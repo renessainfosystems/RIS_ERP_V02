@@ -1,0 +1,8 @@
+/Auth/bin
+/Auth/obj
+obj
+/.vs
+/WebApp/.angular/cache/babel-webpack
+/WebApp/.angular/cache/angular-webpack
+
+
