@@ -1,0 +1,105 @@
+
+<!--<div class="container">
+
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Division Information</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form class="form-container" [formGroup]="divisionForm" (ngSubmit)="onFormSubmit()">
+        <mat-grid-list cols="2" rowHeight="" class="example-form">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Country Name</mat-label>
+            <mat-select formControlName="country_id" matTooltip="Select Division">
+              <mat-option *ngFor="let CountryName of allCountry" [value]="CountryName.id">
+                {{CountryName.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-list>
+        <mat-grid-list cols="2" rowHeight="" class="example-form">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Division Code</mat-label>
+            <input formControlName="division_code" matTooltip="Enter Division Code" matInput placeholder="Division Code" autocomplete="off">
+            <mat-error>
+              <span *ngIf="!divisionForm.get('division_code').value && divisionForm.get('division_code').touched"></span>
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Division Name</mat-label>
+            <input formControlName="division_name" matTooltip="Enter Division Name" matInput placeholder="Division Name" autocomplete="off">
+            <mat-error>
+              <span *ngIf="!divisionForm.get('division_name').value && divisionForm.get('division_name').touched"></span>
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Division Short Name</mat-label>
+            <input formControlName="division_short_name" matTooltip="Enter Division Short Name" matInput placeholder="Division Short Name" autocomplete="off">
+          </mat-form-field>
+        </mat-grid-list>
+        <mat-grid-list cols="2" rowHeight="" class="example-form">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Name In Local Language</mat-label>
+            <input formControlName="name_in_local_language" matTooltip="Enter Name In Local Language" matInput placeholder="Name In Local Language" autocomplete="off">
+          </mat-form-field>
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Short Name In Local Language</mat-label>
+            <input formControlName="short_name_in_local_language" matTooltip="Enter Short Name In Local Language" matInput placeholder="Short Name In Local Language" autocomplete="off">
+          </mat-form-field>
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Remarks</mat-label>
+            <input formControlName="remarks" matTooltip="Enter Remarks" matInput placeholder="Email Remarks" autocomplete="off">
+          </mat-form-field>
+        </mat-grid-list>
+        <mat-grid-list cols="2" rowHeight="" class="example-form">
+          <button type="submit" mat-raised-button color="primary" matTooltip="Submit" [disabled]="!divisionForm.valid">Submit</button>&nbsp;&nbsp;&nbsp;&nbsp;
+          <button type="reset" mat-raised-button color="warn" matTooltip="Reset" (click)="resetForm()">Reset</button>
+        </mat-grid-list>
+
+        <br><br>
+
+        <div>
+          <mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8" style="box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);">
+
+             Checkbox Column 
+
+            <ng-container matColumnDef="DivisionCode">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Division Code </mat-header-cell>
+              <mat-cell *matCellDef="let division"> {{division.division_code}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="DivisionName">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Division Name </mat-header-cell>
+              <mat-cell *matCellDef="let division"> {{division.division_name}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="DivisionShortName">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Division Short Name </mat-header-cell>
+              <mat-cell *matCellDef="let division"> {{division.division_short_name}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Edit">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Edit </mat-header-cell>
+
+              <mat-cell *matCellDef="let division">
+                <button mat-icon-button aria-label="" type="button" mat-raised-button color="primary" matTooltip="Edit" (click)="loadDivisionToEdit(division.division_id)"><mat-icon>edit</mat-icon></button>
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Delete">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Delete </mat-header-cell>
+              <mat-cell *matCellDef="let division">
+                <button mat-icon-button aria-label="Example icon button with a delete icon" type="button" mat-raised-button color="warn" matTooltip="Delete" (click)="deleteDivisionInfo(division.division_id)"><mat-icon>delete_forever</mat-icon></button>
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+          </mat-table>
+
+          <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>-->

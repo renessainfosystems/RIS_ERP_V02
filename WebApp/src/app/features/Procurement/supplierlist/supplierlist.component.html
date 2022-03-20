@@ -1,0 +1,1901 @@
+<div class="p-card">
+
+  <div class="me-auto">
+    <div class="p-card-title ">
+      <span class="pi pi-users"> </span> Supplier List
+    </div>
+    <div class="p-card-body justify-content-center ">
+      <!-- ********** start card body ******************** -->
+
+      <div class="card">
+        <p-tabView>
+          <p-tabPanel class="geoTab" header="BasicInfo">
+            <form [formGroup]="supplierApplicationForm">
+              <p-fieldset legend="Supplier Basic Information" [collapsed]="collapsedBasicInfo" (onBeforeToggle)="toggleBasicInfo()" [toggleable]="true">
+                <p-dialog header="Delete Record" [(visible)]="display" [style]="{width: '35vw'}">
+                  <p>Do you want to delete this record?</p>
+                  <ng-template pTemplate="footer">
+                    <button class="pi pi-times risBtn risClose" (click)="display=false"> No</button>
+                    <button class="pi pi-check risBtn risSave" (click)="deleteBasicinfo()"> Yes</button>
+                  </ng-template>
+                </p-dialog>
+                <div class="p-fluid grid col-12 flex justify-content-start flex-wrap card-container">
+                  <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                    <div class="col mt-2 text-right">
+                      <label for="" class=" d-md-inline-flex">Supplier Code<span class="req">*</span> :</label>
+                    </div>
+                    <div class="col p-fluid">
+                      <span class="p-float-label">
+                        <input id="float-input p-fluid" type="text" value="1" class="read-only" formControlName="supplier_code" placeholder="<<Auto Generate>>" pInputText autocomplete="off">
+                      </span>
+                    </div>
+                  </div>
+
+
+                </div>
+                <!--disabled="disabled"-->
+                <div class="p-fluid grid col-12 flex justify-content-start flex-wrap card-container">
+                  <div class="col-3 mt-2 text-right">
+                    <label for="" class=" d-md-inline-flex">Legal Name<span class="req">*</span> :</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <span class="p-float-label">
+                      <input id="float-input p-fluid" type="text" formControlName="legal_name" placeholder="Supplier Legal Name" pInputText autocomplete="off">
+                    </span>
+                  </div>
+                </div>
+
+                <div class="p-fluid grid col-11 flex justify-content-end flex-wrap card-container">
+                  <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                    <div class="col mt-2 text-right">
+                      <label for="" class=" d-md-inline-flex">Short Name<span class="req">*</span> :</label>
+                    </div>
+                    <div class="col p-fluid">
+                      <span class="p-float-label">
+                        <input id="float-input p-fluid" type="text" formControlName="short_name" placeholder="Supplier short Name" pInputText autocomplete="off">
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                    <div class="col mt-2 text-right">
+                      <label for="" class=" d-md-inline-flex">Year Established :</label>
+                    </div>
+                    <div class="col p-fluid">
+                      <span class="p-float-label">
+                        <p-calendar [showIcon]="true" formControlName="year_established" placeholder="Year of Established" selectOtherMonths="true" inputId="navigators" showButtonBar="true" [monthNavigator]="true"
+                                    [yearNavigator]="true" yearRange="2000:2030" dateFormat="dd/mm/yy"></p-calendar>
+
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                    <div class="col mt-2 text-right">
+                      <label for="" class=" d-md-inline-flex">Domicile :</label>
+                    </div>
+                    <div class="col p-fluid">
+                      <span class="p-float-label">
+                        <p-dropdown [options]="allDomicile" [(ngModel)]="selectedDomicile" formControlName="domicile_enum_id" placeholder="Select Domicile"
+                                    optionLabel="domicile_enum_name" optionValue="domicile_enum_id" [showClear]="true"></p-dropdown>
+
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                    <div class="col mt-2 text-right">
+                      <label for="" class=" d-md-inline-flex">Registry Authority :</label>
+                    </div>
+                    <div class="col p-fluid">
+                      <span class="p-float-label">
+                        <p-dropdown [options]="allRegistryAuthority" [(ngModel)]="selectedRegistryAuthority" formControlName="registry_authority_id" placeholder="Select Registry Authority"
+                                    optionLabel="registry_authority_name" optionValue="registry_authority_id" [showClear]="true"></p-dropdown>
+
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                    <div class="col mt-2 text-right">
+                      <label for="" class=" d-md-inline-flex">Regulator :</label>
+                    </div>
+                    <div class="col p-fluid">
+                      <span class="p-float-label">
+                        <p-dropdown [options]="allRegulator" [(ngModel)]="selectedRegulator" formControlName="regulator_id" placeholder="Select Regulator"
+                                    optionLabel="regulator_name" optionValue="regulator_id" [showClear]="true"></p-dropdown>
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                    <div class="col mt-2 text-right">
+                      <label for="" class=" d-md-inline-flex">Ownership Type<span class="req">*</span> :</label>
+                    </div>
+                    <div class="col p-fluid">
+                      <span class="p-float-label">
+                        <p-dropdown [options]="allOwnershipType" [(ngModel)]="selectedOwnershipType" formControlName="ownership_type_id" placeholder="Select Ownership Type"
+                                    optionLabel="ownership_type_name" optionValue="ownership_type_id" [showClear]="true"></p-dropdown>
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                    <div class="col mt-2 text-right">
+                      <label for="" class=" d-md-inline-flex" pTooltip="Name in Local Language" tooltipPosition="top">NILL :</label>
+                    </div>
+                    <div class="col p-fluid">
+                      <span class="p-float-label">
+                        <input id="float-input p-fluid" type="text" formControlName="name_in_local_language" placeholder="Name in Local Language" pInputText autocomplete="off">
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                    <div class="col mt-2 text-right">
+                      <label for="" class=" d-md-inline-flex" pTooltip="Address in Local Language" tooltipPosition="top">AILL :</label>
+                    </div>
+                    <div class="col p-fluid">
+                      <span class="p-float-label">
+                        <input id="float-input p-fluid" type="text" formControlName="address_in_local_language" placeholder="Address in Local Language" pInputText autocomplete="off">
+                      </span>
+                    </div>
+                  </div>
+
+                </div>
+                <p style="border-top:2px solid blue; width: 100%; margin:0px 0px 10px 0px;"></p>
+                <div class="p-fluid grid col-11 flex justify-content-end flex-wrap card-container ">
+                  <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                    <div class="col mt-2 text-right">
+                      <label for="" class=" d-md-inline-flex">Country<span class="req">*</span> :</label>
+                    </div>
+                    <div class="col p-fluid">
+                      <span class="p-float-label">
+                        <p-dropdown [options]="allCountry" [(ngModel)]="selectedCountry" formControlName="country_id" placeholder="Select Country"
+                                    optionLabel="country_name" optionValue="country_id" (onChange)="onSelectByCountryId($event.value)" [showClear]="true" [filter]="true" filterBy="country_name"></p-dropdown>
+
+                      </span>
+
+                      <!--<p-dropdown [options]="allCountry" [(ngModel)]="selectedCountry" formControlName="countryObj" placeholder="Select Country"
+              optionLabel="country_name" (onChange)="onSelectByCountryIdLocation()" [showClear]="true" [filter]="true" filterBy="country_name"></p-dropdown>-->
+                    </div>
+                  </div>
+                  <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                    <div class="col mt-2 text-right">
+                      <label for="" class=" d-md-inline-flex">Division<span class="req">*</span> :</label>
+                    </div>
+                    <div class="col p-fluid">
+                      <span class="p-float-label">
+
+                        <p-dropdown [options]="allDivision" [(ngModel)]="selectedDivision" formControlName="division_id" placeholder="Select Division"
+                                    optionLabel="division_name" optionValue="division_id" (onChange)="onSelectByDivisionId($event.value)" [showClear]="true"></p-dropdown>
+
+
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                    <div class="col mt-2 text-right">
+                      <label for="" class=" d-md-inline-flex">District<span class="req">*</span> :</label>
+                    </div>
+                    <div class="col p-fluid">
+                      <span class="p-float-label">
+                        <p-dropdown [options]="allDistrict" [(ngModel)]="selectedDistrict" formControlName="district_id" placeholder="Select District"
+                                    optionLabel="district_name" optionValue="district_id" [showClear]="true" [filter]="true" filterBy="district_name"></p-dropdown>
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                    <div class="col mt-2 text-right">
+                      <label for="" class=" d-md-inline-flex" pTooltip="City/Town" tooltipPosition="top">City/Town :</label>
+                    </div>
+                    <div class="col p-fluid">
+                      <span class="p-float-label">
+                        <input id="float-input p-fluid" type="text" formControlName="city" placeholder="City/Town" pInputText autocomplete="off">
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                    <div class="col mt-2 text-right">
+                      <label for="" class=" d-md-inline-flex" pTooltip="P.S/Area" tooltipPosition="top">P.S/Area :</label>
+                    </div>
+                    <div class="col p-fluid">
+                      <span class="p-float-label">
+                        <input id="float-input p-fluid" type="text" formControlName="ps_area" placeholder="P.S/Area" pInputText autocomplete="off">
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                    <div class="col mt-2 text-right">
+                      <label for="" class=" d-md-inline-flex">Post Code :</label>
+                    </div>
+                    <div class="col p-fluid">
+                      <span class="p-float-label">
+                        <input id="float-input p-fluid" type="text" formControlName="post_code" placeholder="Post Code" pInputText autocomplete="off">
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                    <div class="col mt-2 text-right">
+                      <label for="" class=" d-md-inline-flex" pTooltip="Block" tooltipPosition="top">Block :</label>
+                    </div>
+                    <div class="col p-fluid">
+                      <span class="p-float-label">
+                        <input id="float-input p-fluid" type="text" formControlName="block" placeholder="Block" pInputText autocomplete="off">
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                    <div class="col mt-2 text-right">
+                      <label for="" class=" d-md-inline-flex">Road No :</label>
+                    </div>
+                    <div class="col p-fluid">
+                      <span class="p-float-label">
+                        <input id="float-input p-fluid" type="text" formControlName="road_no" placeholder="Road No" pInputText autocomplete="off">
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                    <div class="col mt-2 text-right">
+                      <label for="" class=" d-md-inline-flex" pTooltip="House No" tooltipPosition="top">House No :</label>
+                    </div>
+                    <div class="col p-fluid">
+                      <span class="p-float-label">
+                        <input id="float-input p-fluid" type="text" formControlName="house_no" placeholder="House No" pInputText autocomplete="off">
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                    <div class="col mt-2 text-right">
+                      <label for="" class=" d-md-inline-flex">Flat No :</label>
+                    </div>
+                    <div class="col p-fluid">
+                      <span class="p-float-label">
+                        <input id="float-input p-fluid" type="text" formControlName="flat_no" placeholder="Flat No" pInputText autocomplete="off">
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                    <div class="col mt-2 text-right">
+                      <label for="" class=" d-md-inline-flex">Email<span class="req">*</span>:</label>
+                    </div>
+                    <div class="col p-fluid">
+                      <span class="p-float-label">
+                        <input id="float-input p-fluid" type="text" formControlName="email" placeholder="Email" pInputText autocomplete="off">
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                    <div class="col mt-2 text-right">
+                      <label for="" class=" d-md-inline-flex">Mobile No <span class="req">*</span>:</label>
+                    </div>
+                    <div class="col p-fluid">
+                      <span class="p-float-label">
+                        <input id="float-input p-fluid" type="text" formControlName="mobile_no" placeholder="Mobile No" pInputText autocomplete="off">
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                    <div class="col mt-2 text-right">
+                      <label for="" class=" d-md-inline-flex">Phone No :</label>
+                    </div>
+                    <div class="col p-fluid">
+                      <span class="p-float-label">
+                        <input id="float-input p-fluid" type="text" formControlName="phone_no" placeholder="Phone No" pInputText autocomplete="off">
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                    <div class="col mt-2 text-right">
+                      <label for="" class=" d-md-inline-flex">PABX :</label>
+                    </div>
+                    <div class="col p-fluid">
+                      <span class="p-float-label">
+                        <input id="float-input p-fluid" type="text" formControlName="pabx" placeholder="PABX" pInputText autocomplete="off">
+
+                      </span>
+                    </div>
+                  </div>
+                  <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                    <div class="col mt-2 ml-5 text-right">
+                      <label for="" class=" d-md-inline-flex">Organizational Logo :</label>
+                    </div>
+                    <div class="col p-fluid">
+                      <span class="p-float-label">
+                        <div class="flex grid  ">
+                          <div class=" inputWrapper col-6 photo-signature align-self-start flex align-items-center justify-content-center">
+                            <img class="risBtn m-1" [src]="photourllink" style="width: 150px;" alt="">
+                            <input type="file" class="fileInput risBtn risAdd " style="width: 150px;" #supplierImage (change)="onSelectImage($event)">
+                          </div>
+
+                        </div>
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="col-6">
+                    <div class="   flex justify-content-end flex-wrap card-container">
+                      <!--<button type="submit" class="pi pi-save risBtn risSave mr-2" (click)="onFormSubmit()"> Save as Draft</button>-->
+                      <button type="submit" class="pi risBtn risAll" (click)="onFormSubmit()"> Next <span class="pi pi-step-forward"></span></button>
+                    </div>
+                  </div>
+
+                  <!--<div class="col-12" style="text-align: right">
+            <button type="submit" class="pi risBtn risAll" (click)="SaveDealerinfo()"> Next <span class="pi pi-step-forward"></span></button>
+          </div>-->
+
+                </div>
+              </p-fieldset>
+              <p-fieldset legend="Supplier Information List" [collapsed]="collapsedBasicDetails" (onBeforeToggle)="toggleBasicInfo()" [toggleable]="true">
+                <div class="grid mb-2">
+                  <button class="pi pi-plus risBtn risAdd mr-2 " (click)="btnNew()"> New</button>
+                  <button class="pi pi-pencil risBtn risEdit mr-2 " (click)="loadSupplierinfoToEdit()"> Edit</button>
+                  <button class="pi pi-trash risBtn risDelete mr-2" (click)="showDialog()"> Delete</button>
+                </div>
+                <p-table [value]="supplierinfoList" styleClass="p-datatable-sm" class="p-0" responsiveLayout="scroll">
+                  <ng-template pTemplate="header">
+                    <tr>
+                      <th>#SL</th>
+                      <th>Supplier Code</th>
+                      <th>Legal Name</th>
+                      <th>Short Name</th>
+                      <th>Mobile No</th>
+                      <th>Email</th>
+                      <th>Action</th>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-rowIndex="rowIndex" let-supplierinfo>
+                    <tr>
+                      <td>{{rowIndex+1}}</td>
+                      <td>{{supplierinfo.SupplierCode}}</td>
+                      <td>{{supplierinfo.LegalName}}</td>
+                      <td>{{supplierinfo.ShortName}}</td>
+                      <td>{{supplierinfo.MobileNo}}</td>
+                      <td>{{supplierinfo.Email}}</td>
+                      <td> <button class="pi pi-pencil risBtn risView mr-2" (click)="viewDocumentinfo(rowIndex,supplierinfo)"> View </button></td>
+                      <!--<button class="pi pi-pencil risBtn risEdit mr-2" (click)="loadassociationToEdit()"> Edit</button>-->
+                    </tr>
+                  </ng-template>
+                </p-table>
+              </p-fieldset>
+            </form>
+          </p-tabPanel>
+          <p-tabPanel header="BusinessInfo">
+            <div class="grid mb-2">
+              <!--<button class="pi pi-plus risBtn risAdd mr-2 ml-2" (click)="showModalDialogdivision()"> New</button>
+      <button class="pi pi-pencil risBtn risEdit mr-2" (click)="loadDivisionToEdit()"> Edit</button>
+      <button class="pi pi-trash risBtn risDelete mr-2" (click)="showDivisionDialog()"> Delete</button>-->
+            </div>
+            <div class="card-body">
+              <form [formGroup]="businessApplicationForm">
+                <div class="p-fluid grid col-12 flex flex-wrap card-container">
+                  <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                    <div class="col-4 mt-2 text-right">
+                      <label for="" class=" d-md-inline-flex">Business Activities<span class="req">*</span> :</label>
+                    </div>
+                    <div class="col-8 p-fluid">
+                      <span class="p-float-label">
+                        <p-dropdown [options]="allBusinessActivities" [(ngModel)]="selectedBusinessActivities" formControlName="business_activities_enum_id" placeholder="Select Business Activities"
+                                    optionLabel="business_activities_enum_name" optionValue="business_activities_enum_id" [showClear]="true">></p-dropdown>
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                    <div class="col-4 mt-2 text-right">
+
+                    </div>
+                    <div class="col-8 p-fluid">
+                    </div>
+                  </div>
+
+                  <!-- start ot stab __________// -->
+
+                  <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                    <div class="col-4 mt-2 text-right">
+                      <label for="" class=" d-md-inline-flex">Sector<span class="req">*</span> :</label>
+                    </div>
+                    <div class="col-8 p-fluid">
+                      <span class="p-float-label">
+                        <p-dropdown [options]="allSector" [(ngModel)]="selectedSector" formControlName="industry_sector_id" placeholder="Select Sector"
+                                    optionLabel="industry_sector_name" (onChange)="onSelectBySectorId()" [showClear]="true"></p-dropdown>
+
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="p-fluid grid col-6 flex justify-content-end flex-wrap card-container">
+                    <div class="col-4 mt-2 text-right">
+                      <label for="" class=" d-md-inline-flex">Sub Sector<span class="req">*</span> :</label>
+                    </div>
+                    <div class="col-6 p-fluid">
+                      <span class="p-float-label">
+                        <p-dropdown [options]="allSubSector" [(ngModel)]="selectedSubSector" formControlName="industry_sub_sector_id" placeholder="Select Sub Sector"
+                                    optionLabel="industry_sub_sector_name"></p-dropdown>
+                      </span>
+
+                    </div>
+                    <!--<div class="col-2 text-right">
+                      <button class=" pi pi-plus risBtn risAdd " label="Add" (click)="addSubSectorToTable(selectedSubSectorTable)">Add</button>
+                    </div>-->
+
+                  </div>
+                  <!-- end ot stab __________// -->
+                  <!-- ************************start grid ************************ -->
+
+                  <div class="col-2 pr-3 text-right">
+                    Sub-Sector List: <span class="req"></span>
+                  </div>
+                  <div class="col-9 p-1">
+                    <p-table [value]="subSectorDataSources" styleClass="p-datatable-sm" class="p-0" responsiveLayout="scroll">
+                      <ng-template pTemplate="header">
+                        <tr>
+                          <th>#SL</th>
+                          <th>Sector</th>
+                          <th>Sub Sector</th>
+                          <th>View File</th>
+                        </tr>
+                      </ng-template>
+                      <ng-template pTemplate="body" let-rowIndex="rowIndex" let-subSector>
+
+                        <tr>
+                          <td>{{rowIndex+1}}</td>
+                          <td>{{subSector.industry_sector_name}}</td>
+                          <td>{{subSector.industry_sub_sector_name}}</td>
+                          <td> <button class="pi pi-eye-slash risBtn risView" (click)="removeSubSector(rowIndex,event)"> </button></td>
+
+                        </tr>
+                      </ng-template>
+                    </p-table>
+                  </div>
+
+
+                  <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                    <div class="col-4 mt-2 text-right">
+                      <label for="" class=" d-md-inline-flex">Management Staff :</label>
+                    </div>
+                    <div class="col-8 p-fluid">
+                      <span class="p-float-label">
+                        <input id="float-input p-fluid" type="text" formControlName="management_staff_no" placeholder="Management Staff" pInputText autocomplete="off">
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                    <div class="col-4 mt-2 text-right">
+                      <label for="" class=" d-md-inline-flex">Non Management Staff :</label>
+                    </div>
+                    <div class="col-8 p-fluid">
+                      <span class="p-float-label">
+                        <input id="float-input p-fluid" type="text" formControlName="nonmanagement_staff_no" placeholder="Non Management Staff" pInputText autocomplete="off">
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                    <div class="col-4 mt-2 text-right">
+                      <label for="" class=" d-md-inline-flex">Permanent Worker :</label>
+                    </div>
+                    <div class="col-8 p-fluid">
+                      <span class="p-float-label">
+                        <input id="float-input p-fluid" type="text" formControlName="permanent_worker_no" placeholder="Permanent Worker" pInputText autocomplete="off">
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                    <div class="col-4 mt-2 text-right">
+                      <label for="" class="d-md-inline-flex">Casual Worker :</label>
+                    </div>
+                    <div class="col-8 p-fluid">
+                      <span class="p-float-label">
+                        <input id="float-input p-fluid" type="text" formControlName="casual_worker_no" placeholder="Casual Worker" pInputText autocomplete="off">
+                      </span>
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class="p-fluid grid col-12 flex justify-content-start flex-wrap card-container">
+                  <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                    <div class="col-4 mt-2 text-right">
+                      <label for="" class="mr-4">Peer Platforms :</label>
+                    </div>
+                    <div class="col-8 p-fluid">
+                      <div class=" row flex text-center p-fluid">
+                        <div *ngFor="let category of categories;let i = index" class="p-field-checkbox text-start row flex flex-row flex-nowrap">
+                          <p-checkbox name="group[i]" value="category" binary="true" [value]="category" (onChange)="onCheckboxChange($event,category.id,category.name)" formControlName="ecommerce_platforms_id" [inputId]="category.id"></p-checkbox>
+                          <label [for]="category.id" class="ml-1" style="margin-right: 40px!important;">{{category.name}}</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="p-fluid grid col-12 flex flex-wrap card-container">
+                  <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                    <div class="col-4 mt-2 text-right">
+                    </div>
+                    <div class="col-8 p-fluid">
+                      <span class="p-float-label">
+                        <button type="submit" class="pi risBtn risAll m-2"><span class="pi pi-step-backward"></span> Previous </button>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                    <div class="col-4 mt-2 text-right">
+                    </div>
+                    <div class="col-8 p-fluid text-right">
+                      <span class="p-float-label">
+                        <!--<button type="submit" class="pi pi-save risBtn risSave mr-2" (click)="onBusinessFormSubmit()"> Save as Draft</button>-->
+                        <button type="submit" class="pi risBtn risAll" (click)="onBusinessFormSubmit()"> Next <span class="pi pi-step-forward"></span></button>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <!--<div class="p-fluid grid col-11 flex justify-content-start flex-wrap card-container ">
+          <div class="p-fluid grid row col-10 flex justify-content-start flex-wrap card-container">
+            <div class=" col text-end">
+              <label for="" class="mr-2 ">Peer Platforms :</label>
+            </div>
+            <div class=" row flex text-center p-fluid">
+
+              <div *ngFor="let category of categories;let i = index" class="p-field-checkbox text-start row flex flex-row flex-nowrap">
+                <p-checkbox name="group[i]" value="category" binary="true" [value]="category" (onChange)="onCheckboxChange($event,category.id,category.name)" formControlName="ecommerce_platforms_id" [inputId]="category.id"></p-checkbox>
+                <label [for]="category.id" class="ml-1" style="margin-right: 40px!important;">{{category.name}}</label>
+              </div>
+            </div>
+          </div>
+        </div>-->
+                <!--<div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+          <div class="col-4 mt-2 text-right">
+            <label for="" class=" d-md-inline-flex">Casual Worker :</label>
+          </div>
+          <div class="col-8 p-fluid">
+            <button type="submit" class="pi pi-save risBtn risSave mr-2" (click)="onBusinessFormSubmit()"> Save as Draft</button>
+          </div>
+        </div>-->
+                <!--<div class="col-2 mt-2 text-right">
+
+        </div>-->
+
+                <div class="p-fluid grid col-11 mt-2 ml-4 flex justify-content-end flex-wrap card-container">
+
+
+                  <!--<button class="pi pi-times risBtn risClose mr-2"> Close</button>-->
+
+                </div>
+
+                <!--<div class="p-fluid grid col-11 mt-2 ml-4 flex justify-content-end flex-wrap card-container">
+
+
+          <button type="submit" class="pi pi-save risBtn risSave mr-2" (click)="SaveOTPolicy()"> Save</button>
+          <button class="pi pi-times risBtn risClose mr-2" (click)="resetForm()"> clear</button>
+
+
+        </div>-->
+
+
+
+              </form>
+
+              <!-- ************************start grid ************************ -->
+            </div>
+            <!-- ********** end card body ******************** -->
+          </p-tabPanel>
+          <p-tabPanel header="Associations">
+            <div class="grid mb-2">
+              <!--<button class="pi pi-plus risBtn risAdd mr-2 ml-2" (click)="showModalDialogdivision()"> New</button>
+      <button class="pi pi-pencil risBtn risEdit mr-2" (click)="loadDivisionToEdit()"> Edit</button>
+      <button class="pi pi-trash risBtn risDelete mr-2" (click)="showDivisionDialog()"> Delete</button>-->
+            </div>
+            <div class="card-body">
+              <form [formGroup]="associationsApplicationForm">
+                <div class="p-fluid grid col-12 flex flex-wrap card-container">
+
+                  <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                    <div class="col-4 mt-2 text-right">
+                      <label for="" class=" ">Association Name :</label>
+                    </div>
+                    <div class="col-8 p-fluid">
+                      <div class="p-float-label ">
+                        <p-dropdown [options]="allAssociation" [(ngModel)]="selectedAssociation" formControlName="association_id" placeholder="Select Association"
+                                    optionLabel="association_name" (onChange)="onSelectByAssociationId()" [showClear]="true" [virtualScroll]="true" [itemSize]="30"></p-dropdown>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                    <div class="col-4 mt-2 text-right">
+                      <label for="" class=" d-md-inline-flex">Abbreviation :</label>
+                    </div>
+                    <div class="col-8 p-fluid">
+                      <span class="p-float-label">
+                        <input id="float-input p-fluid" type="text" formControlName="abbreviation" placeholder="Abbreviation" pInputText autocomplete="off">
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                    <div class="col-4 mt-2 text-right">
+                      <label for="" class=" d-md-inline-flex">Country of Origin :</label>
+                    </div>
+                    <div class="col-8 p-fluid">
+                      <span class="p-float-label">
+
+                        <p-dropdown [options]="allCountryAssociation" [(ngModel)]="selectedCountryAssociation" formControlName="country_id_association" placeholder="Select Country"
+                                    optionLabel="country_name" optionValue="country_id" [showClear]="true"></p-dropdown>
+
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                    <div class="col-4 mt-2 text-right">
+                      <label for="" class=" d-md-inline-flex">Organization Type :</label>
+                    </div>
+                    <div class="col-8 p-fluid">
+                      <span class="p-float-label">
+                        <p-dropdown [options]="allOrganizationType" [(ngModel)]="selectedOrganizationType" formControlName="organization_type_id_enum" placeholder="Select Organization"
+                                    optionLabel="organization_type_name_enum" optionValue="organization_type_id_enum"></p-dropdown>
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                    <div class="col-4 mt-2 text-right">
+                      <label for="" class=" d-md-inline-flex">Membership Type :</label>
+                    </div>
+                    <div class="col-8 p-fluid">
+                      <span class="p-float-label">
+                        <p-dropdown [options]="allMembershipType" [(ngModel)]="selectedMembershipType" formControlName="membership_type_enum_id" placeholder="Select Membership Type"
+                                    optionLabel="membership_type_enum_name"></p-dropdown>
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                    <div class="col-4 mt-2 text-right">
+                      <label for="" class=" d-md-inline-flex">Association Number :</label>
+                    </div>
+                    <div class="col-8 p-fluid">
+                      <span class="p-float-label">
+                        <input id="float-input p-fluid" type="text" formControlName="association_number" placeholder="association_number" pInputText autocomplete="off">
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                    <div class="col-4 mt-2 text-right">
+                      <label for="" class=" d-md-inline-flex">Start Date :</label>
+                    </div>
+                    <div class="col-6 p-fluid">
+                      <span class="p-float-label">
+                        <p-calendar [showIcon]="true" formControlName="start_date" placeholder="Association membership start date" selectOtherMonths="true" inputId="navigators" showButtonBar="true" [monthNavigator]="true"
+                                    [yearNavigator]="true" yearRange="2000:2030" dateFormat="dd/mm/yy"></p-calendar>
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                    <div class="col-4 mt-2 text-right">
+
+                    </div>
+                    <div class="col-8 p-fluid-right">
+                      <!--<button type="submit" class="pi pi-save risBtn risSave mr-2" (click)="onAssociationFormSubmit()"> Save as Draft</button>-->
+                      <button type="submit" class="pi risBtn risAll" (click)="onAssociationFormSubmit()"> Next <span class="pi pi-step-forward"></span></button>
+                    </div>
+                  </div>
+
+
+
+                  <!-- ************************start grid ************************ -->
+
+                  <div class="col-2 pr-3 text-right">
+                    Association List: <span class="req"></span>
+                  </div>
+                  <div class="col-9 p-1">
+                    <p-table [value]="associationDataSources" styleClass="p-datatable-sm" class="p-0" responsiveLayout="scroll">
+                      <ng-template pTemplate="header">
+                        <tr>
+                          <th>#SL</th>
+                          <th>Association Name</th>
+                          <th>Membership Type</th>
+                          <th>Number</th>
+                          <th>Date</th>
+                          <th>View File</th>
+                        </tr>
+                      </ng-template>
+                      <ng-template pTemplate="body" let-rowIndex="rowIndex" let-association>
+
+                        <tr>
+                          <td>{{rowIndex+1}}</td>
+                          <td>{{association.association_name}}</td>
+                          <td>{{association.membership_type_enum_name}}</td>
+                          <td>{{association.association_number}}</td>
+                          <td>{{association.start_date_str}}</td>
+                          <td> <button class="pi pi-eye-slash risBtn risView" (click)="removeAssociation(rowIndex,event)"> </button></td>
+
+                        </tr>
+                      </ng-template>
+                    </p-table>
+                  </div>
+
+                  <div class="p-fluid grid col-11 mt-2 ml-4 flex justify-content-end flex-wrap card-container">
+
+                    <!--<button class="pi pi-times risBtn risClose mr-2"> Close</button>-->
+                  </div>
+
+                </div>
+              </form>
+
+              <!-- ************************start grid ************************ -->
+            </div>
+            <!-- ********** end card body ******************** -->
+          </p-tabPanel>
+          <p-tabPanel header="Legal Forms">
+            <div class="grid mb-2">
+            </div>
+            <div class="card-body">
+              <form [formGroup]="legalDocumentApplicationForm">
+                <p-dialog header="Delete Record" [(visible)]="display" [style]="{width: '35vw'}">
+                  <p>Do you want to delete this record?</p>
+                  <ng-template pTemplate="footer">
+                    <button class="pi pi-times risBtn risClose" (click)="display=false"> No</button>
+                    <button class="pi pi-check risBtn risSave" (click)="deleteDocumentinfo()"> Yes</button>
+                  </ng-template>
+                </p-dialog>
+                <div class="p-fluid grid col-12 flex flex-wrap card-container">
+                  <div class="card">
+                    <div class="formgrid grid">
+                      <div class="field col-3 text-left">
+                        <label for="" class=" ">Document Name</label>
+                        <p-dropdown [options]="allDocument" [(ngModel)]="selectedDocument" formControlName="document_type_id" placeholder="Select Document"
+                                    optionLabel="document_type_name" [showClear]="true"></p-dropdown>
+                      </div>
+                      <div class="field col-2 text-left">
+                        <label for="lastname2">Document Number</label>
+                        <input id="float-input p-fluid" type="text" formControlName="document_number" placeholder="Document Number" pInputText autocomplete="off">
+                      </div>
+                      <div class="field col-3 text-left">
+                        <label for="lastname2">Issue Date</label>
+                        <p-calendar [showIcon]="true" formControlName="issue_date" placeholder="Select Issue Date" selectOtherMonths="true" inputId="navigators" showButtonBar="true" [monthNavigator]="true"
+                                    [yearNavigator]="true" yearRange="2000:2030" dateFormat="dd/mm/yy"></p-calendar>
+
+                      </div>
+                      <div class="field col-3 text-left">
+                        <label for="lastname2">Expiry Date</label>
+                        <p-calendar [showIcon]="true" formControlName="expiry_date" placeholder="Select Expiry Date" selectOtherMonths="true" inputId="navigators" showButtonBar="true" [monthNavigator]="true"
+                                    [yearNavigator]="true" yearRange="2000:2030" dateFormat="dd/mm/yy"></p-calendar>
+                      </div>
+                      <!--<div class="field col-2 text-left">
+                        <label for="lastname2">File Upload</label>
+                        <input type="file" id="file" (change)="handleLegalFormFileInput($event.target.files)">
+                      </div>-->
+
+                    </div>
+                  </div>
+
+                  <div class="col-11 p-0">
+
+                    <p-table [value]="documentDataSources" styleClass="p-datatable-sm" class="p-0" responsiveLayout="scroll">
+                      <ng-template pTemplate="header">
+                        <tr>
+                          <th>#SL</th>
+                          <th>Document Name</th>
+                          <th>Document Number</th>
+                          <th>Issue Date</th>
+                          <th>Expiry Date</th>
+                          <th>File Name</th>
+                          <th>View File</th>
+                        </tr>
+                      </ng-template>
+                      <ng-template pTemplate="body" let-rowIndex="rowIndex" let-document>
+                        <tr>
+                          <td>{{rowIndex+1}}</td>
+                          <td>{{document.document_type_name}}</td>
+                          <td>{{document.document_number}}</td>
+                          <td>{{document.issue_date_str}}</td>
+                          <td>{{document.expiry_date_str}}</td>
+                          <td>{{document.file_path}}</td>
+                          <td> <button class="pi pi-eye-slash risBtn risView" (click)="viewDocument(rowIndex,document)"> </button></td>
+                        </tr>
+                      </ng-template>
+                    </p-table>
+                  </div>
+
+            <!--<td> <button class="pi pi-pencil risBtn risView mr-2" (click)="viewDocumentinfo(rowIndex,supplierinfo)"> View </button></td>-->
+            <!--<button class="pi pi-trash risBtn risDelete mr-2" (click)="showDialog()"> Delete</button>-->
+
+            <p-dialog header="Delete Record" [(visible)]="display" [style]="{width: '35vw'}">
+              <p>Do you want to delete this record?</p>
+              <ng-template pTemplate="footer">
+                <button class="pi pi-times risBtn risClose" (click)="display=false"> No</button>
+                <button class="pi pi-check risBtn risSave" (click)="deleteDocumentInfo()"> Yes</button>
+              </ng-template>
+            </p-dialog>
+
+
+            <div class="col-2 pr-3 text-right">
+              <!--<button type="submit" class="pi pi-save risBtn risSave mr-2" (click)="onLegalDocumentFormSubmit()"> Save as Draft</button>-->
+            </div>
+</div>
+
+                <div class="p-fluid grid col-12 flex flex-wrap card-container">
+                  <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                    <div class="col-4 mt-2 text-left">
+                      <button type="submit" class="pi risBtn risAll m-2"><span class="pi pi-step-backward"></span> Previous </button>
+                    </div>
+                    <div class="col-8 p-fluid">
+                      <span class="p-float-label">
+
+                      </span>
+                    </div>
+                  </div>
+                  <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                    <div class="col-4 mt-2 text-right">
+                    </div>
+                    <div class="col-8 p-fluid text-right">
+                      <span class="p-float-label">
+                        <!--<button type="submit" class="pi pi-save risBtn risSave mr-2" (click)="onBusinessFormSubmit()"> Save as Draft</button>-->
+                        <button type="submit" class="pi risBtn risAll"> Next <span class="pi pi-step-forward"></span></button>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+
+          </p-tabPanel>
+          <p-tabPanel header="Location">
+            <div class="card-body">
+              <p-fieldset legend="Add-Location" [collapsed]="collapsedLocationInfo" (onBeforeToggle)="toggle()" [toggleable]="true">
+                <!--<p-dialog header="Delete Record"  [style]="{width: '35vw'}">-->
+                <p-dialog header="Delete Record" [(visible)]="display" [style]="{width: '35vw'}">
+                  <p>Do you want to delete this record?</p>
+                  <ng-template pTemplate="footer">
+                    <button class="pi pi-times risBtn risClose" (click)="display=false"> No</button>
+                    <button class="pi pi-check risBtn risSave" (click)="deleteLocation()"> Yes</button>
+                  </ng-template>
+                </p-dialog>
+                <form [formGroup]="locationApplicationForm">
+                  <div class="p-fluid grid col-12 flex flex-wrap card-container">
+                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">Location Type : <span class="req">*</span></label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <p-dropdown [options]="allLocationType" [(ngModel)]="selectedLocationType" formControlName="location_type_id" placeholder="Select Location Type"
+                                    optionLabel="location_type_name" [showClear]="true"></p-dropdown>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex"></label>
+                      </div>
+                      <div class="col-8 p-fluid">
+
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6 flex justify-content-end flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">Location Name : <span class="req">*</span></label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <input id="float-input p-fluid" type="text" formControlName="supplier_location_name" placeholder="Location Name" pInputText required>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">Country : <span class="req">*</span> </label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <p-dropdown [options]="allCountryLocation" [(ngModel)]="selectedCountryLocation" formControlName="country_id_location" placeholder="Select Country"
+                                      optionLabel="country_name" (onChange)="onSelectByCountryIdLocation()" [showClear]="true" [filter]="true" filterBy="country_name"></p-dropdown>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">Division : <span class="req">*</span> </label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <p-dropdown [options]="allDivisionLocation" [(ngModel)]="selectedDivisionLocation" formControlName="division_id_location" placeholder="Select Division"
+                                      optionLabel="division_name" (onChange)="onSelectByDivisionIdLocation()" [showClear]="true" [filter]="true" filterBy="division_name"></p-dropdown>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">District : <span class="req">*</span> </label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <p-dropdown [options]="allDistrictLocation" [(ngModel)]="selectedDistrictLocation" formControlName="district_id_location" placeholder="Select District"
+                                      optionLabel="district_name" [showClear]="true" [filter]="true" filterBy="district_name"></p-dropdown>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">City/Town : <span class="req">*</span> </label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <input id="float-input p-fluid" type="text" formControlName="city" placeholder="City/Town" pInputText autocomplete="off">
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">P.S/Area : <span class="req">*</span></label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <input id="float-input p-fluid" type="text" formControlName="ps_area" placeholder="P.S/Area" pInputText autocomplete="off">
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">Post Code :  </label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <input id="float-input p-fluid" type="text" formControlName="post_code" placeholder="Post Code" pInputText autocomplete="off">
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">Block : <span class="req">*</span> </label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <input id="float-input p-fluid" type="text" formControlName="block" placeholder="Block" pInputText autocomplete="off">
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">Road No : <span class="req">*</span> </label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <input id="float-input p-fluid" type="text" formControlName="road_no" placeholder="Road No" pInputText autocomplete="off">
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">House No : <span class="req">*</span> </label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <input id="float-input p-fluid" type="text" formControlName="house_no" placeholder="House No" pInputText autocomplete="off">
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">Flat No : <span class="req">*</span> </label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <input id="float-input p-fluid" type="text" formControlName="flat_no" placeholder="Flat No" pInputText autocomplete="off">
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">Email : <span class="req">*</span> </label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <input id="float-input p-fluid" type="text" formControlName="email" placeholder="Email" pInputText autocomplete="off">
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">Mobile No : <span class="req">*</span> </label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <input id="float-input p-fluid" type="text" formControlName="mobile_no" placeholder="Mobile No" pInputText autocomplete="off">
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">Phone No : </label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <input id="float-input p-fluid" type="text" formControlName="phone_no" placeholder="Phone No" pInputText autocomplete="off">
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">PABX : </label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <input id="float-input p-fluid" type="text" formControlName="pabx" placeholder="PABX" pInputText autocomplete="off">
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex"> </label>
+                      </div>
+                      <div class="col-4 p-fluid">
+                        <!--<button class=" pi pi-plus risBtn risAdd " label="Add" (click)="addLocationToTable(selectedLocationTable)">Add</button>-->
+                      </div>
+                      <div class="col-4 p-fluid text-right">
+                        <button type="submit" class="pi pi-save risBtn risSave mr-2" (click)="onLocationFormSubmit()"> Next</button>
+                      </div>
+                    </div>
+
+                    <div class="col-2 pr-3 text-right">
+                      Location List: <span class="req"></span>
+                    </div>
+                    <div class="col-9 p-1">
+                      <p-table [value]="locationDataSources" styleClass="p-datatable-sm" class="p-0" responsiveLayout="scroll">
+                        <ng-template pTemplate="header">
+                          <tr>
+                            <th>#SL</th>
+                            <th>Location Type</th>
+                            <th>Location Name</th>
+                            <th>Country</th>
+                            <th>Division</th>
+                            <th>District</th>
+                            <th>Address</th>
+                            <th>View File</th>
+                          </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-rowIndex="rowIndex" let-location>
+
+                          <tr>
+                            <td>{{rowIndex+1}}</td>
+                            <td>{{location.location_type_name}}</td>
+                            <td>{{location.supplier_location_name}}</td>
+                            <td>{{location.country_name}}</td>
+                            <td>{{location.division_name}}</td>
+                            <td>{{location.district_name}}</td>
+                            <td>{{location.Address}}</td>
+                            <td> <button class="pi pi-eye-slash risBtn risView" (click)="removeLocation(rowIndex,event)"> </button></td>
+
+                          </tr>
+                        </ng-template>
+                      </p-table>
+                    </div>
+                  </div>
+                </form>
+              </p-fieldset>
+              <p-fieldset legend="Add-Warehouse" [collapsed]="collapsedWarehouseInfo" (onBeforeToggle)="toggle()" [toggleable]="true">
+
+                <!--<p-dialog header="Delete Record"  [style]="{width: '35vw'}">-->
+                <p-dialog header="Delete Record" [(visible)]="display" [style]="{width: '35vw'}">
+                  <p>Do you want to delete this record?</p>
+                  <ng-template pTemplate="footer">
+                    <button class="pi pi-times risBtn risClose" (click)="display=false"> No</button>
+                    <button class="pi pi-check risBtn risSave" (click)="deleteWarehouse()"> Yes</button>
+                  </ng-template>
+                </p-dialog>
+                <form [formGroup]="warehouseApplicationForm">
+                  <div class="p-fluid grid col-12 flex flex-wrap card-container">
+                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">Select Location : <span class="req">*</span></label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <p-dropdown [options]="allLocation" [(ngModel)]="selectedLocation" formControlName="supplier_location_id" placeholder="Select Location"
+                                      optionLabel="supplier_location_type_name" [showClear]="true"></p-dropdown>
+                        </span>
+                      </div>
+                    </div>
+
+
+                    <div class="p-fluid grid col-6 flex justify-content-end flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">Warehouse Name:  <span class="req">*</span></label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <input id="float-input p-fluid" type="text" formControlName="supplier_warehouse_name" placeholder="Warehouse Name" pInputText required>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6 flex justify-content-end flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">Note: </label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <input id="float-input p-fluid" type="text" formControlName="add_note" placeholder="Add Note" pInputText required>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex"> </label>
+                      </div>
+                      <div class="col-4 p-fluid">
+                        <!--<button class=" pi pi-plus risBtn risAdd " label="Add" (click)="addWarehouseToTable(selectedSubSectorTable)">Add</button>-->
+                      </div>
+                      <div class="col-4 p-fluid text-right">
+                        <button type="submit" class="pi pi-save risBtn risSave mr-2" (click)="onWarehouseFormSubmit()"> Next</button>
+                      </div>
+                    </div>
+
+                    <div class="col-2 pr-3 text-right">
+                      Warehouse List: <span class="req"></span>
+                    </div>
+                    <div class="col-9 p-1">
+                      <p-table [value]="warehouseDataSources" styleClass="p-datatable-sm" class="p-0" responsiveLayout="scroll">
+                        <ng-template pTemplate="header">
+                          <tr>
+                            <th>#SL</th>
+                            <th>Location</th>
+                            <th>Warehouse Name</th>
+                            <th>Note</th>
+                            <th>View File</th>
+                          </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-rowIndex="rowIndex" let-warehouse>
+                          <tr>
+                            <td>{{rowIndex+1}}</td>
+                            <td>{{warehouse.supplier_location_type_name}}</td>
+                            <td>{{warehouse.supplier_warehouse_name}}</td>
+                            <td>{{warehouse.add_note}}</td>
+                            <td> <button class="pi pi-eye-slash risBtn risView" (click)="viewWarehouse(rowIndex,event)"> </button></td>
+                          </tr>
+                        </ng-template>
+                      </p-table>
+                    </div>
+
+                  </div>
+                </form>
+              </p-fieldset>
+            </div>
+          </p-tabPanel>
+          <p-tabPanel header="Contacts">
+            <div class="card-body">
+              <p-fieldset legend="Add-Contact" [collapsed]="collapsedContactInfo" (onBeforeToggle)="toggleContact()" [toggleable]="true">
+                <!--<p-dialog header="Delete Record"  [style]="{width: '35vw'}">-->
+                <p-dialog header="Delete Record" [(visible)]="display" [style]="{width: '35vw'}">
+                  <p>Do you want to delete this record?</p>
+                  <ng-template pTemplate="footer">
+                    <button class="pi pi-times risBtn risClose" (click)="display=false"> No</button>
+                    <button class="pi pi-check risBtn risSave" (click)="deleteLocation()"> Yes</button>
+                  </ng-template>
+                </p-dialog>
+                <form [formGroup]="contactApplicationForm">
+                  <div class="p-fluid grid col-12 flex flex-wrap card-container">
+
+                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">Contact Type : <span class="req">*</span></label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <p-dropdown [options]="allContactType" [(ngModel)]="selectedContactType" formControlName="contact_type_id" placeholder="Select Contact Type"
+                                    optionLabel="contact_type_name" optionValue="contact_type_id" [showClear]="true"></p-dropdown>
+
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">First Name : <span class="req">*</span></label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <input id="float-input p-fluid" type="text" formControlName="first_name" placeholder="First Name" pInputText required>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6 flex justify-content-end flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">Middle Name :</label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <input id="float-input p-fluid" type="text" formControlName="middle_name" placeholder="Middle Name" pInputText required>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6 flex justify-content-end flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">Sur Name :<span class="req">*</span></label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <input id="float-input p-fluid" type="text" formControlName="sur_name" placeholder="Sur Name" pInputText required>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">Designation : <span class="req">*</span> </label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <p-dropdown [options]="allDesignation" [(ngModel)]="selectedDesignation" formControlName="designation_id" placeholder="Designation"
+                                      optionLabel="designation_name" optionValue="designation_id" [showClear]="true" [filter]="true" filterBy="designation_name"></p-dropdown>
+                        </span>
+
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">Email : <span class="req">*</span> </label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <input id="float-input p-fluid" type="text" formControlName="email" placeholder="Email" pInputText required>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">Mobile No : <span class="req">*</span> </label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <input id="float-input p-fluid" type="text" formControlName="mobile" placeholder="Mobile No" pInputText required>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">Phone No : </label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <input id="float-input p-fluid" type="text" formControlName="phone" placeholder="Phone No" pInputText required>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">Whatsapp No : </label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <input id="float-input p-fluid" type="text" formControlName="whatsapp" placeholder="Whatsapp No" pInputText required>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">Facebook ID :  </label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <input id="float-input p-fluid" type="text" formControlName="facebook" placeholder="Facebook ID" pInputText autocomplete="off">
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">Linkedin : </label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <input id="float-input p-fluid" type="text" formControlName="linkedin" placeholder="Linkedin" pInputText autocomplete="off">
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                      </div>
+                      <div class="col-8 p-fluid">
+
+                      </div>
+                    </div>
+
+                    <p style="border-top:2px solid blue; width: 100%; margin:0px 0px 10px 0px;"></p>
+
+                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">Nationality : <span class="req">*</span></label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <p-dropdown [options]="allNationality" [(ngModel)]="selectedNationality" formControlName="nationality_id" placeholder="Select Nationality"
+                                      optionLabel="country_name" optionValue="country_id" [showClear]="true" [filter]="true" filterBy="country_name">
+                          </p-dropdown>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">Religion :  <span class="req">*</span></label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <p-dropdown [options]="allReligionList" [(ngModel)]="selectedReligion" formControlName="religion_enum_id" placeholder="Select Religion"
+                                      optionLabel="religion_enum_name" optionValue="religion_enum_id" [showClear]="true"></p-dropdown>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6 flex justify-content-end flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">Date of Birth :</label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <p-calendar [showIcon]="true" formControlName="date_of_birth" placeholder="Date of Birth" selectOtherMonths="true" inputId="navigators" showButtonBar="true" [monthNavigator]="true"
+                                      [yearNavigator]="true" yearRange="2000:2030" dateFormat="dd/mm/yy"></p-calendar>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6 flex justify-content-end flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">Gender : <span class="req">*</span></label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <p-dropdown [options]="allGenderList" [(ngModel)]="selectedGender" formControlName="gender_enum_id" placeholder="Select Gender"
+                                      optionLabel="gender_enum_name" optionValue="gender_enum_id" [showClear]="true"></p-dropdown>
+
+                        </span>
+                      </div>
+                    </div>
+
+
+                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">Maritial Status : <span class="req">*</span> </label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <p-dropdown [options]="allMaritalStatusList" [(ngModel)]="selectedMaritalStatus" formControlName="marital_status_enum_id" placeholder="Select Marital Status"
+                                      optionLabel="marital_status_enum_name" optionValue="marital_status_enum_id" [showClear]="true"></p-dropdown>
+
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">Date of Marriage : </label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <p-calendar [showIcon]="true" formControlName="date_of_marriage" placeholder="Date of Marriage" selectOtherMonths="true" inputId="navigators" showButtonBar="true" [monthNavigator]="true"
+                                      [yearNavigator]="true" yearRange="2000:2030" dateFormat="dd/mm/yy"></p-calendar>
+                        </span>
+                      </div>
+                    </div>
+
+
+                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">National ID : <span class="req">*</span> </label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <input id="float-input p-fluid" type="text" formControlName="nid_number" placeholder="National ID Number" pInputText required>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <input type="file" id="file" (change)="handleNIDFileInput($event.target.files)">
+                      </div>
+                    </div>
+                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">Blood Group : </label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <p-dropdown [options]="allBloodGroupList" formControlName="blood_group_enum_id" placeholder="Select Blood Group"
+                                      optionLabel="blood_group_enum_name" optionValue="blood_group_enum_id" [showClear]="true" [filter]="true" filterBy="blood_group_enum_name"></p-dropdown>
+
+
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex"> </label>
+                      </div>
+                      <div class="col-4 p-fluid">
+                        <!--<button class=" pi pi-plus risBtn risAdd " label="Add" (click)="addContactToTable(selectedContactTable)">Add</button>-->
+                      </div>
+                      <div class="col-4 p-fluid text-right">
+                        <button type="submit" class="pi pi-save risBtn risSave mr-2" (click)="onContactFormSubmit()"> Next</button>
+                      </div>
+                    </div>
+
+
+                    <div class="col-2 pr-3 text-right">
+                      Contact List: <span class="req"></span>
+                    </div>
+                    <div class="col-9 p-1">
+                      <p-table [value]="contactDataSources" styleClass="p-datatable-sm" class="p-0" responsiveLayout="scroll">
+                        <ng-template pTemplate="header">
+                          <tr>
+                            <th>#SL</th>
+                            <th>Contact Person</th>
+                            <th>Contact Type</th>
+                            <th>Designation</th>
+                            <th>Nationality</th>
+                            <th>DOB</th>
+                            <th>Religion</th>
+                            <th>Gender</th>
+                            <th>Marital Status</th>
+                            <th>View File</th>
+                          </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-rowIndex="rowIndex" let-contact>
+
+                          <tr>
+                            <td>{{rowIndex+1}}</td>
+                            <td>{{contact.contact_person_name}}</td>
+                            <td>{{contact.contact_type_name}}</td>
+                            <td>{{contact.designation_name}}</td>
+                            <td>{{contact.country_name}}</td>
+                            <td>{{contact.date_of_birth_str}}</td>
+                            <td>{{contact.religion_enum_name}}</td>
+                            <td>{{contact.gender_enum_name}}</td>
+                            <td>{{contact.marital_status_enum_name}}</td>
+                            <td> <button class="pi pi-eye-slash risBtn risView" (click)="viewContact(rowIndex,event)"> </button></td>
+
+                          </tr>
+                        </ng-template>
+                      </p-table>
+                    </div>
+
+                  </div>
+                </form>
+              </p-fieldset>
+
+              <p-fieldset legend="Add-Location wise Contact" [collapsed]="collapsedLocationWiseContactInfo" (onBeforeToggle)="toggleContact()" [toggleable]="true">
+                <!--<p-dialog header="Delete Record"  [style]="{width: '35vw'}">-->
+                <p-dialog header="Delete Record" [(visible)]="display" [style]="{width: '35vw'}">
+                  <p>Do you want to delete this record?</p>
+                  <ng-template pTemplate="footer">
+                    <button class="pi pi-times risBtn risClose" (click)="display=false"> No</button>
+                    <button class="pi pi-check risBtn risSave" (click)="deleteWarehouse()"> Yes</button>
+                  </ng-template>
+                </p-dialog>
+
+                <form [formGroup]="ContactLocationApplicationForm">
+                  <div class="p-fluid grid col-12 flex flex-wrap card-container">
+                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">Select Location : <span class="req">*</span></label>
+                      </div>
+
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <p-dropdown [options]="allContactLocation" [(ngModel)]="selectedContactLocation" formControlName="supplier_location_id" placeholder="Select Location"
+                                      optionLabel="supplier_location_name" [showClear]="true"></p-dropdown>
+
+                          <!--<p-dropdown [options]="allContactLocation" [(ngModel)]="selectedContactLocation" formControlName="supplierLocationObj" placeholder="Select Location"
+                              optionLabel="supplier_location_name" optionValue="supplier_location_id" [showClear]="true"></p-dropdown>-->
+
+                        </span>
+                      </div>
+                    </div>
+
+
+                    <div class="p-fluid grid col-6 flex justify-content-end flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">Contact Person:  <span class="req">*</span></label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <p-dropdown [options]="allContactPerson" [(ngModel)]="selectedContactPerson" formControlName="supplier_contact_id" placeholder="Select Contact Person"
+                                      optionLabel="contact_person_name" [showClear]="true"></p-dropdown>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6 flex justify-content-end flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">Note: </label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <input id="float-input p-fluid" type="text" formControlName="add_note" placeholder="Add Note" pInputText required>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex"> </label>
+                      </div>
+                      <div class="col-4 p-fluid">
+                        <!--<button class=" pi pi-plus risBtn risAdd " label="Add" (click)="addContactLocationToTable(selectedContactLocationTable)">Add</button>-->
+                      </div>
+                      <div class="col-4 p-fluid text-right">
+                        <button type="submit" class="pi pi-save risBtn risSave mr-2" (click)="onContactLocationFormSubmit()"> Next</button>
+                      </div>
+                    </div>
+
+                    <div class="col-2 pr-3 text-right">
+                      Warehouse List: <span class="req"></span>
+                    </div>
+                    <div class="col-9 p-1">
+                      <p-table [value]="contactLocationDataSources" styleClass="p-datatable-sm" class="p-0" responsiveLayout="scroll">
+                        <ng-template pTemplate="header">
+                          <tr>
+                            <th>#SL</th>
+                            <th>Location</th>
+                            <th>Contact Person</th>
+                            <th>Note</th>
+                            <th>Action</th>
+                          </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-rowIndex="rowIndex" let-contactLocation>
+
+                          <tr>
+                            <td>{{rowIndex+1}}</td>
+                            <td>{{contactLocation.supplier_location_name}}</td>
+                            <td>{{contactLocation.contact_person_name}}</td>
+                            <td>{{contactLocation.add_note}}</td>
+                            <td> <button class="pi pi-eye-slash risBtn risView" (click)="removeContactLocation(rowIndex,event)"> </button></td>
+
+                          </tr>
+                        </ng-template>
+                      </p-table>
+                    </div>
+
+                  </div>
+                </form>
+              </p-fieldset>
+
+            </div>
+          </p-tabPanel>
+          <p-tabPanel header="Financial Info">
+            <div class="card-body">
+              <p-fieldset legend="Security Deposit" [collapsed]="collapsedSecurityDepositInfo" (onBeforeToggle)="toggleFinancialInfo()" [toggleable]="true">
+                <!--<p-dialog header="Delete Record"  [style]="{width: '35vw'}">-->
+                <p-dialog header="Delete Record" [(visible)]="display" [style]="{width: '35vw'}">
+                  <p>Do you want to delete this record?</p>
+                  <ng-template pTemplate="footer">
+                    <button class="pi pi-times risBtn risClose" (click)="display=false"> No</button>
+                    <button class="pi pi-check risBtn risSave" (click)="deleteSecurityDeposit()"> Yes</button>
+                  </ng-template>
+                </p-dialog>
+                <form [formGroup]="financialApplicationForm">
+                  <div class="p-fluid grid col-12 flex flex-wrap card-container">
+
+                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">Currency : <span class="req">*</span></label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <p-dropdown [options]="allCurrency" [(ngModel)]="selectedCurrency" formControlName="currency_id" placeholder="Select Currency"
+                                    optionLabel="currency_name" optionValue="currency_id" [showClear]="true"></p-dropdown>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">Credit Days : <span class="req">*</span></label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <input id="float-input p-fluid" type="text" formControlName="credit_days" placeholder="Credit Days" pInputText required>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">Credit Limit : <span class="req">*</span> </label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <input id="float-input p-fluid" type="text" formControlName="credit_limit" placeholder="Credit Limit Amount" pInputText required>
+                        </span>
+
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">Payment Frequency : <span class="req">*</span> </label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <div class="formgroup-inline">
+
+                          <p-checkbox [(ngModel)]="checked" formControlName="is_payment_monthly" binary="true" inputId="binary"></p-checkbox>
+
+                          <!--<p-checkbox name="group1" value="New York" [(ngModel)]="selectedCities" inputId="ny"></p-checkbox>-->
+                          <label for="ny">Is payment Monthly</label>
+                        </div>
+                      </div>
+                    </div>
+
+                    <p style="border-top:2px solid blue; width: 100%; margin:0px 0px 10px 0px;"></p>
+
+                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">Security Deposit : <span class="req">*</span></label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <p-dropdown [options]="allSecurityType" [(ngModel)]="selectedSecurityType" formControlName="security_deposit_id" placeholder="Select Security Deposit"
+                                    optionLabel="security_deposit_name" [showClear]="true"></p-dropdown>
+
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">Security Amount : <span class="req">*</span></label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <input id="float-input p-fluid" type="text" formControlName="security_amount" placeholder="Security Amount" pInputText required>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">Expiry Date: <span class="req">*</span></label>
+                      </div>
+                      <div class="col-4 p-fluid">
+                        <span class="p-float-label">
+                          <p-calendar [showIcon]="true" formControlName="expiry_date" placeholder="Security Expiry Date" selectOtherMonths="true" inputId="navigators" showButtonBar="true" [monthNavigator]="true"
+                                      [yearNavigator]="true" yearRange="2000:2030" dateFormat="dd/mm/yy"></p-calendar>
+                        </span>
+                      </div>
+                      <div class="col-4 p-fluid text-right">
+                        <label for="lastname2">File Upload</label>
+                        <input type="file" id="file" (change)="handleSecurityFileInput($event.target.files)">
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex"> </label>
+                      </div>
+                      <div class="col-4 p-fluid">
+                        <!--<button class=" pi pi-plus risBtn risAdd " label="Add" (click)="addSecurityDepositToTable(selectedSecurityDepositTable)">Add</button>-->
+                      </div>
+                      <div class="col-4 p-fluid text-right">
+                        <!--<button type="submit" class="pi pi-save risBtn risSave mr-2" (click)="onSecurityDepositFormSubmit()"> Save as Draft</button>-->
+                      </div>
+                    </div>
+
+                    <div class="col-2 pr-3 text-right">
+                      Security List: <span class="req"></span>
+                    </div>
+                    <div class="col-9 p-1">
+                      <p-table [value]="SecurityDepositDataSources" styleClass="p-datatable-sm" class="p-0" responsiveLayout="scroll">
+                        <ng-template pTemplate="header">
+                          <tr>
+                            <th>#SL</th>
+                            <th>Security Deposit</th>
+                            <th>Security Amount</th>
+                            <th>Expiry Date</th>
+                            <th>View File</th>
+                          </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-rowIndex="rowIndex" let-securitydeposit>
+
+                          <tr>
+                            <td>{{rowIndex+1}}</td>
+                            <td>{{securitydeposit.security_deposit_name}}</td>
+                            <td>{{securitydeposit.security_amount}}</td>
+                            <td>{{securitydeposit.expiry_date_str}}</td>
+                            <td> <button class="pi pi-eye-slash risBtn risView" (click)="viewSecurityDeposit(rowIndex,event)"> </button></td>
+                          </tr>
+                        </ng-template>
+                      </p-table>
+                    </div>
+
+
+
+
+                  </div>
+                </form>
+              </p-fieldset>
+
+              <p-fieldset legend="Account List" [collapsed]="collapsedMobileBankingInfo" (onBeforeToggle)="toggleFinancialInfo()" [toggleable]="true">
+
+                <!--<p-dialog header="Delete Record"  [style]="{width: '35vw'}">-->
+                <p-dialog header="Delete Record" [(visible)]="display" [style]="{width: '35vw'}">
+                  <p>Do you want to delete this record?</p>
+                  <ng-template pTemplate="footer">
+                    <button class="pi pi-times risBtn risClose" (click)="display=false"> No</button>
+                    <button class="pi pi-check risBtn risSave" (click)="deleteMobileBanking()"> Yes</button>
+                  </ng-template>
+                </p-dialog>
+                <form action="" [formGroup]="mobileBankingApplicationForm">
+
+                  <div class="p-fluid grid col-12 flex flex-wrap card-container">
+
+                    <div class="col-2 pr-3 text-right">
+                      Mobile Banking List: <span class="req"></span>
+                    </div>
+                    <div class="col-9 p-1">
+                      <p-table [value]="mobileBankingDataSources" styleClass="p-datatable-sm" class="p-0" responsiveLayout="scroll">
+                        <ng-template pTemplate="header">
+                          <tr>
+                            <th>#SL</th>
+                            <th>MFS Name</th>
+                            <th>A/C Number</th>
+                            <th>MFS Type</th>
+                            <th>View File</th>
+                          </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-rowIndex="rowIndex" let-mobilebanking>
+
+                          <tr>
+                            <td>{{rowIndex+1}}</td>
+                            <td>{{mobilebanking.mfs_name}}</td>
+                            <td>{{mobilebanking.account_number}}</td>
+                            <td>{{mobilebanking.mfs_type_name}}</td>
+                            <td> <button class="pi pi-eye-slash risBtn risView" (click)="viewMFS(rowIndex,event)"> </button></td>
+
+                          </tr>
+                        </ng-template>
+                      </p-table>
+                    </div>
+
+                    <p style="border-top:2px solid blue; width: 100%; margin:10px 0px 10px 0px;"></p>
+
+                    <div class="col-2 pr-3 text-right">
+                      Bank List: <span class="req"></span>
+                    </div>
+                    <div class="col-9 p-1">
+                      <p-table [value]="bankingDataSources" styleClass="p-datatable-sm" class="p-0" responsiveLayout="scroll">
+                        <ng-template pTemplate="header">
+                          <tr>
+                            <th>#SL</th>
+                            <th>Bank Type</th>
+                            <th>Bank Name</th>
+                            <th>Branch Name</th>
+                            <th>Account Name</th>
+                            <th>Account Number</th>
+                            <th>View File</th>
+                          </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-rowIndex="rowIndex" let-banking>
+
+                          <tr>
+                            <td>{{rowIndex+1}}</td>
+                            <td>{{banking.bank_type_name}}</td>
+                            <td>{{banking.bank_name}}</td>
+                            <td>{{banking.bank_branch_name}}</td>
+                            <td>{{banking.account_name}}</td>
+                            <td>{{banking.account_number}}</td>
+                            <td> <button class="pi pi-eye-slash risBtn risView" (click)="viewBankAccount(rowIndex,event)"> </button></td>
+
+                          </tr>
+                        </ng-template>
+                      </p-table>
+                    </div>
+
+                  </div>
+                </form>
+              </p-fieldset>
+
+              <p-fieldset legend="Feedback" [collapsed]="collapsedBankingInfo" (onBeforeToggle)="toggleFinancialInfo()" [toggleable]="true">
+
+                <!--<p-dialog header="Delete Record"  [style]="{width: '35vw'}">-->
+                <p-dialog header="Delete Record" [(visible)]="display" [style]="{width: '35vw'}">
+                  <p>Do you want to delete this record?</p>
+                  <ng-template pTemplate="footer">
+                    <button class="pi pi-times risBtn risClose" (click)="display=false"> No</button>
+                    <button class="pi pi-check risBtn risSave" (click)="deleteBanking()"> Yes</button>
+
+                  </ng-template>
+                </p-dialog>
+                <form action="" [formGroup]="feedbackApplicationForm">
+                  <div class="p-fluid grid col-12 flex flex-wrap card-container">
+
+
+                    <div class="p-fluid grid col-6 flex justify-content-end flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">Comment</label>
+                      </div>
+                      <div class="col-8 p-fluid text-right">
+                        <input id="float-input p-fluid" type="text" formControlName="comment" placeholder="Please comment here" pInputText autocomplete="off">
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6 flex justify-content-end flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-md-inline-flex">Suggestion</label>
+                      </div>
+                      <div class="col-8 p-fluid text-right">
+                        <input id="float-input p-fluid" type="text" formControlName="suggestion" placeholder="Please suggestion here" pInputText autocomplete="off">
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6 flex justify-content-end flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                      </div>
+                      <div class="col-8 p-fluid text-left">
+                        <button type="submit" class="pi pi-times-circle risBtn risDelete mr-2" (click)="onFormReject()"> Reject</button>
+                      </div>
+                    </div>
+
+                    <!--pi pi-times-circle risBtn risView-->
+
+                    <div class="p-fluid grid col-6 flex justify-content-end flex-wrap card-container">
+                      <div class="col-4 mt-2 text-right">
+                      </div>
+                      <div class="col-8 p-fluid text-right">
+                        <button type="submit" class="pi pi-save risBtn risAdd mr-2" (click)="onFormApprove()"> Approve</button>
+                      </div>
+                    </div>
+
+
+                  </div>
+                </form>
+              </p-fieldset>
+            </div>
+          </p-tabPanel>
+        </p-tabView>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,125 @@
+<div class="p-card">
+
+  <div class="me-auto">
+    <div class="p-card-title ">
+      <span class="pi pi-positions"> </span> Position Information
+    </div>
+    <div class="p-card-body">
+      <!-- ********** start card body ******************** -->
+
+      <div class="card">
+        <div class="grid mb-2">
+          <button class="pi pi-plus risBtn risAdd mr-2 ml-2" (click)="showBasicDialog()"> New</button>
+          <button class="pi pi-pencil risBtn risEdit mr-2" (click)="loadPositionToEdit()"> Edit</button>
+          <button class="pi pi-trash risBtn risDelete mr-2" (click)="showDialog()"> Delete</button>
+        </div>
+        <p-dialog header="Delete Record" [(visible)]="display" [style]="{width: '35vw'}">
+          <p>Do you want to delete this record?</p>
+          <ng-template pTemplate="footer">
+            <button class="pi pi-times risBtn risClose" (click)="display=false"> No</button>
+            <button class="pi pi-check risBtn risSave" (click)="deletePositionInfo()"> Yes</button>
+          </ng-template>
+        </p-dialog>
+
+        <div class="card-body">
+
+          <p-dialog header="Position Information" [(visible)]="displayBasic" [draggable]="true" [resizable]="false" [style]="{width: '60vw'}">
+            <form action="" [formGroup]="positionForm">
+              <div class="grid mt-3">
+
+                <div class="p-fluid grid col-6">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-none d-md-inline-flex" title="Position Code">Code<span class="req">*</span> :</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <span class="p-float-label">
+                      <input id="float-input p-fluid" formControlName="position_code" type="text" placeholder="Position Code" pInputText autocomplete="off">
+                    </span>
+                  </div>
+                </div>
+                <div class="p-fluid grid col-6">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-none d-md-inline-flex" title="Position Name">Name<span class="req">*</span> :</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <span class="p-float-label">
+                      <input id="float-input p-fluid" formControlName="position_name" type="text" placeholder="Position Name"
+                             pInputText autocomplete="off">
+                    </span>
+                  </div>
+                </div>
+                <div class="p-fluid grid col-6">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-none d-md-inline-flex" title="Position Short Name">Short Name<span class="req">*</span> :</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <span class="p-float-label">
+                      <input id="float-input p-fluid" formControlName="position_short_name" type="text" placeholder="Position Short Name" pInputText autocomplete="off">
+                    </span>
+                  </div>
+                </div>
+                <div class="p-fluid grid col-6">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-none d-md-inline-flex" title="Name In Local Language">Name In Local Lang. :</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <span class="p-float-label">
+                      <input id="float-input p-fluid" formControlName="name_in_local_language" type="text" placeholder="Name In Local Language" pInputText autocomplete="off">
+                    </span>
+                  </div>
+                </div>
+                <div class="p-fluid grid col-6">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-none d-md-inline-flex" title="Remarks">Remarks :</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <span class="p-float-label">
+                      <textarea id="float-input p-fluid" formControlName="remarks" type="text" placeholder="Remarks" pInputText autocomplete="off"></textarea>
+                    </span>
+                  </div>
+                </div>
+
+              </div>
+
+            </form>
+            <ng-template pTemplate="footer">
+              <button type="submit" class="pi pi-save risBtn risSave" (click)="onFormSubmit()"> Save</button>
+              <button class="pi pi-times risBtn risClose" (click)="displayBasic=false"> Close</button>
+            </ng-template>
+          </p-dialog>
+          <!-- ************************start grid ************************ -->
+          <p-table [value]="positions" [paginator]="true" [rows]="10" styleClass="p-datatable-striped p-datatable-sm" [showCurrentPageReport]="true" selectionMode="single" [(selection)]="selectedPosition" dataKey="position_code"
+                   currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]">
+
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Position Code</th>
+                <th>Position Name</th>
+                <th>Position Short Name</th>
+                <th>Remarks</th>
+
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-position>
+
+              <tr (click)="selectRow(position)" [pSelectableRow]="position">
+                <td>{{position.position_code}}</td>
+                <td>{{position.position_name}}</td>
+                <td>{{position.position_short_name}}</td>
+                <td>{{position.remarks}}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+
+
+
+
+
+        </div>
+
+        <!-- ********** end card body ******************** -->
+
+      </div>
+    </div>
+  </div>
+</div>

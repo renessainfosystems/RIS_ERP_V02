@@ -1,0 +1,67 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <h5>Advanced</h5>
+            <p-fileUpload name="demo[]" url="./upload.php" (onUpload)="onUpload($event)"
+                          multiple="multiple" accept="image/*" maxFileSize="1000000">
+                <ng-template pTemplate="content">
+                    <ul *ngIf="uploadedFiles.length">
+                        <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
+                    </ul>
+                </ng-template>
+            </p-fileUpload>
+
+            <h5>Basic</h5>
+            <p-fileUpload mode="basic" name="demo[]" url="./upload.php" accept="image/*" maxFileSize="1000000" (onUpload)="onUpload($event)" chooseLabel="Browse"></p-fileUpload>
+        </div>
+    </div>
+</div>
+
+<h5>-----------------Show Hide Example -------------------</h5>
+
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+
+            <div [hidden]="formDisplay">
+                <h3> This is form</h3>
+                hellodsd dsfdsfdsf sdfdsfd
+                <button pButton pRipple type="button" (click)="toggleFormDisplay()" label="Save" class="risBtn risSave mr-2 mb-2"></button>
+                <button pButton pRipple type="button" (click)="toggleFormDisplay()" label="Close" class="risBtn risClose mr-2 mb-2"></button>
+
+            </div>
+
+            <div [hidden]="gridDisplay">
+                <button pButton pRipple type="button" (click)="toggleGridDisplay()" label="New" class="risBtn risAdd mr-2 mb-2"></button>
+                <button pButton pRipple type="button" (click)="toggleGridDisplay()" label="Edit" class="risBtn risEdit mr-2 mb-2"></button>
+
+                <h3> This is grid</h3>
+              
+                <table>
+                    <tr>
+                        <td>sfdsf</td>
+                        <td>sfdsf</td>
+                        <td>sfdsf</td>
+                    </tr>
+                </table>
+
+            </div>
+
+
+            <!--<div visible="isDisplay1">
+        helsslo
+
+        <button (click)="toggleDisplay1()">Hide</button>
+    </div>-->
+
+
+
+
+
+
+
+
+
+        </div>
+    </div>
+</div>

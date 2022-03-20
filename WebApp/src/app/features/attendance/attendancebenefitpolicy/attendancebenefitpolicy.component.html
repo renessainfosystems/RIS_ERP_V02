@@ -1,0 +1,487 @@
+<div class="p-card">
+
+  <div class="me-auto">
+    <div class="p-card-title ">
+      <span class="pi pi-OT Policy"> </span>Attendance Benefit Policy
+    </div>
+    <div class="p-card-body">
+      <!--********** start card body ********************-->
+
+      <div class="card">
+
+
+
+        <div class="card-body">
+
+
+          <p-fieldset legend={{header}} [collapsed]="collapsed" (onBeforeToggle)="toggle()" [toggleable]="true">
+            <p-dialog header="Delete Record" [(visible)]="display" [style]="{width: '35vw'}">
+              <p>Do you want to delete this record?</p>
+              <ng-template pTemplate="footer">
+                <button class="pi pi-times risBtn risClose" (click)="display=false"> No</button>
+                <button class="pi pi-check risBtn risSave" (click)="deleteAttendanceBenefitPolicy()"> Yes</button>
+              </ng-template>
+            </p-dialog>
+            <p-dialog header="Approve Record" [(visible)]="displayApprove" [style]="{width: '35vw'}">
+              <p>Do you want to approve this record?</p>
+              <ng-template pTemplate="footer">
+                <button class="pi pi-times risBtn risClose" (click)="displayApprove=false"> No</button>
+                <button class="pi pi-check risBtn risSave" (click)="policyApprove()"> Yes</button>
+              </ng-template>
+            </p-dialog>
+            <form action="" [formGroup]="benefitPolicyForm">
+              <div class="p-fluid grid col-12 flex flex-wrap card-container">
+                <div class="grid col-6 flex justify-content-start flex-wrap card-container">
+                  <div class="col-4 mt-1 text-right">
+                    <label for="" class=" d-md-inline-flex" pTooltip="Name" tooltipPosition="top">Name<span class="req">*:</span> </label>
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <span class="p-float-label">
+                      <input id="float-input p-fluid" type="text" formControlName="abp_name" placeholder="Policy Name" pInputText required>
+                    </span>
+                  </div>
+                </div>
+                <div class="grid col-6 flex justify-content-start flex-wrap card-container">
+                  <div class="col-4 mt-1 text-right">
+                    <label for="" class=" d-md-inline-flex" pTooltip="code" tooltipPosition="top">Code<span class="req">*:</span> </label>
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <span class="p-float-label">
+                      <input id="float-input p-fluid" type="text" disabled="disabled" formControlName="code" placeholder="Code" pInputText required>
+                    </span>
+                  </div>
+                </div>
+                <div class="p-fluid grid col-12 flex justify-content-start flex-wrap card-container pr-4">
+                  <div class="col-2 mt-2 text-right">
+                    <label for="" class=" d-md-inline-flex">Remarks:</label>
+                  </div>
+                  <div class="col-10 pr-md-5 p-fluid">
+
+                    <textarea rows="1" id="float-input flex p-fluid" formControlName="remarks" class="inputfield w-full" cols="50" pInputTextarea></textarea>
+
+                  </div>
+                </div>
+                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-md-inline-flex">Works On*:</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <p-dropdown [options]="benefitType" formControlName="benefit_work_on_id_enum" placeholder="Select Work On Type"
+                                optionLabel="benefit_work_on_name_enum" optionValue="benefit_work_on_id_enum" (onChange)="onBenefitTypeChange($event)" [showClear]="true"></p-dropdown>
+
+                  </div>
+
+                </div>
+
+
+                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                  <div class="col-4 mt-1 text-right">
+                    <label for="" class=" d-md-inline-flex">Min.Working Hour:</label>
+                  </div>
+                  <div class="col-3 p-fluid">
+                    <input id="float-input p-fluid" type="text" formControlName="minimum_working_hour" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" (input)="getHourToMin()" placeholder="Hour" pInputText>
+
+
+                  </div>
+                  <div class="col-1 mt-1 text-left">
+                    <label for="" class=" d-md-inline-flex">(h)</label>
+                  </div>
+                  <div class="col-3 p-fluid">
+                    <input id="float-input p-fluid" type="text" disabled="disabled" formControlName="minimum_working_hour_min" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" placeholder="Minutes" pInputText>
+
+
+                  </div>
+                  <div class="col-1 mt-1 text-left">
+                    <label for="" class=" d-md-inline-flex">(m)</label>
+                  </div>
+                </div>
+
+
+
+                <div *ngIf="isShownTimeslot" class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-md-inline-flex">Time Start*:</label>
+                  </div>
+
+                  <div class="col-8 p-fluid">
+
+                    <p-calendar [timeOnly]="true" formControlName="time_start" dataType="string" showTime="true" [hourFormat]="24" inputId="timeonly"></p-calendar>
+                  </div>
+
+                </div>
+                <div *ngIf="isShownTimeslot" class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-md-inline-flex">Time End*:</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+
+                    <p-calendar [timeOnly]="true" formControlName="time_end" dataType="string" [hourFormat]="24" inputId="timeonly"></p-calendar>
+                  </div>
+                </div>
+
+                <!--<div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+
+        <div class="col-4 mt-2 text-right">
+
+        </div>
+        <div class="col-8 p-fluid">
+
+          <div class="field-checkbox">
+            <p-checkbox name="group"  binary="true"></p-checkbox>
+            <label [for]="">Check if there is any special holiday</label>
+          </div>
+        </div>
+
+      </div>-->
+
+                <div *ngIf="isShownHolidayDP" class="p-fluid grid col-12 flex justify-content-start flex-wrap card-container">
+                  <div class="col-2 mt-1 text-right">
+                    <label for="" class=" d-md-inline-flex">Holiday:</label>
+                  </div>
+                  <div class="col-4 p-fluid">
+
+
+                    <p-dropdown [options]="holidays" placeholder="Select Holiday" formControlName="holiday_id"
+                                optionLabel="holiday_name" optionValue="holiday_id" [showClear]="true"></p-dropdown>
+
+                  </div>
+                  <div class="col-4 mt-1 text-left">
+                    <label for="" class=" d-md-inline-flex">(Optional)</label>
+                  </div>
+                </div>
+                <div class="p-fluid grid col-12 flex justify-content-start flex-wrap card-container">
+                  <div class="col-2 p-fluid ">
+
+                  </div>
+                  <div class="col-10 p-fluid ">
+                    <label for="" pl class=" d-md-inline-flex">
+                      If an employee work on the above day and meet the minimum working hour,
+                      he/she may achieve the following benefits
+                    </label>
+                  </div>
+                </div>
+                <div class="p-fluid grid col-12 flex justify-content-start flex-wrap card-container">
+                  <div class="col-2 p-fluid ">
+
+                  </div>
+                  <div class="col-4 p-fluid ">
+                    <p-checkbox name="group" formControlName="is_OT_benefit" (onChange)="onOTBenefitChange($event)" binary="true" pl-1></p-checkbox>
+                    <label for="" pl style="font-weight: bold;" class=" d-md-inline-flex  pl-2">Overtime Benefit</label>
+                  </div>
+                </div>
+
+                <div *ngIf="isShownOTBenefit" class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-md-inline-flex">Overtime Policy:</label>
+                  </div>
+                  <div class="col-6 p-fluid">
+                    <p-dropdown [options]="otPolicies" placeholder="Select OT Policy" formControlName="OT_policy_id"
+                                optionLabel="policy_name" optionValue="OT_policy_id" [showClear]="true"></p-dropdown>
+
+                  </div>
+                  <div class="col-2 p-fluid">
+
+                    <button class=" pi pi-search risBtn risAdd mr-2" label="Add" (click)="getOTDetails()">Details</button>
+                  </div>
+
+                </div>
+                <div *ngIf="isShownOTBenefit" class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+
+                </div>
+                <div class="p-fluid grid col-12 flex justify-content-start flex-wrap card-container">
+                  <div class="col-2 p-fluid ">
+
+                  </div>
+                  <div class="col-4 p-fluid ">
+                    <p-checkbox name="group" formControlName="is_leave_benefit" (onChange)="onLeaveBenefitChange($event)" binary="true" pl-1></p-checkbox>
+                    <label for="" style="font-weight: bold;" class=" d-md-inline-flex  pl-2">Leave Benefit</label>
+                  </div>
+
+                </div>
+                <div *ngIf="isShownLeaveBenefit" class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-md-inline-flex">Leave Head:</label>
+
+                  </div>
+                  <div class="col-8 p-fluid">
+
+                    <p-dropdown [options]="leaveHeads" placeholder="Select Leave Head" formControlName="leave_head_id"
+                                optionLabel="head_name" optionValue="leave_head_id" [showClear]="true"></p-dropdown>
+
+                  </div>
+                </div>
+                <div *ngIf="isShownLeaveBenefit" class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                  <div class="col-3 mt-2 text-left">
+                    <label for="" class=" d-md-inline-flex">LeaveAmount</label>
+                  </div>
+                  <div class="col-2 p-fluid">
+
+                    <input id="float-input p-fluid" type="text" (input)="getDaytoHourToMin()" formControlName="leave_amount_d" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" placeholder="Recover tolerence" pInputText>
+
+                  </div>
+                  <div class="col-1 mt-1 text-left">
+                    <label for="" class=" d-md-inline-flex">(d)</label>
+                  </div>
+                  <div class="col-2 p-fluid">
+
+                    <input id="float-input p-fluid" type="text" (input)="getHourToDayToMin()" formControlName="leave_amount_h" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" placeholder="Recover tolerence" pInputText>
+
+                  </div>
+                  <div class="col-1 mt-1 text-left">
+                    <label for="" class=" d-md-inline-flex">(h)</label>
+                  </div>
+                  <div class="col-2 p-fluid">
+
+                    <input id="float-input p-fluid" type="text" disabled="disabled" formControlName="leave_amount" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" placeholder="Recover tolerence" pInputText>
+
+                  </div>
+                  <div class="col-1 mt-1 text-left">
+                    <label for="" class=" d-md-inline-flex">(m)</label>
+                  </div>
+                </div>
+                <div *ngIf="isShownLeaveBenefit" class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-md-inline-flex">Enjoy Leave Within:</label>
+                  </div>
+                  <div class="col-3 p-fluid">
+
+                    <input id="float-input p-fluid" type="text" formControlName="leave_expire_day" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" placeholder="Recover tolerence" pInputText>
+
+                  </div>
+                  <div class="col-5 mt-1 text-left">
+                    <label for="" class=" d-md-inline-flex">days after working day</label>
+                  </div>
+                </div>
+                <div class="p-fluid grid col-12 flex justify-content-start flex-wrap card-container">
+                  <div class="col-2 p-fluid ">
+
+                  </div>
+                  <div class="col-4 p-fluid ">
+                    <p-checkbox name="group" formControlName="is_monetary_benefit" (onChange)="onMonetaryBenefitChange($event)" binary="true" pl-1></p-checkbox>
+                    <label for="" style="font-weight: bold;" class=" d-md-inline-flex  pl-2">Monetary Benefit</label>
+                  </div>
+
+                </div>
+                <div *ngIf="isShownMonetaryBenefit" class="p-fluid grid col-12 flex justify-content-start flex-wrap card-container">
+                  <div class="col-2 mt-2 text-right">
+                    <label for="" class=" d-md-inline-flex">Salary Head:</label>
+                  </div>
+                  <div class="col-3 p-fluid">
+
+                    <p-dropdown [options]="salaryheads" formControlName="salary_head_id" placeholder="Select Salary Head"
+                                optionLabel="salary_head_name" optionValue="salary_head_id" [showClear]="true"></p-dropdown>
+
+                  </div>
+                  <div class="col-5 mt-1 text-left">
+                    <label for="" class=" d-md-inline-flex">Amount will be given under the salary head.</label>
+                  </div>
+                </div>
+                <div *ngIf="isShownMonetaryBenefit" class="p-fluid grid col-12 flex justify-content-start flex-wrap card-container pr-5">
+                  <div class="col-2 mt-2 text-right">
+                    <label for="" class=" d-md-inline-flex">Fixed Amount:</label>
+                  </div>
+                  <div class="col-2 p-fluid">
+
+                    <input id="float-input p-fluid" type="text" (input)="checkFixedAmount()" formControlName="fixed_value" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" placeholder="Fixed Amount" pInputText>
+
+                  </div>
+                  <div class="col-1 mt-1 text-left">
+                    <label for="" class=" d-md-inline-flex"> (BDT) Or</label>
+                  </div>
+                  <div class="col-1 p-fluid">
+
+                    <input id="float-input p-fluid" type="text" (input)="checkPercentageAmount()" formControlName="percent_value" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" placeholder="Percentage" pInputText>
+
+                  </div>
+                  <div class="col-1 mt-1 text-left">
+                    <label for="" class=" d-md-inline-flex">% of</label>
+                  </div>
+                  <div class="col-2 mt-1 text-left">
+                    <div class="field-checkbox">
+                      <p-checkbox name="group" (onChange)="checkIsGross()" formControlName="is_gross" binary="true"></p-checkbox>
+                      <label [for]="">Gross     Or</label>
+                    </div>
+                  </div>
+                  <div class="col-3 p-fluid text-left">
+
+                    <p-dropdown [options]="basicsalaryheads" [(ngModel)]="selectedBasicSalaryHead" formControlName="basic_salary_head_id"
+                                optionLabel="basic_salary_head_name" optionValue="basic_salary_head_id" [showClear]="true"></p-dropdown>
+
+                  </div>
+                </div>
+                <div *ngIf="isShownMonetaryBenefit" class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                  <div class="col-4 mt-2 text-right">
+
+                  </div>
+                  <div class="col-8 p-fluid">
+
+
+                    <div class="field-checkbox">
+                      <p-checkbox name="group" formControlName="is_effect_on_payroll" binary="true"></p-checkbox>
+                      <label [for]="">Effect On Payroll</label>
+                    </div>
+                  </div>
+
+                </div>
+
+
+
+
+                <div class="p-fluid grid col-11 mt-2 ml-4 flex justify-content-end flex-wrap card-container">
+
+
+                  <button type="submit" class="pi pi-save risBtn risSave mr-2" (click)="saveBenefitPolicy()">Save</button>
+                  <button class="pi pi-times risBtn risClose mr-2" (click)="clear()"> Clear</button>
+
+
+                </div>
+              </div>
+
+            </form>
+
+          </p-fieldset>
+          <p-fieldset legend="Benefit Policy List" [collapsed]="collapsedBenefitList" (onBeforeToggle)="toggle()"[toggleable]="true">
+
+            <!--<div class="grid mb-4">
+              <form [formGroup]="shiftSearchForm">
+                <span class="p-input-icon-right mr-2">
+                  <i class="pi pi-search cursor-pointer" (click)="shiftSearch()"></i>
+                  <input type="text" id="user_info_search" formControlName="shift_name" (keyup.enter)="shiftSearch()" style="width:350px" pInputText placeholder="Search By- Any">
+                </span>
+
+            
+
+              </form>
+
+  
+            </div>-->
+
+            <div class="grid mb-2">
+              <button class="pi pi-plus risBtn risAdd mr-2 " (click)="btnNew()"> New</button>
+              <button class="pi pi-pencil risBtn risEdit mr-2 " (click)="loadBenefitPolicyToEdit()"> Edit</button>
+              <button class="pi pi-trash risBtn risDelete mr-2" (click)="showDialog()"> Delete</button>
+              <button class="pi pi-box risBtn risAll mr-2"> Activity</button>
+              <button class="pi pi-box risBtn risAll mr-2" (click)="approveConfirm()"> Approve</button>
+            </div>
+            <p-table [value]="benefitPolicies" dataKey="AbpId" [paginator]="true" [rows]="10" selectionMode="single" [(selection)]="selectedPolicy" [showCurrentPageReport]="true" responsiveLayout="scroll" styleClass="p-datatable-striped p-datatable-sm"
+                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
+
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>Policy Name</th>
+                  <th>Policy Type</th>
+                  <th>Minimum Working Hour</th>
+                  <th>Benefit</th>
+                  <th>Approved By</th>
+                  <th>Activity</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-policy>
+                <tr [pSelectableRow]="policy">
+                  <td>{{policy.AbpName}}</td>
+                  <td>{{policy.BenefitTypeName}}</td>
+                  <td>{{policy.MinimumWorkingHourMin}}</td>
+                  <td>{{policy.Benefits}}</td>
+                  <td>{{policy.ApprovedBy}}</td>
+                  <td *ngIf="policy.IsActive===true">{{"Active"}}</td>
+                  <td *ngIf="policy.IsActive===false">{{"InActive"}}</td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </p-fieldset>
+
+
+          <p-dialog header="OT Details" [(visible)]="OTDetailsModal" [draggable]="true" [resizable]="false" [style]="{width: '40vw'}">
+            <form action="" [formGroup]="OTDetailsForm">
+
+
+              <div class="p-fluid grid col-12">
+                <div class="p-fluid grid col-4 flex justify-content-start flex-wrap card-container">
+                  <div class="col-6 mt-2 text-right">
+                    <label for="" class=" d-md-inline-flex">Min OT:</label>
+                  </div>
+                  <div class="col-6 p-fluid">
+                    <span class="p-float-label">
+                      <input id="float-input p-fluid" type="text" disabled="disabled" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" formControlName="minimum_OT_min" placeholder="Minimum OT" pInputText>
+                    </span>
+                  </div>
+
+                </div>
+                <div class="p-fluid grid col-4 flex justify-content-start flex-wrap card-container">
+                  <div class="col-6 mt-2 text-right">
+                    <label for="" class=" d-md-inline-flex">Max OT</label>
+                  </div>
+                  <div class="col-6 p-fluid">
+                    <span class="p-float-label">
+                      <input id="float-input p-fluid" type="text" disabled="disabled" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" formControlName="maximum_OT_min" placeholder="Maximum OT" pInputText>
+                    </span>
+                  </div>
+
+                </div>
+                <div class="p-fluid grid col-4 flex justify-content-start flex-wrap card-container">
+                  <div class="col-6 mt-2 text-right">
+                    <label for="" class=" d-md-inline-flex">Reduce Time:</label>
+                  </div>
+                  <div class="col-6 p-fluid">
+                    <span class="p-float-label">
+                      <input id="float-input p-fluid" type="text" disabled="disabled" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" formControlName="OT_reduce_time_min" placeholder="OT Reduce Time" pInputText>
+                    </span>
+
+                  </div>
+
+                </div>
+                <div class="col-1 mt-1 text-right">
+                  <label for="" class=" d-md-inline-flex">(Minutes)</label>
+                </div>
+
+              </div>
+
+
+
+              <div class="p-fluid grid col-12">
+                <div class="col-3 mt-2 text-right">
+                  <label for="" class=" d-none d-md-inline-flex">OT Slab(Minute)<span class="req"></span>:</label>
+                </div>
+                <div class="col-9 p-fluid">
+                  <p-table [value]="otslabDataSources" styleClass="p-datatable-sm" class="p-0" responsiveLayout="scroll">
+                    <!-- <ng-template pTemplate="caption">
+                      OT Slab List<span class="req"></span>
+                    </ng-template> -->
+                    <ng-template pTemplate="header">
+                      <tr>
+                        <th>#SL</th>
+
+                        <th>Min OT</th>
+                        <th>Max OT</th>
+                        <th>Achieve OT</th>
+
+                      </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-rowIndex="rowIndex" let-slab>
+
+                      <tr>
+                        <td>{{rowIndex+1}}</td>
+
+                        <td>{{slab.minimum_OT_min}}</td>
+                        <td>{{slab.maximum_OT_min}}</td>
+                        <td>{{slab.acheive_OT_min}}</td>
+
+                      </tr>
+                    </ng-template>
+                  </p-table>
+                </div>
+              </div>
+            </form>
+            <ng-template pTemplate="footer">
+              <button type="submit" class="pi pi-save risBtn risSave" (click)="OTDetailsModal=false"> Ok</button>
+              <button class="pi pi-times risBtn risClose" (click)="OTDetailsModal=false"> Close</button>
+            </ng-template>
+          </p-dialog>
+        </div>
+
+        <!--********** end card body ********************-->
+
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,150 @@
+<div class="p-card">
+
+  <div class="me-auto">
+    <div class="p-card-title ">
+      <span class="pi pi-zones"> </span> Zone Information
+    </div>
+    <div class="p-card-body">
+      <!-- ********** start card body ********************-->
+
+      <div class="card">
+        <div class="grid mb-2">
+          <button class="pi pi-plus risBtn risAdd mr-2 ml-2" (click)="showBasicDialog()"> New</button>
+          <button class="pi pi-pencil risBtn risEdit mr-2" (click)="loadZoneToEdit()"> Edit</button>
+          <button class="pi pi-trash risBtn risDelete mr-2" (click)="showDialog()"> Delete</button>
+        </div>
+        <p-dialog header="Delete Record" [(visible)]="display" [style]="{width: '35vw'}">
+          <p>Do you want to delete this record?</p>
+          <ng-template pTemplate="footer">
+            <button class="pi pi-times risBtn risClose" (click)="display=false"> No</button>
+            <button class="pi pi-check risBtn risSave" (click)="deleteZoneInfo()"> Yes</button>
+          </ng-template>
+        </p-dialog>
+        <div class="card-body">
+
+          <p-dialog header="VAT Zone Information" [(visible)]="displayBasic" [draggable]="true" [resizable]="false" [style]="{width: '60vw'}">
+            <form action="" [formGroup]="zoneForm">
+              <div class="grid mt-3">              
+                <div class="p-fluid grid col-6">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-none d-md-inline-flex">Country<span class="req">*</span> :</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <span class="p-float-label">
+                      <p-dropdown [options]="allCountry" [(ngModel)]="selectedCountry" formControlName="countryObj" placeholder="Select Country"
+                                  optionLabel="country_name" optionValue="country_id"  [showClear]="true"></p-dropdown>
+
+                    </span>
+                  </div>
+                </div>
+
+                <div class="p-fluid grid col-6">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-none d-md-inline-flex" title="Zone Code">Code<span class="req">*</span> :</label>
+
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <span class="p-float-label">
+                      <input id="float-input p-fluid" formControlName="zone_code" type="text" placeholder="Zone Code" pInputText>
+                    </span>
+                  </div>
+                </div>
+
+                <div class="p-fluid grid col-6">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-none d-md-inline-flex" title="Zone Name">Name<span class="req">*</span> :</label>
+
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <span class="p-float-label">
+                      <input id="float-input p-fluid" formControlName="zone_name" type="text" placeholder="Zone Name" pInputText>
+                    </span>
+                  </div>
+                </div>
+
+                <div class="p-fluid grid col-6">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-none d-md-inline-flex" title="Zone Short Name">Short Name<span class="req">*</span> :</label>
+
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <span class="p-float-label">
+                      <input id="float-input p-fluid" formControlName="zone_short_name" type="text" placeholder="Zone Short Name" pInputText>
+                    </span>
+                  </div>
+                </div>
+
+                <div class="p-fluid grid col-6">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-none d-md-inline-flex" title="Name In Local Language">Name (Local): </label>
+
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <span class="p-float-label">
+                      <input id="float-input p-fluid" formControlName="name_in_local_language" type="text" placeholder="Name In Local Language" pInputText>
+                    </span>
+                  </div>
+                </div>
+
+                <div class="p-fluid grid col-6">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-none d-md-inline-flex" title="Short Name In Local Language">Short Name (Local): </label>
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <span class="p-float-label">
+                      <input id="float-input p-fluid" formControlName="short_name_in_local_language" type="text" placeholder="Short Name In Local Language" pInputText>
+                    </span>
+                  </div>
+                </div>
+
+                <div class="p-fluid grid col-6">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-none d-md-inline-flex">Remarks: </label>
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <span class="p-float-label">
+                      <textarea id="float-input p-fluid" formControlName="remarks" type="text" placeholder="Remarks" pInputText></textarea>
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+            </form>
+            <ng-template pTemplate="footer">
+              <button type="submit" class="pi pi-save risBtn risSave" (click)="onFormSubmit()"> Save</button>
+              <button class="pi pi-times risBtn risClose" (click)="displayBasic=false"> Close</button>
+            </ng-template>
+          </p-dialog>
+          <!--************************start grid ************************-->
+          <p-table [value]="zones" [paginator]="true" [rows]="10" styleClass="p-datatable-striped p-datatable-sm" [showCurrentPageReport]="true" selectionMode="single" [(selection)]="selectedZone" dataKey="zone_name"
+                   currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]">
+
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Zone Code</th>
+                <th>Zone Name</th>
+                <th>Remarks</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-zone>
+
+              <tr (click)="selectRow(zone)" [pSelectableRow]="zone">
+                <td>{{zone.zone_code}}</td>
+                <td>{{zone.zone_name}}</td>
+                <td>{{zone.remarks}}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+
+
+
+
+
+        </div>
+
+        <!--********** end card body ********************-->
+
+      </div>
+    </div>
+  </div>
+</div>

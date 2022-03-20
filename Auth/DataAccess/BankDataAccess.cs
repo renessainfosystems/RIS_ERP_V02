@@ -1,0 +1,242 @@
+﻿using Administrative.Model.ViewModel;
+using Auth.Model.Administrative.Model;
+using Auth.Utility;
+using Dapper;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Threading.Tasks;
+using Utility.Administrative.Enum;
+using static Auth.Utility.CommonMessage;
+
+namespace DataAccess
+{
+    public class BankDataAccess
+    {
+        public IConfiguration _config;
+
+        private readonly IDbConnection _dbConnection;
+        //protected CommonParammeter _commonParammeter { get; set; }
+
+        IHttpContextAccessor _httpContextAccessor = new HttpContextAccessor();
+        public BankDataAccess(IConfiguration configuration, IDbConnection dbConnection)
+        {
+            _config = configuration;
+            _dbConnection = dbConnection;
+
+        }
+
+        //Parameter Binding
+        public DynamicParameters BankParameterBinding(Bank bank, int operationType)
+        {
+           // var currentUserInfoId = _httpContextAccessor.HttpContext.Items["User_Info_Id"];
+            DynamicParameters parameters = new DynamicParameters();
+
+            if (operationType == (int)GlobalEnumList.DBOperation.Create || operationType == (int)GlobalEnumList.DBOperation.Update)
+            {
+                parameters.Add("@bank_id", bank.bank_id, DbType.Int32);
+                parameters.Add("@bank_name", bank.bank_name, DbType.String);
+                parameters.Add("@bank_short_name", bank.bank_short_name, DbType.String);
+                parameters.Add("@bank_swift_code", bank.bank_swift_code, DbType.String);
+                parameters.Add("@bank_email", bank.bank_email, DbType.String);
+                parameters.Add("@bank_web_url", bank.bank_web_url, DbType.String);
+                parameters.Add("@country_id", bank.country_id, DbType.Int32);
+                parameters.Add("@division_id", bank.division_id, DbType.Int32);
+                parameters.Add("@district_id", bank.district_id, DbType.Int32);
+                parameters.Add("@city", bank.city, DbType.String);
+                parameters.Add("@ps_area", bank.ps_area, DbType.String);
+                parameters.Add("@post_code", bank.post_code, DbType.String);
+                parameters.Add("@block", bank.block, DbType.String);
+                parameters.Add("@road_no", bank.road_no, DbType.String);
+                parameters.Add("@house_no", bank.house_no, DbType.String);
+                parameters.Add("@flat_no", bank.flat_no, DbType.String);
+                parameters.Add("@address_note", bank.address_note, DbType.String);
+                parameters.Add("@remarks", bank.remarks, DbType.String);
+                parameters.Add("@is_bank", bank.is_bank, DbType.Boolean);
+                parameters.Add("@is_local", bank.is_local, DbType.Boolean);
+                //parameters.Add("@is_active", bank.is_active, DbType.Boolean);
+                parameters.Add("@DBOperation", operationType == (int)GlobalEnumList.DBOperation.Create ? GlobalEnumList.DBOperation.Create : GlobalEnumList.DBOperation.Update);
+    }
+            else if (operationType == (int)GlobalEnumList.DBOperation.Delete)
+            {
+                parameters.Add("@bank_id", bank.bank_id, DbType.Int32);
+                parameters.Add("@DBOperation", GlobalEnumList.DBOperation.Delete);
+            }
+
+            return parameters;
+        }
+
+
+        //User Insert Update Delete
+        public async Task<dynamic> IUDBank(Bank bank, int dbOperation)
+        {
+            var message = new CommonMessage();
+            var result = (dynamic)null;
+            var parameters = BankParameterBinding(bank, dbOperation);
+            if (_dbConnection.State == ConnectionState.Closed)
+                _dbConnection.Open();
+
+            using (var tran = _dbConnection.BeginTransaction())
+            {
+                try
+                {
+
+                    tran.Commit();
+
+                    if (dbOperation == 3)
+                    {
+                        dynamic data = await _dbConnection.ExecuteAsync("[Administrative].[SP_Bank_D]", parameters, commandType: CommandType.StoredProcedure, transaction: tran);
+                        message = CommonMessage.SetSuccessMessage(CommonDeleteMessage);
+
+                    }
+                    else
+                    {
+                        dynamic data = await _dbConnection.QueryAsync<dynamic>("[Administrative].[SP_Bank_IUD]", parameters, commandType: CommandType.StoredProcedure, transaction: tran);
+
+                        if (data != null)
+                        {
+                            List<dynamic> dataList = data;
+
+                            result = (from dr in dataList select BankViewModel.ConvertToModel(dr)).ToList();
+
+                            message = CommonMessage.SetSuccessMessage(CommonSaveMessage, result);
+                        }
+                    }
+
+
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    throw ex.InnerException;
+                }
+                finally
+                {
+                    //DB connection dispose with db connection close
+                    tran.Dispose();
+
+                }
+
+            }
+
+            return (message);
+        }
+
+        public async Task<dynamic> GetAllAsync()
+        {
+            var message = new CommonMessage();
+
+            var result = (dynamic)null;
+
+            if (_dbConnection.State == ConnectionState.Closed)
+                _dbConnection.Open();
+
+            try
+            {
+                var sql = "SELECT bank_id,bank_name,bank_short_name,bank_swift_code,bank_email,bank_web_url,country_id,division_id,district_id,city,ps_area,post_code,block,road_no,house_no,flat_no,address_note,remarks,is_bank,is_active,is_local " +
+                    "FROM [Administrative].[Bank] ORDER BY bank_name ASC";
+
+                dynamic data = await _dbConnection.QueryAsync<dynamic>(sql);
+
+                if (data != null)
+                {
+                    List<dynamic> dataList = data;
+                    result = (from dr in dataList select BankViewModel.ConvertToModel(dr)).ToList();
+
+
+                    //  message = CommonMessage.SetSuccessMessage(CommonSaveMessage,result);
+
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw ex.InnerException;
+            }
+            finally
+            {
+
+                _dbConnection.Close();
+            }
+
+
+            return (result);
+        }
+
+        public async Task<dynamic> GetByIdAsync(int bank_id)
+        {
+            var result = (dynamic)null;
+            if (_dbConnection.State == ConnectionState.Closed)
+                _dbConnection.Open();
+
+            try
+            {
+                var sql = "SELECT bank_id,bank_name,bank_short_name,bank_swift_code,bank_email,bank_web_url,country_id,division_id,district_id,city,ps_area,post_code,block,road_no,house_no,flat_no,address_note,remarks,is_bank,is_active,is_local " +
+                    "FROM [Administrative].[Bank] WHERE  bank_id=@bank_id";
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@bank_id", bank_id);
+
+                dynamic data = await _dbConnection.QuerySingleOrDefaultAsync<dynamic>(sql, parameters);
+                if (data != null)
+                {
+
+                    result = BankViewModel.ConvertToModel(data);
+                }
+
+                //var sql = "SELECT bank_id,bank_name,bank_short_name,bank_swift_code,bank_email,bank_web_url,country_id,division_id,district_id,city,ps_area,post_code,block,road_no,house_no,flat_no,address_note,remarks,is_bank,is_active,is_local " +
+                //  "FROM [Administrative].[Bank] WHERE  bank_id=@bank_id";
+                //DynamicParameters parameters = new DynamicParameters();
+                //parameters.Add("@bank_id", bank_id);
+
+                //result = await _dbConnection.QuerySingleOrDefaultAsync<dynamic>(sql, parameters);
+
+            }
+            catch (Exception ex)
+            {
+                throw ex.InnerException;
+            }
+            finally
+            {
+                _dbConnection.Close();
+            }
+
+            return result;
+        }
+
+        public async Task<dynamic> GetAllBank()
+        {
+
+
+            var message = new CommonMessage();
+            var result = (dynamic)null;
+
+            if (_dbConnection.State == ConnectionState.Closed)
+                _dbConnection.Open();
+
+            try
+            {
+                var sql = "SELECT bank_id,bank_name FROM [Administrative].[Bank]";
+
+                result = await _dbConnection.QueryAsync<dynamic>(sql);
+
+
+            }
+            catch (Exception ex)
+            {
+                throw ex.InnerException;
+            }
+            finally
+            {
+
+                _dbConnection.Close();
+            }
+
+
+            return (result);
+        }
+    }
+}

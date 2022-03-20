@@ -1,0 +1,177 @@
+<div class="p-card">
+
+  <div class="me-auto">
+    <div class="p-card-title ">
+      <span class="pi pi-OT Policy"> </span>Leave Head Information
+    </div>
+    <div class="p-card-body">
+      <!--********** start card body ********************-->
+
+      <div class="card">
+
+
+
+        <div class="card-body">
+
+          <p-fieldset legend={{header}} [collapsed]="collapsed" (onBeforeToggle)="toggle()" [toggleable]="true">
+            <p-dialog header="Delete Record" [(visible)]="display" [style]="{width: '35vw'}">
+              <p>Do you want to delete this record?</p>
+              <ng-template pTemplate="footer">
+                <button class="pi pi-times risBtn risClose" (click)="display=false"> No</button>
+                <button class="pi pi-check risBtn risSave" (click)="deleteLeaveHead()"> Yes</button>
+              </ng-template>
+            </p-dialog>
+            <form action="" [formGroup]="leaveHeadForm">
+              <div class="p-fluid grid col-12 flex flex-wrap card-container">
+                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-md-inline-flex" pTooltip="Leave Name" tooltipPosition="top">Leave Name<span class="req">*:</span> </label>
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <span class="p-float-label">
+                      <input id="float-input p-fluid" type="text" formControlName="head_name" placeholder="Leave Name" pInputText required>
+                    </span>
+                  </div>
+                </div>
+                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                  <div class="col-3 mt-2 text-right">
+                    <label for="" class=" d-md-inline-flex">Short Name*:</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <span class="p-float-label">
+                      <input id="float-input p-fluid" type="text" formControlName="leave_head_short_name" placeholder="Short Name" pInputText>
+                    </span>
+                  </div>
+
+                </div>
+
+                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-md-inline-flex">Leave Type*:</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <span class="p-float-label  ">
+                      <p-dropdown [options]="leaveTypes" [(ngModel)]="selectedLeaveType" formControlName="leave_type_id_enum" placeholder="Select Leave Types"
+                                  optionLabel="leave_type_enum_name" optionValue="leave_type_id_enum" [showClear]="true"></p-dropdown>
+
+                    </span>
+                  </div>
+
+                </div>
+                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                  <div class="col-3 mt-2 text-right">
+                    <label for="" class=" d-md-inline-flex">Required For*:</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <span class="p-float-label  ">
+                      <p-dropdown [options]="requiredFor" [(ngModel)]="selectedrequiredFor" formControlName="required_for_id_enum" placeholder="Select Type"
+                                  optionLabel="required_for_enum_name" optionValue="required_for_id_enum" [showClear]="true"></p-dropdown>
+
+                    </span>
+                  </div>
+
+                </div>
+                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-md-inline-flex">Name In Local:</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <span class="p-float-label">
+                      <input id="float-input p-fluid" type="text" formControlName="name_in_local_language" placeholder="Name in Local Language" pInputText>
+                    </span>
+
+                  </div>
+
+                </div>
+
+
+                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                  <div class="col-3 mt-2 text-right">
+                    <label for="" class=" d-md-inline-flex">Remarks:</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <span class="p-float-label">
+
+                      <textarea rows="1" id="float-input p-fluid" formControlName="remarks" class="inputfield w-full" cols="50" pInputTextarea></textarea>
+                    </span>
+                  </div>
+                </div>
+
+
+
+
+                <div class="p-fluid grid col-11 mt-2 ml-4 flex justify-content-end flex-wrap card-container">
+
+
+
+                  <button type="submit" class="pi pi-save risBtn risSave mr-2" (click)="saveLeaveHead()"> Save</button>
+                  <button class="pi pi-times risBtn risClose mr-2" (click)="clear()"> Close</button>
+
+
+                </div>
+
+
+              </div>
+
+            </form>
+
+          </p-fieldset>
+
+          <p-fieldset legend="Leave Head List"  [collapsed]="collapsedLeaveHeadList" (onBeforeToggle)="toggle()" [toggleable]="true">
+            <div class="grid mb-2">
+              <button class="pi pi-plus risBtn risAdd mr-2 " (click)="btnNew()"> New</button>
+              <button class="pi pi-pencil risBtn risEdit mr-2 " (click)="loadLeaveHeadToEdit()"> Edit</button>
+              <button class="pi pi-trash risBtn risDelete mr-2" (click)="showDialog()"> Delete</button>
+
+            </div>
+            <p-table [value]="leaveHeads" dataKey="LeaveHeadId" [paginator]="true" [rows]="10" selectionMode="single" [(selection)]="selectedLeaveHead" [showCurrentPageReport]="true" responsiveLayout="scroll" styleClass="p-datatable-striped p-datatable-sm"
+                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
+
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>Leave Head</th>
+                  <th>Leave Type</th>
+                  <th>Required For</th>
+
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-leaveHead>
+                <tr [pSelectableRow]="leaveHead">
+                  <td>{{leaveHead.HeadName}}</td>
+                  <td>{{leaveHead.LeaveTypeName}}</td>
+                  <td>{{leaveHead.RequiredFor}}</td>
+
+                </tr>
+              </ng-template>
+            </p-table>
+          </p-fieldset>
+          <!--************************start grid ************************-->
+          <!--<p-table [value]="Holidays" [paginator]="true" [rows]="10" selectionMode="single" [(selection)]="selectedHolidays" dataKey="holiday_id" [showCurrentPageReport]="true" responsiveLayout="scroll" styleClass="p-datatable-striped p-datatable-sm"
+                   currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
+
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Holiday</th>
+                <th>Type Of Holiday</th>
+                <th>Days Of Month</th>
+
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-holiday>
+              <tr [pSelectableRow]="holiday">
+                <td>{{holiday.holiday_name}}</td>
+                <td>{{holiday.holidayTypeName}}</td>
+                <td>{{holiday.days_of_month}}</td>
+              </tr>
+            </ng-template>
+          </p-table>-->
+
+
+        </div>
+
+        <!--********** end card body ********************-->
+
+      </div>
+    </div>
+  </div>
+</div>

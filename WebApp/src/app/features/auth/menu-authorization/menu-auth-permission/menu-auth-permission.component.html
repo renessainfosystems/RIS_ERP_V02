@@ -1,0 +1,62 @@
+
+<div class="p-card">
+
+  <div class="me-auto">
+    <div class="p-card-title ">
+      <span class="pi pi-users"> </span> Menu List
+    </div>
+    <button class="pi pi-step-backward risBtn risAll mr-2" (click)="BacktoAuthorizationRole()"> Back</button>
+    <div class="p-card-body">
+      <!-- ********** start card body ******************** -->
+      <p-dialog [(visible)]="displayModal" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [style]="{width: '35vw'}" [baseZIndex]="10000" [maximizable]="false">
+
+
+        <div class="p-fluid grid col-12">
+          <div *ngFor="let event of events;let i = index" class="field-checkbox">
+            <p-checkbox name="group[i]" value="event" binary="true" [value]="event" (onChange)="onCheckboxChange($event,event.MenuId,event.AuthorizationRoleMenuEventsId,event.AuthorizationRoleId,event.MenuEventId)" [(ngModel)]="event.IsPermissionExist" [inputId]="event.EventEnumId"></p-checkbox>
+            <label [for]="event.EventEnumId">{{event.EventEnumName}}</label>
+          </div>
+        </div>
+
+        <ng-template pTemplate="footer">
+          <button class="pi pi-refresh risBtn risSave mr-2" (click)="okButton()"> OK</button>
+          <button class="pi pi-times risBtn risClose mr-2" (click)="displayModal=false"> Close</button>
+
+
+        </ng-template>
+
+      </p-dialog>
+      <p-treeTable [value]="MenuDataSource" [columns]="cols" selectionMode="single" [(selection)]="selectedNode" dataKey="MenuId"
+                   (onNodeSelect)="nodeSelect($event)" (onNodeUnselect)="nodeUnselect($event)">
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <th *ngFor="let col of columns">
+              {{col.header}}
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
+          <tr [ttRow]="rowNode" [ttSelectableRow]="rowNode">
+            <td>
+              <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+              <mat-icon *ngIf="rowData.MenuIconPath">  <img [src]="rowData.MenuIconPath"></mat-icon>
+              {{rowData.MenuName}}
+            </td>
+            <!-- <td>
+
+            {{rowData.MenuId}}
+          </td> -->
+            <td>{{rowData.TotalEvents}}</td>
+            <td>{{rowData.PermittedEvents}}</td>
+
+          </tr>
+        </ng-template>
+      </p-treeTable>
+
+      <!-- ********** end card body ******************** -->
+    </div>
+  </div>
+</div>
+
+
+

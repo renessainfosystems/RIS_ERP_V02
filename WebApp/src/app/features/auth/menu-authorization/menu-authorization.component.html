@@ -1,0 +1,96 @@
+<div class="p-card">
+
+  <div class="me-auto">
+    <div class="p-card-title ">
+      <span class="pi pi-users"> </span>Authorization Role
+    </div>
+    <div class="p-card-body">
+      <!-- ********** start card body ******************** -->
+
+      <div class="grid mb-2">
+        <button class="pi pi-plus risBtn risAdd mr-2" (click)="showDialog()"> New</button>
+        <button class="pi pi-pencil risBtn risEdit mr-2" (click)="editModalDialog()"> Edit</button>
+        <button class="pi pi-trash risBtn risDelete mr-2" (click)="deleteRole()"> Delete</button>
+        <button class="pi pi-box risBtn risAll mr-2" (click)="roleActivity()"> Activity</button>
+        <button class="pi pi-box risBtn risAll mr-2" (click)="menuEventPermission()"> Permission</button>
+      </div>
+
+
+      <form [formGroup]="roleForm">
+
+        <p-dialog [(visible)]="displayModal" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [style]="{width: '55vw'}" [baseZIndex]="10000" [maximizable]="true">
+
+
+          <div class="p-fluid grid col-12">
+            <div class="col-4 mt-2 text-right">
+              <label for="" class=" d-none d-md-inline-flex">Role Name :</label>
+            </div>
+            <div class="col-8 p-fluid">
+              <span class="p-float-label">
+                <input id="float-input p-fluid" formControlName="authorization_role_name" type="text" placeholder="Role Name"
+                       pInputText>
+              </span>
+            </div>
+          </div>
+
+
+          <div class="p-fluid grid col-12">
+            <div class="col-4 mt-2 text-right">
+              <label for="" class=" d-none d-md-inline-flex">Remarks :</label>
+            </div>
+            <div class="col-8 p-fluid">
+              <span class="p-float-label">
+                <input id="float-input p-fluid" formControlName="remarks" type="text" placeholder="Remarks"
+                       pInputText>
+              </span>
+            </div>
+          </div>
+
+
+
+
+
+          <ng-template pTemplate="footer">
+            <button type="submit" class="pi pi-save risBtn risSave" (click)="SaveRole()"> Save</button>
+            <button class="pi pi-times risBtn risClose" (click)="displayModal=false"> Close</button>
+          </ng-template>
+
+        </p-dialog>
+      </form>
+      <!-- <div>
+       <app-menu-auth-permission></app-menu-auth-permission>
+      </div> -->
+      <!-- start grid -->
+
+
+      <div class="card">
+
+        <p-table [value]="authorizationRoles" [paginator]="true" [rows]="10" selectionMode="single" [(selection)]="selectedRole" dataKey="AuthorizationRoleId" [showCurrentPageReport]="true" responsiveLayout="scroll"
+                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Role</th>
+              <th>Remarks</th>
+              <th>Activity</th>
+              <th>Total Menus</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-role>
+            <tr [pSelectableRow]="role">
+              <td>{{role.AuthorizationRoleName}}</td>
+              <td>{{role.remarks}}</td>
+              <td *ngIf="role.IsActive===true">{{"Active"}}</td>
+              <td *ngIf="role.IsActive===false">{{"InActive"}}</td>
+              <td>{{role.MenuCount}}</td>
+            </tr>
+          </ng-template>
+
+        </p-table>
+      </div>
+
+
+
+      <!-- ********** end card body ******************** -->
+    </div>
+  </div>
+</div>

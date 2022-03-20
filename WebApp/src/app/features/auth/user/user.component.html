@@ -1,0 +1,236 @@
+
+<div class="p-card">
+  <div class="me-auto">
+    <div class="p-card-title ">
+      <span class="pi pi-users"> </span> User Information
+  </div>
+     <div class="p-card-body">
+<!-- ********** start card body ******************** -->
+<div class="card">
+  <div class="grid mb-2">
+    <span class="p-input-icon-right mr-2">
+      <i class="pi pi-search cursor-pointer" (click)="searchUserInfo()"></i>
+      <input type="text" id="user_info_search" (keyup.enter)="searchUserInfo()" user_info_search class="inputfield min-w-30rem" pInputText placeholder="Search By- Any">
+    </span>
+    <button class="pi pi-plus risBtn risAdd mr-2" (click)="showBasicDialog()"> New</button>
+    <button class="pi pi-pencil risBtn risEdit mr-2" (click)="loadUserToEdit()"> Edit</button>
+    <button class="pi pi-trash risBtn risDelete mr-2" (click)="deleteUserInfo()"> Delete</button>
+    <button class="pi pi-box risBtn risAll mr-2" (click)="userActivity()"> Activity</button>
+    <button class="pi pi-box risBtn risAll mr-2" (click)="userPermission()"> Permission</button>
+  </div>
+<p-dialog header="Add New User" [(visible)]="displayBasic"  [draggable]="true" [resizable]="false" [style]="{width: '60vw'}">
+<form action="" [formGroup]="userForm">
+<div class="grid ">
+ <div class="col-6 leftside ">
+<div class=" grid col">
+  <div class="col-4 text-right">
+    <label for="" style="padding-right:5px!important;" class="  d-none d-md-inline-flex">Employee Name :</label>
+  </div>
+  <div class="col-8 p-fluid ">
+    <div class="p-float-label grid ">
+      <input id="float-input" class="col p-fluid "  formControlName="employee_name" type="text" placeholder="Employee Name" pInputText>
+      <button class="pi pi-search risBtn risAll col-4 ml-2  mr-3" (click)="op.toggle($event)"> Check</button>
+    </div>
+<!-- start overlay panel ----------- -->
+<p-overlayPanel #op [showCloseIcon]="true" [style]="{width: '450px'}">
+    <ng-template pTemplate>
+        <p-table [value]="users" selectionMode="single"  (onRowSelect)="onRowSelect($event)" [paginator]="true" [rows]="5">
+            <ng-template pTemplate="header">
+                <tr>
+                  <th>Name</th>
+                  <th>Login ID</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-product>
+                <tr >
+                  <td>Lalamin</td>
+                  <td>U12345</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </ng-template>
+</p-overlayPanel>
+<!-- end overlay panel ----------- -->
+  </div>
+</div>
+<div class="p-fluid grid col" style="padding-right:15px!important; padding-left: 0px!important;">
+  <div class="col-4 mt-2 text-right">
+    <label for="" class=" d-none d-md-inline-flex">Employee Official :</label>
+  </div>
+  <div class="col-8 p-fluid">
+    <span class="p-float-label">
+      <input formControlName="employee_official" id="float-input p-fluid disabled-input" type="text"  disabled [(ngModel)]="value5" placeholder="Employee Official" pInputText>
+    </span>
+  </div>
+</div>
+<div class="p-fluid grid col" style="padding-right:15px!important; padding-left: 0px!important;">
+  <div class="col-4 mt-2 text-right">
+    <label for="" class=" d-md-inline-flex">User Name <span class="req">*</span> :</label>
+  </div>
+  <div class="col-8 p-fluid">
+    <span class="p-float-label">
+      <input id="float-input p-fluid"  formControlName="user_name" type="text" placeholder="User Name"  pInputText>
+    </span>
+  </div>
+</div>
+ </div>
+  <!-- start image *************************** -->
+  <div class=" col-6 flex justify-content-end right">
+   <div class="flex grid  ">
+      <div class=" inputWrapper col-6 photo-signature align-self-end flex align-items-center justify-content-center">
+      <img class="risBtn m-1" [src]="photourllink" style="width: 150px;" alt="">
+      <input type="file" class="fileInput risBtn risAdd " style="width: 150px;" #userImage (change)="onSelectImage($event)">
+    </div>
+    <div class=" inputWrapper col-5 photo-signature align-self-end flex align-items-end justify-content-center">
+      <img class="risBtn m-1" [src]="sigurllink" style="width: 140px;" alt="">
+      <input type="file" class="fileInput risBtn risAdd " style="width: 140px; " #userSignature (change)="onSelectSignature($event)">
+    </div>
+   </div>
+    </div>
+  <!-- end image *************************** -->
+  <div class=" p-fluid grid col-6">
+    <div class="col-4 mt-2 text-right">
+      <label for="" class=" d-none d-md-inline-flex">Login ID <span class="req">*</span> :</label>
+    </div>
+    <div class="col-8 p-fluid">
+      <span class="p-float-label">
+        <input id="float-input p-fluid" formControlName="login_id" type="text" placeholder="Login ID" pInputText>
+      </span>
+    </div>
+  </div>
+  <div class="p-fluid grid col-6 ">
+    <div class="col-4 mt-2 text-right">
+      <label for="" class=" d-none d-md-inline-flex">User Type <span class="req">*</span> :</label>
+    </div>
+    <div class="col-8 p-fluid">
+      <span class="p-float-label  p-fluid">
+        <!--<p-dropdown [options]="user_type" [(ngModel)]="selectusertype" formControlName="user_type" placeholder="Select Continent" optionLabel="name" optionValue="code"></p-dropdown>-->
+        <p-dropdown [options]="user_type" [(ngModel)]="selectusertype" formControlName="user_type_enum" placeholder="Select User Type"
+                    optionLabel="user_type_enum_name" optionValue="user_type_enum_id" [showClear]="true"></p-dropdown>
+      </span>
+    </div>
+  </div>
+  <div class="p-fluid grid col-6">
+    <div class="col-4 mt-2 text-right">
+      <label for="" class=" d-none d-md-inline-flex">National ID :</label>
+    </div>
+    <div class="col-8 p-fluid">
+      <span class="p-float-label">
+        <input id="float-input p-fluid" formControlName="national_id" type="text" placeholder="National ID" pInputText>
+      </span>
+    </div>
+  </div>
+  <div class="p-fluid grid col-6">
+    <div class="col-4 mt-2 text-right">
+      <label for="" class=" d-none d-md-inline-flex">Phone No :</label>
+    </div>
+    <div class="col-8 p-fluid">
+      <span class="p-float-label">
+        <input id="float-input p-fluid" formControlName="phone_no" type="text" placeholder="Phone No"
+               pInputText>
+        
+      </span>
+    </div>
+  </div>
+  <div class="p-fluid grid col-6">
+    <div class="col-4 mt-2 text-right">
+      <label for="" class=" d-none d-md-inline-flex">Mobile No <span class="req">*</span> :</label>
+    </div>
+    <div class="col-8 p-fluid">
+      <span class="p-float-label">
+        <input id="float-input p-fluid" formControlName="mobile_no" type="text" placeholder="Mobile No"
+               pInputText>
+      </span>
+ 
+
+    </div>
+  </div>
+  <div class="p-fluid grid col-6">
+    <div class="col-4 mt-2 text-right">
+      <label for="" class=" d-none d-md-inline-flex">Email Address <span class="req">*</span> :</label>
+    </div>
+    <div class="col-8 p-fluid">
+      <span class="p-float-label">
+        <input id="float-input p-fluid" formControlName="email_address" type="text" placeholder="Email Address"
+          pInputText>
+      </span>
+    </div>
+  </div>
+  <div class="p-fluid grid col-6">
+    <div class="col-4 mt-2 text-right">
+      <label for="" class=" d-none d-md-inline-flex">Remarks:</label>
+    </div>
+    <div class="col-8 p-fluid">
+      <span class="p-float-label">
+        <input id="float-input p-fluid" formControlName="remarks" type="text" placeholder="Remarks" pInputText>
+      </span>
+    </div>
+  </div>
+  <div class="p-fluid grid col-6">
+    <div class="col-4 mt-2 text-right">
+      <label for="" class=" d-none d-md-inline-flex">Password <span class="req">*</span> :</label>
+    </div>
+    <div class="col-8 fluid ">
+         <p-password [(ngModel)]="value3"  formControlName="password"placeholder="Password" [toggleMask]="true"></p-password>
+    </div>
+  </div>
+  <div class="grid col-6"></div>
+  <div class="p-fluid grid col-6">
+    <div class="col-4 mt-2 text-right">
+      <label for="" class=" d-none d-md-inline-flex">Confirm Pass <span class="req">*</span> :</label>
+    </div>
+    <div class="col-8 p-fluid">
+      <span class="p-float-label">
+        <input id="float-input p-fluid" formControlName="confirm_password" type="password" placeholder="Confirm Pass"
+          pInputText>
+      </span>
+    </div>
+  </div>
+</div>
+</form>
+  <ng-template pTemplate="footer">
+    <button type="submit" class="pi pi-save risBtn risSave" (click)="onFormSubmit()"> Save</button>
+    <button class="pi pi-times risBtn risClose" (click)="displayBasic=false"> Close</button>
+  </ng-template>
+</p-dialog>
+<div class="c1">
+
+</div>
+  <!-- ************************start grid ************************ -->
+
+
+
+<p-table [value]="users" [paginator]="true" styleClass="p-datatable-striped" [rows]="10" [showCurrentPageReport]="true"
+         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]"  selectionMode="single" [(selection)]="selectUser" dataKey="UserInfoId" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
+
+  <ng-template pTemplate="header">
+    <tr [pSelectableRow]="user">
+
+      <th>Name</th>
+      <th>Login ID</th>
+      <th>Employee Official</th>
+      <th>Mobile</th>
+      <th>Email</th>
+      <th>Activity</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-user>
+
+    <tr [pSelectableRow]="user">
+      <td>{{user.UserName}}</td>
+      <td>{{user.LoginId}}</td>
+      <td>{{""}}</td>
+      <td>{{user.MobileNo}}</td>
+      <td>{{user.EmailAddress}}</td>
+      <td *ngIf="user.IsActive===true">{{"Active"}}</td>
+      <td *ngIf="user.IsActive===false">{{"InActive"}}</td>
+    </tr>
+  </ng-template>
+</p-table>
+</div>
+
+ <!-- ********** end card body ******************** -->
+
+     </div>
+   </div>
+  </div>

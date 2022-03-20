@@ -1,0 +1,192 @@
+<div class="p-card">
+
+  <div class="me-auto">
+    <div class="p-card-title ">
+      <button class="pi pi-step-backward risBtn risAll mr-2" (click)="BacktoAuthorizationRole()"> Back</button>
+      <span class="pi pi-users"> User Permission</span>
+    </div>
+
+    <div class="p-card-body">
+      <!-- ********** start card body ******************** -->
+
+
+
+
+
+      <div class="card">
+        <p-tabView>
+
+            <p-tabPanel header="Role Assign">
+              <form action="" [formGroup]="userassignForm">
+                <div class="p-fluid grid col-10 flex justify-content-start flex-wrap card-container">
+                  <div class="p-fluid grid col-12 flex justify-content-start flex-wrap card-container">
+
+
+
+                    <div class="col-2 p-fluid">
+                      <label for="" class=" d-md-inline-flex">User Name :</label>
+                    </div>
+                    <div class="col-3 p-fluid">
+                      <span class="p-float-label">
+                        <input readonly="readonly" formControlName="user_name" id="user_name" type="text" pInputText />
+                        <!-- <label for="float-input">Parent: </label> -->
+                      </span>
+                    </div>
+                    <div class="col-3 p-fluid">
+                      <label for="" class=" d-md-inline-flex">Authorization Role :</label>
+                    </div>
+                    <div class="col-4 p-fluid">
+                      <span class="p-float-label">
+
+                        <p-dropdown [options]="user_role" formControlName="user_role" [(ngModel)]="selectuserrole" (onChange)="onRoleChange($event)" placeholder="Select User Type"
+                                    optionLabel="AuthorizationRoleName" optionValue="AuthorizationRoleId" [showClear]="true"></p-dropdown>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="p-fluid grid col-12 flex justify-content-end flex-wrap card-container">
+                    <button type="submit" class="pi pi-save risBtn risSave mr-3" (click)="UserRoleCreate()"> Save</button>
+
+                  </div>
+                </div>
+              </form>
+              <div class="card">
+
+
+                <p-dialog [(visible)]="displayModal" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [style]="{width: '35vw'}" [baseZIndex]="10000" [maximizable]="false">
+
+
+                  <div class="p-fluid grid col-12">
+                    <div *ngFor="let event of events;let i = index" class="field-checkbox">
+                      <p-checkbox readonly="readonly" name="group[i]" value="event" binary="true" [value]="event" (onChange)="onCheckboxChange($event,event.MenuId,event.AuthorizationRoleMenuEventsId,event.AuthorizationRoleId,event.MenuEventId)" [(ngModel)]="event.IsPermissionExist" [inputId]="event.EventEnumId"></p-checkbox>
+                      <label [for]="event.EventEnumId">{{event.EventEnumName}}</label>
+                    </div>
+                  </div>
+
+                  <ng-template pTemplate="footer">
+                    <button class="pi pi-refresh risBtn risSave mr-2" (click)="okButton()"> OK</button>
+                    <button class="pi pi-times risBtn risClose mr-2" (click)="displayModal=false"> Close</button>
+
+
+                  </ng-template>
+
+                </p-dialog>
+                <p-treeTable [value]="MenuDataSource" [columns]="cols" selectionMode="single" [(selection)]="selectedNode" dataKey="MenuId"
+                             (onNodeSelect)="nodeSelect($event)" (onNodeUnselect)="nodeUnselect($event)">
+                  <ng-template pTemplate="header" let-columns>
+                    <tr>
+                      <th *ngFor="let col of columns">
+                        {{col.header}}
+                      </th>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
+                    <tr [ttRow]="rowNode" [ttSelectableRow]="rowNode">
+                      <td>
+                        <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+                        <mat-icon *ngIf="rowData.MenuIconPath">  <img [src]="rowData.MenuIconPath"></mat-icon>
+                        {{rowData.MenuName}}
+                      </td>
+                      <!-- <td>
+
+                {{rowData.MenuId}}
+              </td> -->
+                      
+
+                      <td>{{rowData.TotalEvents}}</td>
+                      <td>{{rowData.PermittedEvents}}</td>
+
+                    </tr>
+                  </ng-template>
+                </p-treeTable>
+
+              </div>
+
+            </p-tabPanel>
+            <p-tabPanel header="Menu Permission">
+
+              <form action="" [formGroup]="userassignForm">
+                <div class="p-fluid grid col-8 flex justify-content-start flex-wrap card-container">
+                  <div class="p-fluid grid col-12 flex justify-content-start flex-wrap card-container">
+                    <div class="col-4 p-fluid">
+                      <label for="" class=" d-md-inline-flex">User Name :</label>
+                    </div>
+                    <div class="col-8 p-fluid">
+                      <span class="p-float-label">
+                        <input readonly="readonly" formControlName="user_name" id="user_name" type="text" pInputText />
+                        <!-- <label for="float-input">Parent: </label> -->
+                      </span>
+                    </div>
+                  </div>
+
+
+                </div>
+              </form>
+
+
+              <div class="card">
+                <p-dialog [(visible)]="displayModalforUser" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [style]="{width: '35vw'}" [baseZIndex]="10000" [maximizable]="false">
+
+
+                  <div class="p-fluid grid col-12">
+                    <div *ngFor="let event of userPermissionevents;let i = index" class="field-checkbox">
+                      <p-checkbox name="group[i]" value="event" binary="true" [value]="event" (onChange)="onCheckboxChange($event,event.MenuId,event.UserMenuAuthorizationEventId,event.UserInfoId,event.MenuEventId)" [(ngModel)]="event.IsPermissionExist" [inputId]="event.EventEnumId"></p-checkbox>
+                      <label [for]="event.EventEnumId">{{event.EventEnumName}}</label>
+                    </div>
+                  </div>
+
+                  <ng-template pTemplate="footer">
+                    <button class="pi pi-refresh risBtn risSave mr-2" (click)="okButtonforUserPermission()"> OK</button>
+                    <button class="pi pi-times risBtn risClose mr-2" (click)="displayModalforUser=false"> Close</button>
+
+
+                  </ng-template>
+
+                </p-dialog>
+                <p-treeTable [value]="UserPermissionDataSource" [columns]="userPermissionColmns" selectionMode="single" [(selection)]="userPermissionselectedNode" dataKey="MenuId"
+                             (onNodeSelect)="UserPermissionNodeSelect($event)" (onNodeUnselect)="UserPermissionNodeUnselect($event)">
+                  <ng-template pTemplate="header" let-columns>
+                    <tr>
+                      <th *ngFor="let col of columns">
+                        {{col.header}}
+                      </th>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
+                    <tr [ttRow]="rowNode" [ttSelectableRow]="rowNode">
+                      <td>
+                        <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+                        <mat-icon *ngIf="rowData.MenuIconPath">  <img [src]="rowData.MenuIconPath"></mat-icon>
+                        {{rowData.MenuName}}
+                      </td>
+                      <!-- <td>
+
+                {{rowData.MenuId}}
+              </td> -->
+                      
+
+                      <td>{{rowData.TotalEvents}}</td>
+                      <td>{{rowData.PermittedEvents}}</td>
+
+                    </tr>
+                  </ng-template>
+                </p-treeTable>
+
+              </div>
+
+            </p-tabPanel>
+
+
+        </p-tabView>
+
+      </div>
+
+
+
+
+
+
+
+      <!-- ********** end card body ******************** -->
+    </div>
+  </div>
+</div>

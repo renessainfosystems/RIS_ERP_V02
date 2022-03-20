@@ -1,0 +1,213 @@
+<div class="p-card">
+
+  <div class="me-auto">
+    <div class="p-card-title ">
+      <span class="pi pi-vatDivisions"> </span> VAT Division Information
+    </div>
+    <div class="p-card-body">
+      <!-- ********** start card body ********************-->
+
+      <div class="card">
+        <div class="grid mb-2">
+          <button class="pi pi-plus risBtn risAdd mr-2 ml-2" (click)="showBasicDialog()"> New</button>
+          <button class="pi pi-pencil risBtn risEdit mr-2" (click)="loadVatDivisionToEdit()"> Edit</button>
+          <button class="pi pi-trash risBtn risDelete mr-2" (click)="showDialog()"> Delete</button>
+        </div>
+        <p-dialog header="Delete Record" [(visible)]="display" [style]="{width: '35vw'}">
+          <p>Do you want to delete this record?</p>
+          <ng-template pTemplate="footer">
+            <button class="pi pi-times risBtn risClose" (click)="display=false"> No</button>
+            <button class="pi pi-check risBtn risSave" (click)="deleteVatDivisionInfo()"> Yes</button>
+          </ng-template>
+        </p-dialog>
+        <div class="card-body">
+
+          <p-dialog header="VAT Division Information" [(visible)]="displayBasic" [draggable]="true" [resizable]="false" [style]="{width: '60vw'}">
+            <form action="" [formGroup]="vatDivisionForm">
+              <div class="grid mt-3">
+                <div class="p-fluid grid col-6">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-none d-md-inline-flex" title="Division Name">Name<span class="req">*</span> :</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <span class="p-float-label">
+                      <input id="float-input p-fluid" formControlName="vat_division_name" type="text" placeholder="Vat Division Name"
+                             pInputText autocomplete="off">
+                    </span>
+                  </div>
+                </div>
+                <div class="p-fluid grid col-6">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-none d-md-inline-flex">Comissionerate<span class="req">*</span> :</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <span class="p-float-label">
+                      <p-dropdown [options]="allCommissionerate" [(ngModel)]="selectedCommissionerate" formControlName="vatCommissionerateObj" placeholder="Select Comissionerate"
+                                  optionLabel="vat_commissionerate_name" optionValue="vat_commissionerate_id" [showClear]="true"></p-dropdown>
+                    </span>
+                  </div>
+                </div>
+                <div class="p-fluid grid col-6">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-none d-md-inline-flex">Country<span class="req">*</span> :</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <span class="p-float-label">
+                      <p-dropdown [options]="allCountry" [(ngModel)]="selectedCountry" formControlName="countryObj" placeholder="Select Country"
+                                  optionLabel="country_name" optionValue="country_id" (onChange)="onSelectByCountryId($event.value)" [showClear]="true"></p-dropdown>
+                    </span>
+                  </div>
+                </div>
+                <div class="p-fluid grid col-6">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-none d-md-inline-flex">Division<span class="req">*</span> :</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <span class="p-float-label">
+                      <p-dropdown [options]="allDivision" [(ngModel)]="selectedDivision" formControlName="divisionObj" placeholder="Select Division"
+                                  optionLabel="division_name" optionValue="division_id" (onChange)="onSelectByDivisionId($event.value)" [showClear]="true"></p-dropdown>
+                    </span>
+                  </div>
+                </div>
+                <div class="p-fluid grid col-6">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-none d-md-inline-flex">District<span class="req">*</span> :</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <span class="p-float-label">
+                      <p-dropdown [options]="allDistrict" [(ngModel)]="selectedDistrict" formControlName="districtObj" placeholder="Select Division"
+                                  optionLabel="district_name" optionValue="district_id" [showClear]="true"></p-dropdown>
+                    </span>
+                  </div>
+                </div>
+                <div class="p-fluid grid col-6">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-none d-md-inline-flex">City :</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <span class="p-float-label">
+                      <input id="float-input p-fluid" formControlName="city" type="text" placeholder="City" pInputText autocomplete="off">
+                    </span>
+                  </div>
+                </div>
+                <div class="p-fluid grid col-6">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-none d-md-inline-flex">PS Area :</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <span class="p-float-label">
+                      <input id="float-input p-fluid" formControlName="ps_area" type="text" placeholder="PS Area" pInputText autocomplete="off">
+                    </span>
+                  </div>
+                </div>
+                <div class="p-fluid grid col-6">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-none d-md-inline-flex">Post Code :</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <span class="p-float-label">
+                      <input id="float-input p-fluid" formControlName="post_code" type="text" placeholder="Post Code" pInputText autocomplete="off">
+                    </span>
+                  </div>
+                </div>
+                <div class="p-fluid grid col-6">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-none d-md-inline-flex">Block :</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <span class="p-float-label">
+                      <input id="float-input p-fluid" formControlName="block" type="text" placeholder="Block" pInputText autocomplete="off">
+                    </span>
+                  </div>
+                </div>
+                <div class="p-fluid grid col-6">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-none d-md-inline-flex">Road No :</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <span class="p-float-label">
+                      <input id="float-input p-fluid" formControlName="road_no" type="text" placeholder="Road No" pInputText autocomplete="off">
+                    </span>
+                  </div>
+                </div>
+                <div class="p-fluid grid col-6">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-none d-md-inline-flex">House No :</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <span class="p-float-label">
+                      <input id="float-input p-fluid" formControlName="house_no" type="text" placeholder="House No" pInputText autocomplete="off">
+                    </span>
+                  </div>
+                </div>
+                <div class="p-fluid grid col-6">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-none d-md-inline-flex">Flat No :</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <span class="p-float-label">
+                      <input id="float-input p-fluid" formControlName="flat_no" type="text" placeholder="Flat No" pInputText autocomplete="off">
+                    </span>
+                  </div>
+                </div>
+                <div class="p-fluid grid col-6">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-none d-md-inline-flex">Address Note :</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <span class="p-float-label">
+                      <input id="float-input p-fluid" formControlName="address_note" type="text" placeholder="Address Note" pInputText autocomplete="off">
+                    </span>
+                  </div>
+                </div>
+                <div class="p-fluid grid col-6">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-none d-md-inline-flex">Remarks :</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <span class="p-float-label">
+                      <textarea id="float-input p-fluid" formControlName="remarks" type="text" placeholder="Remarks" pInputText autocomplete="off"></textarea>
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+            </form>
+            <ng-template pTemplate="footer">
+              <button type="submit" class="pi pi-save risBtn risSave" (click)="onFormSubmit()"> Save</button>
+              <button class="pi pi-times risBtn risClose" (click)="displayBasic=false"> Close</button>
+            </ng-template>
+          </p-dialog>
+          <!--************************start grid ************************-->
+          <p-table [value]="vatDivisions" [paginator]="true" [rows]="10" styleClass="p-datatable-striped p-datatable-sm" [showCurrentPageReport]="true" selectionMode="single" [(selection)]="selectedVatDivision" dataKey="vat_division_name"
+                   currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]">
+
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Division Name</th>
+                <th>City</th>
+                <th>Remarks</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-vatDivision>
+
+              <tr (click)="selectRow(vatDivision)" [pSelectableRow]="vatDivision">
+                <td>{{vatDivision.vat_division_name}}</td>
+                <td>{{vatDivision.city}}</td>
+                <td>{{vatDivision.remarks}}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+
+
+
+
+
+        </div>
+
+        <!--********** end card body ********************-->
+
+      </div>
+    </div>
+  </div>
+</div>

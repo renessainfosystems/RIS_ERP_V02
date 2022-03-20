@@ -1,0 +1,96 @@
+<div class="p-card">
+
+  <div class="me-auto">
+    <div class="p-card-title ">
+      <span class="pi pi-industrySubSectors"> </span> Industry Sub Sector Information
+    </div>
+    <div class="p-card-body">
+      <!--********** start card body ********************-->
+
+      <div class="card">
+        <div class="grid mb-2">
+          <button class="pi pi-plus risBtn risAdd mr-2 ml-2" (click)="showBasicDialog()"> New</button>
+          <button class="pi pi-pencil risBtn risEdit mr-2" (click)="loadIndustrySubSectorToEdit()"> Edit</button>
+          <button class="pi pi-trash risBtn risDelete mr-2" (click)="showDialog()"> Delete</button>
+        </div>
+        <p-dialog header="Delete Record" [(visible)]="display" [style]="{width: '35vw'}">
+          <p>Do you want to delete this record?</p>
+          <ng-template pTemplate="footer">
+            <button class="pi pi-times risBtn risClose" (click)="display=false"> No</button>
+            <button class="pi pi-check risBtn risSave" (click)="deleteIndustrySubSectorInfo()"> Yes</button>
+          </ng-template>
+        </p-dialog>
+
+        <div class="card-body">
+
+          <p-dialog header="Industry Sub Sector Information" [(visible)]="displayBasic" [draggable]="true" [resizable]="false" [style]="{width: '40vw'}">
+            <form action="" [formGroup]="industrySubSectorForm">
+              <div class="">
+                <div class="p-fluid grid col-12">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-none d-md-inline-flex">Industry Sector<span class="req">*</span> :</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <span class="p-float-label">
+                      <p-dropdown [options]="allIndustrySector"  formControlName="industry_sector_id" placeholder="Select Industry Sector"
+                                  optionLabel="industry_sector_name" optionValue="industry_sector_id" [showClear]="true"></p-dropdown>
+                    </span>
+                  </div>
+                </div>
+                <div class="p-fluid grid col-12">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-none d-md-inline-flex">Industry Sub Sector Name<span class="req">*</span> :</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <span class="p-float-label">
+                      <input id="float-input p-fluid" formControlName="industry_sub_sector_name" type="text" placeholder="Industry Sector Name"
+                             pInputText autocomplete="off">
+                    </span>
+                  </div>
+                </div>
+
+                <div class="p-fluid grid col-12">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-none d-md-inline-flex">Remarks :</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <span class="p-float-label">
+                      <textarea id="float-input p-fluid" formControlName="remarks" type="text" placeholder="Remarks" pInputText autocomplete="off"></textarea>
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+            </form>
+            <ng-template pTemplate="footer">
+              <button type="submit" class="pi pi-save risBtn risSave" (click)="onFormSubmit()"> Save</button>
+              <button class="pi pi-times risBtn risClose" (click)="displayBasic=false"> Close</button>
+            </ng-template>
+          </p-dialog>
+          <!--************************start grid ************************-->
+          <p-table [value]="industrySubSectors" [paginator]="true" [rows]="10" styleClass="p-datatable-striped p-datatable-sm" [showCurrentPageReport]="true" selectionMode="single" [(selection)]="selectedIndustrySubSector"
+                   dataKey="industry_sub_sector_name" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]">
+
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Industry Sub Sector Name</th>
+                <th>Remarks</th>
+
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-industrySubSector>
+              <tr (click)="selectRow(industrySubSector)" [pSelectableRow]="industrySubSector">
+                <td>{{industrySubSector.industry_sub_sector_name}}</td>
+                <td>{{industrySubSector.remarks}}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+
+        </div>
+
+        <!--********** end card body ********************-->
+
+      </div>
+    </div>
+  </div>
+</div>

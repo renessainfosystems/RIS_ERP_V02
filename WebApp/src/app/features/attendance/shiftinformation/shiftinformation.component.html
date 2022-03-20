@@ -1,0 +1,639 @@
+<div class="p-card">
+
+  <div class="me-auto">
+    <div class="p-card-title ">
+      <span class="pi pi-OT Policy"> </span>Shift Information
+    </div>
+    <div class="p-card-body">
+      <!--********** start card body ********************-->
+
+      <div class="card">
+
+
+
+        <div class="card-body">
+
+
+          <p-fieldset legend="Add-Edit Shift" [collapsed]="collapsed" (onBeforeToggle)="toggle()" [toggleable]="true">
+            <p-dialog header="Delete Record" [(visible)]="display" [style]="{width: '35vw'}">
+              <p>Do you want to delete this record?</p>
+              <ng-template pTemplate="footer">
+                <button class="pi pi-times risBtn risClose" (click)="display=false"> No</button>
+                <button class="pi pi-check risBtn risSave" (click)="deleteShift()"> Yes</button>
+              </ng-template>
+            </p-dialog>
+            <form action="" [formGroup]="shiftForm">
+              <div class="p-fluid grid col-12 flex flex-wrap card-container">
+                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                  <div class="col-4 mt-1 text-right">
+                    <label for="" class=" d-md-inline-flex" pTooltip="Shift Name" tooltipPosition="top">Shift Name<span class="req">*:</span> </label>
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <span class="p-float-label">
+                      <input id="float-input p-fluid" type="text" formControlName="shift_name" placeholder="Shift Name" pInputText required>
+                    </span>
+                  </div>
+                </div>
+                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-md-inline-flex">Shift Type*:</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <p-dropdown [options]="shiftTypes" formControlName="shift_type_id_enum"
+                                optionLabel="shift_type_enum_name" optionValue="shift_type_id_enum" (onChange)="onShiftChange($event)" [showClear]="true"></p-dropdown>
+
+                  </div>
+
+                </div>
+
+
+                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-md-inline-flex">Time Zone*:</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <p-dropdown [options]="timeZones" formControlName="time_zone_id"
+                                optionLabel="time_Zone_name" optionValue="time_zone_id" [showClear]="true"></p-dropdown>
+
+                  </div>
+
+                </div>
+                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-md-inline-flex">Remarks:</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+
+                    <textarea rows="1" id="float-input p-fluid" formControlName="remark" class="inputfield w-full" cols="50" pInputTextarea></textarea>
+
+                  </div>
+                </div>
+                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-md-inline-flex">Attendance Count*:</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <p-dropdown [options]="attendanceCounts" formControlName="attendance_count"
+                                optionLabel="attendance_countname" optionValue="attendance_count" [showClear]="true"></p-dropdown>
+
+                  </div>
+                </div>
+                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                  <div class="col-4 mt-2 text-right">
+
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <!--<div class="field-checkbox">
+              <p-checkbox name="group[i]" value="event" binary="true" [value]="event" (onChange)="onCheckboxChange($event,event.MenuId,event.AuthorizationRoleMenuEventsId,event.AuthorizationRoleId,event.MenuEventId)" [(ngModel)]="event.IsPermissionExist" [inputId]="event.EventEnumId"></p-checkbox>
+              <label [for]="event.EventEnumId">{{event.EventEnumName}}</label>
+            </div>-->
+                    <div class="field-checkbox">
+                      <p-checkbox name="group" formControlName="is_day_crossing" binary="true"></p-checkbox>
+                      <label [for]="">Night Shift(Day Overlap)</label>
+                    </div>
+                  </div>
+
+                </div>
+                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-md-inline-flex">Day Start*:</label>
+                  </div>
+
+                  <div class="col-8 p-fluid">
+                   
+                    <p-calendar [timeOnly]="true" formControlName="day_start" dataType="string"  showTime="true" [hourFormat]="24" inputId="timeonly"></p-calendar>
+                  </div>
+
+                </div>
+                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-md-inline-flex">Day End*:</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+
+                    <p-calendar  [timeOnly]="true" formControlName="day_end" dataType="string" [hourFormat]="24" inputId="timeonly"></p-calendar>
+                  </div>
+                </div>
+
+                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-md-inline-flex">Shift Start*:</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+
+                    <p-calendar  [timeOnly]="true" [disabled]="isShiftStartEnabled"  formControlName="shift_start" dataType="string" [hourFormat]="24" inputId="timeonly"></p-calendar>
+                  </div>
+
+                </div>
+                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-md-inline-flex">Shift End*:</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+
+                    <p-calendar  [timeOnly]="true" [disabled]="isShiftEndEnabled" (input)="onShiftEndChange()" (onSelect)="onShiftEndChange()" formControlName="shift_end"dataType="string" [hourFormat]="24" inputId="timeonly"></p-calendar>
+                  </div>
+                </div>
+
+                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-md-inline-flex">Report time*:</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+
+                    <p-calendar  [timeOnly]="true"  formControlName="report_time"dataType="string" [hourFormat]="24" inputId="timeonly"></p-calendar>
+                  </div>
+                </div>
+
+                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-md-inline-flex">Late tolerence*:</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+
+
+                    <input id="float-input p-fluid" type="number" formControlName="late_tolerance_min" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" placeholder="Late tolerence" pInputText>
+
+                  </div>
+                </div>
+                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-md-inline-flex">Early tolerence*:</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+
+                    <input id="float-input p-fluid" type="number" formControlName="early_tolerance_min" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" placeholder="Early tolerence" pInputText>
+
+                  </div>
+                </div>
+                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-md-inline-flex">Recover late time*:</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+
+                    <input id="float-input p-fluid" type="number"  formControlName="extended_time_min" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" placeholder="Recover tolerence" pInputText>
+
+                  </div>
+                </div>
+
+                <div class="p-fluid grid col-12 flex justify-content-start flex-wrap card-container">
+                  <div class="col-2 mt-2 text-right">
+
+                  </div>
+                  <div class="col-3 p-fluid">
+                    <!--<div class="field-checkbox">
+              <p-checkbox name="group[i]" value="event" binary="true" [value]="event" (onChange)="onCheckboxChange($event,event.MenuId,event.AuthorizationRoleMenuEventsId,event.AuthorizationRoleId,event.MenuEventId)" [(ngModel)]="event.IsPermissionExist" [inputId]="event.EventEnumId"></p-checkbox>
+              <label [for]="event.EventEnumId">{{event.EventEnumName}}</label>
+            </div>-->
+                    <div class="field-checkbox">
+                      <p-checkbox name="group" formControlName="is_allow_half_day" (onChange)="halfWorkingStartEnd()" binary="true"></p-checkbox>
+                      <label [for]="">Half Working Day</label>
+
+
+                    </div>
+
+
+                  </div>
+                  <div class="col-1 p-fluid mt-1 text-right">
+                    <label for="" class=" d-md-inline-flex">Start*:</label>
+                  </div>
+                  <div class="col-2 p-fluid">
+
+                    <p-calendar [timeOnly]="true" [disabled]="isHalfStartEnabled" formControlName="half_shift_start" dataType="string" [hourFormat]="24" inputId="timeonly"></p-calendar>
+                  </div>
+
+                  <div class="col-1 p-fluid mt-1 text-right">
+                    <label for="" class=" d-md-inline-flex">End*:</label>
+                  </div>
+                  <div class="col-2 p-fluid">
+
+                    <p-calendar [timeOnly]="true"[disabled]="isHalfEndEnabled" [hourFormat]="24"dataType="string" (input)="onHalfShiftEndChange()" (onSelect)="onHalfShiftEndChange()" formControlName="half_shift_end" inputId="timeonly"></p-calendar>
+                  </div>
+
+                </div>
+                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-md-inline-flex">Working Hour:</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+
+                    <input id="float-input p-fluid" type="number"   formControlName="working_hour_min" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" placeholder="Working Hour" pInputText>
+
+                  </div>
+                </div>
+                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-md-inline-flex">Half Working Hour:</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+
+                    <input id="float-input p-fluid" type="number" [disabled]="isHalfWorkingHourEnabled" formControlName="half_working_hour_min" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" placeholder="Half Working Hour" pInputText>
+
+                  </div>
+                </div>
+
+
+                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-md-inline-flex">Overtime Policy:</label>
+                  </div>
+                  <div class="col-6 p-fluid">
+                    <p-dropdown [options]="otPolicies" [(ngModel)]="selectedOTPolicy" placeholder="Select OT Policy" formControlName="OT_policy_id"
+                                optionLabel="policy_name" optionValue="OT_policy_id" [showClear]="true"></p-dropdown>
+
+                  </div>
+                  <div class="col-2 p-fluid">
+
+                    <button class=" pi pi-search risBtn risAdd mr-2" label="Add" (click)="getOTDetails()">Details</button>
+                  </div>
+                </div>
+                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-md-inline-flex">Benefit Policy:</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <p-dropdown [options]="benifitPolicies" [(ngModel)]="selectedBenifitPolicy" placeholder="Select Benefit Policy" formControlName="attendance_benefit_policy_id"
+                                optionLabel="leave_type_enum_name" optionValue="leave_type_id_enum" [showClear]="true"></p-dropdown>
+
+                  </div>
+
+                </div>
+                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                  <div class="col-4 mt-2 text-right">
+
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <!--<div class="field-checkbox">
+              <p-checkbox name="group[i]" value="event" binary="true" [value]="event" (onChange)="onCheckboxChange($event,event.MenuId,event.AuthorizationRoleMenuEventsId,event.AuthorizationRoleId,event.MenuEventId)" [(ngModel)]="event.IsPermissionExist" [inputId]="event.EventEnumId"></p-checkbox>
+              <label [for]="event.EventEnumId">{{event.EventEnumName}}</label>
+            </div>-->
+                  
+                    <div class="field-checkbox">
+                      <p-checkbox name="group" formControlName="is_OT_before_shift" binary="true"></p-checkbox>
+                      <label [for]="">OT Start before starting shift</label>
+                    </div>
+                  </div>
+
+                </div>
+                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                  <div class="col-4 mt-2 text-right">
+
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <!--<div class="field-checkbox">
+              <p-checkbox name="group[i]" value="event" binary="true" [value]="event" (onChange)="onCheckboxChange($event,event.MenuId,event.AuthorizationRoleMenuEventsId,event.AuthorizationRoleId,event.MenuEventId)" [(ngModel)]="event.IsPermissionExist" [inputId]="event.EventEnumId"></p-checkbox>
+              <label [for]="event.EventEnumId">{{event.EventEnumName}}</label>
+            </div>-->
+                   
+                    <div class="field-checkbox">
+                      <p-checkbox name="group" formControlName="is_OT_after_shift" binary="true"></p-checkbox>
+                      <label [for]="">OT Start after ending shift</label>
+                    </div>
+                  </div>
+
+                </div>
+                <div class="p-fluid grid col-12 flex justify-content-start flex-wrap card-container">
+                  <div class="col-2 mt-2 text-right">
+                    <label for="" class=" d-md-inline-flex">Break*:</label>
+                  </div>
+                  <div class="col-4 p-fluid">
+                    <p-dropdown [options]="breakList" [(ngModel)]="selectedBreak" formControlName="shift_break_head_id" placeholder="Select Break"
+                                optionLabel="head_name" [showClear]="true"></p-dropdown>
+
+                  </div>
+                  <div class="col-2 p-fluid mt-1 text-right">
+                    <label for="" class=" d-md-inline-flex">Break Duration*:</label>
+                  </div>
+                  <div class="col-2 p-fluid">
+
+
+                    <input id="float-input p-fluid" type="number" formControlName="break_duration_min" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" placeholder="Duration" pInputText>
+
+
+                  </div>
+                  <div class="col-2">
+                    <button class=" pi pi-plus risBtn risAdd mr-2" label="Add" (click)="addOTSlabInfo()">Add</button>
+                 
+                  </div>
+                </div>
+                <div class="col-2 pr-3 text-right">
+
+                </div>
+                <div class="col-9 p-fluid">
+                  <p-table [value]="breakDataSources" styleClass="p-datatable-sm" class="p-0" responsiveLayout="scroll">
+
+                    <ng-template pTemplate="header">
+                      <tr>
+                        <th>#SL</th>
+
+                        <th>Break Name</th>
+                        <th>Duration(Minutes)</th>
+                        <th>Activity</th>
+                        <th>Action</th>
+                      </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-rowIndex="rowIndex" let-slab>
+
+                      <tr>
+                        <td>{{rowIndex+1}}</td>
+
+                        <td>{{slab.break_name}}</td>
+                        <td>{{slab.break_duration_min}}</td>
+                        <td *ngIf="slab.is_active===true">{{"Active"}}</td>
+                        <td *ngIf="slab.is_active===false">{{"InActive"}}</td>
+                        <td> <button class="pi pi-times-circle risBtn risDelete" (click)="removeEvent(rowIndex,slab)"> </button></td>
+
+                      </tr>
+                    </ng-template>
+                  </p-table>
+                </div>
+                <div class="p-fluid grid col-11 mt-2 ml-4 flex justify-content-end flex-wrap card-container">
+
+                  <button type="submit" class="pi pi-save risBtn risSave mr-2" (click)="saveShift()"> Save</button>
+                  <button class="pi pi-times risBtn risClose mr-2" (click)="resetForm()"> Clear</button>
+
+
+                </div>
+              </div>
+
+            </form>
+
+          </p-fieldset>
+          <p-fieldset legend="Shift List" collapsed="true" [toggleable]="true">
+            
+            <div class="grid mb-4">
+              <form [formGroup]="shiftSearchForm">
+                <span class="p-input-icon-right mr-2">
+                  <i class="pi pi-search cursor-pointer" (click)="shiftSearch()"></i>
+                  <input type="text" id="user_info_search" formControlName="shift_name" (keyup.enter)="shiftSearch()" style="width:350px" pInputText placeholder="Search By- Any">
+                </span>
+
+                <span class="p-input-icon-right mr-2">
+                  <p-checkbox name="group" formControlName="is_night_shift" (onChange)="shiftSearch()" binary="true"></p-checkbox>
+                  <label class="p-input-right ml-2" [for]="">Night Shift(Day Overlap)</label>
+                </span>
+             
+              </form>
+             
+              <span class="p-input-right mr-2">
+
+                <button class="pi pi-search risBtn risAll ml-1 mr-2" (click)="showBasicDialog()"> Adv Search</button>
+
+              </span>
+            </div>
+
+            <div class="grid mb-2">
+
+              <button class="pi pi-pencil risBtn risEdit mr-2 " (click)="loadShiftToEdit()"> Edit</button>
+              <button class="pi pi-trash risBtn risDelete mr-2" (click)="showDialog()"> Delete</button>
+              <button class="pi pi-box risBtn risAll mr-2"> Activity</button>
+              <button class="pi pi-box risBtn risAll mr-2" (click)="policyApprove()"> Approve</button>
+            </div>
+            <p-table [value]="shifts" dataKey="ShiftId" [paginator]="true" [rows]="10" selectionMode="single" [(selection)]="selectedShift" [showCurrentPageReport]="true" responsiveLayout="scroll" styleClass="p-datatable-striped p-datatable-sm"
+                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
+
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>Shift</th>
+                  <th>Shift Type</th>
+                  <th>Day Time</th>
+                  <th>Shift Time</th>
+                  <th>Tolerence(min)</th>
+                  <th>Other Info</th>
+                  <th>Approved By</th>
+                  <th>Activity</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-shift>
+                <tr [pSelectableRow]="shift">
+                  <td>{{shift.ShiftName}}</td>
+                  <td>{{shift.ShiftTypeName}}</td>
+                  <td>{{shift.DayTime}}</td>
+                  <td>{{shift.ShiftTime}}</td>
+                  <td>{{shift.Tollerence}}</td>
+                  <td>{{shift.OtherInfo}}</td>
+                  <td>{{shift.ApprovedBy}}</td>
+                  <td *ngIf="shift.IsActive===true">{{"Active"}}</td>
+                  <td *ngIf="shift.IsActive===false">{{"InActive"}}</td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </p-fieldset>
+
+          <p-dialog header="Advance Search" maskStyleClass="xl-dialog" [(visible)]="displayBasic" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [style]="{width: '50vw',height:'27vw'}" [baseZIndex]="10000">
+            <form action="" [formGroup]="advSearchForm">
+
+
+
+              <div class="p-fluid grid col-12 flex justify-content-end flex-wrap card-container">
+                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-md-inline-flex">Shift Type:</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <p-dropdown [options]="shiftTypes" formControlName="shift_type_id_enum"
+                                optionLabel="shift_type_enum_name" optionValue="shift_type_id_enum" [showClear]="true"></p-dropdown>
+
+                  </div>
+
+                </div>
+                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                  <div class="col-1 mt-2 text-right">
+
+                  </div>
+                  <div class="col-5 p-fluid">
+
+                    <div class="field-checkbox">
+                      <p-checkbox name="group" formControlName="is_inactive" binary="true"></p-checkbox>
+                      <label [for]="">InActive</label>
+                    </div>
+                  </div>
+                  <div class="col-6 p-fluid">
+
+                    <div class="field-checkbox">
+                      <p-checkbox name="group" formControlName="is_allow_half_day" binary="true"></p-checkbox>
+                      <label [for]="">Allow Half Day</label>
+                    </div>
+                  </div>
+
+
+
+                </div>
+
+
+                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-md-inline-flex">Time Zone:</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <p-dropdown [options]="timeZones" formControlName="time_zone_id"
+                                optionLabel="time_Zone_name" optionValue="time_zone_id" [showClear]="true"></p-dropdown>
+
+                  </div>
+
+                </div> <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                  <div class="col-1 mt-2 text-right">
+
+                  </div>
+
+                  <div class="col-5 p-fluid">
+
+                    <div class="field-checkbox">
+                      <p-checkbox name="group" formControlName="is_allow_OT" binary="true"></p-checkbox>
+                      <label [for]="">Allow OT</label>
+                    </div>
+                  </div>
+                  <div class="col-6 p-fluid">
+
+                    <div class="field-checkbox">
+                      <p-checkbox name="group" formControlName="is_allow_benifit" binary="true"></p-checkbox>
+                      <label [for]="">Allow Benefit</label>
+                    </div>
+                  </div>
+
+
+                </div>
+
+
+
+                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-md-inline-flex">Shift Start:</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+
+                    <p-calendar  [timeOnly]="true" formControlName="shift_start" [hourFormat]="24" inputId="timeonly"></p-calendar>
+                  </div>
+
+                </div>
+                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-md-inline-flex">Shift End:</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+
+                    <p-calendar [timeOnly]="true" formControlName="shift_end" [hourFormat]="24" inputId="timeonly"></p-calendar>
+                  </div>
+                </div>
+                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                  <div class="col-4 mt-2 text-right">
+                    <label for="" class=" d-md-inline-flex">Att. Count:</label>
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <p-dropdown [options]="attendanceCounts" formControlName="attendance_count"
+                                optionLabel="attendance_countname" optionValue="attendance_count" [showClear]="true"></p-dropdown>
+
+
+                  </div>
+                </div>
+
+                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+
+
+                </div>
+
+
+              </div>
+
+            </form>
+            <ng-template pTemplate="footer">
+              <button type="submit" class="pi pi-save risBtn risSave"(click)="shiftAdvanceSearch()"> Search</button>
+              <button class="pi pi-times risBtn risClose" (click)="displayBasic=false"> Close</button>
+            </ng-template>
+          </p-dialog>
+
+          <p-dialog header="OT Details" [(visible)]="OTDetailsModal" [draggable]="true" [resizable]="false" [style]="{width: '40vw'}">
+            <form action="" [formGroup]="OTDetailsForm">
+
+             
+              <div class="p-fluid grid col-12">
+                <div class="p-fluid grid col-4 flex justify-content-start flex-wrap card-container">
+                  <div class="col-6 mt-2 text-right">
+                    <label for="" class=" d-md-inline-flex">Min OT:</label>
+                  </div>
+                  <div class="col-6 p-fluid">
+                    <span class="p-float-label">
+                      <input id="float-input p-fluid" type="text" disabled="disabled" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" formControlName="minimum_OT_min" placeholder="Minimum OT" pInputText>
+                    </span>
+                  </div>
+
+                </div>
+                <div class="p-fluid grid col-4 flex justify-content-start flex-wrap card-container">
+                  <div class="col-6 mt-2 text-right">
+                    <label for="" class=" d-md-inline-flex">Max OT</label>
+                  </div>
+                  <div class="col-6 p-fluid">
+                    <span class="p-float-label">
+                      <input id="float-input p-fluid" type="text" disabled="disabled" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" formControlName="maximum_OT_min" placeholder="Maximum OT" pInputText>
+                    </span>
+                  </div>
+
+                </div>
+                <div class="p-fluid grid col-4 flex justify-content-start flex-wrap card-container">
+                  <div class="col-6 mt-2 text-right">
+                    <label for="" class=" d-md-inline-flex">Reduce Time:</label>
+                  </div>
+                  <div class="col-6 p-fluid">
+                    <span class="p-float-label">
+                      <input id="float-input p-fluid" type="text" disabled="disabled" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" formControlName="OT_reduce_time_min" placeholder="OT Reduce Time" pInputText>
+                    </span>
+
+                  </div>
+
+                </div>
+                <div class="col-1 mt-1 text-right">
+                  <label for="" class=" d-md-inline-flex">(Minutes)</label>
+                </div>
+
+              </div>
+           
+
+
+              <div class="p-fluid grid col-12">
+                <div class="col-3 mt-2 text-right">
+                  <label for="" class=" d-none d-md-inline-flex">OT Slab(Minute)<span class="req"></span>:</label>
+                </div>
+                <div class="col-9 p-fluid">
+                  <p-table [value]="otslabDataSources" styleClass="p-datatable-sm" class="p-0" responsiveLayout="scroll">
+                    <!-- <ng-template pTemplate="caption">
+      OT Slab List<span class="req"></span>
+    </ng-template> -->
+                    <ng-template pTemplate="header">
+                      <tr>
+                        <th>#SL</th>
+
+                        <th>Min OT</th>
+                        <th>Max OT</th>
+                        <th>Achieve OT</th>
+                    
+                      </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-rowIndex="rowIndex" let-slab>
+
+                      <tr>
+                        <td>{{rowIndex+1}}</td>
+
+                        <td>{{slab.minimum_OT_min}}</td>
+                        <td>{{slab.maximum_OT_min}}</td>
+                        <td>{{slab.acheive_OT_min}}</td>
+                      
+                      </tr>
+                    </ng-template>
+                  </p-table>
+                </div>
+              </div>
+            </form>
+            <ng-template pTemplate="footer">
+              <button type="submit" class="pi pi-save risBtn risSave" (click)="OTDetailsModal=false"> Ok</button>
+              <button class="pi pi-times risBtn risClose" (click)="OTDetailsModal=false"> Close</button>
+            </ng-template>
+          </p-dialog>
+        </div>
+
+        <!--********** end card body ********************-->
+
+      </div>
+    </div>
+  </div>
+</div>

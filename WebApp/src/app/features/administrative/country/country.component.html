@@ -1,0 +1,588 @@
+<div class="p-card">
+
+  <div class="me-auto">
+    <div class="p-card-title ">
+      <span class="pi pi-countrys"> </span> Geo Area
+    </div>
+    <div class="p-card-body">
+      <!-- ********** start card body ******************** -->
+
+      <div class="card">
+        <p-tabView>
+          <p-tabPanel class="geoTab " header="Country">
+            
+            <p-dialog header="Delete Record" [(visible)]="display" [style]="{width: '35vw'}">
+              <p>Do you want to delete this record?</p>
+              <ng-template pTemplate="footer">
+                <button class="pi pi-times risBtn risClose" (click)="display=false"> No</button>
+                <button class="pi pi-check risBtn risSave" (click)="deleteCountryInfo()"> Yes</button>
+              </ng-template>
+            </p-dialog>
+            <div class="card-body">
+              <form [formGroup]="countryForm">
+                <p-dialog header="Add Country Information" [(visible)]="displayModal" [modal]="true" [style]="{width: '58vw'}"
+                          [draggable]="true" [resizable]="false">
+                  <div class="grid mt-3">
+                    <div class="p-fluid grid col-6">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class="d-none d-md-inline-flex">Continent<span class="req">*</span> :</label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <p-dropdown [options]="allContinent" [(ngModel)]="selectedContinent" formControlName="continent_enum" placeholder="Select Continent"
+                                      optionLabel="continent_enum_name" optionValue="continent_enum_id" [showClear]="true"></p-dropdown>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class="d-none d-md-inline-flex">Country code<span class="req">*</span> :</label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <input id="float-input p-fluid" formControlName="country_code" type="text" placeholder="Country Code" pInputText>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-none d-md-inline-flex">Country Name<span class="req">*</span> :</label>
+
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <input id="float-input p-fluid" formControlName="country_name" type="text" placeholder="Country Name" pInputText>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-none d-md-inline-flex">Short Name<span class="req">*</span> : </label>
+
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <input id="float-input p-fluid" formControlName="country_short_name" type="text" placeholder="Short Name" pInputText>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-none d-md-inline-flex" title="Name In Local Language">Name (Local): </label>
+
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <input id="float-input p-fluid" formControlName="name_in_local_language" type="text" placeholder="Name In Local Language" pInputText>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-none d-md-inline-flex" title="Short Name In Local Language">Short Name (Local): </label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <input id="float-input p-fluid" formControlName="short_name_in_local_language" type="text" placeholder="Short Name In Local Language" pInputText>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-none d-md-inline-flex">Remarks: </label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <textarea id="float-input p-fluid" formControlName="remarks" type="text" placeholder="Remarks" pInputText></textarea>
+                        </span>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <ng-template pTemplate="footer" class="">
+                    <div class="text-right mr-1">
+                      <button type="submit" class="pi pi-save risBtn risSave mr-1" (click)="onCountrySubmit()"> Save</button>
+                      <button class="pi pi-times risBtn risClose" (click)="displayModal=false"> Close</button>
+                    </div>
+                  </ng-template>
+                </p-dialog>
+              </form>
+
+              <!-- ************************start grid ************************ -->
+              <p-table [value]="countrys" [paginator]="true" [rows]="10" styleClass="p-datatable-striped p-datatable-sm" [showCurrentPageReport]="true" selectionMode="single" [(selection)]="selectCountry" dataKey="country_code"
+                       currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]">
+
+                <ng-template pTemplate="caption">
+
+                  <div class="flex justify-content-between flex-wrap">
+                    <div class="ui-helper-clearfix flex justify-content-start col">
+                      <div class="grid mt-2 mb-2">
+                        <button class="pi pi-plus btn-sm risBtn risAdd mr-2 ml-2" (click)="showModalDialog()"> New</button>
+                        <button class="pi pi-pencil risBtn risEdit mr-2" (click)="loadCountryToEdit()"> Edit</button>
+                        <button class="pi pi-trash risBtn risDelete mr-2" (click)="showDialog()"> Delete</button>
+                      </div>
+                    </div>
+
+                    <div class="ui-helper-clearfix flex justify-content-end col" >
+                      <!--<button type="button" pButton icon="pi pi-file-o" iconPos="left" label="CSV" (click)="dt.exportCSV()" style="margin-right: 0.5em;"></button>-->
+                      <button type="button" pButton icon="pi pi-file-excel" iconPos="left" label="EXCEL" (click)="exportExcel()" style="margin-right: 0.5em;" class="ui-button-success risBtn"></button>
+                      <button type="button" pButton icon="pi pi-file-pdf" iconPos="left" label="PDF" (click)="exportPdf()" class="ui-button-warning risBtn"></button>
+                      <!--<button type="button" pButton icon="pi pi-file" iconPos="left" label="CSV - Selection Only" (click)="dt.exportCSV({selectionOnly:true})" style="float:right"></button>-->
+                    </div>
+                  </div>
+
+                </ng-template>
+
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th>Country Code</th>
+                    <th>Country Name</th>
+                    <th>Country Short Name</th>
+                    <th>Remarks</th>
+
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-country>
+
+                  <tr (click)="selectCountryRow(country)" [pSelectableRow]="country">
+                    <td>{{country.country_code}}</td>
+                    <td>{{country.country_name}}</td>
+                    <td>{{country.country_short_name}}</td>
+                    <td>{{country.remarks}}</td>
+                  </tr>
+                </ng-template>
+              </p-table>
+
+            </div>
+            <!-- ********** end card body ******************** -->
+          </p-tabPanel>
+          <p-tabPanel header="Division">
+            <div class="grid mb-2">
+              <button class="pi pi-plus risBtn risAdd mr-2 ml-2" (click)="showModalDialogdivision()"> New</button>
+              <button class="pi pi-pencil risBtn risEdit mr-2" (click)="loadDivisionToEdit()"> Edit</button>
+              <button class="pi pi-trash risBtn risDelete mr-2" (click)="showDivisionDialog()"> Delete</button>
+            </div>
+            <p-dialog header="Delete Record" [(visible)]="displayDivision" [style]="{width: '35vw'}">
+              <p>Do you want to delete this record?</p>
+              <ng-template pTemplate="footer">
+                <button class="pi pi-times risBtn risClose" (click)="displayDivision=false"> No</button>
+                <button class="pi pi-check risBtn risSave" (click)="deleteDivisionInfo()"> Yes</button>
+              </ng-template>
+            </p-dialog>
+            <div class="card-body">
+              <form [formGroup]="divisionForm">
+                <p-dialog header="Add Division Information" [(visible)]="displayModaldivision" [modal]="true" [style]="{width: '58vw'}"
+                          [draggable]="true" [resizable]="false">
+
+                  <div class="grid mt-3">
+                    <div class="p-fluid grid col-6">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-none d-md-inline-flex">Country Name<span class="req">*</span> :</label>
+
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <p-dropdown [options]="allCountry" [(ngModel)]="selectedCountry" formControlName="countryObj" placeholder="Select Country"
+                                      optionLabel="country_name" optionValue="country_id" [showClear]="true"></p-dropdown>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class="d-none d-md-inline-flex" title="Division Code">Code<span class="req">*</span> :</label>
+
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <input id="float-input p-fluid" formControlName="division_code" type="text" placeholder="Division Code" pInputText>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-none d-md-inline-flex" title="Division Name">Name<span class="req">*</span> :</label>
+
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <input id="float-input p-fluid" formControlName="division_name" type="text" placeholder="Division Name" pInputText>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-none d-md-inline-flex">Short Name<span class="req">*</span> :</label>
+
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <input id="float-input p-fluid" formControlName="division_short_name" type="text" placeholder="Division Short Name" pInputText>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-none d-md-inline-flex" title="Name In Local Language">Name (Local): </label>
+
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <input id="float-input p-fluid" formControlName="name_in_local_language" type="text" placeholder="Name In Local Language" pInputText>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-none d-md-inline-flex" title="Short Name In Local Language">Short Name (Local): </label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <input id="float-input p-fluid" formControlName="short_name_in_local_language" type="text" placeholder="Short Name In Local Language" pInputText>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-none d-md-inline-flex">Remarks: </label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <textarea id="float-input p-fluid" formControlName="remarks" type="text" placeholder="Remarks" pInputText></textarea>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <ng-template pTemplate="footer" class="">
+                    <div class="text-right mr-1">
+                      <button type="submit" class="pi pi-save risBtn risSave mr-1" (click)="onDivisionSubmit()"> Save</button>
+                      <button class="pi pi-times risBtn risClose" (click)="displayModaldivision=false"> Close</button>
+                    </div>
+                  </ng-template>
+
+                </p-dialog>
+              </form>
+              <!-- ************************start grid ************************ -->
+              <p-table [value]="divisions" [paginator]="true" [rows]="10" styleClass="p-datatable-striped p-datatable-sm" [showCurrentPageReport]="true" selectionMode="single" [(selection)]="selectDivision" dataKey="division_code"
+                       currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]">
+
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th>Division Code</th>
+                    <th>Division Name</th>
+                    <th>Division Short Name</th>
+                    <th>Remarks</th>
+
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-division>
+
+                  <tr (click)="selectDivisionRow(division)" [pSelectableRow]="division">
+                    <td>{{division.division_code}}</td>
+                    <td>{{division.division_name}}</td>
+                    <td>{{division.division_short_name}}</td>
+                    <td>{{division.remarks}}</td>
+                  </tr>
+                </ng-template>
+              </p-table>
+
+            </div>
+            <!-- ********** end card body ******************** -->
+          </p-tabPanel>
+          <p-tabPanel header="District">
+            <div class="grid mb-2">
+              <button class="pi pi-plus risBtn risAdd mr-2 ml-2" (click)="showModalDialogdistrict()"> New</button>
+              <button class="pi pi-pencil risBtn risEdit mr-2" (click)="loadDistrictToEdit()"> Edit</button>
+              <button class="pi pi-trash risBtn risDelete mr-2" (click)="showDistrictDialog()"> Delete</button>
+            </div>
+            <p-dialog header="Delete Record" [(visible)]="displayDistrict" [style]="{width: '35vw'}">
+              <p>Do you want to delete this record?</p>
+              <ng-template pTemplate="footer">
+                <button class="pi pi-times risBtn risClose" (click)="displayDistrict=false"> No</button>
+                <button class="pi pi-check risBtn risSave" (click)="deleteDistrictInfo()"> Yes</button>
+              </ng-template>
+            </p-dialog>
+            <div class="card-body">
+
+              <form [formGroup]="districtForm">
+                <p-dialog header="Add District Information" [(visible)]="displayModaldistrict" [modal]="true" [style]="{width: '58vw'}"
+                          [draggable]="true" [resizable]="false">
+
+                  <div class="grid mt-3">
+                    <div class="p-fluid grid col-6">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-none d-md-inline-flex">Division Name<span class="req">*</span> :</label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <p-dropdown [options]="allDivision" [(ngModel)]="selectedDivision" formControlName="divisionObj" placeholder="Select Division"
+                                      optionLabel="division_name" optionValue="division_id" [showClear]="true"></p-dropdown>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-none d-md-inline-flex" title="District Code">Code<span class="req">*</span> :</label>
+
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <input id="float-input p-fluid" formControlName="district_code" type="text" placeholder="District Code" pInputText>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-none d-md-inline-flex" title="District Name">Name<span class="req">*</span> :</label>
+
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <input id="float-input p-fluid" formControlName="district_name" type="text" placeholder="District Name" pInputText>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-none d-md-inline-flex" title="District Short Name">Short Name<span class="req">*</span> :</label>
+
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <input id="float-input p-fluid" formControlName="district_short_name" type="text" placeholder="District Short Name" pInputText>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-none d-md-inline-flex" title="Name In Local Language">Name (Local): </label>
+
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <input id="float-input p-fluid" formControlName="name_in_local_language" type="text" placeholder="Name In Local Language" pInputText>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-none d-md-inline-flex" title="Short Name In Local Language">Short Name (Local): </label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <input id="float-input p-fluid" formControlName="short_name_in_local_language" type="text" placeholder="Short Name In Local Language" pInputText>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-none d-md-inline-flex">Remarks: </label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <textarea id="float-input p-fluid" formControlName="remarks" type="text" placeholder="Remarks" pInputText></textarea>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <ng-template pTemplate="footer" class="">
+                    <div class="text-right mr-1">
+                      <button type="submit" class="pi pi-save risBtn risSave ml-2" (click)="onDistrictSubmit()"> Save</button>
+                      <button class="pi pi-times risBtn risClose" (click)="displayModaldistrict=false"> Close</button>
+                    </div>
+                  </ng-template>
+
+                </p-dialog>
+              </form>
+              <!-- ************************start grid ************************ -->
+              <p-table [value]="districts" [paginator]="true" [rows]="10" styleClass="p-datatable-striped p-datatable-sm" [showCurrentPageReport]="true" selectionMode="single" [(selection)]="selectDistrict" dataKey="district_code"
+                       currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]">
+
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th>District Code</th>
+                    <th>District Name</th>
+                    <th>District Short Name</th>
+                    <th>Remarks</th>
+
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-district>
+
+                  <tr (click)="selectDistrictRow(district)" [pSelectableRow]="district">
+                    <td>{{district.district_code}}</td>
+                    <td>{{district.district_name}}</td>
+                    <td>{{district.district_short_name}}</td>
+                    <td>{{district.remarks}}</td>
+                  </tr>
+                </ng-template>
+              </p-table>
+
+            </div>
+            <!-- ********** end card body ******************** -->
+          </p-tabPanel>
+
+          <p-tabPanel header="Thana">
+            <div class="grid mb-2">
+              <button class="pi pi-plus risBtn risAdd mr-2 ml-2" (click)="showModalDialogthana()"> New</button>
+              <button class="pi pi-pencil risBtn risEdit mr-2" (click)="loadThanaToEdit()"> Edit</button>
+              <button class="pi pi-trash risBtn risDelete mr-2" (click)="showThanaDialog()"> Delete</button>
+            </div>
+            <p-dialog header="Delete Record" [(visible)]="displayThana" [style]="{width: '35vw'}">
+              <p>Do you want to delete this record?</p>
+              <ng-template pTemplate="footer">
+                <button class="pi pi-times risBtn risClose" (click)="displayThana=false"> No</button>
+                <button class="pi pi-check risBtn risSave" (click)="deleteThanaInfo()"> Yes</button>
+              </ng-template>
+            </p-dialog>
+            <div class="card-body">
+
+              <form [formGroup]="thanaForm">
+                <p-dialog header="Add Thana Information" [(visible)]="displayModalthana" [modal]="true" [style]="{width: '58vw'}"
+                          [draggable]="true" [resizable]="false">
+
+                  <div class="grid mt-3">
+                    <div class="p-fluid grid col-6">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-none d-md-inline-flex">District Name<span class="req">*</span> :</label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <p-dropdown [options]="allDistrict" [(ngModel)]="selectedDistrict" formControlName="districtObj" placeholder="Select District"
+                                      optionLabel="district_name" optionValue="district_id" [showClear]="true"></p-dropdown>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-none d-md-inline-flex" title="Thana Code">Code<span class="req">*</span> :</label>
+
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <input id="float-input p-fluid" formControlName="thana_code" type="text" placeholder="Thana Code" pInputText>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-none d-md-inline-flex" title="Thana Name">Name<span class="req">*</span> :</label>
+
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <input id="float-input p-fluid" formControlName="thana_name" type="text" placeholder="Thana Name" pInputText>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-none d-md-inline-flex" title="Thana Short Name">Short Name<span class="req">*</span> :</label>
+
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <input id="float-input p-fluid" formControlName="thana_short_name" type="text" placeholder="Thana Short Name" pInputText>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-none d-md-inline-flex" title="Name In Local Language">Name (Local): </label>
+
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <input id="float-input p-fluid" formControlName="name_in_local_language" type="text" placeholder="Name In Local Language" pInputText>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-none d-md-inline-flex" title="Short Name In Local Language">Short Name (Local): </label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <input id="float-input p-fluid" formControlName="short_name_in_local_language" type="text" placeholder="Short Name In Local Language" pInputText>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-fluid grid col-6">
+                      <div class="col-4 mt-2 text-right">
+                        <label for="" class=" d-none d-md-inline-flex">Remarks: </label>
+                      </div>
+                      <div class="col-8 p-fluid">
+                        <span class="p-float-label">
+                          <textarea id="float-input p-fluid" formControlName="remarks" type="text" placeholder="Remarks" pInputText></textarea>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <ng-template pTemplate="footer" class="">
+                    <div class="text-right mr-1">
+                      <button type="submit" class="pi pi-save risBtn risSave ml-2" (click)="onThanaSubmit()"> Save</button>
+                      <button class="pi pi-times risBtn risClose" (click)="displayModalthana=false"> Close</button>
+                    </div>
+                  </ng-template>
+
+                </p-dialog>
+              </form>
+              <!-- ************************start grid ************************ -->
+              <p-table [value]="thanas" [paginator]="true" [rows]="10" styleClass="p-datatable-striped p-datatable-sm" [showCurrentPageReport]="true" selectionMode="single" [(selection)]="selectThana" dataKey="thana_code"
+                       currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]">
+
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th>Thana Code</th>
+                    <th>Thana Name</th>
+                    <th>Thana Short Name</th>
+                    <th>Remarks</th>
+
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-thana>
+
+                  <tr (click)="selectThanaRow(thana)" [pSelectableRow]="thana">
+                    <td>{{thana.thana_code}}</td>
+                    <td>{{thana.thana_name}}</td>
+                    <td>{{thana.thana_short_name}}</td>
+                    <td>{{thana.remarks}}</td>
+                  </tr>
+                </ng-template>
+              </p-table>
+
+            </div>
+            <!-- ********** end card body ******************** -->
+          </p-tabPanel>
+        </p-tabView>
+      </div>
+    </div>
+  </div>
+</div>

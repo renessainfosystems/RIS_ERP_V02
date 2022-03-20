@@ -1,0 +1,187 @@
+
+<div class="p-card">
+  <div class="me-auto">
+    <div class="p-card-title ">
+      <span class="pi pi-users"> </span>Menu Setup
+    </div>
+    <div class="p-card-body">
+      <!-- ********** start card body ******************** -->
+
+
+
+      <div class="card mb-3">
+        <button class="pi pi-plus risBtn risAdd mr-2" (click)="showModalDialog()"> Add</button>
+        <button class="pi pi-pencil risBtn risEdit mr-2" (click)="editModalDialog()"> Edit</button>
+        <button class="pi pi-trash risBtn risDelete mr-2" (click)="deleteMenu()"> Delete</button>
+        <button class="pi pi-pi-cog risBtn risAll  mr-2" (click)="menuActivity()">Activity</button>
+        <button class="pi pi-sort-amount-up-alt risBtn mr-2" (click)="menuSorting(true)"> Upper Sorting</button>
+        <button class="pi pi-sort-amount-down-alt risBtn mr-2" (click)="menuSorting(false)"> Down Sorting</button>
+      </div>
+
+      <form [formGroup]="menuForm">
+        <p-dialog header="Add/Edit" [(visible)]="displayModal" [style]="{width: '55vw'}" [baseZIndex]="10000">
+
+          <div class="col-12">
+            <div class="p-fluid grid mt-2">
+              <div class="col-3 mt-2 text-right">
+                <label for="firstname2" class="col-fixed">Parent :</label>
+              </div>
+              <div class="col-8 p-fluid">
+                <span class="p-float-label">
+                  <input readonly="readonly" formControlName="menu_parent_name" id="menu_parent_name" type="text" pInputText />
+                </span>
+              </div>
+            </div>
+
+            <div class="p-fluid grid ">
+              <div class="col-3 mt-2 text-right">
+                <label for="firstname2" class="col-fixed">Name :</label>
+              </div>
+              <div class="col-8 p-fluid">
+                <span class="p-float-label">
+                  <input formControlName="menu_name" type="text" placeholder="Name" pInputText />
+
+                </span>
+              </div>
+            </div>
+
+            <div class="p-fluid grid ">
+              <div class="col-3 mt-2 text-right">
+                <label for="firstname2" class="col-fixed">Routing Path :</label>
+              </div>
+              <div class="col-8 p-fluid">
+                <span class="p-float-label">
+                  <input formControlName="menu_routing_path" id="firstname2" placeholder="Routing Path" type="text" pInputText />
+                </span>
+              </div>
+            </div>
+
+            <div class="grid">
+              <div class=" col-6  ">
+                <div class=" p-fluid grid">
+                  <div class="col-6 mt-2 text-right">
+                    <label for="firstname2" class="col-fixed">Calling Parameter Type :</label>
+                  </div>
+                  <div class="col-4 p-fluid">
+                    <span class="p-float-label">
+                      <input formControlName="calling_parameter_type" id="firstname2" placeholder="Calling Parameter Type" type="text" pInputText />
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div class=" col-6  ">
+                <div class="p-fluid grid">
+                  <div class="col-6 mt-2 text-right">
+                    <label for="firstname2" class="col-fixed">Calling Parameter Value :</label>
+                  </div>
+                  <div class="col-4 p-fluid">
+                    <span class="p-float-label">
+                      <input formControlName="calling_parameter_value" id="lastname2" placeholder="Calling Parameter Value" type="text" pInputText />
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+
+            <div class="p-fluid grid">
+              <div class="col-3 text-right">
+                <label for="lastname2">Icon:</label>
+              </div>
+              <div class="col-8 p-fluid">
+                <span class="p-float-label">
+
+                  <p-fileUpload formControlName="menu_icon_path" name="menu_icon_path" customUpload="true" multiple="multiple"
+                                (uploadHandler)="onUpload($event)" accept="image/*"></p-fileUpload>
+                </span>
+              </div>
+            </div>
+
+            <div class="p-fluid card grid ">
+              <div class="col-4 mt-2 text-right">
+
+                <label for="firstname2" class="p-fluid col-fixed text-right">Events :</label>
+              </div>
+              <div class="col-8 grid p-fluid text-center">
+                <span class="p-float-label col-9  fluid">
+                  <p-dropdown [options]="allEvents" formControlName="event_enum" [(ngModel)]="selectedEvent"
+                              optionLabel="event_enum_name"></p-dropdown>
+
+                </span>
+                <div class="col-2 text-left">
+                  <button class=" pi pi-plus risBtn risAdd  " (click)="addEventToTable(selectedEvent)" label="Add"> Add</button>
+                </div>
+              </div>
+            </div>
+
+            <div class=" p-fluid card col-11 grid ">
+              <div class="col-4"></div>
+              <div class="col-8 text-center">
+                <p-table [value]="eventDataSources" responsiveLayout="scroll">
+                  <ng-template pTemplate="header">
+                    <tr>
+                      <th>#SL</th>
+
+                      <th>Events</th>
+                      <th>Remove</th>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-rowIndex="rowIndex" let-event>
+                    <tr>
+                      <td>{{rowIndex+1}}</td>
+
+                      <td>{{event.event_enum_name}}</td>
+                      <td> <button class="pi pi-times-circle risBtn risDelete" (click)="removeEvent(rowIndex,event)"> Remove</button></td>
+
+                    </tr>
+                  </ng-template>
+                </p-table>
+              </div>
+            </div>
+          </div>
+
+          <ng-template pTemplate="footer">
+            <button class="pi pi-save risBtn risSave mr-2" (click)="SaveMenu()"> Save</button>
+            <button class="pi pi-times risBtn risClose mr-2" (click)="displayModal=false"> Close</button>
+
+          </ng-template>
+        </p-dialog>
+      </form>
+
+      <p-treeTable [value]="MenuDataSource" [columns]="cols" selectionMode="single" [(selection)]="selectedNode" dataKey="MenuId"
+                   (onNodeSelect)="nodeSelect($event)" (onNodeUnselect)="nodeUnselect($event)">
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <th *ngFor="let col of columns">
+              {{col.header}}
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
+          <tr [ttRow]="rowNode" [ttSelectableRow]="rowNode">
+            <td>
+              <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+              <mat-icon *ngIf="rowData.MenuIconPath">  <img [src]="rowData.MenuIconPath"></mat-icon>
+              {{rowData.MenuName}}
+            </td>
+            <!-- <td>
+
+              {{rowData.MenuId}}
+            </td> -->
+            <td>{{rowData.SortingPriority}}</td>
+            <td *ngIf="rowData.IsActive===true">{{"Active"}}</td>
+            <td *ngIf="rowData.IsActive===false">{{"InActive"}}</td>
+          </tr>
+        </ng-template>
+      </p-treeTable>
+      <!-- ********** end card body ******************** -->
+    </div>
+  </div>
+</div>
+
+
+
+
+

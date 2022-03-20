@@ -1,0 +1,426 @@
+<div class="p-card">
+
+  <div class="me-auto">
+    <div class="p-card-title ">
+      <span class="pi pi-OT Policy"> </span>Late Early Policy
+    </div>
+    <div class="p-card-body">
+      <!--********** start card body ********************-->
+
+      <div class="card">
+
+
+
+        <div class="card-body">
+
+
+          <p-fieldset legend={{header}} [collapsed]="collapsed" (onBeforeToggle)="toggle()" [toggleable]="true">
+            <p-dialog header="Delete Record" [(visible)]="display" [style]="{width: '35vw'}">
+              <p>Do you want to delete this record?</p>
+              <ng-template pTemplate="footer">
+                <button class="pi pi-times risBtn risClose" (click)="display=false"> No</button>
+                <button class="pi pi-check risBtn risSave" (click)="deleteAttendanceBenefitPolicy()"> Yes</button>
+              </ng-template>
+            </p-dialog>
+            <p-dialog header="Approve Record" [(visible)]="displayApprove" [style]="{width: '35vw'}">
+              <p>Do you want to approve this record?</p>
+              <ng-template pTemplate="footer">
+                <button class="pi pi-times risBtn risClose" (click)="displayApprove=false"> No</button>
+                <button class="pi pi-check risBtn risSave" (click)="policyApprove()"> Yes</button>
+              </ng-template>
+            </p-dialog>
+            <form action="" [formGroup]="lateEarlyPolicyForm">
+              <div class="p-fluid grid col-12 flex flex-wrap card-container">
+                <div class="grid col-6 flex justify-content-start flex-wrap card-container">
+                  <div class="col-4 mt-1 text-right">
+                    <label for="" class=" d-md-inline-flex" pTooltip="Name" tooltipPosition="top">Name<span class="req">*:</span> </label>
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <span class="p-float-label">
+                      <input id="float-input p-fluid" type="text" formControlName="late_early_policy_name" placeholder="Policy Name" pInputText required>
+                    </span>
+                  </div>
+                </div>
+                <div class="grid col-6 flex justify-content-start flex-wrap card-container">
+                  <div class="col-4 mt-1 text-right">
+                    <label for="" class=" d-md-inline-flex" pTooltip="code" tooltipPosition="top">Code<span class="req">*:</span> </label>
+                  </div>
+                  <div class="col-8 p-fluid">
+                    <span class="p-float-label">
+                      <input id="float-input p-fluid" type="text" disabled="disabled" formControlName="code" placeholder="Code" pInputText required>
+                    </span>
+                  </div>
+                </div>
+                <div class="p-fluid grid col-12 flex justify-content-start flex-wrap card-container pr-4">
+                  <div class="col-2 mt-2 text-right">
+                    <label for="" class=" d-md-inline-flex">Remarks:</label>
+                  </div>
+                  <div class="col-10 pr-md-5 p-fluid">
+
+                    <textarea rows="1" id="float-input flex p-fluid" formControlName="remarks" class="inputfield w-full" cols="50" pInputTextarea></textarea>
+
+                  </div>
+                </div>
+                <div class="p-fluid grid col-8 flex justify-content-start flex-wrap card-container">
+                  <div class="col-3 mt-2 text-right">
+
+                  </div>
+                  <div class="col-2 p-fluid ">
+                    <p-radioButton name="late_early_type_id_enum" formControlName="late_early_type_id_enum" value="1" [(ngModel)]="selectedlateearlyValue" binary="true" pl-1></p-radioButton>
+                    <label for="" style="font-weight: bold;" class=" d-md-inline-flex  pl-2">Late</label>
+                  </div>
+                  <div class="col-2 p-fluid ">
+                    <p-radioButton name="late_early_type_id_enum" formControlName="late_early_type_id_enum" value="2" [(ngModel)]="selectedlateearlyValue" binary="true" pl-1></p-radioButton>
+                    <label for="" style="font-weight: bold;" class=" d-md-inline-flex  pl-2">Early</label>
+                  </div>
+                  <div class="col-2 p-fluid ">
+                    <p-radioButton name="late_early_type_id_enum" formControlName="late_early_type_id_enum" value="3" [(ngModel)]="selectedlateearlyValue" binary="true" pl-1></p-radioButton>
+                    <label for="" style="font-weight: bold;" class=" d-md-inline-flex  pl-2">Both</label>
+                  </div>
+
+
+                </div>
+
+
+
+
+                <div class="p-fluid grid col-12 flex justify-content-start flex-wrap card-container">
+                  <div class="col-2 mt-1 p-fluid text-right">
+                    <label for="" class=" d-md-inline-flex">For</label>
+                  </div>
+                  <div class="col-1 p-fluid">
+                    <input id="float-input p-fluid" type="text" formControlName="late_early_days_for" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" (input)="getHourToMin()" placeholder="Day" pInputText>
+
+
+                  </div>
+                  <div class="col-3 mt-1 text-left pl-3">
+                    <label for="" class=" d-md-inline-flex">Days of monthly(Late)</label>
+                  </div>
+                  <div class="col-1 mt-1 text-left">
+                    <div class="field-checkbox">
+                      <p-checkbox name="group" formControlName="is_consecutive" binary="true"></p-checkbox>
+                      <label [for]="">Consecutive</label>
+                    </div>
+                  </div>
+                </div>
+
+
+                <!--<div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+
+    <div class="col-4 mt-2 text-right">
+
+    </div>
+    <div class="col-8 p-fluid">
+
+      <div class="field-checkbox">
+        <p-checkbox name="group"  binary="true"></p-checkbox>
+        <label [for]="">Check if there is any special holiday</label>
+      </div>
+    </div>
+
+  </div>-->
+
+
+
+                <div class="p-fluid grid col-12 flex justify-content-start flex-wrap card-container">
+                  <div class="col-2 p-fluid ">
+
+                  </div>
+                  <div class="col-4 p-fluid ">
+
+                    <p-checkbox name="group" formControlName="is_allow_late_early_slab" (onChange)="onOTBenefitChange($event)" binary="true" pl-1></p-checkbox>
+                    <label for="" pl style="font-weight: bold;" class=" d-md-inline-flex  pl-2">Allow Slab for late policy</label>
+                  </div>
+                </div>
+
+                <div *ngIf="isShownOTBenefit" class="p-fluid grid col-12 flex justify-content-start flex-wrap card-container">
+
+                  <div class="col-2 mt-1 text-right">
+
+                  </div>
+                  <div class="col-1 p-fluid">
+                    <input id="float-input p-fluid" type="text" formControlName="min_late_early_hour" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" (input)="getHourToMin()" placeholder="Hour" pInputText>
+
+
+                  </div>
+                  <div class="col-1 mt-1 text-left">
+                    <label for="" class=" d-md-inline-flex">hour or</label>
+                  </div>
+                  <div class="col-1 p-fluid">
+                    <input id="float-input p-fluid" type="text" disabled="disabled" formControlName="min_late_early_min" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" placeholder="Minutes" pInputText>
+
+
+                  </div>
+                  <div class="col-1 mt-1 text-right">
+                    <label for="" class=" d-md-inline-flex">minutes</label>
+                  </div>
+                  <div class="col-1 mt-1 text-left pl-5">
+                    <label for="" class=" d-md-inline-flex" style="font-weight: bold;">to</label>
+                  </div>
+                  <div class="col-1 p-fluid">
+                    <input id="float-input p-fluid" type="text" formControlName="max_late_early_hour" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" (input)="getMaxHourToMin()" placeholder="Hour" pInputText>
+
+
+                  </div>
+                  <div class="col-1 mt-1 text-left">
+                    <label for="" class=" d-md-inline-flex">hour or</label>
+                  </div>
+                  <div class="col-1 p-fluid">
+                    <input id="float-input p-fluid" type="text" disabled="disabled" formControlName="max_late_early_min" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" placeholder="Minutes" pInputText>
+
+
+                  </div>
+                  <div class="col-1 mt-1 text-left">
+                    <label for="" class=" d-md-inline-flex">minutes</label>
+                  </div>
+                </div>
+                <div *ngIf="isShownOTBenefit" class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+
+                </div>
+                <div class="p-fluid grid col-12 flex justify-content-start flex-wrap card-container">
+                  <div class="col-2 p-fluid ">
+
+                  </div>
+                  <div class="col-8 p-fluid ">
+                    <p>Select the following adjustment for the above late rule</p>
+                  </div>
+                </div>
+                <div class="p-fluid grid col-12 flex justify-content-start flex-wrap card-container">
+                  <div class="col-2 p-fluid ">
+
+                  </div>
+                  <div class="col-4 p-fluid ">
+                    <p-checkbox name="is_leave_adjustment" formControlName="is_leave_adjustment" (onChange)="onLeaveBenefitChange($event)" binary="true" pl-1></p-checkbox>
+
+                    <label for="" style="font-weight: bold;" class=" d-md-inline-flex  pl-2">Leave Adjustment</label>
+                  </div>
+
+                </div>
+
+                <div *ngIf="isShownLeaveBenefit" class="p-fluid grid col-12 flex justify-content-start flex-wrap card-container">
+                  <div class="col-2 mt-1 text-left">
+
+                  </div>
+                  <div class="col-1 p-fluid">
+
+                    <input id="float-input p-fluid" type="text" (input)="getDaytoHourToMin()" formControlName="leave_amount_d" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" placeholder="Day" pInputText>
+
+                  </div>
+                  <div class="col-1 mt-1 text-left">
+                    <label for="" class=" d-md-inline-flex">days Or</label>
+                  </div>
+                  <div class="col-1 p-fluid">
+
+                    <input id="float-input p-fluid" type="text" (input)="getHourToDayToMin()" formControlName="leave_amount_h" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" placeholder="Hour" pInputText>
+
+                  </div>
+                  <div class="col-1 mt-1 text-left">
+                    <label for="" class=" d-md-inline-flex">hours Or</label>
+                  </div>
+                  <div class="col-1 p-fluid">
+
+                    <input id="float-input p-fluid" type="text" disabled="disabled" formControlName="leave_in_min" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" placeholder="Min" pInputText>
+
+                  </div>
+                  <div class="col-1 text-left">
+                    <label for="" class=" d-md-inline-flex">minutes Or</label>
+                  </div>
+                  <div class="col-4 mt-1 text-left">
+
+                    <div class="field-checkbox">
+
+                      <p-checkbox name="group" (onChange)="checkIsleavelateearlymin()" formControlName="is_leave_as_late_early_min" binary="true"></p-checkbox>
+                      <label [for]="">Actual late min adjust with leave as per deduction priority</label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="p-fluid grid col-12 flex justify-content-start flex-wrap card-container">
+                  <div class="col-2 p-fluid ">
+
+                  </div>
+                  <div class="col-4 p-fluid ">
+                    <p-checkbox name="group" formControlName="is_monetary_benefit" (onChange)="onMonetaryBenefitChange($event)" binary="true" pl-1></p-checkbox>
+
+
+                    <label for="" style="font-weight: bold;" class=" d-md-inline-flex  pl-2">Salary Adjustment</label>
+                  </div>
+
+                </div>
+                <div *ngIf="isShownMonetaryBenefit" class="p-fluid grid col-12 flex justify-content-start flex-wrap card-container">
+                  <div class="col-2 mt-2 text-right">
+                    <label for="" class=" d-md-inline-flex">Deduction Head:</label>
+                  </div>
+                  <div class="col-4 p-fluid">
+
+                    <p-dropdown [options]="salaryheads" formControlName="salary_head_id" placeholder="Select Deduction Head"
+                                optionLabel="salary_head_name" optionValue="salary_head_id" [showClear]="true"></p-dropdown>
+
+                  </div>
+                  <div class="col-5 mt-1 text-left">
+                    <label for="" class=" d-md-inline-flex">Amount will be given under the salary head.</label>
+                  </div>
+                </div>
+                <div *ngIf="isShownMonetaryBenefit" class="p-fluid grid col-12 flex justify-content-start flex-wrap card-container pr-5">
+
+                  <div class="col-2 mt-2 text-right">
+                    <label for="" class=" d-md-inline-flex"> Daily</label>
+                  </div>
+                  <div class="col-1 p-fluid">
+
+                    <input id="float-input p-fluid" type="text" (input)="checkPercentageAmount()" formControlName="percent_value" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" placeholder="Percentage" pInputText>
+
+                  </div>
+                  <div class="col-1 mt-1 text-left">
+                    <label for="" class=" d-md-inline-flex">% of</label>
+                  </div>
+                  <div class="col-2 mt-1 text-left">
+                    <div class="field-checkbox">
+                      <p-checkbox name="group" (onChange)="checkIsGross()" formControlName="is_gross" binary="true"></p-checkbox>
+                      <label [for]="">Gross     Or</label>
+                    </div>
+                  </div>
+                  <div class="col-3 p-fluid text-left">
+                    <p-dropdown [options]="basicsalaryheads"  formControlName="primary_salary_head_id" placeholder="Select Salary Head"
+                                optionLabel="basic_salary_head_name" optionValue="primary_salary_head_id" [showClear]="true" (onChange)="checkPrimaryHead()"></p-dropdown>
+
+
+                  </div>
+                  <div class="col-1 mt-1 text-left pl-5">
+                    <label for="" class=" d-md-inline-flex">for </label>
+
+                  </div>
+                  <div class="col-1 text-left p-fluid">
+
+                    <input id="float-input p-fluid" type="text" (input)="checkPercentageAmount()" formControlName="deduction_days" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" placeholder="day" pInputText>
+
+                  </div>
+                  <div class="col-1 mt-1 text-left">
+                    <label for="" class=" d-md-inline-flex">days</label>
+
+                  </div>
+
+
+                </div>
+                <div *ngIf="isShownMonetaryBenefit" class="p-fluid grid col-12 flex justify-content-start flex-wrap card-container">
+                  <div class="col-2 mt-2 text-right">
+                    <label for="" style="font-weight: bold;" class=" d-md-inline-flex">Or</label>
+                  </div>
+                  <div class="col-5 mt-1 text-left">
+                    <div class="field-checkbox mt-1">
+                      <p-checkbox name="group" (onChange)="checkIsDeductionMonthlyMin()" formControlName="is_deduction_monthly_min" binary="true"></p-checkbox>
+                      <label [for]="">Actual late min adjust with salary</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12  text-right pr-5">
+
+                  <button class=" pi pi-plus risBtn risAdd mr-2" label="Add" (click)="addOTSlabInfo()">Add</button>
+
+
+                </div>
+
+                <div class="col-2  pr-1 text-right">
+
+                </div>
+                <div class="col-10 pr-5 p-fluid ">
+                  <p-table [value]="latEarlySlabDataSources" styleClass="p-datatable-sm" class="p-0" responsiveLayout="scroll">
+
+                    <ng-template pTemplate="header">
+                      <tr>
+                        <th>#SL</th>
+
+                        <th>Rules For</th>
+                        <th>Description</th>
+                        <th>Leave Adjustment</th>
+                        <th>Salary Adjustment</th>
+                        <th>Action</th>
+                      </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-rowIndex="rowIndex" let-slab>
+
+                      <tr>
+                        <td>{{rowIndex+1}}</td>
+
+                        <td>{{slab.rulesFor}}</td>
+                        <td>{{slab.description}}</td>
+                        <td>{{slab.leaveadjustment}}</td>
+                        <td>{{slab.Salaryadjustment}}</td>
+                        <td> <button class="pi pi-times-circle risBtn risDelete" (click)="removeEvent(rowIndex,slab)"> </button></td>
+
+                      </tr>
+                    </ng-template>
+                  </p-table>
+                </div>
+
+
+                <div class="p-fluid grid col-12 pr-7 mt-2 ml-4 flex justify-content-end flex-wrap card-container">
+
+
+                  <button type="submit" class="pi pi-save risBtn risSave mr-2" (click)="saveBenefitPolicy()">Save</button>
+                  <button class="pi pi-times risBtn risClose " (click)="clear()"> Clear</button>
+
+
+                </div>
+              </div>
+
+            </form>
+
+          </p-fieldset>
+          <p-fieldset legend="Late-Early Policy List" [collapsed]="collapsedBenefitList" (onBeforeToggle)="toggle()" [toggleable]="true">
+
+            <!--<div class="grid mb-4">
+              <form [formGroup]="shiftSearchForm">
+                <span class="p-input-icon-right mr-2">
+                  <i class="pi pi-search cursor-pointer" (click)="shiftSearch()"></i>
+                  <input type="text" id="user_info_search" formControlName="shift_name" (keyup.enter)="shiftSearch()" style="width:350px" pInputText placeholder="Search By- Any">
+                </span>
+
+
+
+              </form>
+
+
+            </div>-->
+
+            <div class="grid mb-2">
+              <button class="pi pi-plus risBtn risAdd mr-2 " (click)="btnNew()"> New</button>
+              <button class="pi pi-pencil risBtn risEdit mr-2 " (click)="loadBenefitPolicyToEdit()"> Edit</button>
+              <button class="pi pi-trash risBtn risDelete mr-2" (click)="showDialog()"> Delete</button>
+              <button class="pi pi-box risBtn risAll mr-2"> Activity</button>
+              <button class="pi pi-box risBtn risAll mr-2" (click)="approveConfirm()"> Approve</button>
+            </div>
+            <p-table [value]="lateEarlyPolicies" dataKey="late_early_policy_id" [paginator]="true" [rows]="10" selectionMode="single" [(selection)]="selectedPolicy" [showCurrentPageReport]="true" responsiveLayout="scroll" styleClass="p-datatable-striped p-datatable-sm"
+                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
+
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>Policy Name</th>
+                  <th>Remarks</th>
+                  <th>Approved By</th>
+                  <th>Activity</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-policy>
+                <tr [pSelectableRow]="policy">
+                  <td>{{policy.late_early_policy_name}}</td>
+                  <td>{{policy.remarks}}</td>
+                
+                  <td>{{policy.approvedBy}}</td>
+                  <td *ngIf="policy.is_active===true">{{"Active"}}</td>
+                  <td *ngIf="policy.is_active===false">{{"InActive"}}</td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </p-fieldset>
+
+
+       
+        </div>
+
+        <!--********** end card body ********************-->
+
+      </div>
+    </div>
+  </div>
+</div>
