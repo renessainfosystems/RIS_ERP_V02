@@ -1,18 +1,25 @@
 ﻿using Auth.DataAccess.EntityDataAccess;
 using Auth.Model.Administrative.Model;
+using Auth.Model.Administrative.ViewModel;
+using Auth.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DataAccess;
+using Microsoft.EntityFrameworkCore;
 
 namespace Auth.Repository.Administrative
 {
     public class RegulatorRepository : IRegulatorRepository
     {
+        protected readonly ApplicationDBContext _dbSet;
         private readonly IEntityDataAccess<Regulator> _entityDataAccess;
 
         public RegulatorRepository(
-            IEntityDataAccess<Regulator> entityDataAccess)
+            ApplicationDBContext dbSet
+            ,IEntityDataAccess<Regulator> entityDataAccess)
         {
+            _dbSet = dbSet;
             _entityDataAccess = entityDataAccess;
 
         }
@@ -44,6 +51,39 @@ namespace Auth.Repository.Administrative
                     throw new Exception("This Ecommerce Platform name(" + oRegulator.regulator_name + ") is already exists.");
                 else
                     throw new Exception(ex.Message);
+            }
+        }
+
+
+        public IEnumerable<RegulatorViewModel> GetAllByRawSql()
+        {
+            try
+            {
+                var result = _dbSet.RegulatorViewModels
+                      .FromSqlRaw(@"select RT.*,C.country_name from [Administrative].[Regulator] RT 
+                       left join [Administrative].[Country] C on RT.country_id=C.country_id order by regulator_id desc")
+                      .ToList();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public IEnumerable<RegulatorViewModel> GetByIdRawSql(int regulator_id)
+        {
+            try
+            {
+                var result = _dbSet.RegulatorViewModels
+                      .FromSqlRaw(@"select RT.*,C.country_name from [Administrative].[Regulator] RT 
+                       left join [Administrative].[Country] C on RT.country_id=C.country_id order by regulator_id desc where RT.regulator_id='" + regulator_id + "'")
+                      .ToList();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
         public IEnumerable<Regulator> GetAllRegulator()
