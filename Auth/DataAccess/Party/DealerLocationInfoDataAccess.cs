@@ -78,7 +78,7 @@ namespace Auth.DataAccess.Party
         public async Task<dynamic> IUD_DealerLocationInfo(DealerLocationInfo dealerLocationInfo, int dbOperation)
         {
             var message = new CommonMessage();
-
+            var result = (dynamic)null;
             var parameters = DealerLocationInfoParameterBinding(dealerLocationInfo, dbOperation);
 
             if (_dbConnection.State == ConnectionState.Closed)
@@ -86,25 +86,29 @@ namespace Auth.DataAccess.Party
 
             try
             {
-                dynamic data = await _dbConnection.QueryAsync("[Party].[SP_Dealer_Location_Info_IUD]", parameters, commandType: CommandType.StoredProcedure);
+                dynamic data = await _dbConnection.QueryFirstOrDefaultAsync("[Party].[SP_Dealer_Location_Info_IUD]", parameters, commandType: CommandType.StoredProcedure);
 
                 if (dbOperation == (int)GlobalEnumList.DBOperation.Create)
                 {
-                    return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage);
+                    result = DealerLocationInfoViewModel.ConvertToModel(data);
+                    return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage, result);
                 }
                 if (dbOperation == (int)GlobalEnumList.DBOperation.Update)
                 {
-                    return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonUpdateMessage);
+                    result = DealerLocationInfoViewModel.ConvertToModel(data);
+                    return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonUpdateMessage, result);
                 }
 
                 if (dbOperation == (int)GlobalEnumList.DBOperation.Delete)
                 {
-                    return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonDeleteMessage);
+                    result = DealerLocationInfoViewModel.ConvertToModel(data);
+                    return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonDeleteMessage, result);
                 }
 
                 if (data.Count > 0)
                 {
-                    message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage, data);
+                    result = DealerLocationInfoViewModel.ConvertToModel(data);
+                    message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage, result);
                 }
                 else
                 {
@@ -138,7 +142,7 @@ namespace Auth.DataAccess.Party
                 if (data != null)
                 {
                     List<dynamic> dataList = data;
-                    result = (from dr in dataList select DealerLocationInfoModel.ConvertToModel(dr)).ToList();
+                    result = (from dr in dataList select DealerLocationInfoViewModel.ConvertToModel(dr)).ToList();
                 }
 
             }
@@ -164,7 +168,7 @@ namespace Auth.DataAccess.Party
                 dynamic data = await _dbConnection.QuerySingleOrDefaultAsync<dynamic>(sql);
                 if (data != null)
                 {
-                    result = DealerLocationInfoModel.ConvertToModel(data);
+                    result = DealerLocationInfoViewModel.ConvertToModel(data);
                 }
             }
             catch (Exception ex)
@@ -190,7 +194,7 @@ namespace Auth.DataAccess.Party
                 if (data != null)
                 {
                     List<dynamic> dataList = data;
-                    result = (from dr in dataList select DealerContactInfoModel.ConvertToModel(dr)).ToList();
+                    result = (from dr in dataList select DealerLocationInfoViewModel.ConvertToModel(dr)).ToList();
                 }
             }
             catch (Exception ex)
