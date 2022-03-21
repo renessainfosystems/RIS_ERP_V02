@@ -23,6 +23,7 @@ export class AssociationComponent implements OnInit {
     displayedColumns: string[] = ['associationName', 'Remarks'];
     isAssociationEdit: boolean = false;
     rowSelected: boolean = false;
+
     selectedOrganizationType: any;
     allOrganizationType: any[];
 

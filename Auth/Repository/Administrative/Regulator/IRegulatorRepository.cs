@@ -1,4 +1,5 @@
 ﻿using Auth.Model.Administrative.Model;
+using Auth.Model.Administrative.ViewModel;
 using System.Collections.Generic;
 
 namespace Auth.Repository.Administrative
@@ -8,6 +9,8 @@ namespace Auth.Repository.Administrative
         void Add(Regulator oRegulator);
         void Update(Regulator oRegulator);
         IEnumerable<Regulator> GetAllRegulator();
+        IEnumerable<RegulatorViewModel> GetAllByRawSql();
+        IEnumerable<RegulatorViewModel> GetByIdRawSql(int association_id);
         Regulator GetById(int regulator_id);
         IEnumerable<object> RegulatorCboList();
         void Delete(int regulator_id);

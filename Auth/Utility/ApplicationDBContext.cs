@@ -70,6 +70,7 @@ namespace DataAccess
         public DbSet<EcommercePlatform> EcommercePlatforms { get; set; }
         public DbSet<EcommercePlatformViewModel> EcommercePlatformViewModels { get; set; }
         public DbSet<Regulator> Regulators { get; set; }
+        public DbSet<RegulatorViewModel> RegulatorViewModels { get; set; }
         public DbSet<DepartmentType> DepartmentTypes { get; set; }
 
         #endregion

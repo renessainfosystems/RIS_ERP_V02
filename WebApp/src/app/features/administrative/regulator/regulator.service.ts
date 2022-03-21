@@ -2,8 +2,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { IPConfiguration } from '../../../core/services/IP-configuration.service';
-import Regulator from './regulator.model';
-
 
 
 const httpOptions = {
@@ -19,19 +17,19 @@ export class RegulatorService {
   constructor(private http: HttpClient, private ipconfig: IPConfiguration) { }
 
 
-  getAllRegulator(): Observable<Regulator[]> {
+    getAllRegulator(): Observable<any[]> {
 
-    return this.http.get<Regulator[]>(this.ipconfig.base_IP + 'Regulator/GetAllRegulator');
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'Regulator/GetAllRegulator');
 
   }
 
-  CreateRegulator(regulator: any): Observable<Regulator> {
-    return this.http.post<Regulator>(this.ipconfig.base_IP + 'Regulator/Create', regulator, httpOptions);
+  CreateRegulator(regulator: any): Observable<any> {
+      return this.http.post<any>(this.ipconfig.base_IP + 'Regulator/Create', regulator, httpOptions);
   }
 
-  UpdateRegulator(regulator: any): Observable<Regulator> {
+    UpdateRegulator(regulator: any): Observable<any> {
 
-    return this.http.post<Regulator>(this.ipconfig.base_IP + 'Regulator/Update', regulator, httpOptions);
+        return this.http.post<any>(this.ipconfig.base_IP + 'Regulator/Update', regulator, httpOptions);
   }
 
   DeleteRegulator(regulator_id: Number): Observable<any> {
@@ -45,8 +43,8 @@ export class RegulatorService {
 
   }
 
-  getAllCountryCboList(): Observable<Regulator[]> {
-    return this.http.get<Regulator[]>(this.ipconfig.base_IP + 'Country/CountryCboList');
+    getAllCountryCboList(): Observable<any[]> {
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'Country/CountryCboList');
   }
 
 }

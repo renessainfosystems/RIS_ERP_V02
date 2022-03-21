@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { SelectionModel } from '@angular/cdk/collections';
 import Company from './company.model';
@@ -17,7 +17,8 @@ import { Message, MessageService } from 'primeng/api';
 })
 export class CompanyComponent implements OnInit {
 
-    
+    companyForm: FormGroup;
+    submitted = false;
 
     //start grid and form show hide ********************
     gridDisplay = false;
@@ -52,7 +53,7 @@ export class CompanyComponent implements OnInit {
 
   rowData: any;
   dataSaved = false;
-  companyForm: any;
+  //companyForm: any;
   allCompany: Observable<Company[]>;
   selection = new SelectionModel<Company>(true, []);
   companyIdUpdate = null;
@@ -110,30 +111,33 @@ export class CompanyComponent implements OnInit {
     }
    
 
-  ngOnInit(): void {
+    ngOnInit(): void {
+        //this.companyForm = new FormGroup({
+        //    'company_name': new FormControl(null,Validators.required)
+        //});
     this.CompanyService.getAllCompany().subscribe(data => this.companys = data);
 
     this.companyForm = this.formbulider.group({
-      company_code: [null, [Validators.required]],
+      company_code: [null],
       company_name: [null, [Validators.required]],
-      company_short_name: [null, [Validators.required]],
+      company_short_name: [null],
       company_prefix: [null, [Validators.required]],
-      companyGroupObj: [null, [Validators.required]],
-      company_group_id: [null, [Validators.required]],
-      countryObj: [null, [Validators.required]],
-      country_id: [null, [Validators.required]],
+        companyGroupObj: [null, [Validators.required]],
+      company_group_id: [null],
+        countryObj: [null, [Validators.required]],
+      country_id: [null],
       divisionObj: [null],
       division_id: [null],
       districtObj: [null],
       district_id: [null],
-      currencyObj: [null],
+        currencyObj: [null, [Validators.required]],
       currency_id: [null],
       company_reg_no: [null],
       company_reg_date: [null],
-      company_reg_file_path: [null],
+        company_reg_file_path: [null, [Validators.required]],
       company_tin_no: [null],
       company_tin_date: [null],
-      company_tin_file_path: [null],
+        company_tin_file_path: [null, [Validators.required]],
       city: [null],
       ps_area: [null],
       post_code: [null],
@@ -145,7 +149,7 @@ export class CompanyComponent implements OnInit {
       phone: [null],
       email: [null],
       web_url: [null],
-      logo: [null],
+        logo: [null, [Validators.required]],
       slogan: [null],
       name_in_local_language: [null],
       address_in_local_language: [null],
@@ -155,7 +159,8 @@ export class CompanyComponent implements OnInit {
     this.loadAllCompanyGroupCboList();
     this.loadAllCountryCboList();
     this.loadAllCurrencyCboList();
-  }
+    }
+    
 
   next() {
     this.first = this.first + this.rows;
@@ -290,34 +295,46 @@ export class CompanyComponent implements OnInit {
     this.CompanyService.getAllCompany().subscribe(data => {
       this.companys = data;
     });
-  }
+    }
 
-    onFormSubmit() {
-     
+    //for validation messate -----------
+
+    get f(): { [key: string]: AbstractControl } {
+        return this.companyForm.controls;
+    }
+    onFormSubmit(): void {
+         //for validation messate -----------
+        this.submitted = true;
+
+        if (this.companyForm.invalid) {
+            return;
+        }
+         //end validation messate -----------
+        console.log(JSON.stringify(this.companyForm.value, null, 2));
 
     this.dataSaved = false;
     const companydata = this.companyForm.value;
-    if (!(companydata.company_prefix)) {
-      return this.notifyService.ShowNotification(2, "Please enter company prefix")
-    }
-    companydata.company_group_id = companydata.companyGroupObj;
-    if (!(companydata.company_group_id)) {
-      return this.notifyService.ShowNotification(2, "Please seletc group name")
-    }
-    if (!(companydata.company_name)) {
-      return this.notifyService.ShowNotification(2, "Please enter company name")
-    }
-    if (!(companydata.company_short_name)) {
-      return this.notifyService.ShowNotification(2, "Please enter company short name")
-    }
-    companydata.currency_id = companydata.currencyObj;
-    if (!(companydata.currency_id)) {
-      return this.notifyService.ShowNotification(2, "Please select currency")
-    }    
-    companydata.country_id = companydata.countryObj;
-    if (!(companydata.country_id)) {
-      return this.notifyService.ShowNotification(2, "Please select country")
-    }
+    //if (!(companydata.company_prefix)) {
+    //  return this.notifyService.ShowNotification(2, "Please enter company prefix")
+    //}
+    //companydata.company_group_id = companydata.companyGroupObj;
+    //if (!(companydata.company_group_id)) {
+    //  return this.notifyService.ShowNotification(2, "Please seletc group name")
+    //}
+    //if (!(companydata.company_name)) {
+    //  return this.notifyService.ShowNotification(2, "Please enter company name")
+    //}
+    //if (!(companydata.company_short_name)) {
+    //  return this.notifyService.ShowNotification(2, "Please enter company short name")
+    //}
+    //companydata.currency_id = companydata.currencyObj;
+    //if (!(companydata.currency_id)) {
+    //  return this.notifyService.ShowNotification(2, "Please select currency")
+    //}    
+    //companydata.country_id = companydata.countryObj;
+    //if (!(companydata.country_id)) {
+    //  return this.notifyService.ShowNotification(2, "Please select country")
+    //}
     companydata.division_id = companydata.divisionObj;
     companydata.district_id = companydata.districtObj;
    
@@ -379,7 +396,7 @@ export class CompanyComponent implements OnInit {
         this.photourllink = event.target.result
       }
     }
-
+      
   }
 
 }
