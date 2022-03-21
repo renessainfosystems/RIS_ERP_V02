@@ -348,7 +348,7 @@
                     <button class="pi pi-plus risBtn risAdd mr-2 " (click)="btnNew()"> New</button>
                     <button class="pi pi-pencil risBtn risEdit mr-2 " (click)="loadEmployeeToEdit()"> Edit</button>
                     <button class="pi pi-trash risBtn risDelete mr-2" (click)="showDialog()"> Delete</button>
-                    <button class="pi pi-pi-cog risBtn risAll  mr-2" (click)="employeeActiveInactive()">Activity</button>
+                    <button class="pi pi-box risBtn risAll  mr-2" (click)="employeeActiveInactive()"> Activity</button>
 
                   </div>
                   <p-table #dt1 [value]="employeeList" [paginator]="true" [rows]="10" selectionMode="single" [(selection)]="selectedemployee" dataKey="EmployeeId" [showCurrentPageReport]="true" responsiveLayout="scroll" styleClass="p-datatable-striped p-datatable-sm"

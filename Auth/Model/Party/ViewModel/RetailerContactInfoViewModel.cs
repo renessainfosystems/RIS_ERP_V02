@@ -2,9 +2,9 @@
 
 namespace Auth.Model.Party.ViewModel
 {
-    public class RetailerContactInfoModel
+    public class RetailerContactInfoViewModel
     {
-        public RetailerContactInfoModel()
+        public RetailerContactInfoViewModel()
         {
             //Constractor
         }
@@ -53,9 +53,9 @@ namespace Auth.Model.Party.ViewModel
         public DateTime DBServerDateTime { get; set; }
         public long CreatedUserInfoId { get; set; }
 
-        public static RetailerContactInfoModel ConvertToModel(dynamic retailerContact)
+        public static RetailerContactInfoViewModel ConvertToModel(dynamic retailerContact)
         {
-            var model = new RetailerContactInfoModel();
+            var model = new RetailerContactInfoViewModel();
             model.RetailerContactInfoId = retailerContact.retailer_contact_info_id ?? 0;
             model.RetailerInfoId = retailerContact.retailer_info_id ?? 0;
             model.RetailerContactInfoCode = retailerContact.retailer_contact_info_code ?? "";

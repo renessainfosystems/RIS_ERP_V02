@@ -2,9 +2,9 @@
 
 namespace Auth.Model.Party.ViewModel
 {
-    public class DealerLocationInfoModel
+    public class DealerLocationInfoViewModel
     {
-        public DealerLocationInfoModel()
+        public DealerLocationInfoViewModel()
         {
             //Constractor
         }
@@ -35,9 +35,9 @@ namespace Auth.Model.Party.ViewModel
         public DateTime DBServerDateTime { get; set; }
         public long CreatedUserInfoId { get; set; }
 
-        public static DealerLocationInfoModel ConvertToModel(dynamic dealerLocation)
+        public static DealerLocationInfoViewModel ConvertToModel(dynamic dealerLocation)
         {
-            var model = new DealerLocationInfoModel();
+            var model = new DealerLocationInfoViewModel();
             model.DealerLocationInfoId = dealerLocation.dealer_location_info_id ?? 0;
             model.DealerInfoId = dealerLocation.dealer_info_id ?? 0;
             model.DealerLocationInfoCode = dealerLocation.dealer_location_info_code ?? "";

@@ -96,7 +96,7 @@ namespace Auth.DataAccess.Party
         public async Task<dynamic> IUD_RetailerContactInfo(RetailerContactInfo retailerContactInfo, int dbOperation)
         {
             var message = new CommonMessage();
-
+            var result = (dynamic)null;
             var parameters = RetailerContactInfoParameterBinding(retailerContactInfo, dbOperation);
 
             if (_dbConnection.State == ConnectionState.Closed)
@@ -104,25 +104,29 @@ namespace Auth.DataAccess.Party
 
             try
             {
-                dynamic data = await _dbConnection.QueryAsync("[Party].[SP_Retailer_Contact_Info_IUD]", parameters, commandType: CommandType.StoredProcedure);
+                dynamic data = await _dbConnection.QueryFirstOrDefaultAsync("[Party].[SP_Retailer_Contact_Info_IUD]", parameters, commandType: CommandType.StoredProcedure);
 
                 if (dbOperation == (int)GlobalEnumList.DBOperation.Create)
                 {
-                    return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage);
+                    result = RetailerContactInfoViewModel.ConvertToModel(data);
+                    return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage, result);
                 }
                 if (dbOperation == (int)GlobalEnumList.DBOperation.Update)
                 {
-                    return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonUpdateMessage);
+                    result = RetailerContactInfoViewModel.ConvertToModel(data);
+                    return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonUpdateMessage, result);
                 }
 
                 if (dbOperation == (int)GlobalEnumList.DBOperation.Delete)
                 {
-                    return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonDeleteMessage);
+                    result = RetailerContactInfoViewModel.ConvertToModel(data);
+                    return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonDeleteMessage, result);
                 }
                
                 if (data.Count > 0)
                 {
-                    message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage, data);
+                    result = RetailerContactInfoViewModel.ConvertToModel(data);
+                    message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage, result);
                 }
                 else
                 {
@@ -156,7 +160,7 @@ namespace Auth.DataAccess.Party
                 if (data != null)
                 {
                     List<dynamic> dataList = data;
-                    result = (from dr in dataList select RetailerContactInfoModel.ConvertToModel(dr)).ToList();
+                    result = (from dr in dataList select RetailerContactInfoViewModel.ConvertToModel(dr)).ToList();
                 }
 
             }
@@ -182,7 +186,7 @@ namespace Auth.DataAccess.Party
                 dynamic data = await _dbConnection.QuerySingleOrDefaultAsync<dynamic>(sql);
                 if (data != null)
                 {
-                    result = RetailerContactInfoModel.ConvertToModel(data);
+                    result = RetailerContactInfoViewModel.ConvertToModel(data);
                 }
             }
             catch (Exception ex)
@@ -208,7 +212,7 @@ namespace Auth.DataAccess.Party
                 if (data != null)
                 {
                     List<dynamic> dataList = data;
-                    result = (from dr in dataList select DealerContactInfoModel.ConvertToModel(dr)).ToList();
+                    result = (from dr in dataList select RetailerContactInfoViewModel.ConvertToModel(dr)).ToList();
                 }
             }
             catch (Exception ex)
