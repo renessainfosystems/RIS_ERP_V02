@@ -287,10 +287,6 @@ export class DealerinfoComponent implements OnInit {
         this.loadAllBloodGroupEnum();        
     }
 
-    selectRow(dealerinfo) {
-        this.rowData = dealerinfo;
-    }
-
     onRowSelect(event) {
         debugger;
         // this.toggle();
@@ -491,24 +487,35 @@ export class DealerinfoComponent implements OnInit {
             data.dealerinfoId = this.rowData.DealerInfoId;
             formData.append("dealer_info_id", this.rowData.DealerInfoId);
             this.dealerinfoService.updateDealerInfo(formData).subscribe(result => {
-
                 this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
-                this.loadAllDealerinfos();
-                this.isDealerinfoEdit = false;
-                this.collapsedempInfo = true;
-                this.collapsedempDetails = false;
-                this.onRowUnselect(event);
+                if (result.MessageType == 1) {
+                    this.dealerinfoList.splice(this.dealerinfoList.findIndex(item => item.DealerInfoId === data.dealerinfoId), 1);
+                    this.dealerinfoList.unshift(result.Data);
+                    this.selecteddealerinfo = result.Data;
+                    //this.nodeSelected = true;
+                    this.rowData = result.Data;
+                    this.collapsedempInfo = true;
+                    this.collapsed = true;                    
+                    this.collapsedempDetails = false;
+                    this.FirstIndex();
+                    //this.onRowUnselect(event);
+                }                
             });
         }
         else {
 
             this.dealerinfoService.createDealerInfo(formData).subscribe(
                 result => {
-                    this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
-                    this.loadAllDealerinfos();
-                    this.resetForm();
-                    this.collapsedempInfo = true;
-                    this.collapsedempDetails = false;
+                    this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);                    
+                    if (result.MessageType == 1) {
+                        this.dealerinfoList.unshift(result.Data);
+                        this.selecteddealerinfo = result.Data;
+                        this.nodeSelected = true;
+                        this.rowData = result.Data;
+                        this.collapsedempInfo = true;
+                        this.collapsed = true;
+                        this.collapsedempDetails = false;
+                    }
                 }
             );
         }
@@ -1036,6 +1043,9 @@ export class DealerinfoComponent implements OnInit {
         this.toggle();
     }
 
+    FirstIndex() {
+        this.index = 0;
+    }
 
     function(e) {
         this.index = e.index;
