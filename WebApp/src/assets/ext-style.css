@@ -196,3 +196,12 @@
 }
 
 /*End photo & signature upload and file name hide  */
+
+/*Start 2 colum form speace---------------***/
+.field {
+    margin-bottom: 0px !important;
+}
+
+.md\:col-6 {
+    padding: 1rem 1rem 0 0 !important;
+}
