@@ -212,7 +212,7 @@ namespace Auth.DataAccess.Party
                 if (data != null)
                 {
                     List<dynamic> dataList = data;
-                    result = (from dr in dataList select DealerContactInfoViewModel.ConvertToModel(dr)).ToList();
+                    result = (from dr in dataList select RetailerContactInfoViewModel.ConvertToModel(dr)).ToList();
                 }
             }
             catch (Exception ex)
