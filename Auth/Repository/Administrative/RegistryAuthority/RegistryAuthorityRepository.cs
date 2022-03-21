@@ -86,9 +86,8 @@ namespace Auth.Repository.Administrative
             try
             {
                 var result = _dbSet.RegistryAuthorityViewModels
-                      .FromSqlRaw(@"select A.*,C.country_name,OT.organization_type_name_enum " +
-                      "from [Administrative].[Association] A left join [Administrative].[Country] C on A.country_id=C.country_id " +
-                      "left join [DBEnum].[Organization_Type] OT on A.organization_type_id_enum=OT.organization_type_id_enum where A.association_id='" + registry_authority_id + "'")
+                      .FromSqlRaw(@"select RA.*,C.country_name from [Administrative].[Registry_Authority] RA 
+                       left join [Administrative].[Country] C on RA.country_id = c.country_id where RA.registry_authority_id='" + registry_authority_id + "'")
                       .ToList();
                 return result;
             }

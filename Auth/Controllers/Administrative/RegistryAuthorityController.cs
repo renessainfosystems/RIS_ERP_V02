@@ -95,7 +95,7 @@ namespace Auth.Controllers.Administrative
                 data = _registryAuthorityRepository.GetByIdRawSql(oRegistryAuthority.registry_authority_id);
 
 
-                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage);
+                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage,data);
             }
             catch (Exception ex)
             {
@@ -130,7 +130,7 @@ namespace Auth.Controllers.Administrative
             try
             {
                 _registryAuthorityRepository.Delete(registry_authority_id);
-                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonDeleteMessage);
+                message = CommonMessage.SetWarningMessage(CommonMessage.CommonDeleteMessage);
             }
             catch (Exception ex)
             {

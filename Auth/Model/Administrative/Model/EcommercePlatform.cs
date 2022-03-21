@@ -15,6 +15,7 @@ namespace Auth.Model.Administrative.Model
         [Key]
         public int ecommerce_paltforms_id { get; set; }
         [Required]
+        public int country_id { get; set; }
         public string ecommerce_paltforms_name { get; set; }
         public string remarks { get; set; }
 

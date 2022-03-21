@@ -30,6 +30,18 @@
 
                                 <div class="p-fluid grid col-12">
                                     <div class="col-4 mt-2 text-right">
+                                        <label for="" class=" d-none d-md-inline-flex">Country <span class="req">*</span> :</label>
+                                    </div>
+                                    <div class="col-8 p-fluid">
+                                        <span class="p-float-label">
+                                            <p-dropdown [options]="allCountry" [(ngModel)]="selectedCountry" formControlName="country_id" placeholder="Select Country"
+                                                        optionLabel="country_name" optionValue="country_id" [showClear]="true" [filter]="true" filterBy="country_name"></p-dropdown>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="p-fluid grid col-12">
+                                    <div class="col-4 mt-2 text-right">
                                         <label for="" class=" d-none d-md-inline-flex">Name <span class="req">*</span> :</label>
                                     </div>
                                     <div class="col-8 p-fluid">
@@ -48,19 +60,6 @@
                                         </span>
                                     </div>
                                 </div>
-
-                                <div class="p-fluid grid col-12">
-                                    <div class="col-4 mt-2 text-right">
-                                        <label for="" class=" d-none d-md-inline-flex">Country <span class="req">*</span> :</label>
-                                    </div>
-                                    <div class="col-8 p-fluid">
-                                        <span class="p-float-label">
-                                            <p-dropdown [options]="allCountry" [(ngModel)]="selectedCountry" formControlName="country_id" placeholder="Select Country"
-                                                        optionLabel="country_name" optionValue="country_id" [showClear]="true" [filter]="true" filterBy="country_name"></p-dropdown>
-                                        </span>
-                                    </div>
-                                </div>
-
 
 
                                 <div class="p-fluid grid col-12">
@@ -104,7 +103,6 @@
                             </tr>
                         </ng-template>
                     </p-table>
-
                 </div>
 
                 <!-- ********** end card body ******************** -->

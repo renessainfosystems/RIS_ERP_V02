@@ -124,7 +124,7 @@ namespace Auth.Controllers.Administrative
             try
             {
                 _ecommercePlatformRepository.Delete(ecommerce_platforms_id);
-                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonDeleteMessage);
+                message = CommonMessage.SetWarningMessage(CommonMessage.CommonDeleteMessage);
             }
             catch (Exception ex)
             {

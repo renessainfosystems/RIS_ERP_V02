@@ -123,7 +123,7 @@ export class AssociationComponent implements OnInit {
         }
         let association_id = this.rowData.association_id;
         this.AssociationService.DeleteAssociation(association_id).subscribe(data => {
-            if (data.MessageType == 1) {
+            if (data.MessageType == 2) {
                 this.associations.splice(this.associations.findIndex(item => item.association_id === association_id), 1);
             }
             this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)

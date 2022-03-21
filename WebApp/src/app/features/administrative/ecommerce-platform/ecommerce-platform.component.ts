@@ -121,7 +121,7 @@ export class EcommercePlatformComponent implements OnInit {
         }
         let ecommerce_paltforms_id = this.rowData.ecommerce_paltforms_id;
         this.EcommercePlatformService.DeleteEcommercePlatform(ecommerce_paltforms_id).subscribe(data => {
-            if (data.MessageType == 1) {
+            if (data.MessageType == 2) {
                 this.ecommercePlatforms.splice(this.ecommercePlatforms.findIndex(item => item.ecommerce_paltforms_id === ecommerce_paltforms_id), 1);
             }
             this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)

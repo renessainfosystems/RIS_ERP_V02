@@ -118,7 +118,7 @@ export class RegistryAuthorityComponent implements OnInit {
         }
         let registry_authority_id = this.rowData.registry_authority_id;
         this.RegistryAuthorityService.DeleteRegistryAuthority(registry_authority_id).subscribe(data => {
-            if (data.MessageType == 1) {
+            if (data.MessageType == 2) {
                 this.registryAuthoritys.splice(this.registryAuthoritys.findIndex(item => item.registry_authority_id === registry_authority_id), 1);
             }
             this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
@@ -137,6 +137,7 @@ export class RegistryAuthorityComponent implements OnInit {
         if (this.isRegistryAuthorityEdit) {
             RegistryAuthoritydata.registry_authority_id = this.rowData.registry_authority_id;
             this.RegistryAuthorityService.UpdateRegistryAuthority(RegistryAuthoritydata).subscribe(result => {
+                debugger
                 this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
                 if (result.MessageType == 1) {
                     this.clear();
@@ -151,6 +152,7 @@ export class RegistryAuthorityComponent implements OnInit {
         }
         else {
             this.RegistryAuthorityService.CreateRegistryAuthority(JSON.stringify(RegistryAuthoritydata)).subscribe(result => {
+                debugger
                 this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
                 if (result.MessageType == 1) {
                     this.clear();
