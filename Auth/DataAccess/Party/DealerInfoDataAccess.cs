@@ -106,7 +106,7 @@ namespace Auth.DataAccess.Party
         public async Task<dynamic> IUD_DealerInfo(DealerInfo dealerInfo, int dbOperation)
         {
             var message = new CommonMessage();
-
+            var result = (dynamic)null;
             var parameters = DealerInfoParameterBinding(dealerInfo, dbOperation);
 
             if (_dbConnection.State == ConnectionState.Closed)
@@ -114,25 +114,29 @@ namespace Auth.DataAccess.Party
 
             try
             {
-                dynamic data = await _dbConnection.QueryAsync("[Party].[SP_Dealer_Info_IUD]", parameters, commandType: CommandType.StoredProcedure);
+                dynamic data = await _dbConnection.QueryFirstOrDefaultAsync("[Party].[SP_Dealer_Info_IUD]", parameters, commandType: CommandType.StoredProcedure);
 
                 if (dbOperation == (int)GlobalEnumList.DBOperation.Create)
                 {
-                    return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage);
+                    result = DealerInfoViewModel.ConvertToModel(data);
+                    return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage, result);
                 }
                 if (dbOperation == (int)GlobalEnumList.DBOperation.Update)
                 {
-                    return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonUpdateMessage);
+                    result = DealerInfoViewModel.ConvertToModel(data);
+                    return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonUpdateMessage, result);
                 }
 
                 if (dbOperation == (int)GlobalEnumList.DBOperation.Delete)
                 {
-                    return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonDeleteMessage);
+                    result = DealerInfoViewModel.ConvertToModel(data);
+                    return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonDeleteMessage, result);
                 }
 
                 if (data.Count > 0)
                 {
-                    message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage, data);
+                    result = DealerInfoViewModel.ConvertToModel(data);
+                    message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage, result);
                 }
                 else
                 {
