@@ -26,6 +26,7 @@ namespace Auth.DataAccess.EntityDataAccess
         IQueryable<T> Queryable();
         bool Any(Expression<Func<T, bool>> expression);
         int ExecuteSqlRaw(string sql, params object[] parameters);
+        IEnumerable<dynamic> SqlRawQuery(string sql);
         IEnumerable<dynamic> SqlQueryGet(string sql, object[] parameters);
         int GetAutoId(string dbObjectName, string dbObjectColumn);
         string GetAutoCode(string dbObjectName, string dbObjectColumn);

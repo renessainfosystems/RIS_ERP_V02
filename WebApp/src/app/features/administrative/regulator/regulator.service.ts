@@ -19,7 +19,7 @@ export class RegulatorService {
 
     getAllRegulator(): Observable<any[]> {
 
-        return this.http.get<any[]>(this.ipconfig.base_IP + 'Regulator/GetAllRegulator');
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'Regulator/GetAllByRawSql');
 
   }
 

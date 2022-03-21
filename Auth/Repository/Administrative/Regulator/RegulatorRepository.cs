@@ -12,14 +12,14 @@ namespace Auth.Repository.Administrative
 {
     public class RegulatorRepository : IRegulatorRepository
     {
-        protected readonly ApplicationDBContext _dbSet;
+        private readonly IEntityDataAccess<RegulatorViewModel> _entityDataAccessVM;
         private readonly IEntityDataAccess<Regulator> _entityDataAccess;
 
         public RegulatorRepository(
-            ApplicationDBContext dbSet
-            ,IEntityDataAccess<Regulator> entityDataAccess)
+            IEntityDataAccess<RegulatorViewModel> entityDataAccessVM
+            , IEntityDataAccess<Regulator> entityDataAccess)
         {
-            _dbSet = dbSet;
+            _entityDataAccessVM = entityDataAccessVM;
             _entityDataAccess = entityDataAccess;
 
         }
@@ -55,15 +55,13 @@ namespace Auth.Repository.Administrative
         }
 
 
-        public IEnumerable<RegulatorViewModel> GetAllByRawSql()
+        public IEnumerable<dynamic> GetAllByRawSql()
         {
             try
             {
-                var result = _dbSet.RegulatorViewModels
-                      .FromSqlRaw(@"select RT.*,C.country_name from [Administrative].[Regulator] RT 
-                       left join [Administrative].[Country] C on RT.country_id=C.country_id order by regulator_id desc")
-                      .ToList();
-                return result;
+                var sql = @"select RT.*,C.country_name from [Administrative].[Regulator] RT 
+                       left join [Administrative].[Country] C on RT.country_id=C.country_id order by regulator_id desc";
+                return _entityDataAccessVM.SqlRawQuery(sql);
             }
             catch (Exception ex)
             {
@@ -71,15 +69,13 @@ namespace Auth.Repository.Administrative
             }
         }
 
-        public IEnumerable<RegulatorViewModel> GetByIdRawSql(int regulator_id)
+        public IEnumerable<dynamic> GetByIdRawSql(int regulator_id)
         {
             try
             {
-                var result = _dbSet.RegulatorViewModels
-                      .FromSqlRaw(@"select RT.*,C.country_name from [Administrative].[Regulator] RT 
-                       left join [Administrative].[Country] C on RT.country_id=C.country_id where RT.regulator_id='" + regulator_id + "'")
-                      .ToList();
-                return result;
+                var sql = @"select RT.*,C.country_name from [Administrative].[Regulator] RT 
+                       left join [Administrative].[Country] C on RT.country_id=C.country_id where RT.regulator_id='" + regulator_id + "'";
+                return _entityDataAccessVM.SqlRawQuery(sql);
             }
             catch (Exception ex)
             {

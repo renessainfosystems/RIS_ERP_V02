@@ -9,8 +9,8 @@ namespace Auth.Repository.Administrative
         void Add(Regulator oRegulator);
         void Update(Regulator oRegulator);
         IEnumerable<Regulator> GetAllRegulator();
-        IEnumerable<RegulatorViewModel> GetAllByRawSql();
-        IEnumerable<RegulatorViewModel> GetByIdRawSql(int association_id);
+        IEnumerable<dynamic> GetAllByRawSql();
+        IEnumerable<dynamic> GetByIdRawSql(int association_id);
         Regulator GetById(int regulator_id);
         IEnumerable<object> RegulatorCboList();
         void Delete(int regulator_id);

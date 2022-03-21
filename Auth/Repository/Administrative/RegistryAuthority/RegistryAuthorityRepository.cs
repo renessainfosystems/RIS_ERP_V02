@@ -14,17 +14,16 @@ namespace Auth.Repository.Administrative
     public class RegistryAuthorityRepository : IRegistryAuthorityRepository
     {
 
-        protected readonly ApplicationDBContext _dbSet;
+        private readonly IEntityDataAccess<RegistryAuthorityViewModel> _entityDataAccessVM;
         private readonly IEntityDataAccess<RegistryAuthority> _entityDataAccess;
-        //IHttpContextAccessor _httpContextAccessor = new HttpContextAccessor();
 
         public RegistryAuthorityRepository(
-            ApplicationDBContext dbSet
+            IEntityDataAccess<RegistryAuthorityViewModel> entityDataAccessVM
             , IEntityDataAccess<RegistryAuthority> entityDataAccess
 
             )
         {
-            _dbSet = dbSet;
+            _entityDataAccessVM = entityDataAccessVM;
             _entityDataAccess = entityDataAccess;
 
         }
@@ -65,15 +64,13 @@ namespace Auth.Repository.Administrative
             }
         }
 
-        public IEnumerable<RegistryAuthorityViewModel> GetAllByRawSql()
+        public IEnumerable<dynamic> GetAllByRawSql()
         {
             try
             {
-                var result = _dbSet.RegistryAuthorityViewModels
-                      .FromSqlRaw(@"select RA.*,C.country_name from [Administrative].[Registry_Authority] RA 
-                       left join [Administrative].[Country] C on RA.country_id = c.country_id")
-                      .ToList();
-                return result;
+                var sql = @"select RA.*,C.country_name from [Administrative].[Registry_Authority] RA 
+                       left join [Administrative].[Country] C on RA.country_id = c.country_id";
+                return _entityDataAccessVM.SqlRawQuery(sql);
             }
             catch (Exception ex)
             {
@@ -81,15 +78,14 @@ namespace Auth.Repository.Administrative
             }
         }
 
-        public IEnumerable<RegistryAuthorityViewModel> GetByIdRawSql(int registry_authority_id)
+        public IEnumerable<dynamic> GetByIdRawSql(int registry_authority_id)
         {
             try
             {
-                var result = _dbSet.RegistryAuthorityViewModels
-                      .FromSqlRaw(@"select RA.*,C.country_name from [Administrative].[Registry_Authority] RA 
-                       left join [Administrative].[Country] C on RA.country_id = c.country_id where RA.registry_authority_id='" + registry_authority_id + "'")
-                      .ToList();
-                return result;
+                var sql = @"select RA.*,C.country_name from [Administrative].[Registry_Authority] RA 
+                       left join [Administrative].[Country] C on RA.country_id = c.country_id where RA.registry_authority_id='" + registry_authority_id + "'";
+                return _entityDataAccessVM.SqlRawQuery(sql);
+
             }
             catch (Exception ex)
             {

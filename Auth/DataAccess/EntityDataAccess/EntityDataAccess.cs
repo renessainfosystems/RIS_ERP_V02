@@ -115,6 +115,10 @@ namespace Auth.DataAccess.EntityDataAccess
             return table;
         }
 
+        IEnumerable<dynamic> IEntityDataAccess<T>.SqlRawQuery(string sql)
+        {
+            return _dbSet.FromSqlRaw(sql).ToList();
+        }
         IEnumerable<dynamic> IEntityDataAccess<T>.SqlQueryGet(string sql, object[] parameters)
         {
             return _dbSet.FromSqlRaw(sql, parameters).ToList();
