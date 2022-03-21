@@ -1,20 +1,27 @@
 ﻿using Auth.DataAccess.EntityDataAccess;
 using Auth.Model.Administrative.Model;
+using Auth.Model.Administrative.ViewModel;
+using Auth.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DataAccess;
+using Microsoft.EntityFrameworkCore;
 
 namespace Auth.Repository.Administrative
 {
     public class EcommercePlatformRepository : IEcommercePlatformRepository
     {
+        protected readonly ApplicationDBContext _dbSet;
         private readonly IEntityDataAccess<EcommercePlatform> _entityDataAccess;
 
         public EcommercePlatformRepository(
-            IEntityDataAccess<EcommercePlatform> entityDataAccess
+            ApplicationDBContext dbSet
+            , IEntityDataAccess<EcommercePlatform> entityDataAccess
 
             )
         {
+            _dbSet = dbSet;
             _entityDataAccess = entityDataAccess;
 
         }
@@ -27,7 +34,7 @@ namespace Auth.Repository.Administrative
             }
             catch (Exception ex)
             {
-                if (ex.InnerException.Message.Contains("UC_ecommerce_paltforms_name"))
+                if (ex.InnerException.Message.Contains("UC_ecommerce_platforms"))
                     throw new Exception("This Ecommerce Platform name(" + oEcommercePlatform.ecommerce_paltforms_name + ") is already exists.");
                 else
                     throw new Exception(ex.Message);
@@ -42,10 +49,42 @@ namespace Auth.Repository.Administrative
             }
             catch (Exception ex)
             {
-                if (ex.InnerException.Message.Contains("UC_ecommerce_paltforms_name"))
+                if (ex.InnerException.Message.Contains("UC_ecommerce_platforms"))
                     throw new Exception("This Ecommerce Platform name(" + oEcommercePlatform.ecommerce_paltforms_name + ") is already exists.");
                 else
                     throw new Exception(ex.Message);
+            }
+        }
+
+        public IEnumerable<EcommercePlatformViewModel> GetAllByRawSql()
+        {
+            try
+            {
+                var result = _dbSet.EcommercePlatformViewModels
+                      .FromSqlRaw(@"select EP.*,C.country_name from [Administrative].[Ecommerce_Platforms] EP 
+                       left join [Administrative].[Country] C on EP.country_id=C.country_id order by ecommerce_paltforms_id desc")
+                      .ToList();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public IEnumerable<EcommercePlatformViewModel> GetByIdRawSql(int ecommerce_paltforms_id)
+        {
+            try
+            {
+                var result = _dbSet.EcommercePlatformViewModels
+                      .FromSqlRaw(@"select EP.*,C.country_name from [Administrative].[Ecommerce_Platforms] EP 
+                       left join [Administrative].[Country] C on EP.country_id= c.country_id where EP.ecommerce_paltforms_id='" + ecommerce_paltforms_id + "'")
+                      .ToList();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
 
@@ -102,6 +141,5 @@ namespace Auth.Repository.Administrative
             }
 
         }
-
     }
 }

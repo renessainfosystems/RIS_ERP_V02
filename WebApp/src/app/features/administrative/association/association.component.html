@@ -92,9 +92,8 @@
                         </ng-template>
                     </p-dialog>
                     <!-- ************************start grid ************************ -->
-                    <p-table [value]="associations" [paginator]="true" [rows]="10" styleClass="p-datatable-striped p-datatable-sm" [showCurrentPageReport]="true" selectionMode="single" [(selection)]="selectedassociation" dataKey="association_id"
-                             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]">
-
+                    <p-table [value]="associations" dataKey="association_id" [paginator]="true" [rows]="10" selectionMode="single" [(selection)]="selectedAssociation" [showCurrentPageReport]="true" responsiveLayout="scroll" styleClass="p-datatable-striped p-datatable-sm"
+                             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
                         <ng-template pTemplate="header">
                             <tr>
                                 <th>Association Name</th>
@@ -105,8 +104,7 @@
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="body" let-association>
-
-                            <tr (click)="selectRow(association)" [pSelectableRow]="association">
+                            <tr [pSelectableRow]="association">
                                 <td>{{association.association_name}}</td>
                                 <td>{{association.abbreviation}}</td>
                                 <td>{{association.country_name}}</td>
@@ -115,13 +113,7 @@
                             </tr>
                         </ng-template>
                     </p-table>
-
-
-
-
-
                 </div>
-
                 <!-- ********** end card body ******************** -->
 
             </div>

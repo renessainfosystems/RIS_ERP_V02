@@ -1,9 +1,7 @@
 ﻿using Auth.DataAccess.EntityDataAccess;
 using Auth.Model.Administrative.Model;
-using Auth.Model.Administrative.ViewModel;
 using Auth.Repository.Administrative;
 using Auth.Utility;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
@@ -89,11 +87,11 @@ namespace Auth.Controllers.Administrative
             dynamic data = (dynamic)null;
             try
             {
-                oAssociation.association_id= _entityDataAccess.GetAutoId("Administrative.Association", "association_id");
+                oAssociation.association_id = _entityDataAccess.GetAutoId("Administrative.Association", "association_id");
                 _associationRepository.Add(oAssociation);
-                data = _entityDataAccess.GetById(oAssociation.association_id);
+                data = _associationRepository.GetByIdRawSql(oAssociation.association_id);
 
-                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage,data);
+                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage, data);
             }
             catch (Exception ex)
             {
@@ -106,10 +104,12 @@ namespace Auth.Controllers.Administrative
         public dynamic Update(Association oAssociation)
         {
             var message = new CommonMessage();
+            dynamic data = (dynamic)null;
             try
             {
                 _associationRepository.Update(oAssociation);
-                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonUpdateMessage);
+                data = _associationRepository.GetByIdRawSql(oAssociation.association_id);
+                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonUpdateMessage, data);
             }
             catch (Exception ex)
             {
