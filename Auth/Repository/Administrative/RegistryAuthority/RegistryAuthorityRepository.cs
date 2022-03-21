@@ -1,33 +1,30 @@
 ﻿using Auth.DataAccess.EntityDataAccess;
 using Auth.Model.Administrative.Model;
+using Auth.Model.Administrative.ViewModel;
+using Auth.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNetCore.Http;
+using DataAccess;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace Auth.Repository.Administrative
 {
     public class RegistryAuthorityRepository : IRegistryAuthorityRepository
     {
-        //private readonly IEntityDataAccess<RegistryAuthority> _entityDataAccess;
-        //public RegistryAuthorityRepository(
-        // IEntityDataAccess<RegistryAuthority> entityDataAccess
 
-        // )
-        //{
-        //    _entityDataAccess = entityDataAccess;
-
-        //}
-
+        protected readonly ApplicationDBContext _dbSet;
         private readonly IEntityDataAccess<RegistryAuthority> _entityDataAccess;
-        IHttpContextAccessor _httpContextAccessor = new HttpContextAccessor();
+        //IHttpContextAccessor _httpContextAccessor = new HttpContextAccessor();
 
         public RegistryAuthorityRepository(
-            IEntityDataAccess<RegistryAuthority> entityDataAccess
+            ApplicationDBContext dbSet
+            , IEntityDataAccess<RegistryAuthority> entityDataAccess
 
             )
         {
+            _dbSet = dbSet;
             _entityDataAccess = entityDataAccess;
 
         }
@@ -36,15 +33,14 @@ namespace Auth.Repository.Administrative
         {
             try
             {
-                oRegistryAuthority.registry_authority_id = GetAutoId();
                 _entityDataAccess.Add(oRegistryAuthority);
+                var result = _entityDataAccess.GetById(oRegistryAuthority.registry_authority_id);
+
             }
             catch (Exception ex)
             {
                 if (ex.InnerException.Message.Contains("UC_registry_authority_name_country_id"))
                     throw new Exception("This registry authority name(" + oRegistryAuthority.registry_authority_name + ") is already exists.");
-                //else if (ex.InnerException.Message.Contains("UC_registry_authority_short_name"))
-                //    throw new Exception("This registry authority short name(" + oRegistryAuthority.registry_authority_short_name + ") is already exists.");
                 else
                     throw new Exception(ex.Message);
             }
@@ -59,17 +55,45 @@ namespace Auth.Repository.Administrative
                 dbdata.registry_authority_short_name = oRegistryAuthority.registry_authority_short_name;
                 dbdata.remarks = oRegistryAuthority.remarks;
                 _entityDataAccess.Update(dbdata);
-
-                //_entityDataAccess.Update(oRegistryAuthority);
             }
             catch (Exception ex)
             {
-                if (ex.InnerException.Message.Contains("UC_association_name"))
-                    throw new Exception("This association name(" + oRegistryAuthority.registry_authority_name + ") is already exists.");
-                else if (ex.InnerException.Message.Contains("UC_abbreviation"))
-                    throw new Exception("This abbreviation(" + oRegistryAuthority.registry_authority_short_name + ") is already exists.");
+                if (ex.InnerException.Message.Contains("UC_registry_authority_name_country_id"))
+                    throw new Exception("This Registry Authority Name name(" + oRegistryAuthority.registry_authority_name + ") is already exists.");
                 else
                     throw new Exception(ex.Message);
+            }
+        }
+
+        public IEnumerable<RegistryAuthorityViewModel> GetAllByRawSql()
+        {
+            try
+            {
+                var result = _dbSet.RegistryAuthorityViewModels
+                      .FromSqlRaw(@"select RA.*,C.country_name from [Administrative].[Registry_Authority] RA 
+                       left join [Administrative].[Country] C on RA.country_id = c.country_id")
+                      .ToList();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public IEnumerable<RegistryAuthorityViewModel> GetByIdRawSql(int registry_authority_id)
+        {
+            try
+            {
+                var result = _dbSet.RegistryAuthorityViewModels
+                      .FromSqlRaw(@"select RA.*,C.country_name from [Administrative].[Registry_Authority] RA 
+                       left join [Administrative].[Country] C on RA.country_id = c.country_id where RA.registry_authority_id='" + registry_authority_id + "'")
+                      .ToList();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
 
@@ -105,26 +129,5 @@ namespace Auth.Repository.Administrative
             _entityDataAccess.Remove(oRegistryAuthority);
         }
 
-        private int GetAutoId()
-        {
-            try
-            {
-                int id = 0;
-                var idList = _entityDataAccess.GetAll().Select(x => x.registry_authority_id).ToList();
-                if (idList.Count() != 0)
-                {
-                    id = idList.Max(x => x + 1);
-                }
-                else
-                {
-                    id = 1;
-                }
-                return id;
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-        }
     }
 }

@@ -3,20 +3,22 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 /// <summary>
 /// Created by Adnan
-/// Dated: 21/12/2021
+/// Dated: 14/12/2021
 /// </summary>
 
-
-namespace Auth.Model.Administrative.Model
+namespace Auth.Model.Administrative.ViewModel
 {
-    [Table("Ecommerce_Platforms", Schema = "Administrative")]
-    public class EcommercePlatform
+    public class EcommercePlatformViewModel
     {
         [Key]
+
         public int ecommerce_paltforms_id { get; set; }
         [Required]
-        public int country_id { get; set; }
         public string ecommerce_paltforms_name { get; set; }
+
+        public int country_id { get; set; }
+
+        public string country_name { get; set; }
         public string remarks { get; set; }
 
     }

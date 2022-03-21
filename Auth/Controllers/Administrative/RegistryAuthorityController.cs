@@ -1,7 +1,7 @@
-﻿using Auth.Model.Administrative.Model;
+﻿using Auth.DataAccess.EntityDataAccess;
+using Auth.Model.Administrative.Model;
 using Auth.Repository.Administrative;
 using Auth.Utility;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
@@ -19,13 +19,15 @@ namespace Auth.Controllers.Administrative
     {
 
         #region Constructor
+        private readonly IEntityDataAccess<RegistryAuthority> _entityDataAccess;
         private IRegistryAuthorityRepository _registryAuthorityRepository;
 
         public RegistryAuthorityController(
-            IRegistryAuthorityRepository registryAuthorityRepository
+            IEntityDataAccess<RegistryAuthority> entityDataAccess
+            , IRegistryAuthorityRepository registryAuthorityRepository
             )
         {
-
+            _entityDataAccess = entityDataAccess;
             _registryAuthorityRepository = registryAuthorityRepository;
         }
         #endregion
@@ -38,6 +40,24 @@ namespace Auth.Controllers.Administrative
             try
             {
                 data = _registryAuthorityRepository.GetAllRegistryAuthority();
+            }
+            catch (Exception ex)
+            {
+                data = ex.Message;
+            }
+            return data;
+        }
+
+
+        [HttpGet]
+        public dynamic GetAllByRawSql()
+        {
+
+            dynamic data = (dynamic)null;
+            try
+            {
+                data = _registryAuthorityRepository.GetAllByRawSql();
+
             }
             catch (Exception ex)
             {
@@ -66,10 +86,16 @@ namespace Auth.Controllers.Administrative
         public dynamic Create(RegistryAuthority oRegistryAuthority)
         {
             var message = new CommonMessage();
+            dynamic data = (dynamic)null;
             try
             {
+
+                oRegistryAuthority.registry_authority_id = _entityDataAccess.GetAutoId("Administrative.Registry_Authority", "registry_authority_id");
                 _registryAuthorityRepository.Add(oRegistryAuthority);
-                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage);
+                data = _registryAuthorityRepository.GetByIdRawSql(oRegistryAuthority.registry_authority_id);
+
+
+                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage,data);
             }
             catch (Exception ex)
             {
@@ -82,10 +108,12 @@ namespace Auth.Controllers.Administrative
         public dynamic Update(RegistryAuthority oRegistryAuthority)
         {
             var message = new CommonMessage();
+            dynamic data = (dynamic)null;
             try
             {
                 _registryAuthorityRepository.Update(oRegistryAuthority);
-                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonUpdateMessage);
+                data = _registryAuthorityRepository.GetByIdRawSql(oRegistryAuthority.registry_authority_id);
+                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonUpdateMessage, data);
             }
             catch (Exception ex)
             {
@@ -102,7 +130,7 @@ namespace Auth.Controllers.Administrative
             try
             {
                 _registryAuthorityRepository.Delete(registry_authority_id);
-                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonDeleteMessage);
+                message = CommonMessage.SetWarningMessage(CommonMessage.CommonDeleteMessage);
             }
             catch (Exception ex)
             {

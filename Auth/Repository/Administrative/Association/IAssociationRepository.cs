@@ -8,9 +8,9 @@ namespace Auth.Repository.Administrative
     {
         void Add(Association oAssociation);
         void Update(Association oAssociation);
-        //IEnumerable<Association> GetAllAssociation();
         IEnumerable<Association> GetAllAssociation();
         IEnumerable<AssociationViewModel> GetAllByRawSql();
+        IEnumerable<AssociationViewModel> GetByIdRawSql(int association_id);
         Association GetById(int association_id);
         IEnumerable<object> AssociationCboList();
         void Delete(int association_id);

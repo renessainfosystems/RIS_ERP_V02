@@ -66,7 +66,9 @@ namespace DataAccess
         public DbSet<Association> Associations { get; set; }
         public DbSet<AssociationViewModel> AssociationViewModels { get; set; }
         public DbSet<RegistryAuthority> RegistryAuthoritys { get; set; }
+        public DbSet<RegistryAuthorityViewModel> RegistryAuthorityViewModels { get; set; }
         public DbSet<EcommercePlatform> EcommercePlatforms { get; set; }
+        public DbSet<EcommercePlatformViewModel> EcommercePlatformViewModels { get; set; }
         public DbSet<Regulator> Regulators { get; set; }
         public DbSet<DepartmentType> DepartmentTypes { get; set; }
 

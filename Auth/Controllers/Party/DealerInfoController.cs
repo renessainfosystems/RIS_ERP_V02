@@ -35,7 +35,8 @@ namespace Auth.Controllers.Party
             {
                 dealerInfo.logo_path = GetImagePath(dealerInfo.ImageUpload);
             }
-            return await _dealerInfoRepository.IUD_DealerInfo(dealerInfo, (int)GlobalEnumList.DBOperation.Create);
+            var result = await _dealerInfoRepository.IUD_DealerInfo(dealerInfo, (int)GlobalEnumList.DBOperation.Create);
+            return result;
         }
      
 

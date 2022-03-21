@@ -1,10 +1,9 @@
-﻿using Auth.Model.Administrative.Model;
+﻿using Auth.DataAccess.EntityDataAccess;
+using Auth.Model.Administrative.Model;
 using Auth.Repository.Administrative;
 using Auth.Utility;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-
 /// <summary>
 /// Created By Adnan Amin
 /// Dated: 14/12/2021
@@ -17,14 +16,14 @@ namespace Auth.Controllers.Administrative
     public class EcommercePlatformController : ControllerBase
     {
         #region Constructor
+        private readonly IEntityDataAccess<EcommercePlatform> _entityDataAccess;
         private IEcommercePlatformRepository _ecommercePlatformRepository;
 
-        public EcommercePlatformController(
-            IEcommercePlatformRepository ecommercePlatformRepository
-            )
+        public EcommercePlatformController(IEntityDataAccess<EcommercePlatform> entityDataAccess, IEcommercePlatformRepository ecommercePlatformRepository)
         {
 
             _ecommercePlatformRepository = ecommercePlatformRepository;
+            _entityDataAccess = entityDataAccess;
         }
 
         #endregion
@@ -36,6 +35,23 @@ namespace Auth.Controllers.Administrative
             try
             {
                 data = _ecommercePlatformRepository.GetAllEcommercePlatform();
+            }
+            catch (Exception ex)
+            {
+                data = ex.Message;
+            }
+            return data;
+        }
+
+        [HttpGet]
+        public dynamic GetAllByRawSql()
+        {
+
+            dynamic data = (dynamic)null;
+            try
+            {
+                data = _ecommercePlatformRepository.GetAllByRawSql();
+
             }
             catch (Exception ex)
             {
@@ -64,10 +80,15 @@ namespace Auth.Controllers.Administrative
         public dynamic Create(EcommercePlatform oEcommercePlatform)
         {
             var message = new CommonMessage();
+            dynamic data = (dynamic)null;
             try
             {
+
+                oEcommercePlatform.ecommerce_paltforms_id = _entityDataAccess.GetAutoId("Administrative.Ecommerce_Platforms", "ecommerce_paltforms_id");
                 _ecommercePlatformRepository.Add(oEcommercePlatform);
-                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage);
+                data = _ecommercePlatformRepository.GetByIdRawSql(oEcommercePlatform.ecommerce_paltforms_id);
+
+                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage, data);
             }
             catch (Exception ex)
             {
@@ -80,10 +101,13 @@ namespace Auth.Controllers.Administrative
         public dynamic Update(EcommercePlatform oEcommercePlatform)
         {
             var message = new CommonMessage();
+            dynamic data = (dynamic)null;
             try
             {
                 _ecommercePlatformRepository.Update(oEcommercePlatform);
-                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonUpdateMessage);
+                data = _ecommercePlatformRepository.GetByIdRawSql(oEcommercePlatform.ecommerce_paltforms_id);
+                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonUpdateMessage, data);
+
             }
             catch (Exception ex)
             {
@@ -100,7 +124,7 @@ namespace Auth.Controllers.Administrative
             try
             {
                 _ecommercePlatformRepository.Delete(ecommerce_platforms_id);
-                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonDeleteMessage);
+                message = CommonMessage.SetWarningMessage(CommonMessage.CommonDeleteMessage);
             }
             catch (Exception ex)
             {
