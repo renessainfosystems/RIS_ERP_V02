@@ -77,7 +77,7 @@ namespace Auth.Repository.Administrative
             {
                 var result = _dbSet.RegulatorViewModels
                       .FromSqlRaw(@"select RT.*,C.country_name from [Administrative].[Regulator] RT 
-                       left join [Administrative].[Country] C on RT.country_id=C.country_id order by regulator_id desc where RT.regulator_id='" + regulator_id + "'")
+                       left join [Administrative].[Country] C on RT.country_id=C.country_id where RT.regulator_id='" + regulator_id + "'")
                       .ToList();
                 return result;
             }
