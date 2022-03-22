@@ -1,4 +1,5 @@
-﻿using Auth.Model.Administrative.Model;
+﻿using Auth.DataAccess.EntityDataAccess;
+using Auth.Model.Administrative.Model;
 using Auth.Repository.Administrative;
 using Auth.Utility;
 using Microsoft.AspNetCore.Mvc;
@@ -17,13 +18,15 @@ namespace Auth.Controllers.Administrative
     public class MfsController : ControllerBase
     {
         #region Constructor
+        private readonly IEntityDataAccess<Mfs> _entityDataAccess;
         private IMfsRepository _mfsRepository;
 
         public MfsController(
-            IMfsRepository mfsRepository
+            IEntityDataAccess<Mfs> entityDataAccess
+            , IMfsRepository mfsRepository
             )
         {
-
+            _entityDataAccess = entityDataAccess;
             _mfsRepository = mfsRepository;
         }
         #endregion
@@ -36,6 +39,23 @@ namespace Auth.Controllers.Administrative
             try
             {
                 data = _mfsRepository.GetAllMfs();
+            }
+            catch (Exception ex)
+            {
+                data = ex.Message;
+            }
+            return data;
+        }
+
+        [HttpGet]
+        public dynamic GetAllByRawSql()
+        {
+
+            dynamic data = (dynamic)null;
+            try
+            {
+                data = _mfsRepository.GetAllByRawSql();
+
             }
             catch (Exception ex)
             {
@@ -64,10 +84,14 @@ namespace Auth.Controllers.Administrative
         public dynamic Create(Mfs oMfs)
         {
             var message = new CommonMessage();
+            dynamic data = (dynamic)null;
             try
             {
+                oMfs.mfs_id = _entityDataAccess.GetAutoId("Administrative.Mobile_Financial_Service", "mfs_id");
                 _mfsRepository.Add(oMfs);
-                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage);
+                data = _mfsRepository.GetByIdRawSql(oMfs.mfs_id);
+                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage, data);
+
             }
             catch (Exception ex)
             {
@@ -80,10 +104,13 @@ namespace Auth.Controllers.Administrative
         public dynamic Update(Mfs oMfs)
         {
             var message = new CommonMessage();
+            dynamic data = (dynamic)null;
             try
             {
                 _mfsRepository.Update(oMfs);
-                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonUpdateMessage);
+                data = _mfsRepository.GetByIdRawSql(oMfs.mfs_id);
+                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonUpdateMessage, data);
+
             }
             catch (Exception ex)
             {
@@ -95,12 +122,11 @@ namespace Auth.Controllers.Administrative
         [HttpPost]
         public dynamic Delete(int mfs_id)
         {
-
             var message = new CommonMessage();
             try
             {
                 _mfsRepository.Delete(mfs_id);
-                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonDeleteMessage);
+                message = CommonMessage.SetWarningMessage(CommonMessage.CommonDeleteMessage);
             }
             catch (Exception ex)
             {
