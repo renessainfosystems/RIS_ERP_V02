@@ -57,4 +57,14 @@ export class LeavePolicyService {
 
         return this.http.get(this.ipconfig.base_IP + 'LeavePolicy/GetLeavePolicyByName', httpOptions);
     }
+    getPrimarySalaryHeadForDP(): Observable<any[]> {
+        let salary_head_type_id = 1;
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'SalaryHead/GetSalaryHeadForDP?salary_head_type_id=' + salary_head_type_id, httpOptions);
+
+    }
+    getAllLeaveHeadForDP(): Observable<any[]> {
+
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'LeaveHead/GetAllLeaveHeadForDP', httpOptions);
+
+    }
 }
