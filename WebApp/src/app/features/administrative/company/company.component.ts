@@ -332,7 +332,7 @@ export class CompanyComponent implements OnInit {
 
                     this.dataSaved = true;
                     this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
-                    this.companyIdUpdate = null;
+                    //this.companyIdUpdate = null;
                     if (result.MessageType == 1) {
                         this.companys.unshift(result.Data);
                         this.selectedCompany = result.Data;
