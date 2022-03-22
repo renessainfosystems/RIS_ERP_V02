@@ -75,6 +75,9 @@ export class CompanyComponent implements OnInit {
     selectedDistrict: any;
     allDistrict: any[];
 
+    selectedThana: any;
+    allThana: any[];
+
     selectedCurrency: any;
     allCurrency: any[];
 
@@ -97,7 +100,6 @@ export class CompanyComponent implements OnInit {
         else
             this.display = true;
     }
-
     // for Insert and update data modal
     //displayBasic: boolean = false;
     showBasicDialog() {
@@ -108,7 +110,6 @@ export class CompanyComponent implements OnInit {
 
 
     }
-
 
     ngOnInit(): void {
         this.CompanyService.getAllCompany().subscribe(data => this.companys = data);
@@ -122,15 +123,15 @@ export class CompanyComponent implements OnInit {
             country_id: [null, [Validators.required]],
             division_id: [null],
             district_id: [null],
+            thana_id: [null],
             currency_id: [null, [Validators.required]],
             company_reg_no: [null],
             company_reg_date: [null],
-            company_reg_file_path: [null, [Validators.required]],
+           company_reg_file_path: [null],
             company_tin_no: [null],
             company_tin_date: [null],
-            company_tin_file_path: [null, [Validators.required]],
+            company_tin_file_path: [null],
             city: [null],
-            ps_area: [null],
             post_code: [null],
             block: [null],
             road_no: [null],
@@ -138,9 +139,9 @@ export class CompanyComponent implements OnInit {
             flat_no: [null],
             address_note: [null],
             phone: [null],
-            email: [null],
+            email: ['', [Validators.email, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
             web_url: [null],
-            logo: [null, [Validators.required]],
+            logo: [null],
             slogan: [null],
             name_in_local_language: [null],
             address_in_local_language: [null],
@@ -151,7 +152,6 @@ export class CompanyComponent implements OnInit {
         this.loadAllCountryCboList();
         this.loadAllCurrencyCboList();
     }
-
 
     next() {
         this.first = this.first + this.rows;
@@ -197,7 +197,16 @@ export class CompanyComponent implements OnInit {
         }
         else
             this.allDistrict = null;
+    }
 
+    onSelectByDistrictId(districtId: Number) {
+        if (districtId != null) {
+            this.CompanyService.getAllThanaCboListByDistrictId(districtId).subscribe(data => {
+                this.allThana = data;
+            });
+        }
+        else
+            this.allThana = null;
     }
 
     loadAllCurrencyCboList() {
@@ -245,13 +254,14 @@ export class CompanyComponent implements OnInit {
             this.companyForm.controls['division_id'].setValue(data.division_id);
             this.onSelectByDivisionId(data.division_id);
             this.companyForm.controls['district_id'].setValue(data.district_id);
+            this.onSelectByDistrictId(data.district_id);
+            this.companyForm.controls['thana_id'].setValue(data.thana_id);
             this.companyForm.controls['currency_id'].setValue(data.currency_id);
             this.companyForm.controls['company_reg_no'].setValue(data.company_reg_no);
             this.companyForm.controls['company_reg_date'].setValue(data.company_reg_date);
             this.companyForm.controls['company_tin_no'].setValue(data.company_tin_no);
             this.companyForm.controls['company_tin_date'].setValue(data.company_tin_date);
             this.companyForm.controls['city'].setValue(data.city);
-            this.companyForm.controls['ps_area'].setValue(data.ps_area);
             this.companyForm.controls['post_code'].setValue(data.post_code);
             this.companyForm.controls['block'].setValue(data.block);
             this.companyForm.controls['road_no'].setValue(data.road_no);
@@ -264,8 +274,8 @@ export class CompanyComponent implements OnInit {
             this.companyForm.controls['name_in_local_language'].setValue(data.name_in_local_language);
             this.companyForm.controls['address_in_local_language'].setValue(data.address_in_local_language);
             this.companyForm.controls['remarks'].setValue(data.remarks);
-            this.companyForm.controls['slogan'].setValue(data.group_logo);
-            this.companyForm.controls['logo'].setValue(data.group_logo);
+            this.companyForm.controls['slogan'].setValue(data.slogan);
+            this.companyForm.controls['logo'].setValue(data.logo);
             this.companyForm.controls['company_reg_file_path'].setValue(data.company_reg_file_path);
             this.companyForm.controls['company_tin_file_path'].setValue(data.company_tin_file_path);
 
@@ -293,25 +303,24 @@ export class CompanyComponent implements OnInit {
     }
 
     //for validation messate -----------
-
     get f(): { [key: string]: AbstractControl } {
         return this.companyForm.controls;
     }
+    
     onFormSubmit(): void {
         //for validation message -----------
         this.submitted = true;
 
-        //if (this.companyForm.invalid) {
-        //    return;
-        //}
+        if (this.companyForm.invalid) {
+            return;
+        }
         //end validation messate -----------
-        //console.log(JSON.stringify(this.companyForm.value, null, 2));
 
         this.dataSaved = false;
-        const companydata = this.companyForm.value;
-       
+        const companydata = this.companyForm.value;       
         companydata.division_id = companydata.division_id;
         companydata.district_id = companydata.district_id;
+        companydata.thana_id = companydata.thana_id;
 
         this.createCompany(companydata);
     }
@@ -332,7 +341,6 @@ export class CompanyComponent implements OnInit {
 
                     this.dataSaved = true;
                     this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
-                    //this.companyIdUpdate = null;
                     if (result.MessageType == 1) {
                         this.companys.unshift(result.Data);
                         this.selectedCompany = result.Data;
@@ -350,7 +358,6 @@ export class CompanyComponent implements OnInit {
             companydata.created_datetime = this.createdDate;
             companydata.db_server_date_time = this.serverDate;
             companydata.created_user_id = this.createdUserId;
-
             this.CompanyService.updateCompany(companydata).subscribe(result => {
                 this.dataSaved = true;
                 this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
@@ -375,9 +382,7 @@ export class CompanyComponent implements OnInit {
                 this.photourllink = event.target.result
             }
         }
-
     }
-
 }
 
 
