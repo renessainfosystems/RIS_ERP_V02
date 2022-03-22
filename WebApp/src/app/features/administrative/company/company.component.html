@@ -88,6 +88,10 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="flex justify-content-end pr-2">
+                                <button pButton pRipple type="button" (click)="onGeneral()" label="Next" class="risBtn risSave mr-2 mb-2" icon="pi pi-step-forward"></button>
+                                <button pButton pRipple type="button" (click)="toggleFormClose()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
+                            </div>
                         </p-tabPanel>
                         <p-tabPanel header="Address Info">
                             <div class="col-12">
@@ -150,7 +154,11 @@
                                     </div>
                                 </div>
                             </div>
-
+                            <div class="flex justify-content-end pr-2">
+                                <button pButton pRipple type="button" (click)="openPrev()" label="Previous" class="risBtn risSave mr-2 mb-2" icon="pi pi-step-backward"></button>
+                                <button pButton pRipple type="button" (click)="onAddress()" label="Next" class="risBtn risSave mr-2 mb-2" icon="pi pi-step-forward"></button>
+                                <button pButton pRipple type="button" (click)="toggleFormClose()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
+                            </div>
                         </p-tabPanel>
                         <p-tabPanel header="Registration Info">
                             <div class="col-12">
@@ -172,6 +180,11 @@
                                         <p-calendar formControlName="company_tin_date" placeholder="" [showIcon]="true" [showButtonBar]="true"></p-calendar>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="flex justify-content-end pr-2">
+                                <button pButton pRipple type="button" (click)="openPrev()" label="Previous" class="risBtn risSave mr-2 mb-2" icon="pi pi-step-backward"></button>
+                                <button pButton pRipple type="button" (click)="openNext()" label="Next" class="risBtn risSave mr-2 mb-2" icon="pi pi-step-forward"></button>
+                                <button pButton pRipple type="button" (click)="toggleFormClose()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
                             </div>
                         </p-tabPanel>
                         <p-tabPanel header="Upload Info">
@@ -229,11 +242,11 @@
                                     </div>
                                 </div>
                             </div>
-                        </p-tabPanel>
-                        <div class="flex justify-content-end pr-2">
-                            <button pButton pRipple type="button" (click)="onFormSubmit()" label="Save" class="risBtn risSave mr-2 mb-2" icon="pi pi-check"></button>
-                            <button pButton pRipple type="button" (click)="toggleFormClose()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
-                        </div>
+                            <div class="flex justify-content-end pr-2">
+                                <button pButton pRipple type="button" (click)="onFormSubmit()" label="Save" class="risBtn risSave mr-2 mb-2" icon="pi pi-check"></button>
+                                <button pButton pRipple type="button" (click)="toggleFormClose()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
+                            </div>
+                        </p-tabPanel>                        
                     </p-tabView>
                 </form>
             </div>

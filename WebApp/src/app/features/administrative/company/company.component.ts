@@ -33,6 +33,7 @@ export class CompanyComponent implements OnInit {
     }
     toggleFormClose() {
         this.toggleFormDisplay();
+        this.generalIndex();
     }
     //end grid and form show hide ********************
 
@@ -306,18 +307,61 @@ export class CompanyComponent implements OnInit {
     get f(): { [key: string]: AbstractControl } {
         return this.companyForm.controls;
     }
+
+    onGeneral(): void {
+        this.submitted = true;
+        const companydata = this.companyForm.value;
+        if (companydata.company_group_id === null) {
+            return;
+        }
+        else if (companydata.company_name === null) {
+            return;
+        }
+        else if (companydata.company_prefix === null) {
+            return;
+        }
+        else if (companydata.company_short_name === null) {
+            return;
+        }
+        else if (companydata.currency_id === null) {
+            return;
+        }
+        else {
+            this.openNext();
+        }
+        if (this.companyForm.invalid) {
+            return;
+        }
+    }
+
+    onAddress(): void {
+        this.submitted = true;
+        const companydata = this.companyForm.value;
+        if ((companydata.country_id === null)) {
+            return;
+        }
+        else {
+            this.openNext();
+        }
+        if (this.companyForm.invalid) {
+            return;
+        }
+    }
+
     
     onFormSubmit(): void {
         //for validation message -----------
         this.submitted = true;
-
+        const companydata = this.companyForm.value;
+        
         if (this.companyForm.invalid) {
             return;
         }
+        
         //end validation messate -----------
 
         this.dataSaved = false;
-        const companydata = this.companyForm.value;       
+        //const companydata = this.companyForm.value;
         companydata.division_id = companydata.division_id;
         companydata.district_id = companydata.district_id;
         companydata.thana_id = companydata.thana_id;
