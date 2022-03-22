@@ -309,7 +309,7 @@
                 </p-dialog>
 
                 <p-table [value]="companys" styleClass="p-datatable-striped p-datatable-sm" [paginator]="true" [rows]="10" selectionMode="single" [showCurrentPageReport]="true" responsiveLayout="scroll"
-                         [(selection)]="selectedCompany" dataKey="company_code" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]">
+                         [(selection)]="selectedCompany" dataKey="company_id" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
                     <ng-template pTemplate="header">
                         <tr>
                             <th>Company Code</th>
@@ -320,7 +320,7 @@
                     </ng-template>
                     <ng-template pTemplate="body" let-company>
 
-                        <tr (click)="selectRow(company)" [pSelectableRow]="company">
+                        <tr [pSelectableRow]="company">
                             <td>{{company.company_code}}</td>
                             <td>{{company.company_name}}</td>
                             <td>{{company.company_short_name}}</td>
