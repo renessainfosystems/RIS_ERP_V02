@@ -26,46 +26,45 @@
 
           <p-dialog header="mfs" [(visible)]="displayBasic" [draggable]="true" [resizable]="false" [style]="{width: '40vw'}">
             <form action="" [formGroup]="mfsForm">
-              <div class="">
+                <div class="">
 
-                <div class="p-fluid grid col-12">
-                  <div class="col-4 mt-2 text-right">
-                    <label for="" class=" d-none d-md-inline-flex">MFS Name <span class="req">*</span> :</label>
-                  </div>
-                  <div class="col-8 p-fluid">
-                    <span class="p-float-label">
-                      <input id="float-input p-fluid" formControlName="mfs_name" type="text" placeholder="MFS Name" pInputText autocomplete="off">
-                    </span>
-                  </div>
+                    <div class="p-fluid grid col-12">
+                        <div class="col-4 mt-2 text-right">
+                            <label for="" class=" d-none d-md-inline-flex">Country <span class="req">*</span> :</label>
+                        </div>
+                        <div class="col-8 p-fluid">
+                            <span class="p-float-label">
+                                <p-dropdown [options]="allCountry" [(ngModel)]="selectedCountry" formControlName="country_id" placeholder="Select Country"
+                                            optionLabel="country_name" optionValue="country_id"></p-dropdown>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="p-fluid grid col-12">
+                        <div class="col-4 mt-2 text-right">
+                            <label for="" class=" d-none d-md-inline-flex">MFS Name <span class="req">*</span> :</label>
+                        </div>
+                        <div class="col-8 p-fluid">
+                            <span class="p-float-label">
+                                <input id="float-input p-fluid" formControlName="mfs_name" type="text" placeholder="MFS Name" pInputText autocomplete="off">
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="p-fluid grid col-12">
+                        <div class="col-4 mt-2 text-right">
+                            <label for="" class=" d-none d-md-inline-flex">Remarks: </label>
+
+                        </div>
+                        <div class="col-8 p-fluid">
+                            <span class="p-float-label">
+                                <input id="float-input p-fluid" formControlName="remarks" type="text" placeholder="Remarks" pInputText>
+                            </span>
+                        </div>
+                    </div>
+
+
                 </div>
-                <div class="p-fluid grid col-12">
-                  <div class="col-4 mt-2 text-right">
-                    <label for="" class=" d-none d-md-inline-flex">Country <span class="req">*</span> :</label>
-                  </div>
-                  <div class="col-8 p-fluid">
-                    <span class="p-float-label">
-                      <p-dropdown [options]="allCountry" [(ngModel)]="selectedCountry" formControlName="countryObj" placeholder="Select Country"
-                                  optionLabel="country_name" optionValue="country_id"></p-dropdown>
-                    </span>
-                  </div>
-                </div>
-
-
-
-                <div class="p-fluid grid col-12">
-                  <div class="col-4 mt-2 text-right">
-                    <label for="" class=" d-none d-md-inline-flex">Remarks: </label>
-
-                  </div>
-                  <div class="col-8 p-fluid">
-                    <span class="p-float-label">
-                      <input id="float-input p-fluid" formControlName="remarks" type="text" placeholder="Remarks" pInputText>
-                    </span>
-                  </div>
-                </div>
-
-
-              </div>
 
             </form>
             <ng-template pTemplate="footer">
@@ -74,26 +73,28 @@
             </ng-template>
           </p-dialog>
           <!-- ************************start grid ************************ -->
-          <p-table [value]="mfss" [paginator]="true" [rows]="10" styleClass="p-datatable-striped p-datatable-sm" [showCurrentPageReport]="true" selectionMode="single" [(selection)]="selectedMfs" dataKey="mfs_name"
-                   currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]">
+          <p-table [value]="mfss" dataKey="mfs_id" [paginator]="true" [rows]="10" selectionMode="single" [(selection)]="selectedMfs" [showCurrentPageReport]="true" responsiveLayout="scroll" styleClass="p-datatable-striped p-datatable-sm"
+                       currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
 
-            <ng-template pTemplate="header">
-              <tr>
-                <th>MFS Name</th>
-                <th>Remarks</th>
-              </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-mfs>
+                  <ng-template pTemplate="header">
+                      <tr>
+                          <th>MFS Name</th>
+                          <th>Country</th>
+                          <th>Remarks</th>
+                      </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-mfs>
 
-              <tr (click)="selectRow(mfs)" [pSelectableRow]="mfs">
-                <td>{{mfs.mfs_name}}</td>
-                <td>{{mfs.remarks}}</td>
-              </tr>
-            </ng-template>
-          </p-table>
+                      <tr [pSelectableRow]="mfs">
+                          <td>{{mfs.mfs_name}}</td>
+                          <td>{{mfs.country_name}}</td>
+                          <td>{{mfs.remarks}}</td>
+                      </tr>
+                  </ng-template>
+              </p-table>
 
 
-        </div>
+</div>
 
         <!-- ********** end card body ******************** -->
 

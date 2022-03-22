@@ -17,20 +17,20 @@ export class DocumentTypeService {
   constructor(private http: HttpClient, private ipconfig: IPConfiguration) { }
 
 
-  getAllDocumentType(): Observable<DocumentType[]> {
+  getAllDocumentType(): Observable<any[]> {
 
-    return this.http.get<DocumentType[]>(this.ipconfig.base_IP + 'DocumentType/GetAllDocumentType');
-
-  }
-
-  CreateDocumentType(documentType: any): Observable<DocumentType> {
-
-    return this.http.post<DocumentType>(this.ipconfig.base_IP + 'DocumentType/Create', documentType, httpOptions);
+      return this.http.get<any[]>(this.ipconfig.base_IP + 'DocumentType/GetAllByRawSql');
 
   }
-  UpdateDocumentType(document_type_id: any): Observable<DocumentType> {
 
-    return this.http.post<DocumentType>(this.ipconfig.base_IP + 'DocumentType/Update', document_type_id, httpOptions);
+    CreateDocumentType(documentType: any): Observable<any> {
+
+        return this.http.post<any>(this.ipconfig.base_IP + 'DocumentType/Create', documentType, httpOptions);
+
+  }
+    UpdateDocumentType(document_type_id: any): Observable<any> {
+
+        return this.http.post<any>(this.ipconfig.base_IP + 'DocumentType/Update', document_type_id, httpOptions);
 
   }
 
@@ -46,8 +46,8 @@ export class DocumentTypeService {
 
   }
 
-  getAllCountryCboList(): Observable<DocumentType[]> {
-    return this.http.get<DocumentType[]>(this.ipconfig.base_IP + 'Country/CountryCboList');
+    getAllCountryCboList(): Observable<any[]> {
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'Country/CountryCboList');
   }
 
 }

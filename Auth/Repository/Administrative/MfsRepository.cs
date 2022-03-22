@@ -1,5 +1,6 @@
 ﻿using Auth.DataAccess.EntityDataAccess;
 using Auth.Model.Administrative.Model;
+using Auth.Model.Administrative.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,13 +11,16 @@ namespace Auth.Repository.Administrative
 {
     public class MfsRepository : IMfsRepository
     {
+        private readonly IEntityDataAccess<MfsViewModel> _entityDataAccessVM;
         private readonly IEntityDataAccess<Mfs> _entityDataAccess;
 
         public MfsRepository(
-            IEntityDataAccess<Mfs> entityDataAccess
+             IEntityDataAccess<MfsViewModel> entityDataAccessVM
+            ,IEntityDataAccess<Mfs> entityDataAccess
 
             )
         {
+            _entityDataAccessVM = entityDataAccessVM;
             _entityDataAccess = entityDataAccess;
 
         }
@@ -79,6 +83,39 @@ namespace Auth.Repository.Administrative
                     throw new Exception("This Mobile Finance Service (" + oMfs.mfs_name + ") is already exists");
                 else
                     throw new Exception(ex.Message);
+            }
+        }
+
+        public IEnumerable<dynamic> GetAllByRawSql()
+        {
+            try
+            {
+                var sql = @"select MFS.*,C.country_name
+                       from[Administrative].[Mobile_Financial_Service] MFS 
+					   left join[Administrative].[Country] C on MFS.country_id = C.country_id order by mfs_id desc";
+                return _entityDataAccessVM.SqlRawQuery(sql);
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+
+
+        public IEnumerable<dynamic> GetByIdRawSql(int mfs_id)
+        {
+            try
+            {
+                var sql = @"select MFS.*,C.country_name
+                       from[Administrative].[Mobile_Financial_Service] MFS 
+					   left join[Administrative].[Country] C on MFS.country_id = C.country_id where MFS.mfs_id='" + mfs_id + "'";
+                return _entityDataAccessVM.SqlRawQuery(sql);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
 
