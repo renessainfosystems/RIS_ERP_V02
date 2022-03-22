@@ -50,7 +50,7 @@ export class CompanyComponent implements OnInit {
             }
         }
     }
-
+    index: number = 0;
     rowData: any;
     dataSaved = false;
     //companyForm: any;
@@ -103,8 +103,8 @@ export class CompanyComponent implements OnInit {
     // for Insert and update data modal
     //displayBasic: boolean = false;
     showBasicDialog() {
-        this.toggleGridDisplay();
         this.resetForm();
+        this.toggleGridDisplay();
     }
     constructor(private formbulider: FormBuilder, private CompanyService: CompanyService, private toastr: ToastrService, private notifyService: NotificationService) {
 
@@ -327,9 +327,6 @@ export class CompanyComponent implements OnInit {
 
     resetForm() {
         this.companyForm.reset();
-        this.massage = null;
-        this.dataSaved = false;
-        this.loadAllCompanys();
     }
 
     createCompany(companydata: any) {
@@ -347,6 +344,9 @@ export class CompanyComponent implements OnInit {
                         this.rowSelected = true;
                         this.rowData = result.Data;
                         this.toggleFormDisplay();
+                        this.generalIndex();
+                        this.companyForm.reset();
+                        this.submitted = false;
                     }                    
                 }
             );
@@ -368,7 +368,11 @@ export class CompanyComponent implements OnInit {
                     this.selectedCompany = result.Data;
                     this.rowSelected = true;
                     this.rowData = result.Data;
+                    this.onRowUnselect(event);
                     this.toggleFormDisplay();
+                    this.generalIndex();
+                    this.companyForm.reset();
+                    this.submitted = false;
                 }
             });
         }
@@ -382,6 +386,22 @@ export class CompanyComponent implements OnInit {
                 this.photourllink = event.target.result
             }
         }
+    }
+
+    generalIndex() {
+        this.index = 0;
+    }    
+
+    function(e) {
+        this.index = e.index;
+    }
+
+    openNext() {
+        this.index = (this.index === 4) ? 0 : this.index + 1;
+    }
+
+    openPrev() {
+        this.index = (this.index === 0) ? 4 : this.index - 1;
     }
 }
 

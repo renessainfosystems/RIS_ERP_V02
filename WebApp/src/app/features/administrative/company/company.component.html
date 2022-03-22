@@ -5,7 +5,7 @@
             <h4>Company</h4>
             <div [hidden]="formDisplay">
                 <form action="" [formGroup]="companyForm">
-                    <p-tabView>
+                    <p-tabView [activeIndex]="index" (onChange)="function($event)">
                         <p-tabPanel header="General Info">
                             <div class="col-12">
                                 <div class="p-fluid p-formgrid grid">
@@ -50,7 +50,7 @@
                                         </div>
                                     </div>
                                     <div class="field col-12 md:col-6">
-                                        <label  pTooltip="Name In Local" tooltipPosition="top">Name In Local </label>
+                                        <label pTooltip="Name In Local" tooltipPosition="top">Name In Local </label>
                                         <input id="lastname2" type="text" formControlName="name_in_local_language" placeholder="" pInputText />
                                     </div>
 
@@ -68,27 +68,26 @@
                                         <input id="lastname2" type="text" formControlName="phone" placeholder="" pInputText />
                                     </div>
                                     <div class="field col-12 md:col-6">
-                                        <label  pTooltip="Email" tooltipPosition="top">Email </label>
+                                        <label pTooltip="Email" tooltipPosition="top">Email </label>
                                         <input id="lastname2" type="email" formControlName="email" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" placeholder="" pInputText />
-                                        <div *ngIf="submitted && f.email.errors" class="invalid-feedback">                                            
+                                        <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
                                             <small *ngIf="f.email.errors.email" class="p-error">Email must be a valid email address</small>
                                         </div>
                                     </div>
                                     <div class="field col-12 md:col-6">
-                                        <label  pTooltip="Web" tooltipPosition="top">Web </label>
+                                        <label pTooltip="Web" tooltipPosition="top">Web </label>
                                         <input id="lastname2" type="text" formControlName="web_url" placeholder="" pInputText />
                                     </div>
                                     <div class="field col-12 md:col-6">
-                                        <label  pTooltip="Slogan" tooltipPosition="top">Slogan </label>
+                                        <label pTooltip="Slogan" tooltipPosition="top">Slogan </label>
                                         <input id="lastname2" type="text" formControlName="slogan" placeholder="" pInputText />
                                     </div>
                                     <div class="field col-12 md:col-6">
-                                        <label  pTooltip="Remarks" tooltipPosition="top">Remarks </label>
+                                        <label pTooltip="Remarks" tooltipPosition="top">Remarks </label>
                                         <input id="lastname2" type="text" formControlName="remarks" placeholder="" pInputText />
                                     </div>
                                 </div>
                             </div>
-
                         </p-tabPanel>
                         <p-tabPanel header="Address Info">
                             <div class="col-12">
@@ -103,18 +102,18 @@
                                         </div>
                                     </div>
                                     <div class="field col-12 md:col-6">
-                                        <label  pTooltip="Division" tooltipPosition="top">Division</label>
-                                        <p-dropdown [options]="allDivision"  formControlName="division_id" placeholder="---Select---"
+                                        <label pTooltip="Division" tooltipPosition="top">Division</label>
+                                        <p-dropdown [options]="allDivision" formControlName="division_id" placeholder="---Select---"
                                                     optionLabel="division_name" optionValue="division_id" (onChange)="onSelectByDivisionId($event.value)" [showClear]="true" [filter]="true" filterBy="division_name"></p-dropdown>
                                     </div>
                                     <div class="field col-12 md:col-6">
-                                        <label  pTooltip="District" tooltipPosition="top">District</label>
-                                        <p-dropdown [options]="allDistrict"  formControlName="district_id" placeholder="---Select---"
+                                        <label pTooltip="District" tooltipPosition="top">District</label>
+                                        <p-dropdown [options]="allDistrict" formControlName="district_id" placeholder="---Select---"
                                                     optionLabel="district_name" optionValue="district_id" (onChange)="onSelectByDistrictId($event.value)" [showClear]="true" [filter]="true" filterBy="district_name"></p-dropdown>
                                     </div>
                                     <div class="field col-12 md:col-6">
-                                        <label  pTooltip="Police Station" tooltipPosition="top">PS/Area</label>
-                                        <p-dropdown [options]="allThana"  formControlName="thana_id" placeholder="---Select---"
+                                        <label pTooltip="Police Station" tooltipPosition="top">PS/Area</label>
+                                        <p-dropdown [options]="allThana" formControlName="thana_id" placeholder="---Select---"
                                                     optionLabel="thana_name" optionValue="thana_id" [showClear]="true" [filter]="true" filterBy="thana_name"></p-dropdown>
                                     </div>
                                     <div class="field col-12 md:col-6">
@@ -122,7 +121,7 @@
                                         <input id="lastname2" type="text" formControlName="city" placeholder="" pInputText />
                                     </div>
                                     <div class="field col-12 md:col-6">
-                                        <label  pTooltip="Post Code" tooltipPosition="top">Post Code </label>
+                                        <label pTooltip="Post Code" tooltipPosition="top">Post Code </label>
                                         <input id="lastname2" type="text" formControlName="post_code" placeholder="" pInputText />
                                     </div>
                                     <div class="field col-12 md:col-6">
@@ -138,15 +137,15 @@
                                         <input id="lastname2" type="text" formControlName="house_no" placeholder="" pInputText />
                                     </div>
                                     <div class="field col-12 md:col-6">
-                                        <label  pTooltip="Flat No" tooltipPosition="top">Flat No </label>
+                                        <label pTooltip="Flat No" tooltipPosition="top">Flat No </label>
                                         <input id="lastname2" type="text" formControlName="flat_no" placeholder="" pInputText />
                                     </div>
                                     <div class="field col-12 md:col-6">
-                                        <label  pTooltip="Address Note" tooltipPosition="top">Address Note </label>
+                                        <label pTooltip="Address Note" tooltipPosition="top">Address Note </label>
                                         <input id="lastname2" type="text" formControlName="address_note" placeholder="" pInputText />
                                     </div>
                                     <div class="field col-12 md:col-6">
-                                        <label  pTooltip="Address In Local" tooltipPosition="top">Address In Local </label>
+                                        <label pTooltip="Address In Local" tooltipPosition="top">Address In Local </label>
                                         <input id="lastname2" type="text" formControlName="address_in_local_language" placeholder="" pInputText />
                                     </div>
                                 </div>
