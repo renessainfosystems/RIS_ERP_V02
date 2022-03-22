@@ -50,7 +50,7 @@ export class CompanyComponent implements OnInit {
             }
         }
     }
-
+    index: number = 0;
     rowData: any;
     dataSaved = false;
     //companyForm: any;
@@ -75,6 +75,9 @@ export class CompanyComponent implements OnInit {
     selectedDistrict: any;
     allDistrict: any[];
 
+    selectedThana: any;
+    allThana: any[];
+
     selectedCurrency: any;
     allCurrency: any[];
 
@@ -83,7 +86,7 @@ export class CompanyComponent implements OnInit {
 
     selectedCompany: any;
     companys: any[];
-
+    rowSelected: boolean = false;
     date1: Date;
 
     first = 0;
@@ -97,24 +100,18 @@ export class CompanyComponent implements OnInit {
         else
             this.display = true;
     }
-
     // for Insert and update data modal
     //displayBasic: boolean = false;
     showBasicDialog() {
-        // this.displayBasic = true;
-        this.toggleGridDisplay();
         this.resetForm();
+        this.toggleGridDisplay();
     }
     constructor(private formbulider: FormBuilder, private CompanyService: CompanyService, private toastr: ToastrService, private notifyService: NotificationService) {
 
 
     }
 
-
     ngOnInit(): void {
-        //this.companyForm = new FormGroup({
-        //    'company_name': new FormControl(null,Validators.required)
-        //});
         this.CompanyService.getAllCompany().subscribe(data => this.companys = data);
 
         this.companyForm = this.formbulider.group({
@@ -122,24 +119,19 @@ export class CompanyComponent implements OnInit {
             company_name: [null, [Validators.required]],
             company_short_name: [null],
             company_prefix: [null, [Validators.required]],
-            //companyGroupObj: [null, [Validators.required]],
             company_group_id: [null, [Validators.required]],
-            //countryObj: [null, [Validators.required]],
             country_id: [null, [Validators.required]],
-            //divisionObj: [null],
             division_id: [null],
-            //districtObj: [null],
             district_id: [null],
-            //currencyObj: [null, [Validators.required]],
+            thana_id: [null],
             currency_id: [null, [Validators.required]],
             company_reg_no: [null],
             company_reg_date: [null],
-            company_reg_file_path: [null, [Validators.required]],
+           company_reg_file_path: [null],
             company_tin_no: [null],
             company_tin_date: [null],
-            company_tin_file_path: [null, [Validators.required]],
+            company_tin_file_path: [null],
             city: [null],
-            ps_area: [null],
             post_code: [null],
             block: [null],
             road_no: [null],
@@ -147,9 +139,9 @@ export class CompanyComponent implements OnInit {
             flat_no: [null],
             address_note: [null],
             phone: [null],
-            email: [null],
+            email: ['', [Validators.email, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
             web_url: [null],
-            logo: [null, [Validators.required]],
+            logo: [null],
             slogan: [null],
             name_in_local_language: [null],
             address_in_local_language: [null],
@@ -160,7 +152,6 @@ export class CompanyComponent implements OnInit {
         this.loadAllCountryCboList();
         this.loadAllCurrencyCboList();
     }
-
 
     next() {
         this.first = this.first + this.rows;
@@ -206,7 +197,16 @@ export class CompanyComponent implements OnInit {
         }
         else
             this.allDistrict = null;
+    }
 
+    onSelectByDistrictId(districtId: Number) {
+        if (districtId != null) {
+            this.CompanyService.getAllThanaCboListByDistrictId(districtId).subscribe(data => {
+                this.allThana = data;
+            });
+        }
+        else
+            this.allThana = null;
     }
 
     loadAllCurrencyCboList() {
@@ -221,8 +221,13 @@ export class CompanyComponent implements OnInit {
         });
     }
 
-    selectRow(company) {
-        this.rowData = company;
+    onRowSelect(event) {
+        this.rowSelected = true;
+        this.rowData = event.data;
+    }
+    onRowUnselect(event) {
+        this.rowSelected = false;
+        this.rowData = null;
     }
 
     loadCompanyToEdit() {
@@ -249,13 +254,14 @@ export class CompanyComponent implements OnInit {
             this.companyForm.controls['division_id'].setValue(data.division_id);
             this.onSelectByDivisionId(data.division_id);
             this.companyForm.controls['district_id'].setValue(data.district_id);
+            this.onSelectByDistrictId(data.district_id);
+            this.companyForm.controls['thana_id'].setValue(data.thana_id);
             this.companyForm.controls['currency_id'].setValue(data.currency_id);
             this.companyForm.controls['company_reg_no'].setValue(data.company_reg_no);
             this.companyForm.controls['company_reg_date'].setValue(data.company_reg_date);
             this.companyForm.controls['company_tin_no'].setValue(data.company_tin_no);
             this.companyForm.controls['company_tin_date'].setValue(data.company_tin_date);
             this.companyForm.controls['city'].setValue(data.city);
-            this.companyForm.controls['ps_area'].setValue(data.ps_area);
             this.companyForm.controls['post_code'].setValue(data.post_code);
             this.companyForm.controls['block'].setValue(data.block);
             this.companyForm.controls['road_no'].setValue(data.road_no);
@@ -268,13 +274,12 @@ export class CompanyComponent implements OnInit {
             this.companyForm.controls['name_in_local_language'].setValue(data.name_in_local_language);
             this.companyForm.controls['address_in_local_language'].setValue(data.address_in_local_language);
             this.companyForm.controls['remarks'].setValue(data.remarks);
-            this.companyForm.controls['slogan'].setValue(data.group_logo);
-            this.companyForm.controls['logo'].setValue(data.group_logo);
+            this.companyForm.controls['slogan'].setValue(data.slogan);
+            this.companyForm.controls['logo'].setValue(data.logo);
             this.companyForm.controls['company_reg_file_path'].setValue(data.company_reg_file_path);
             this.companyForm.controls['company_tin_file_path'].setValue(data.company_tin_file_path);
 
         });
-        //this.displayBasic = true;
         this.toggleGridDisplay();
     }
 
@@ -298,54 +303,30 @@ export class CompanyComponent implements OnInit {
     }
 
     //for validation messate -----------
-
     get f(): { [key: string]: AbstractControl } {
         return this.companyForm.controls;
     }
+    
     onFormSubmit(): void {
-        //for validation messate -----------
+        //for validation message -----------
         this.submitted = true;
 
-        //if (this.companyForm.invalid) {
-        //    return;
-        //}
+        if (this.companyForm.invalid) {
+            return;
+        }
         //end validation messate -----------
-        //console.log(JSON.stringify(this.companyForm.value, null, 2));
 
         this.dataSaved = false;
-        const companydata = this.companyForm.value;
-        //if (!(companydata.company_prefix)) {
-        //  return this.notifyService.ShowNotification(2, "Please enter company prefix")
-        //}
-        //companydata.company_group_id = companydata.companyGroupObj;
-        //if (!(companydata.company_group_id)) {
-        //  return this.notifyService.ShowNotification(2, "Please seletc group name")
-        //}
-        //if (!(companydata.company_name)) {
-        //  return this.notifyService.ShowNotification(2, "Please enter company name")
-        //}
-        //if (!(companydata.company_short_name)) {
-        //  return this.notifyService.ShowNotification(2, "Please enter company short name")
-        //}
-        //companydata.currency_id = companydata.currencyObj;
-        //if (!(companydata.currency_id)) {
-        //  return this.notifyService.ShowNotification(2, "Please select currency")
-        //}    
-        //companydata.country_id = companydata.countryObj;
-        //if (!(companydata.country_id)) {
-        //  return this.notifyService.ShowNotification(2, "Please select country")
-        //}
-        companydata.division_id = companydata.divisionObj;
-        companydata.district_id = companydata.districtObj;
+        const companydata = this.companyForm.value;       
+        companydata.division_id = companydata.division_id;
+        companydata.district_id = companydata.district_id;
+        companydata.thana_id = companydata.thana_id;
 
         this.createCompany(companydata);
     }
 
     resetForm() {
         this.companyForm.reset();
-        this.massage = null;
-        this.dataSaved = false;
-        this.loadAllCompanys();
     }
 
     createCompany(companydata: any) {
@@ -356,14 +337,17 @@ export class CompanyComponent implements OnInit {
                 result => {
 
                     this.dataSaved = true;
-                    this.loadAllCompanys();
                     this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
-                    this.companyIdUpdate = null;
-
                     if (result.MessageType == 1) {
+                        this.companys.unshift(result.Data);
+                        this.selectedCompany = result.Data;
+                        this.rowSelected = true;
+                        this.rowData = result.Data;
                         this.toggleFormDisplay();
-                    }
-                    //this.displayBasic = true;
+                        this.generalIndex();
+                        this.companyForm.reset();
+                        this.submitted = false;
+                    }                    
                 }
             );
         }
@@ -374,14 +358,21 @@ export class CompanyComponent implements OnInit {
             companydata.created_datetime = this.createdDate;
             companydata.db_server_date_time = this.serverDate;
             companydata.created_user_id = this.createdUserId;
-
             this.CompanyService.updateCompany(companydata).subscribe(result => {
                 this.dataSaved = true;
-                this.loadAllCompanys();
                 this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
-                this.companyIdUpdate = null;
+                this.companyIdUpdate = null;                
                 if (result.MessageType == 1) {
+                    this.companys.splice(this.companys.findIndex(item => item.company_id === companydata.company_id), 1);
+                    this.companys.unshift(result.Data);
+                    this.selectedCompany = result.Data;
+                    this.rowSelected = true;
+                    this.rowData = result.Data;
+                    this.onRowUnselect(event);
                     this.toggleFormDisplay();
+                    this.generalIndex();
+                    this.companyForm.reset();
+                    this.submitted = false;
                 }
             });
         }
@@ -395,9 +386,23 @@ export class CompanyComponent implements OnInit {
                 this.photourllink = event.target.result
             }
         }
-
     }
 
+    generalIndex() {
+        this.index = 0;
+    }    
+
+    function(e) {
+        this.index = e.index;
+    }
+
+    openNext() {
+        this.index = (this.index === 4) ? 0 : this.index + 1;
+    }
+
+    openPrev() {
+        this.index = (this.index === 0) ? 4 : this.index - 1;
+    }
 }
 
 

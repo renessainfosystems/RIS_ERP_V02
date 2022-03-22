@@ -44,23 +44,25 @@ export class CompanyService {
     return this.http.get(this.ipconfig.base_IP + 'Company/GetById?company_id=' + company_id, httpOptions);
   }
 
-  getAllCountryCboList(): Observable<Company[]> {
-    return this.http.get<Company[]>(this.ipconfig.base_IP + 'Country/CountryCboList');
+    getAllCountryCboList(): Observable<any[]> {
+    return this.http.get<any[]>(this.ipconfig.base_IP + 'Country/CountryCboList');
   }
 
-  getAllDivisionCboListByCountryId(country_id): Observable<Company[]> {
-    return this.http.get<Company[]>(this.ipconfig.base_IP + 'Division/DivisionCboListByCountryId?country_id=' + country_id, httpOptions);
+    getAllDivisionCboListByCountryId(country_id): Observable<any[]> {
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'Division/DivisionCboListByCountryId?country_id=' + country_id, httpOptions);
   }
 
-  getAllDistrictCboListByDivisionId(division_id): Observable<Company[]> {
-    return this.http.get<Company[]>(this.ipconfig.base_IP + 'District/DistrictCboListByDivisionId?division_id=' + division_id, httpOptions);
+    getAllDistrictCboListByDivisionId(division_id): Observable<any[]> {
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'District/DistrictCboListByDivisionId?division_id=' + division_id, httpOptions);
+  }
+    getAllThanaCboListByDistrictId(district_id): Observable<any[]> {
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'Thana/ThanaCboListByDistrictId?district_id=' + district_id, httpOptions);
+    }
+    getAllCurrencyCboList(): Observable<any[]> {
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'Currency/CurrencyCboList');
   }
 
-  getAllCurrencyCboList(): Observable<Company[]> {
-    return this.http.get<Company[]>(this.ipconfig.base_IP + 'Currency/CurrencyCboList');
-  }
-
-  getAllCompanyGroupCboList(): Observable<Company[]> {
-    return this.http.get<Company[]>(this.ipconfig.base_IP + 'CompanyGroup/CompanyGroupCboList');
+    getAllCompanyGroupCboList(): Observable<any[]> {
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'CompanyGroup/CompanyGroupCboList');
   }
 }

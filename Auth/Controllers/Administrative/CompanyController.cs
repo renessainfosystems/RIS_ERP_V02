@@ -126,15 +126,5 @@ namespace Auth.Controllers.Administrative
 
         }
 
-        //Unique key validation method
-        //private dynamic validateUniqueKey(string company_name)
-        //{
-
-        //    var companies = _companyRepository.GetAllCompany();
-        //    var result = (from c in companies
-        //                  where c.company_name == company_name
-        //                  select c.company_name).ToList();
-        //    return result;
-        //}
     }
 }
