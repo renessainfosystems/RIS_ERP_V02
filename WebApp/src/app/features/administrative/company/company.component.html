@@ -28,11 +28,11 @@
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label pTooltip="Country of Domicile" tooltipPosition="top">Company Group<span class="req">*</span></label>
-                                        <p-dropdown [options]="allCompanyGroup" [(ngModel)]="selectedCompanyGroup" formControlName="companyGroupObj" [ngClass]="{ 'is-invalid': submitted && f.companyGroupObj.errors }" placeholder="Select Company Group"
+                                        <p-dropdown [options]="allCompanyGroup"  formControlName="company_group_id" [ngClass]="{ 'is-invalid': submitted && f.company_group_id.errors }" placeholder="Select Company Group"
                                                     optionLabel="company_group_name" optionValue="company_group_id" [showClear]="true"></p-dropdown>
 
-                                        <div *ngIf="submitted && f.companyGroupObj.errors" class="invalid-feedback">
-                                            <small *ngIf="f.companyGroupObj.errors.required" class="p-error">Company group is required</small>
+                                        <div *ngIf="submitted && f.company_group_id.errors" class="invalid-feedback">
+                                            <small *ngIf="f.company_group_id.errors.required" class="p-error">Company group is required</small>
                                         </div>
                                     </div>
 
@@ -113,33 +113,33 @@
 
                                     <div class="field col-12 md:col-6">
                                         <label pTooltip="Country of Domicile" tooltipPosition="top">Currency<span class="req">*</span></label>
-                                        <p-dropdown [options]="allCurrency" [(ngModel)]="selectedCurrency" formControlName="currencyObj" [ngClass]="{ 'is-invalid': submitted && f.currencyObj.errors }" placeholder="Select Currency"
+                                        <p-dropdown [options]="allCurrency" formControlName="currency_id" [ngClass]="{ 'is-invalid': submitted && f.currency_id.errors }" placeholder="Select Currency"
                                                     optionLabel="currency_name" optionValue="currency_id" [showClear]="true"></p-dropdown>
 
-                                        <div *ngIf="submitted && f.currencyObj.errors" class="invalid-feedback">
-                                            <small *ngIf="f.currencyObj.errors.required" class="p-error">Currency is required</small>
+                                        <div *ngIf="submitted && f.currency_id.errors" class="invalid-feedback">
+                                            <small *ngIf="f.currency_id.errors.required" class="p-error">Currency is required</small>
                                         </div>
                                     </div>
 
                                     <div class="field col-12 md:col-6">
                                         <label pTooltip="Country of Domicile" tooltipPosition="top">CoD<span class="req">*</span></label>
-                                        <p-dropdown [options]="allCountry" [(ngModel)]="selectedCountry" formControlName="countryObj" [ngClass]="{ 'is-invalid': submitted && f.countryObj.errors }" placeholder="Select Country"
+                                        <p-dropdown [options]="allCountry" formControlName="country_id" [ngClass]="{ 'is-invalid': submitted && f.country_id.errors }" placeholder="Select Country"
                                                     optionLabel="country_name" optionValue="country_id" (onChange)="onSelectByCountryId($event.value)" [showClear]="true"></p-dropdown>
 
-                                        <div *ngIf="submitted && f.countryObj.errors" class="invalid-feedback">
-                                            <small *ngIf="f.countryObj.errors.required" class="p-error">CoD is required</small>
+                                        <div *ngIf="submitted && f.country_id.errors" class="invalid-feedback">
+                                            <small *ngIf="f.country_id.errors.required" class="p-error">CoD is required</small>
                                         </div>
                                     </div>
 
                                     <div class="field col-12 md:col-6">
                                         <label>Division</label>
-                                        <p-dropdown [options]="allDivision" [(ngModel)]="selectedDivision" formControlName="divisionObj" placeholder="Select Division"
+                                        <p-dropdown [options]="allDivision" [(ngModel)]="selectedDivision" formControlName="division_id" placeholder="Select Division"
                                                     optionLabel="division_name" optionValue="division_id" (onChange)="onSelectByDivisionId($event.value)" [showClear]="true"></p-dropdown>
                                     </div>
 
                                     <div class="field col-12 md:col-6">
                                         <label>District</label>
-                                        <p-dropdown [options]="allDistrict" [(ngModel)]="selectedDistrict" formControlName="districtObj" placeholder="Select District"
+                                        <p-dropdown [options]="allDistrict" [(ngModel)]="selectedDistrict" formControlName="district_id" placeholder="Select District"
                                                     optionLabel="district_name" optionValue="district_id" [showClear]="true"></p-dropdown>
                                     </div>
 
@@ -214,18 +214,18 @@
 
                                 <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
                                     <div class="col-4 mt-2 text-right">
-                                        <label for="" class=" d-md-inline-flex">Company Logo<span class="req">*</span> :</label>
+                                        <label for="" class=" d-md-inline-flex">Company Logo:</label>
                                     </div>
                                     <div class="col-8 p-fluid">
                                         <span class="p-float-label">
                                             <div class="flex grid ">
                                                 <div class=" inputWrapper photo-signature align-self-end flex align-items-center justify-content-center">
                                                     <img class="risBtn m-1" [src]="photourllink" style="width: 150px;" alt="">
-                                                    <input type="file" formControlName="logo" [ngClass]="{ 'is-invalid': submitted && f.logo.errors }" class="fileInput risBtn risAdd " style="width: 150px;" #userImage (change)="onSelectImage($event)">
+                                                    <input type="file" formControlName="logo"  class="fileInput risBtn risAdd " style="width: 150px;" #userImage (change)="onSelectImage($event)">
 
-                                                    <div *ngIf="submitted && f.logo.errors" class="invalid-feedback">
+                                                    <!--<div *ngIf="submitted && f.logo.errors" class="invalid-feedback">
                                                         <small *ngIf="f.logo.errors.required" class="p-error">Company Logo is required</small>
-                                                    </div>
+                                                    </div>-->
                                                 </div>
                                             </div>
                                         </span>
@@ -233,18 +233,18 @@
                                 </div>
                                 <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
                                     <div class="col-4 mt-2 text-right">
-                                        <label for="" class=" d-md-inline-flex">Company Reg File<span class="req">*</span> :</label>
+                                        <label for="" class=" d-md-inline-flex">Company Reg File :</label>
                                     </div>
                                     <div class="col-8 p-fluid">
                                         <span class="p-float-label">
                                             <div class="flex grid ">
                                                 <div class=" inputWrapper photo-signature align-self-end flex align-items-center justify-content-center">
                                                     <img class="risBtn m-1" [src]="photourllink" style="width: 150px;" alt="">
-                                                    <input type="file" formControlName="company_reg_file_path" [ngClass]="{ 'is-invalid': submitted && f.company_reg_file_path.errors }" class="fileInput risBtn risAdd " style="width: 150px;" #userImage (change)="onSelectImage($event)">
+                                                    <input type="file" formControlName="company_reg_file_path"  class="fileInput risBtn risAdd " style="width: 150px;" #userImage (change)="onSelectImage($event)">
 
-                                                    <div *ngIf="submitted && f.company_reg_file_path.errors" class="invalid-feedback">
+                                                    <!--<div *ngIf="submitted && f.company_reg_file_path.errors" class="invalid-feedback">
                                                         <small *ngIf="f.company_reg_file_path.errors.required" class="p-error">Company Reg File is required</small>
-                                                    </div>
+                                                    </div>-->
 
                                                 </div>
                                             </div>
@@ -254,18 +254,19 @@
 
                                 <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
                                     <div class="col-4 mt-2 text-right">
-                                        <label for="" class=" d-md-inline-flex">Company TIN File<span class="req">*</span> :</label>
+                                        <label for="" class=" d-md-inline-flex">Company TIN File :</label>
                                     </div>
                                     <div class="col-8 p-fluid">
                                         <span class="p-float-label">
                                             <div class="flex grid ">
                                                 <div class=" inputWrapper photo-signature align-self-end flex align-items-center justify-content-center">
                                                     <img class="risBtn m-1" [src]="photourllink" style="width: 150px;" alt="">
-                                                    <input type="file" formControlName="company_tin_file_path" [ngClass]="{ 'is-invalid': submitted && f.company_tin_file_path.errors }" class="fileInput risBtn risAdd " style="width: 150px;" #userImage (change)="onSelectImage($event)">
+                                                    <input type="file" formControlName="company_tin_file_path"  class="fileInput risBtn risAdd " style="width: 150px;" #userImage (change)="onSelectImage($event)">
+                                                    <!--<input type="file" formControlName="company_tin_file_path" [ngClass]="{ 'is-invalid': submitted && f.company_tin_file_path.errors }" class="fileInput risBtn risAdd " style="width: 150px;" #userImage (change)="onSelectImage($event)">-->
 
-                                                    <div *ngIf="submitted && f.company_tin_file_path.errors" class="invalid-feedback">
-                                                        <small *ngIf="f.company_tin_file_path.errors.required" class="p-error">Company TIN File is required</small>
-                                                    </div>
+                                                    <!--<div *ngIf="submitted && f.company_tin_file_path.errors" class="invalid-feedback">
+        <small *ngIf="f.company_tin_file_path.errors.required" class="p-error">Company TIN File is required</small>
+    </div>-->
 
                                                 </div>
                                             </div>
