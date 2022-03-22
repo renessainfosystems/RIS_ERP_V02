@@ -137,7 +137,6 @@ export class RegistryAuthorityComponent implements OnInit {
         if (this.isRegistryAuthorityEdit) {
             RegistryAuthoritydata.registry_authority_id = this.rowData.registry_authority_id;
             this.RegistryAuthorityService.UpdateRegistryAuthority(RegistryAuthoritydata).subscribe(result => {
-                debugger
                 this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
                 if (result.MessageType == 1) {
                     this.clear();
@@ -152,7 +151,6 @@ export class RegistryAuthorityComponent implements OnInit {
         }
         else {
             this.RegistryAuthorityService.CreateRegistryAuthority(JSON.stringify(RegistryAuthoritydata)).subscribe(result => {
-                debugger
                 this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
                 if (result.MessageType == 1) {
                     this.clear();

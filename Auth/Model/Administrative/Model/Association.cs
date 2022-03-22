@@ -20,8 +20,7 @@ namespace Auth.Model.Administrative.Model
         public int country_id { get; set; }
         public int organization_type_id_enum { get; set; }
         public string remarks { get; set; }
-
-
+     
 
     }
 }

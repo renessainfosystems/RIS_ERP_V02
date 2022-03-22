@@ -123,7 +123,7 @@ namespace Auth.Controllers.Administrative
             try
             {
                 _regulatorRepository.Delete(regulator_id);
-                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonDeleteMessage);
+                message = CommonMessage.SetWarningMessage(CommonMessage.CommonDeleteMessage);
             }
             catch (Exception ex)
             {

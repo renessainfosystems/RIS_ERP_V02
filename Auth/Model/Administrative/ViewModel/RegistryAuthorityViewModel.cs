@@ -17,7 +17,6 @@ namespace Auth.Model.Administrative.ViewModel
         public string registry_authority_short_name { get; set; }
         [Required]
         public int country_id { get; set; }
-
         public string country_name { get; set; }
         public string remarks { get; set; }
 

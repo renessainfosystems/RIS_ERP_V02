@@ -20,7 +20,7 @@ export class RegistryAuthorityService {
 
     getAllRegistryAuthority(): Observable<any[]> {
 
-        return this.http.get<any[]>(this.ipconfig.base_IP + 'RegistryAuthority/GetAllRegistryAuthority');
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'RegistryAuthority/GetAllByRawSql');
 
     }
 
