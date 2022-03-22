@@ -24,6 +24,10 @@
 
         public bool IsLocal { get; set; }
 
+        public string CountryName { get; set; }
+        public string DivisionName { get; set; }
+        public string DistrictName { get; set; }
+
         //public bool IsActive { get; set; }
 
 
@@ -52,7 +56,11 @@
             model.IsBank = bank.is_bank ?? false;
             model.IsLocal = bank.is_local ?? false;
 
-           // model.IsActive = bank.is_active ?? true;
+            model.CountryName = bank.country_name ?? "";
+            model.DivisionName = bank.division_name ?? "";
+            model.DistrictName = bank.district_name ?? "";
+
+            // model.IsActive = bank.is_active ?? true;
 
             return model;
 

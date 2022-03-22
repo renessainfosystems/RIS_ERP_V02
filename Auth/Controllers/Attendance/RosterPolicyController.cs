@@ -45,13 +45,13 @@ namespace Auth.Controllers.Attendance
         }
       
         [HttpPost]
-        public async Task<dynamic> CreateRosterDetails([FromBody] RosterPolicy rosterDetails)
+        public async Task<dynamic> CreateRosterDetails([FromBody] RosterDetails rosterDetails)
 
         {
             return await _rosterPolicyRepository.IUD_RosterPolicyDetails(rosterDetails, (int)GlobalEnumList.DBOperation.Create);
         }
         [HttpPost]
-        public async Task<dynamic> DeleteRosterDetails([FromBody] RosterPolicy rosterDetails)
+        public async Task<dynamic> DeleteRosterDetails([FromBody] RosterDetails rosterDetails)
 
         {
             return await _rosterPolicyRepository.IUD_RosterPolicyDetails(rosterDetails, (int)GlobalEnumList.DBOperation.Delete);

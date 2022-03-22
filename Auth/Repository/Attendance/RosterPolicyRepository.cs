@@ -38,9 +38,9 @@ namespace Auth.Repository.Attendance
             return await _rosterPolicyDataAccess.IUD_RosterPolicy(rosterPolicy, dbOperation);
         }
 
-        public async Task<dynamic> IUD_RosterPolicyDetails(RosterPolicy rosterPolicy, int dbOperation)
+        public async Task<dynamic> IUD_RosterPolicyDetails(RosterDetails rosterDetails, int dbOperation)
         {
-            return await _rosterPolicyDataAccess.IUD_RosterPolicyDetails(rosterPolicy, dbOperation);
+            return await _rosterPolicyDataAccess.IUD_RosterPolicyDetails(rosterDetails, dbOperation);
         }
 
         public async Task<dynamic> GetAllRosterPolicyForDP()

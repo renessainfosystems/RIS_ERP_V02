@@ -67,7 +67,6 @@ namespace Auth.Controllers.Procurement
         [HttpGet]
         public dynamic GetById(int document_type_id)
         {
-
             dynamic data = (dynamic)null;
             try
             {
@@ -121,7 +120,6 @@ namespace Auth.Controllers.Procurement
         [HttpPost]
         public dynamic Delete(int document_type_id)
         {
-
             var message = new CommonMessage();
             try
             {

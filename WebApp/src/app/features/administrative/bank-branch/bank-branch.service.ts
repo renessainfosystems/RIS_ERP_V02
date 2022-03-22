@@ -2,8 +2,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { IPConfiguration } from '../../../core/services/IP-configuration.service';
-import BankBranch from './bank-branch.model';
-
 
 
 const httpOptions = {
@@ -19,18 +17,18 @@ export class BankBranchService {
   constructor(private http: HttpClient,private ipconfig: IPConfiguration) { }
 
   
-  getAllBankBranch(): Observable<BankBranch[]> {
+  getAllBankBranch(): Observable<any[]> {
 
-    return this.http.get<BankBranch[]>(this.ipconfig.base_IP + 'BankBranch/GetAllBankBranchs');
+      return this.http.get<any[]>(this.ipconfig.base_IP + 'BankBranch/GetAllBankBranchs');
   }
 
-  CreateBankBranch(bankBranch: any): Observable<BankBranch> {
-    return this.http.post<BankBranch>(this.ipconfig.base_IP + 'BankBranch/Create', bankBranch,httpOptions);
+    CreateBankBranch(bankBranch: any): Observable<any> {
+        return this.http.post<any>(this.ipconfig.base_IP + 'BankBranch/Create', bankBranch,httpOptions);
   }
 
-  UpdateBankBranch(bankBranch: any): Observable<BankBranch> {
+    UpdateBankBranch(bankBranch: any): Observable<any> {
  
-    return this.http.post<BankBranch>(this.ipconfig.base_IP + 'BankBranch/Update', bankBranch,httpOptions);
+        return this.http.post<any>(this.ipconfig.base_IP + 'BankBranch/Update', bankBranch,httpOptions);
   }
 
 
@@ -51,22 +49,22 @@ export class BankBranchService {
   }
 
 
-  getAllCountryCboList(): Observable<BankBranch[]> {
-    return this.http.get<BankBranch[]>(this.ipconfig.base_IP + 'Country/CountryCboList');
+    getAllCountryCboList(): Observable<any[]> {
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'Country/CountryCboList');
   }
 
-  getAllDivisionCboList(): Observable<BankBranch[]> {
-    return this.http.get<BankBranch[]>(this.ipconfig.base_IP + 'Division/DivisionCboList');
+    getAllDivisionCboList(): Observable<any[]> {
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'Division/DivisionCboList');
   }
 
-  getAllDistrictCboList(): Observable<BankBranch[]> {
-    return this.http.get<BankBranch[]>(this.ipconfig.base_IP + 'District/DistrictCboList');
+    getAllDistrictCboList(): Observable<any[]> {
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'District/DistrictCboList');
   }
 
-  getAllDivisionCboListByCountryId(country_id): Observable<BankBranch[]> {
-    return this.http.get<BankBranch[]>(this.ipconfig.base_IP + 'Division/DivisionCboListByCountryId?country_id=' + country_id, httpOptions);
+    getAllDivisionCboListByCountryId(country_id): Observable<any[]> {
+      return this.http.get<any[]>(this.ipconfig.base_IP + 'Division/DivisionCboListByCountryId?country_id=' + country_id, httpOptions);
   }
-  getAllDistrictCboListByDivisionId(division_id): Observable<BankBranch[]> {
-    return this.http.get<BankBranch[]>(this.ipconfig.base_IP + 'District/DistrictCboListByDivisionId?division_id=' + division_id, httpOptions);
+    getAllDistrictCboListByDivisionId(division_id): Observable<any[]> {
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'District/DistrictCboListByDivisionId?division_id=' + division_id, httpOptions);
   }
 }

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using static Auth.Utility.Attendance.Enum.GlobalEnumList;
 
 namespace Auth.DataAccess.Attendance
 {
@@ -64,7 +65,7 @@ namespace Auth.DataAccess.Attendance
             return parameters;
         }
 
-        public DynamicParameters RosterDetailsParameterBinding(RosterPolicy rosterPolicy, int operationType)
+        public DynamicParameters RosterDetailsParameterBinding(RosterDetails rosterDetails, int operationType)
         {
             var currentUserInfoId = _httpContextAccessor.HttpContext.Items["User_Info_Id"];
             var company_id = _httpContextAccessor.HttpContext.Items["company_id"];
@@ -75,22 +76,17 @@ namespace Auth.DataAccess.Attendance
 
             if (operationType == (int)GlobalEnumList.DBOperation.Create || operationType == (int)GlobalEnumList.DBOperation.Update)
             {
-                parameters.Add("@param_roster_policy_detail_id", rosterPolicy.roster_policy_detail_id, DbType.Int32);
-                parameters.Add("@param_roster_policy_id", rosterPolicy.roster_policy_id, DbType.Int32);
-                parameters.Add("@param_roster_policy_name", rosterPolicy.roster_policy_name, DbType.String);
-                parameters.Add("@param_roster_cycle", rosterPolicy.roster_cycle, DbType.Int32);
-                parameters.Add("@param_shift_id", rosterPolicy.shift_id, DbType.Int32);
-                parameters.Add("@param_next_shift_id", rosterPolicy.next_shift_id, DbType.Int32);
-                parameters.Add("@param_roster_cycle", rosterPolicy.roster_cycle, DbType.Int32);
+                parameters.Add("@param_roster_policy_detail_id", rosterDetails.roster_policy_detail_id, DbType.Int32);
+                parameters.Add("@param_roster_policy_id", rosterDetails.roster_policy_id, DbType.Int32);
+               
+                parameters.Add("@param_shift_id", rosterDetails.shift_id, DbType.Int32);
+                parameters.Add("@param_next_shift_id", rosterDetails.next_shift_id, DbType.Int32);
                 parameters.Add("@param_created_user_id", currentUserInfoId ?? 0, DbType.Int32);
-                parameters.Add("@param_company_corporate_id", company_corporate_id ?? 0, DbType.Int32);
-                parameters.Add("@param_company_group_id", company_group_id ?? 0, DbType.Int32);
-                parameters.Add("@param_company_id", company_id ?? 0, DbType.Int32);
                 parameters.Add("@param_DBOperation", operationType == (int)GlobalEnumList.DBOperation.Create ? GlobalEnumList.DBOperation.Create : GlobalEnumList.DBOperation.Update);
             }
             else if (operationType == (int)GlobalEnumList.DBOperation.Delete)
             {
-                parameters.Add("@param_roster_policy_detail_id", rosterPolicy.roster_policy_detail_id, DbType.Int32);
+                parameters.Add("@param_roster_policy_detail_id", rosterDetails.roster_policy_detail_id, DbType.Int32);
                 parameters.Add("@param_created_user_id", currentUserInfoId ?? 0, DbType.Int32);
                 parameters.Add("@param_DBOperation", GlobalEnumList.DBOperation.Delete);
             }
@@ -111,22 +107,38 @@ namespace Auth.DataAccess.Attendance
             try
             {
 
-                dynamic data = await _dbConnection.QueryAsync("[Attendance].[Roster_Policy_IUD]", parameters, commandType: CommandType.StoredProcedure);
+                dynamic data = await _dbConnection.QueryAsync<dynamic>("[Attendance].[Roster_Policy_IUD]", parameters, commandType: CommandType.StoredProcedure);
 
+                if (dbOperation == (int)DBOperation.Create && rosterPolicy.rosterDetails != null)
+                {
+                    if (rosterPolicy.rosterDetails.Count > 0 &&  data.Count > 0)
+                    {
+                        foreach (RosterDetails item in rosterPolicy.rosterDetails)
+                        {
+                            item.roster_policy_id = data[0].roster_policy_id;
+                            var slabParameters = RosterDetailsParameterBinding(item, dbOperation);
+                            dynamic slabData = _dbConnection.QueryAsync<dynamic>("[Attendance].[SP_Roster_Policy_Details_IUD]", slabParameters, commandType: CommandType.StoredProcedure);
 
+                        }
+                    }
+                }
                 if (dbOperation == (int)GlobalEnumList.DBOperation.Delete)
                 {
                     return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonDeleteMessage);
                 }
 
-                if (dbOperation == (int)GlobalEnumList.DBOperation.Approve)
+                else if (dbOperation == (int)GlobalEnumList.DBOperation.Approve && data.Count > 0)
                 {
                     return message = CommonMessage.SetSuccessMessage("Policy Approved");
                 }
 
-                if (data.Count > 0)
+                else if (dbOperation == (int)GlobalEnumList.DBOperation.Create && data.Count > 0)
                 {
                     message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage, data);
+                }
+                else if (dbOperation == (int)GlobalEnumList.DBOperation.Update && data.Count > 0)
+                {
+                    message = CommonMessage.SetSuccessMessage(CommonMessage.CommonUpdateMessage, data);
                 }
                 else
                 {
@@ -148,11 +160,11 @@ namespace Auth.DataAccess.Attendance
             return (message);
         }
 
-        public async Task<dynamic> IUD_RosterPolicyDetails(RosterPolicy rosterPolicy, int dbOperation)
+        public async Task<dynamic> IUD_RosterPolicyDetails(RosterDetails rosterDetails, int dbOperation)
         {
             var message = new CommonMessage();
 
-            var parameters = RosterDetailsParameterBinding(rosterPolicy, dbOperation);
+            var parameters = RosterDetailsParameterBinding(rosterDetails, dbOperation);
 
             if (_dbConnection.State == ConnectionState.Closed)
                 _dbConnection.Open();
@@ -311,7 +323,7 @@ namespace Auth.DataAccess.Attendance
 
             try
             {
-                var sql = "SELECT r.roster_policy_id,r.roster_policy_detail_id,r.shift_id,r.next_shift_id,s.shift_name shift,s1.shift_name next_shift FROM Attendance.Roster_Policy_Detail r Inner join Attendance.Shift_Info s on r.shift_id = r.shift_id " +
+                var sql = "SELECT r.roster_policy_id,r.roster_policy_detail_id,r.shift_id,r.next_shift_id,s.shift_name ,s1.shift_name next_shift_name FROM Attendance.Roster_Policy_Detail r Inner join Attendance.Shift_Info s on s.shift_id = r.shift_id " +
                     "Inner join Attendance.Shift_Info s1 on s1.shift_id = r.next_shift_id  " +
                     "WHERE roster_policy_id = @roster_policy_id";
                 DynamicParameters parameters = new DynamicParameters();
