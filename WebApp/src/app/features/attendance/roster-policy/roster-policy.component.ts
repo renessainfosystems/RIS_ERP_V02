@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Console } from 'console';
 import { NotificationService } from '../../../service/CommonMessage/notification.service';
 import { RosterPolicyService } from './roster-policy.service';
 
@@ -153,7 +152,7 @@ export class RosterPolicyComponent implements OnInit {
             alert(roster_policy_id)
 
             this.RosterPolicyService.createRosterDetails(rosterDetailsObj).subscribe(data => {
-                console.log(data.Data[0])
+               
                 if (data.MessageType == 1) {
                   this.rosterPolicies.unshift(data.Data[0]);
                 }
