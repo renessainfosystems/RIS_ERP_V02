@@ -89,7 +89,7 @@ namespace DataAccess
                     if (dbOperation == 3)
                     {
                         dynamic data = await _dbConnection.ExecuteAsync("[Administrative].[SP_Bank_D]", parameters, commandType: CommandType.StoredProcedure, transaction: tran);
-                        message = CommonMessage.SetSuccessMessage(CommonDeleteMessage);
+                        message = CommonMessage.SetWarningMessage(CommonDeleteMessage);
 
                     }
                     else
@@ -136,8 +136,12 @@ namespace DataAccess
 
             try
             {
-                var sql = "SELECT bank_id,bank_name,bank_short_name,bank_swift_code,bank_email,bank_web_url,country_id,division_id,district_id,city,ps_area,post_code,block,road_no,house_no,flat_no,address_note,remarks,is_bank,is_active,is_local " +
-                    "FROM [Administrative].[Bank] ORDER BY bank_name ASC";
+                var sql = @"SELECT B.*,C.country_name,dv.division_name,ds.district_name
+                            FROM [Administrative].[Bank] B 
+                            left join[Administrative].[Country] C on B.country_id = C.country_id 
+                            left join[Administrative].[Division] DV on B.division_id = DV.division_id 
+                            left join[Administrative].[District] DS on B.district_id = DS.district_id 
+                            ORDER BY bank_name ASC";
 
                 dynamic data = await _dbConnection.QueryAsync<dynamic>(sql);
 
@@ -145,11 +149,6 @@ namespace DataAccess
                 {
                     List<dynamic> dataList = data;
                     result = (from dr in dataList select BankViewModel.ConvertToModel(dr)).ToList();
-
-
-                    //  message = CommonMessage.SetSuccessMessage(CommonSaveMessage,result);
-
-
                 }
 
             }
@@ -175,8 +174,12 @@ namespace DataAccess
 
             try
             {
-                var sql = "SELECT bank_id,bank_name,bank_short_name,bank_swift_code,bank_email,bank_web_url,country_id,division_id,district_id,city,ps_area,post_code,block,road_no,house_no,flat_no,address_note,remarks,is_bank,is_active,is_local " +
-                    "FROM [Administrative].[Bank] WHERE  bank_id=@bank_id";
+                var sql = @"SELECT B.*,C.country_name,dv.division_name,ds.district_name
+                            FROM [Administrative].[Bank] B 
+                            left join[Administrative].[Country] C on B.country_id = C.country_id 
+                            left join[Administrative].[Division] DV on B.division_id = DV.division_id 
+                            left join[Administrative].[District] DS on B.district_id = DS.district_id 
+                            WHERE [bank_id]=@bank_id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@bank_id", bank_id);
 
@@ -186,13 +189,6 @@ namespace DataAccess
 
                     result = BankViewModel.ConvertToModel(data);
                 }
-
-                //var sql = "SELECT bank_id,bank_name,bank_short_name,bank_swift_code,bank_email,bank_web_url,country_id,division_id,district_id,city,ps_area,post_code,block,road_no,house_no,flat_no,address_note,remarks,is_bank,is_active,is_local " +
-                //  "FROM [Administrative].[Bank] WHERE  bank_id=@bank_id";
-                //DynamicParameters parameters = new DynamicParameters();
-                //parameters.Add("@bank_id", bank_id);
-
-                //result = await _dbConnection.QuerySingleOrDefaultAsync<dynamic>(sql, parameters);
 
             }
             catch (Exception ex)

@@ -25,21 +25,23 @@
                                   <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
                                       <div class="p-fluid grid col-12 col-6 col-3">
                                           <div class="col-4 mt-2 text-right">
-                                              <label for="" class=" d-md-inline-flex" pTooltip="Retailer Code" tooltipPosition="top">Retailer Code<span class="req">*</span> : </label>
+                                              <label for="" class=" d-md-inline-flex" pTooltip="Dealer Name" tooltipPosition="top">Dealer Name<span class="req">*</span> : </label>
                                           </div>
                                           <div class="col-8 p-fluid">
                                               <span class="p-float-label">
-                                                  <input id="float-input p-fluid" type="text" formControlName="retailer_info_code" placeholder="Retailer Code" pInputText required>
+                                                  <p-dropdown [options]="allDealerInfo" formControlName="dealer_info_id" placeholder="Select Dealer"
+                                                              optionLabel="dealer_info_name" optionValue="dealer_info_id" [showClear]="true" [filter]="true" filterBy="dealer_info_name">
+                                                  </p-dropdown>
                                               </span>
                                           </div>
                                       </div>
                                       <div class="p-fluid grid col-12 col-6 col-3">
                                           <div class="col-4 mt-2 text-right">
-                                              <label for="" class=" d-md-inline-flex" pTooltip="Retailer Legal Name" tooltipPosition="top">Retailer Legal Name<span class="req">*</span> : </label>
+                                              <label for="" class=" d-md-inline-flex" pTooltip="Retailer Short Name" tooltipPosition="top">Retailer Short Name<span class="req">*</span> : </label>
                                           </div>
                                           <div class="col-8 p-fluid">
                                               <span class="p-float-label">
-                                                  <input id="float-input p-fluid" type="text" formControlName="retailer_info_name" placeholder="Retailer Legal/Proprietor Name" pInputText required>
+                                                  <input id="float-input p-fluid" type="text" formControlName="retailer_info_short_name" placeholder="Retailer Short Name" pInputText required>
                                               </span>
                                           </div>
                                       </div>
@@ -98,29 +100,40 @@
                                   <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
                                       <div class="p-fluid grid col-12 col-6 col-3">
                                           <div class="col-4 mt-2 text-right">
-                                              <label for="" class=" d-md-inline-flex" pTooltip="Retailer Short Name" tooltipPosition="top">Retailer Short Name<span class="req">*</span> : </label>
+                                              <label for="" class=" d-md-inline-flex" pTooltip="Retailer Code" tooltipPosition="top">Retailer Code<span class="req">*</span> : </label>
                                           </div>
                                           <div class="col-8 p-fluid">
                                               <span class="p-float-label">
-                                                  <input id="float-input p-fluid" type="text" formControlName="retailer_info_short_name" placeholder="Retailer Short Name" pInputText required>
+                                                  <input id="float-input p-fluid" type="text" formControlName="retailer_info_code" placeholder="Retailer Code" pInputText required>
                                               </span>
                                           </div>
                                       </div>
-                                      <!--<div class="p-fluid grid col-12 col-6 col-3">
+                                      <div class="p-fluid grid col-12 col-6 col-3">
                                           <div class="col-4 mt-2 text-right">
-                                              <label for="" class=" d-md-inline-flex" pTooltip="Retailer Display Name" tooltipPosition="top">Retailer Display Name<span class="req">*</span> : </label>
+                                              <label for="" class=" d-md-inline-flex" pTooltip="Retailer Legal Name" tooltipPosition="top">Retailer Legal Name<span class="req">*</span> : </label>
                                           </div>
                                           <div class="col-8 p-fluid">
                                               <span class="p-float-label">
-                                                  <input id="float-input p-fluid" type="text" formControlName="retailer_info_display_name" placeholder="Retailer Display Name" pInputText required>
+                                                  <input id="float-input p-fluid" type="text" formControlName="retailer_info_name" placeholder="Retailer Legal/Proprietor Name" pInputText required>
                                               </span>
                                           </div>
-                                      </div>-->
+                                      </div>
+                                    
+                                      <!--<div class="p-fluid grid col-12 col-6 col-3">
+        <div class="col-4 mt-2 text-right">
+            <label for="" class=" d-md-inline-flex" pTooltip="Retailer Display Name" tooltipPosition="top">Retailer Display Name<span class="req">*</span> : </label>
+        </div>
+        <div class="col-8 p-fluid">
+            <span class="p-float-label">
+                <input id="float-input p-fluid" type="text" formControlName="retailer_info_display_name" placeholder="Retailer Display Name" pInputText required>
+            </span>
+        </div>
+    </div>-->
                                       <div class="p-fluid grid col-12 col-6 col-3">
                                           <div class="col-4 mt-2 text-right">
                                               <label for="" class=" d-md-inline-flex" pTooltip="Trade License Date" tooltipPosition="top">Trade License Date<span class="req">*</span> : </label>
                                           </div>
-                                          
+
                                           <div class="col-8 p-fluid">
                                               <span class="p-float-label">
                                                   <p-calendar id="float-input p-fluid" formControlName="trade_license_date" placeholder="Trade License Date" [showIcon]="true" selectOtherMonths="true"

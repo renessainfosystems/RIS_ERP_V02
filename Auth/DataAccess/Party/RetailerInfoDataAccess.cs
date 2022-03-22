@@ -94,7 +94,7 @@ namespace Auth.DataAccess.Party
         public async Task<dynamic> IUD_RetailerInfo(RetailerInfo retailerInfo, int dbOperation)
         {
             var message = new CommonMessage();
-
+            var result = (dynamic)null;
             var parameters = RetailerInfoParameterBinding(retailerInfo, dbOperation);
 
             if (_dbConnection.State == ConnectionState.Closed)
@@ -102,25 +102,29 @@ namespace Auth.DataAccess.Party
 
             try
             {
-                dynamic data = await _dbConnection.QueryAsync("[Party].[SP_Retailer_Info_IUD]", parameters, commandType: CommandType.StoredProcedure);
+                dynamic data = await _dbConnection.QueryFirstOrDefaultAsync("[Party].[SP_Retailer_Info_IUD]", parameters, commandType: CommandType.StoredProcedure);
 
                 if (dbOperation == (int)GlobalEnumList.DBOperation.Create)
                 {
-                    return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage);
+                    result = RetailerInfoViewModel.ConvertToModel(data);
+                    return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage, result);
                 }
                 if (dbOperation == (int)GlobalEnumList.DBOperation.Update)
                 {
-                    return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonUpdateMessage);
+                    result = RetailerInfoViewModel.ConvertToModel(data);
+                    return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonUpdateMessage, result);
                 }
 
                 if (dbOperation == (int)GlobalEnumList.DBOperation.Delete)
                 {
-                    return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonDeleteMessage);
+                    result = RetailerInfoViewModel.ConvertToModel(data);
+                    return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonDeleteMessage, result);
                 }
 
                 if (data.Count > 0)
                 {
-                    message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage, data);
+                    result = RetailerInfoViewModel.ConvertToModel(data);
+                    message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage, result);
                 }
                 else
                 {

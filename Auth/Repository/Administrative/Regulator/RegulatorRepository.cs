@@ -1,18 +1,25 @@
 ﻿using Auth.DataAccess.EntityDataAccess;
 using Auth.Model.Administrative.Model;
+using Auth.Model.Administrative.ViewModel;
+using Auth.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DataAccess;
+using Microsoft.EntityFrameworkCore;
 
 namespace Auth.Repository.Administrative
 {
     public class RegulatorRepository : IRegulatorRepository
     {
+        private readonly IEntityDataAccess<RegulatorViewModel> _entityDataAccessVM;
         private readonly IEntityDataAccess<Regulator> _entityDataAccess;
 
         public RegulatorRepository(
-            IEntityDataAccess<Regulator> entityDataAccess)
+            IEntityDataAccess<RegulatorViewModel> entityDataAccessVM
+            , IEntityDataAccess<Regulator> entityDataAccess)
         {
+            _entityDataAccessVM = entityDataAccessVM;
             _entityDataAccess = entityDataAccess;
 
         }
@@ -44,6 +51,35 @@ namespace Auth.Repository.Administrative
                     throw new Exception("This Ecommerce Platform name(" + oRegulator.regulator_name + ") is already exists.");
                 else
                     throw new Exception(ex.Message);
+            }
+        }
+
+
+        public IEnumerable<dynamic> GetAllByRawSql()
+        {
+            try
+            {
+                var sql = @"select RT.*,C.country_name from [Administrative].[Regulator] RT 
+                       left join [Administrative].[Country] C on RT.country_id=C.country_id order by regulator_id desc";
+                return _entityDataAccessVM.SqlRawQuery(sql);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public IEnumerable<dynamic> GetByIdRawSql(int regulator_id)
+        {
+            try
+            {
+                var sql = @"select RT.*,C.country_name from [Administrative].[Regulator] RT 
+                       left join [Administrative].[Country] C on RT.country_id=C.country_id where RT.regulator_id='" + regulator_id + "'";
+                return _entityDataAccessVM.SqlRawQuery(sql);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
         public IEnumerable<Regulator> GetAllRegulator()

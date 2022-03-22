@@ -492,13 +492,11 @@ export class DealerinfoComponent implements OnInit {
                     this.dealerinfoList.splice(this.dealerinfoList.findIndex(item => item.DealerInfoId === data.dealerinfoId), 1);
                     this.dealerinfoList.unshift(result.Data);
                     this.selecteddealerinfo = result.Data;
-                    //this.nodeSelected = true;
                     this.rowData = result.Data;
                     this.collapsedempInfo = true;
                     this.collapsed = true;                    
                     this.collapsedempDetails = false;
-                    this.FirstIndex();
-                    //this.onRowUnselect(event);
+                    this.dealerIndex();
                 }                
             });
         }
@@ -515,6 +513,7 @@ export class DealerinfoComponent implements OnInit {
                         this.collapsedempInfo = true;
                         this.collapsed = true;
                         this.collapsedempDetails = false;
+                        this.dealerIndex();
                     }
                 }
             );
@@ -815,11 +814,18 @@ export class DealerinfoComponent implements OnInit {
             this.dealerinfoService.updateDealerContactInfo(formData).subscribe(result => {
 
                 this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
-                this.loadAllDealerContactinfos();
-                this.isDealerContactinfoEdit = false;
-                this.collapsedempInfo = true;
-                this.collapsedempDetails = false;
-                this.onRowUnselect(event);
+               
+                if (result.MessageType == 1) {
+                    this.dealercontactinfoList.splice(this.dealercontactinfoList.findIndex(item => item.DealerContactInfoId === data.dealerContactinfoId), 1);
+                    this.dealercontactinfoList.unshift(result.Data);
+                    this.selecteddealerinfo = result.Data;
+                    this.rowData = result.Data;
+                    this.collapsedempInfo = true;
+                    this.collapsed = true;
+                    this.collapsedempDetails = false;
+                    this.dealerContactIndex();
+                }
+
             });
         }
         else {
@@ -827,10 +833,17 @@ export class DealerinfoComponent implements OnInit {
             this.dealerinfoService.createDealerContactInfo(formData).subscribe(
                 result => {
                     this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
-                    this.loadAllDealerContactinfos();
-                    this.resetForm();
-                    this.collapsedempInfo = true;
-                    this.collapsedempDetails = false;
+                   
+                    if (result.MessageType == 1) {
+                        this.dealercontactinfoList.unshift(result.Data);
+                        this.selecteddealercontactinfo = result.Data;
+                        this.nodeSelected = true;
+                        this.rowData = result.Data;
+                        this.collapsedempInfo = true;
+                        this.collapsed = true;
+                        this.collapsedempDetails = false;
+                        this.dealerContactIndex();
+                    }
                 }
             );
         }
@@ -980,11 +993,17 @@ export class DealerinfoComponent implements OnInit {
             this.dealerinfoService.updateDealerLocationInfo(formData).subscribe(result => {
 
                 this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
-                this.loadAllDealerLocationinfos();
-                this.isDealerLocationinfoEdit = false;
-                this.collapsedempInfo = true;
-                this.collapsedempDetails = false;
-                this.onRowUnselect(event);
+               
+                if (result.MessageType == 1) {
+                    this.dealerlocationinfoList.splice(this.dealerlocationinfoList.findIndex(item => item.DealerInfoId === data.dealerinfoId), 1);
+                    this.dealerlocationinfoList.unshift(result.Data);
+                    this.selecteddealerlocationinfo = result.Data;
+                    this.rowData = result.Data;
+                    this.collapsedempInfo = true;
+                    this.collapsed = true;
+                    this.collapsedempDetails = false;
+                    this.dealerLocationIndex();
+                }
             });
         }
         else {
@@ -992,10 +1011,16 @@ export class DealerinfoComponent implements OnInit {
             this.dealerinfoService.createDealerLocationInfo(formData).subscribe(
                 result => {
                     this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
-                    this.loadAllDealerLocationinfos();
-                    this.resetForm();
-                    this.collapsedempInfo = true;
-                    this.collapsedempDetails = false;
+                    if (result.MessageType == 1) {
+                        this.dealerlocationinfoList.unshift(result.Data);
+                        this.selecteddealerlocationinfo = result.Data;
+                        this.nodeSelected = true;
+                        this.rowData = result.Data;
+                        this.collapsedempInfo = true;
+                        this.collapsed = true;
+                        this.collapsedempDetails = false;
+                        this.dealerLocationIndex();
+                    }
                 }
             );
         }
@@ -1043,9 +1068,18 @@ export class DealerinfoComponent implements OnInit {
         this.toggle();
     }
 
-    FirstIndex() {
+    dealerIndex() {
         this.index = 0;
     }
+        
+    dealerContactIndex() {
+        this.index = 3;
+    }
+
+    
+    dealerLocationIndex() {
+        this.index = 4;
+    }    
 
     function(e) {
         this.index = e.index;

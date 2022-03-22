@@ -1,21 +1,28 @@
 ﻿using Auth.DataAccess.EntityDataAccess;
 using Auth.Model.Administrative.Model;
+using Auth.Model.Administrative.ViewModel;
+using Auth.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DataAccess;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace Auth.Repository.Administrative
 {
     public class DocumentTypeRepository : IDocumentTypeRepository
     {
+        private readonly IEntityDataAccess<DocumentTypeViewModel> _entityDataAccessVM;
         private readonly IEntityDataAccess<DocumentType> _entityDataAccess;
 
         public DocumentTypeRepository(
-            IEntityDataAccess<DocumentType> entityDataAccess
+            IEntityDataAccess<DocumentTypeViewModel> entityDataAccessVM
+            ,IEntityDataAccess<DocumentType> entityDataAccess
 
             )
         {
+            _entityDataAccessVM = entityDataAccessVM;
             _entityDataAccess = entityDataAccess;
 
         }
@@ -40,6 +47,37 @@ namespace Auth.Repository.Administrative
         {
             DocumentType oDocumentType = new DocumentType() { document_type_id = document_type_id };
             _entityDataAccess.Remove(oDocumentType);
+        }
+
+        public IEnumerable<dynamic> GetAllByRawSql()
+        {
+            try
+            {
+                var sql = @"select DT.*,C.country_name from[Administrative].[Document_Type] DT 
+                          left join[Administrative].[Country] C on DT.country_id = C.country_id order by document_type_id desc";
+                return _entityDataAccessVM.SqlRawQuery(sql);
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+
+
+        public IEnumerable<dynamic> GetByIdRawSql(int document_type_id)
+        {
+            try
+            {
+                var sql = @"select DT.*,C.country_name from[Administrative].[Document_Type] DT 
+                          left join[Administrative].[Country] C on DT.country_id = C.country_id where DT.document_type_id='" + document_type_id + "'";
+                return _entityDataAccessVM.SqlRawQuery(sql);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public IEnumerable<object> DocumentTypeCboList()

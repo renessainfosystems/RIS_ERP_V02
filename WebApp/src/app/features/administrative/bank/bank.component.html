@@ -2,7 +2,7 @@
 
     <div class="me-auto">
         <div class="p-card-title ">
-            <span class="pi pi-users"> Bank Information</span>
+            <span class="pi pi-banks"></span> Bank Information
         </div>
         <div class="p-card-body">
             <!-- ********** start card body ******************** -->
@@ -114,9 +114,6 @@
                                         </div>
                                     </div>
 
-
-
-
                                     <div class="fluid grid col-6 flex justify-content-start flex-wrap card-container">
                                         <div class="col-4  text-right">
                                         </div>
@@ -133,10 +130,9 @@
                                             </div>
                                         </div>
                                     </div>
-
-
                                 </div>
                             </p-tabPanel>
+
                             <p-tabPanel header="Address">
                                 <div class="p-fluid grid col-12 flex justify-content-start flex-wrap card-container">
 
@@ -267,9 +263,7 @@
                                 </div>
                             </p-tabPanel>
                         </p-tabView>
-
                     </div>
-
 
                     <ng-template pTemplate="footer">
                         <button type="submit" class="pi pi-save risBtn risSave" (click)="onFormSubmit()"> Save</button>
@@ -278,26 +272,31 @@
                 </p-dialog>
             </form>
             <div class="card">
-
-                <p-table [value]="banks" [paginator]="true" selectionMode="single" [(selection)]="selectedBank" dataKey="BankName" styleClass="p-datatable-striped" [rows]="10" [showCurrentPageReport]="true" responsiveLayout="scroll"
-                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]">
-                    <ng-template pTemplate="header">
-                        <tr>
-                            <th>Name</th>
-                            <th>Short Name</th>
-                            <th>City</th>
-                            <th>Remarks</th>
-                        </tr>
-                    </ng-template>
-                    <ng-template pTemplate="body" let-bank>
-                        <tr (click)="selectRow(bank)" [pSelectableRow]="bank">
-                            <td>{{bank.BankName}}</td>
-                            <td>{{bank.BankShortName}}</td>
-                            <td>{{bank.City}}</td>
-                            <td>{{bank.Remarks}}</td>
-                        </tr>
-                    </ng-template>
-                </p-table>
+                <p-table [value]="banks" dataKey="BankId" [paginator]="true" [rows]="10" selectionMode="single" [(selection)]="selectedBank" [showCurrentPageReport]="true" responsiveLayout="scroll" styleClass="p-datatable-striped p-datatable-sm"
+                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>Name</th>
+                                <th>Short Name</th>
+                                <th>Swift Code</th>
+                                <th>Country</th>
+                                <th>Division</th>
+                                <th>District</th>
+                                <th>Remarks</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-bank>
+                            <tr [pSelectableRow]="bank">
+                                <td>{{bank.BankName}}</td>
+                                <td>{{bank.BankShortName}}</td>
+                                <td>{{bank.BankSwiftCode}}</td>
+                                <td>{{bank.CountryName}}</td>
+                                <td>{{bank.DivisionName}}</td>
+                                <td>{{bank.DistrictName}}</td>
+                                <td>{{bank.Remarks}}</td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
             </div>
 
             <!-- ********** end card body ******************** -->

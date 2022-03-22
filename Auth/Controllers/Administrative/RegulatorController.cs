@@ -4,6 +4,8 @@ using Auth.Utility;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using Auth.DataAccess.EntityDataAccess;
+
 
 namespace Auth.Controllers.Administrative
 {
@@ -12,13 +14,15 @@ namespace Auth.Controllers.Administrative
     public class RegulatorController : ControllerBase
     {
         #region Constructor
+        private readonly IEntityDataAccess<Regulator> _entityDataAccess;
         private IRegulatorRepository _regulatorRepository;
 
         public RegulatorController(
-            IRegulatorRepository regulatorRepository
+            IEntityDataAccess<Regulator> entityDataAccess
+            ,IRegulatorRepository regulatorRepository
             )
         {
-
+            _entityDataAccess = entityDataAccess;
             _regulatorRepository = regulatorRepository;
         }
         #endregion
@@ -31,6 +35,23 @@ namespace Auth.Controllers.Administrative
             try
             {
                 data = _regulatorRepository.GetAllRegulator();
+            }
+            catch (Exception ex)
+            {
+                data = ex.Message;
+            }
+            return data;
+        }
+
+        [HttpGet]
+        public dynamic GetAllByRawSql()
+        {
+
+            dynamic data = (dynamic)null;
+            try
+            {
+                data = _regulatorRepository.GetAllByRawSql();
+
             }
             catch (Exception ex)
             {
@@ -59,10 +80,14 @@ namespace Auth.Controllers.Administrative
         public dynamic Create(Regulator oRegulator)
         {
             var message = new CommonMessage();
+            dynamic data = (dynamic)null;
             try
             {
+                oRegulator.regulator_id = _entityDataAccess.GetAutoId("Administrative.Regulator", "regulator_id");
                 _regulatorRepository.Add(oRegulator);
-                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage);
+                data = _regulatorRepository.GetByIdRawSql(oRegulator.regulator_id);
+                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage, data);
+
             }
             catch (Exception ex)
             {
@@ -75,10 +100,13 @@ namespace Auth.Controllers.Administrative
         public dynamic Update(Regulator oRegulator)
         {
             var message = new CommonMessage();
+            dynamic data = (dynamic)null;
             try
             {
                 _regulatorRepository.Update(oRegulator);
-                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonUpdateMessage);
+                data = _regulatorRepository.GetByIdRawSql(oRegulator.regulator_id);
+                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonUpdateMessage, data);
+
             }
             catch (Exception ex)
             {
@@ -95,7 +123,7 @@ namespace Auth.Controllers.Administrative
             try
             {
                 _regulatorRepository.Delete(regulator_id);
-                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonDeleteMessage);
+                message = CommonMessage.SetWarningMessage(CommonMessage.CommonDeleteMessage);
             }
             catch (Exception ex)
             {

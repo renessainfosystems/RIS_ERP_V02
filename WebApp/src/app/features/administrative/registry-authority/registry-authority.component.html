@@ -91,6 +91,7 @@
                             <tr>
                                 <th>Registry Authority Name</th>
                                 <th>Short Name</th>
+                                <th>Country Name</th>
                                 <th>Remarks</th>
                             </tr>
                         </ng-template>
@@ -99,6 +100,7 @@
                             <tr [pSelectableRow]="registryAuthority">
                                 <td>{{registryAuthority.registry_authority_name}}</td>
                                 <td>{{registryAuthority.registry_authority_short_name}}</td>
+                                <td>{{registryAuthority.country_name}}</td>
                                 <td>{{registryAuthority.remarks}}</td>
                             </tr>
                         </ng-template>

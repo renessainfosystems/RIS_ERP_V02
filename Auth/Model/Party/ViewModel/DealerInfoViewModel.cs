@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
-using static Auth.Utility.Party.Enum.GlobalEnumList;
 
 namespace Auth.Model.Party.ViewModel
 {

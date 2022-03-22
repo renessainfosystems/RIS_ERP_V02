@@ -22,6 +22,10 @@
         public string AddressNote { get; set; }
         public string Remarks { get; set; }
         public bool IsBranch { get; set; }
+        public string BankName { get; set; }
+        public string CountryName { get; set; }
+        public string DivisionName { get; set; }
+        public string DistrictName { get; set; }
         //public bool IsActive { get; set; }
 
 
@@ -50,6 +54,11 @@
             model.AddressNote = bankBranch.address_note ?? "";
             model.Remarks = bankBranch.remarks ?? "";
             model.IsBranch = bankBranch.is_branch ?? false;
+
+            model.BankName = bankBranch.bank_name ?? "";
+            model.CountryName = bankBranch.country_name ?? "";
+            model.DivisionName = bankBranch.division_name ?? "";
+            model.DistrictName = bankBranch.district_name ?? "";
             //model.IsActive = bankBranch.is_active ?? true;
             return model;
 

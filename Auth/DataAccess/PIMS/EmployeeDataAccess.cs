@@ -236,7 +236,7 @@ namespace Auth.DataAccess.PIMS
       ,[present_block],[present_road_no],[present_house_no],[present_flat_no],[present_address_note],[permanent_country_id],[permanent_division_id]
       ,[permanent_district_id],[permanent_city],[permanent_ps_area],[permanent_post_code],[permanent_block],[permanent_road_no],[permanent_house_no]
       ,[permanent_flat_no],[permanent_address_note],[company_corporate_id],[company_group_id],[company_id],[created_user_id],[created_datetime]
-      ,[updated_user_id],[updated_datetime],[db_server_date_time],[is_active],[employee_old_id],[employee_old_code]FROM[RISERP].[PIMS].[Employee] O WHERE O.company_group_id =@company_group_id";
+      ,[updated_user_id],[updated_datetime],[db_server_date_time],[is_active],[employee_old_id],[employee_old_code]FROM [PIMS].[Employee] O WHERE O.company_group_id =@company_group_id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@company_group_id", company_group_id);
                 dynamic data = await _dbConnection.QueryAsync<dynamic>(sql,parameters);
@@ -280,7 +280,7 @@ namespace Auth.DataAccess.PIMS
       ,[present_block],[present_road_no],[present_house_no],[present_flat_no],[present_address_note],[permanent_country_id],[permanent_division_id]
       ,[permanent_district_id],[permanent_city],[permanent_ps_area],[permanent_post_code],[permanent_block],[permanent_road_no],[permanent_house_no]
       ,[permanent_flat_no],[permanent_address_note],[company_corporate_id],[company_group_id],[company_id],[created_user_id],[created_datetime]
-      ,[updated_user_id],[updated_datetime],[db_server_date_time],[is_active],[employee_old_id],[employee_old_code],[employee_image_path],[signature_image_path]FROM[RISERP].[PIMS].[Employee] O WHERE o.employee_id=@employee_id";
+      ,[updated_user_id],[updated_datetime],[db_server_date_time],[is_active],[employee_old_id],[employee_old_code],[employee_image_path],[signature_image_path]FROM[PIMS].[Employee] O WHERE o.employee_id=@employee_id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@employee_id", employee_id);
 

@@ -1,4 +1,5 @@
-﻿using Auth.Model.Administrative.Model;
+﻿using Auth.DataAccess.EntityDataAccess;
+using Auth.Model.Administrative.Model;
 using Auth.Repository.Administrative;
 using Auth.Utility;
 using Microsoft.AspNetCore.Mvc;
@@ -17,13 +18,15 @@ namespace Auth.Controllers.Procurement
     public class DocumentTypeController : ControllerBase
     {
         #region Constructor
+        private readonly IEntityDataAccess<DocumentType> _entityDataAccess;
         private IDocumentTypeRepository _documentTypeRepository;
 
         public DocumentTypeController(
-            IDocumentTypeRepository documentTypeRepository
+            IEntityDataAccess<DocumentType> entityDataAccess
+            ,IDocumentTypeRepository documentTypeRepository
             )
         {
-
+            _entityDataAccess = entityDataAccess;
             _documentTypeRepository = documentTypeRepository;
         }
         #endregion
@@ -45,9 +48,25 @@ namespace Auth.Controllers.Procurement
         }
 
         [HttpGet]
-        public dynamic GetById(int document_type_id)
+        public dynamic GetAllByRawSql()
         {
 
+            dynamic data = (dynamic)null;
+            try
+            {
+                data = _documentTypeRepository.GetAllByRawSql();
+
+            }
+            catch (Exception ex)
+            {
+                data = ex.Message;
+            }
+            return data;
+        }
+
+        [HttpGet]
+        public dynamic GetById(int document_type_id)
+        {
             dynamic data = (dynamic)null;
             try
             {
@@ -64,10 +83,13 @@ namespace Auth.Controllers.Procurement
         public dynamic Create(DocumentType oDocumentType)
         {
             var message = new CommonMessage();
+            dynamic data = (dynamic)null;
             try
             {
+                oDocumentType.document_type_id = _entityDataAccess.GetAutoId("Administrative.Document_Type", "document_type_id");
                 _documentTypeRepository.Add(oDocumentType);
-                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage);
+                data = _documentTypeRepository.GetByIdRawSql(oDocumentType.document_type_id);
+                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage, data);
             }
             catch (Exception ex)
             {
@@ -80,10 +102,13 @@ namespace Auth.Controllers.Procurement
         public dynamic Update(DocumentType oDocumentType)
         {
             var message = new CommonMessage();
+            dynamic data = (dynamic)null;
             try
             {
                 _documentTypeRepository.Update(oDocumentType);
-                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonUpdateMessage);
+                data = _documentTypeRepository.GetByIdRawSql(oDocumentType.document_type_id);
+                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonUpdateMessage, data);
+
             }
             catch (Exception ex)
             {
@@ -95,12 +120,11 @@ namespace Auth.Controllers.Procurement
         [HttpPost]
         public dynamic Delete(int document_type_id)
         {
-
             var message = new CommonMessage();
             try
             {
                 _documentTypeRepository.Delete(document_type_id);
-                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonDeleteMessage);
+                message = CommonMessage.SetWarningMessage(CommonMessage.CommonDeleteMessage);
             }
             catch (Exception ex)
             {

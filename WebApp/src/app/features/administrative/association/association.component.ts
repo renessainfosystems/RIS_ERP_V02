@@ -23,6 +23,7 @@ export class AssociationComponent implements OnInit {
     displayedColumns: string[] = ['associationName', 'Remarks'];
     isAssociationEdit: boolean = false;
     rowSelected: boolean = false;
+
     selectedOrganizationType: any;
     allOrganizationType: any[];
 
@@ -70,9 +71,9 @@ export class AssociationComponent implements OnInit {
     ngOnInit() {
 
         this.formInit();
-        this.loadAllassociations();
+     this.loadAllassociations();
         this.loadAllOrganizationTypeEnum();
-        this.loadAllCountryCboList();
+        this.loadAllCountryCboList();   
     }
 
     formInit() {

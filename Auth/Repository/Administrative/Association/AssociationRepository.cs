@@ -13,14 +13,15 @@ namespace Auth.Repository.Administrative
 {
     public class AssociationRepository : IAssociationRepository
     {
-        protected readonly ApplicationDBContext _dbSet;
+        private readonly IEntityDataAccess<AssociationViewModel> _entityDataAccessVM;
         private readonly IEntityDataAccess<Association> _entityDataAccess;
+
         public AssociationRepository(
-            ApplicationDBContext dbSet
-            , IEntityDataAccess<Association> entityDataAccess
+                 IEntityDataAccess<AssociationViewModel> entityDataAccessVM
+                 ,IEntityDataAccess<Association> entityDataAccess
             )
         {
-            _dbSet = dbSet;
+            _entityDataAccessVM = entityDataAccessVM;
             _entityDataAccess = entityDataAccess;
         }
 
@@ -57,16 +58,15 @@ namespace Auth.Repository.Administrative
             }
         }
 
-        public IEnumerable<AssociationViewModel> GetAllByRawSql()
+        public IEnumerable<dynamic> GetAllByRawSql()
         {
             try
             {
-                var result = _dbSet.AssociationViewModels
-                      .FromSqlRaw(@"select A.*,C.country_name,OT.organization_type_name_enum 
-                       from [Administrative].[Association] A left join [Administrative].[Country] C on A.country_id=C.country_id
-                       left join [DBEnum].[Organization_Type] OT on A.organization_type_id_enum=OT.organization_type_id_enum order by association_id desc")
-                      .ToList();
-                return result;
+                var sql = @"select A.*,C.country_name,OT.organization_type_name_enum 
+                       from[Administrative].[Association] A left join[Administrative].[Country] C on A.country_id = C.country_id
+                       left join[DBEnum].[Organization_Type] OT on A.organization_type_id_enum = OT.organization_type_id_enum order by association_id desc";
+                return _entityDataAccessVM.SqlRawQuery(sql);
+
             }
             catch (Exception ex)
             {
@@ -74,16 +74,16 @@ namespace Auth.Repository.Administrative
             }
         }
 
-        public IEnumerable<AssociationViewModel> GetByIdRawSql(int association_id)
+
+
+        public IEnumerable<dynamic> GetByIdRawSql(int association_id)
         {
             try
             {
-                var result = _dbSet.AssociationViewModels
-                      .FromSqlRaw(@"select A.*,C.country_name,OT.organization_type_name_enum " +
-                      "from [Administrative].[Association] A left join [Administrative].[Country] C on A.country_id=C.country_id " +
-                      "left join [DBEnum].[Organization_Type] OT on A.organization_type_id_enum=OT.organization_type_id_enum where A.association_id='" + association_id + "'")
-                      .ToList();
-                return result;
+                var sql = @"select A.*,C.country_name,OT.organization_type_name_enum 
+                       from[Administrative].[Association] A left join[Administrative].[Country] C on A.country_id = C.country_id
+                       left join[DBEnum].[Organization_Type] OT on A.organization_type_id_enum = OT.organization_type_id_enum where A.association_id='" + association_id + "'";
+                return _entityDataAccessVM.SqlRawQuery(sql);
             }
             catch (Exception ex)
             {

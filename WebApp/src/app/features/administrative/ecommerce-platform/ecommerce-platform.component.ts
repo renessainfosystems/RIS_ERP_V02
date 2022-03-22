@@ -142,7 +142,6 @@ export class EcommercePlatformComponent implements OnInit {
         if (this.isEcommercePlatformEdit) {
             ecommercePlatformdata.ecommerce_paltforms_id = this.rowData.ecommerce_paltforms_id;
             this.EcommercePlatformService.UpdateEcommercePlatform(ecommercePlatformdata).subscribe(result => {
-                debugger
                 this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
                 if (result.MessageType == 1) {
                     this.clear();
@@ -157,7 +156,6 @@ export class EcommercePlatformComponent implements OnInit {
         }
         else {
             this.EcommercePlatformService.CreateEcommercePlatform(JSON.stringify(ecommercePlatformdata)).subscribe(result => {
-                debugger
                 this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
                 if (result.MessageType == 1) {
                     this.clear();
