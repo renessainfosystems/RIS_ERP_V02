@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { SelectionModel } from '@angular/cdk/collections';
 import Location from './location.model';
@@ -14,7 +14,26 @@ import { NotificationService } from '../../../service/CommonMessage/notification
 })
 export class LocationComponent implements OnInit {
 
-    //phone: string;
+    submitted = false;
+
+    //start grid and form show hide ********************
+    gridDisplay = false;
+    formDisplay = true;
+    toggleFormDisplay() {
+        this.gridDisplay = false;
+        this.formDisplay = true;
+    }
+    toggleGridDisplay() {
+        this.gridDisplay = true;
+        this.formDisplay = false;
+    }
+    toggleFormClose() {
+        this.toggleFormDisplay();
+        this.generalIndex();
+    }
+
+    index: number = 0;
+    //end grid and form show hide ********************
 
     // for photo and signature upload
 
@@ -31,9 +50,9 @@ export class LocationComponent implements OnInit {
 
     rowData: any;
     dataSaved = false;
-    locationForm: any;
-    allLocation: Observable<Location[]>;
-    selection = new SelectionModel<Location>(true, []);
+    locationForm: FormGroup;
+    allLocation: Observable<any[]>;
+    selection = new SelectionModel<any>(true, []);
     locationIdUpdate = null;
     createdDate = null;
     serverDate = null;
@@ -44,25 +63,25 @@ export class LocationComponent implements OnInit {
     massage = null;
     displayedColumns: string[] = ['LocationName', 'Remarks'];
 
-    selectedCountry: Location;
-    allCountry: Location[];
+    selectedCountry: any;
+    allCountry: any[];
 
-    selectedDivision: Location;
-    allDivision: Location[];
+    selectedDivision: any;
+    allDivision: any[];
 
-    selectedDistrict: Location;
-    allDistrict: Location[];
+    selectedDistrict: any;
+    allDistrict: any[];
 
-    selectedThana: Location;
-    allThana: Location[];
+    selectedThana: any;
+    allThana: any[];
 
-    selectedVatApplicable: Location;
-    allVatApplicable: Location[];
+    selectedVatApplicable: any;
+    allVatApplicable: any[];
 
-    selectedLocation: Location;
-    locations: Location[];
+    selectedLocation: any;
+    locations: any[];
 
-    nodeSelected: boolean = false;
+    rowSelected: boolean = false;
     first = 0;
     rows = 10;
     // for delete data modal
@@ -78,9 +97,10 @@ export class LocationComponent implements OnInit {
     // for Insert and update data modal
     displayBasic: boolean = false;
     showBasicDialog() {
-        this.displayBasic = true;
         this.resetForm();
+        this.toggleGridDisplay();
     }
+
     constructor(private formbulider: FormBuilder, private LocationService: LocationService, private toastr: ToastrService, private notifyService: NotificationService) {
 
 
@@ -90,32 +110,31 @@ export class LocationComponent implements OnInit {
         this.LocationService.getAllLocation().subscribe(data => this.locations = data);
 
         this.locationForm = this.formbulider.group({
-            location_code: [null, [Validators.required]],
+            location_code: [null],
             location_name: [null, [Validators.required]],
             location_short_name: [null, [Validators.required]],
             location_prefix: [null, [Validators.required]],
             country_id: [null, [Validators.required]],
-            division_id: null,
-            district_id: null,
-            thana_id: null,
+            division_id: [null],
+            district_id: [null],
+            thana_id: [null],
             vat_applicable_type_enum_id: [null, [Validators.required]],
-            location_reg_no: null,
-            location_reg_date: null,
-            location_reg_file_path: null,
-            city: null,
-            ps_area: null,
-            post_code: null,
-            block: null,
-            road_no: null,
-            house_no: null,
-            flat_no: null,
-            address_note: null,
-            phone: null,
-            email: null,
-            web_url: null,
-            name_in_local_language: null,
-            address_in_local_language: null,
-            remarks: null
+            location_reg_no: [null],
+            location_reg_date: [null],
+            location_reg_file_path: [null],
+            city: [null],
+            post_code: [null],
+            block: [null],
+            road_no: [null],
+            house_no: [null],
+            flat_no: [null],
+            address_note: [null],
+            phone: [null],
+            email: ['', [Validators.email, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
+            web_url: [null],
+            name_in_local_language: [null],
+            address_in_local_language: [null],
+            remarks: [null],
 
         });
         this.loadAllCountryCboList();
@@ -189,13 +208,13 @@ export class LocationComponent implements OnInit {
     onRowSelect(event) {
         debugger;
         // this.toggle();
-        this.nodeSelected = true;
+        this.rowSelected = true;
         this.rowData = event.data;
 
     }
     onRowUnselect(event) {
         // this.toggle();
-        this.nodeSelected = false;
+        this.rowSelected = false;
         this.rowData = null;
 
     }
@@ -229,8 +248,7 @@ export class LocationComponent implements OnInit {
             this.locationForm.controls['vat_applicable_type_enum_id'].setValue(data.vat_applicable_type_enum_id);
             this.locationForm.controls['location_reg_no'].setValue(data.location_reg_no);
             this.locationForm.controls['location_reg_date'].setValue(data.location_reg_date);
-            this.locationForm.controls['city'].setValue(data.city);
-            this.locationForm.controls['ps_area'].setValue(data.ps_area);
+            this.locationForm.controls['city'].setValue(data.city);           
             this.locationForm.controls['post_code'].setValue(data.post_code);
             this.locationForm.controls['block'].setValue(data.block);
             this.locationForm.controls['road_no'].setValue(data.road_no);
@@ -246,7 +264,7 @@ export class LocationComponent implements OnInit {
             this.locationForm.controls['location_reg_file_path'].setValue(data.location_reg_file_path);
 
         });
-        this.displayBasic = true;
+        this.toggleGridDisplay();
     }
 
     deleteLocationInfo() {
@@ -270,24 +288,54 @@ export class LocationComponent implements OnInit {
         });
     }
 
-    onFormSubmit() {
-        this.dataSaved = false;
+
+    //for validation messate -----------
+    get f(): { [key: string]: AbstractControl } {
+        return this.locationForm.controls;
+    }
+
+    onGeneral(): void {
+        this.submitted = true;
         const locationdata = this.locationForm.value;
-        if (!(locationdata.location_prefix)) {
-            return this.notifyService.ShowNotification(2, "Please enter location prefix")
+        if (locationdata.location_name === null) {
+            return;
         }
-        if (!(locationdata.location_name)) {
-            return this.notifyService.ShowNotification(2, "Please enter location name")
+        else if (locationdata.location_short_name === null) {
+            return;
         }
-        if (!(locationdata.location_short_name)) {
-            return this.notifyService.ShowNotification(2, "Please enter location short name")
+        else if (locationdata.location_prefix === null) {
+            return;
         }        
-        if (!(locationdata.vat_applicable_type_enum_id)) {
-            return this.notifyService.ShowNotification(2, "Please enter vat type")
+        else {
+            this.openNext();
         }
-        if (!(locationdata.country_id)) {
-            return this.notifyService.ShowNotification(2, "Please select country")
+        if (this.locationForm.invalid) {
+            return;
         }
+    }
+
+    onAddress(): void {
+        this.submitted = true;
+        const locationdata = this.locationForm.value;
+        if ((locationdata.country_id === null)) {
+            return;
+        }
+        else {
+            this.openNext();
+        }
+        if (this.locationForm.invalid) {
+            return;
+        }
+    }
+    
+    onFormSubmit() {
+        this.submitted = true;
+        const locationdata = this.locationForm.value;
+
+        if (this.locationForm.invalid) {
+            return;
+        }
+
         this.createLocation(locationdata);
     }
 
@@ -318,10 +366,17 @@ export class LocationComponent implements OnInit {
             this.LocationService.createLocation(formData).subscribe(
                 result => {
                     this.dataSaved = true;
-                    this.loadAllLocations();
                     this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
-                    this.locationIdUpdate = null;
-                    this.displayBasic = true;
+                    if (result.MessageType == 1) {
+                        this.locations.unshift(result.Data);
+                        this.selectedLocation = result.Data;
+                        this.rowSelected = true;
+                        this.rowData = result.Data;
+                        this.toggleFormDisplay();
+                        this.generalIndex();
+                        this.locationForm.reset();
+                        this.submitted = false;
+                    }
                 }
             );
         }
@@ -336,10 +391,20 @@ export class LocationComponent implements OnInit {
 
             this.LocationService.updateLocation(formData).subscribe(result => {
                 this.dataSaved = true;
-                this.loadAllLocations();
                 this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
                 this.locationIdUpdate = null;
-                this.displayBasic = false;
+                if (result.MessageType == 1) {
+                    this.locations.splice(this.locations.findIndex(item => item.location_id === locationdata.location_id), 1);
+                    this.locations.unshift(result.Data);
+                    this.selectedLocation = result.Data;
+                    this.rowSelected = true;
+                    this.rowData = result.Data;
+                    this.onRowUnselect(event);
+                    this.toggleFormDisplay();
+                    this.generalIndex();
+                    this.locationForm.reset();
+                    this.submitted = false;
+                }
             });
         }
     }
@@ -353,6 +418,22 @@ export class LocationComponent implements OnInit {
             }
         }
 
+    }
+
+    generalIndex() {
+        this.index = 0;
+    }
+
+    function(e) {
+        this.index = e.index;
+    }
+
+    openNext() {
+        this.index = (this.index === 3) ? 0 : this.index + 1;
+    }
+
+    openPrev() {
+        this.index = (this.index === 0) ? 3 : this.index - 1;
     }
 
 }

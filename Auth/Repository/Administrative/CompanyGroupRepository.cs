@@ -28,7 +28,7 @@ namespace Auth.Repository.Administrative
                 {
                     var currentUserInfoId = _httpContextAccessor.HttpContext.Items["User_Info_Id"];
                     var company_corporate_id = _httpContextAccessor.HttpContext.Items["company_corporate_id"];
-                    oCompanyGroup.company_group_id = _entityDataAccess.GetAutoId("Administrative.Company_Group", "company_group_id");
+                    oCompanyGroup.company_group_id = oCompanyGroup.company_group_id;
                     oCompanyGroup.created_user_id = (long)currentUserInfoId;
                     oCompanyGroup.company_corporate_id = (int)company_corporate_id;
                     oCompanyGroup.created_datetime = DateTime.Now;

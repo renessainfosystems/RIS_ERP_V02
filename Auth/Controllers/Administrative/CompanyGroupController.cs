@@ -1,4 +1,5 @@
 ﻿
+using Auth.DataAccess.EntityDataAccess;
 using Auth.Model.Administrative.Model;
 using Auth.Repository.Administrative;
 using Auth.Utility;
@@ -18,13 +19,15 @@ namespace Auth.Controllers.Administrative
 
         //Intialize
         #region Constructor
+        private readonly IEntityDataAccess<CompanyGroup> _entityDataAccess;
         private ICompanyGroupRepository _companyGroupRepository;
 
         public CompanyGroupController(
-            ICompanyGroupRepository companyGroupRepository
+            IEntityDataAccess<CompanyGroup> entityDataAccess
+            ,ICompanyGroupRepository companyGroupRepository
             )
         {
-
+            _entityDataAccess = entityDataAccess;
             _companyGroupRepository = companyGroupRepository;
         }
 
@@ -69,10 +72,13 @@ namespace Auth.Controllers.Administrative
         public dynamic Create(CompanyGroup oCompanyGroup)
         {
             var message = new CommonMessage();
+            dynamic data = (dynamic)null;
             try
             {
+                oCompanyGroup.company_group_id = _entityDataAccess.GetAutoId("Administrative.Company_Group", "company_group_id");
                 _companyGroupRepository.Add(oCompanyGroup);
-                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage);
+                data = _companyGroupRepository.GetById(oCompanyGroup.company_group_id);
+                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage, data);
             }
             catch (Exception ex)
             {
@@ -84,12 +90,13 @@ namespace Auth.Controllers.Administrative
         [HttpPost]
         public dynamic Update(CompanyGroup oCompanyGroup)
         {
-
             var message = new CommonMessage();
+            dynamic data = (dynamic)null;
             try
             {                
                 _companyGroupRepository.Update(oCompanyGroup);
-                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonUpdateMessage);
+                data = _companyGroupRepository.GetById(oCompanyGroup.company_group_id);
+                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonUpdateMessage,data);
             }
             catch (Exception ex)
             {
@@ -100,8 +107,7 @@ namespace Auth.Controllers.Administrative
 
         [HttpPost]
         public dynamic Delete( int company_group_id)
-        {
-            
+        {            
             var message = new CommonMessage();
             try
             {

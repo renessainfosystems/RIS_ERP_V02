@@ -102,7 +102,7 @@ import { RouterModule } from '@angular/router';
 import { Compiler, COMPILER_OPTIONS, CompilerFactory } from '@angular/core';
 import { JitCompilerFactory } from '@angular/platform-browser-dynamic';
 
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { LoginComponent } from '../features/auth/login/login.component';
 import { authInterceptorProviders } from '../core/interceptor/auth.interceptor';
 import { ToastrModule } from 'ngx-toastr';
@@ -232,7 +232,7 @@ export function createCompiler(compilerFactory: CompilerFactory) {
         LoginComponent
     ],
     providers: [
-        { provide: LocationStrategy, useClass: HashLocationStrategy },
+        { provide: LocationStrategy, useClass: HashLocationStrategy }, ConfirmationService,
         CountryService, CustomerService, EventService, IconService, NodeService, MessageService,
         PhotoService, ProductService, MenuService, ConfigService, authInterceptorProviders,
         { provide: COMPILER_OPTIONS, useValue: {}, multi: true },

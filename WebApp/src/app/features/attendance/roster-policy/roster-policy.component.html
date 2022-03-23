@@ -5,7 +5,7 @@
             <h4>Roster Policy</h4>
             <div [hidden]="formDisplay">
 
-                <form action="" [formGroup]="rosterPolicyForm">
+                <form action="" [formGroup]="rosterPolicyForm" >
 
                     <div class="col-12">
                         <div class="p-fluid p-formgrid grid">
@@ -33,20 +33,25 @@
                                     <small *ngIf="f.roster_cycle.errors.required" class="p-error">Roster cycle is required</small>
                                 </div>
                             </div>
-
-                            <div class="field col-12 md:col-6">
+                            <div class="field col-12 md:col-12 pt-3 pb-2 pl-0">
+                                <label for="" pl style="font-weight: bold;">Roster Planning</label>
+                          
+                            </div>
+                            <div class="field col-12 md:col-6 pt-0">
+                           
                                 <label pTooltip="Shift" tooltipPosition="top">Shift<span class="req">*</span></label>
                                 <p-dropdown [options]="allShifts" [(ngModel)]="selectedShift" formControlName="shift_id" [ngClass]="{ 'is-invalid': submitted && f.shift_id.errors }" placeholder="Select Shift"
                                             optionLabel="shift_name" [showClear]="true"></p-dropdown>
 
-                            
+
                             </div>
-                            <div class="field col-12 md:col-6">
+                            <div class="field col-12 md:col-6 pt-0">
+                              
                                 <label pTooltip="Next Shift" tooltipPosition="top">Next Shift<span class="req">*</span></label>
                                 <p-dropdown [options]="allShifts" [(ngModel)]="selectedNextShift" formControlName="next_shift_id" [ngClass]="{ 'is-invalid': submitted && f.next_shift_id.errors }" placeholder="Select Next Shift"
-                                            optionLabel="shift_name"  [showClear]="true"></p-dropdown>
+                                            optionLabel="shift_name" [showClear]="true"></p-dropdown>
 
-                         
+
                             </div>
                             <div class="field col-12 md:col-12 text-right">
 
@@ -56,15 +61,15 @@
                             </div>
 
                             <div class="field col-12 md:col-12 ">
-                                <p-table [value]="rosterDetails" styleClass="p-datatable-striped p-datatable-sm" responsiveLayout="scroll">
+                                <p-table [value]="rosterDetails" styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm" responsiveLayout="scroll">
 
                                     <ng-template pTemplate="header">
                                         <tr>
-                                            <th>#SL</th>
+                                            <th style="width:100px">#SL</th>
 
-                                            <th>Shift</th>
+                                            <th style="width:300px"> Shift    </th>
                                             <th>Next Shift</th>
-                                            <th>Action</th>
+                                            <th style="width:50px">Action</th>
                                         </tr>
                                     </ng-template>
                                     <ng-template pTemplate="body" let-rowIndex="rowIndex" let-slab>
@@ -75,23 +80,17 @@
                                             <td>{{slab.shift_name}}</td>
 
                                             <td>{{slab.next_shift_name}}</td>
-                                            <td> <button class="pi pi-times-circle risBtn risDelete" (click)="removeEvent(rowIndex,slab)"> </button></td>
+                                            <td> <button  pButton pRipple type="button" icon="pi pi-times-circle" class="risBtn risDelete" (click)="removeEvent(rowIndex,slab)"> </button></td>
 
                                         </tr>
                                     </ng-template>
                                 </p-table>
                             </div>
                         </div>
-                    </div>
+                        </div>
 
 
-                    <p-dialog header="Approve Record" [(visible)]="displayApprove" [style]="{width: '35vw'}">
-                        <p>Do you want to approve this record?</p>
-                        <ng-template pTemplate="footer">
-                            <button class="pi pi-times risBtn risClose" (click)="displayApprove=false"> No</button>
-                            <button class="pi pi-check risBtn risSave" (click)="policyApprove()"> Yes</button>
-                        </ng-template>
-                    </p-dialog>
+              
 
 
 
@@ -115,21 +114,15 @@
             <!--end form display------------->
 
             <div [hidden]="gridDisplay">
-                <button pButton pRipple type="button" label="New" (click)="showBasicDialog()" class="risBtn risAdd mr-2 mb-2"></button>
-                <button pButton pRipple type="button" label="Edit" (click)="loadRosterPolicyToEdit()" class="risBtn risEdit mr-2 mb-2"></button>
-                <button pButton pRipple type="button"  class="pi pi-trash risBtn risDelete mr-2 mb-2" (click)="showDialog()"> Delete</button>
-                <button pButton pRipple type="button"  class="pi pi-box risBtn risAll mr-2 mb-2"> Activity</button>
-                <button pButton pRipple type="button"  class="pi pi-box risBtn risAll mr-2 mb-2" (click)="approveConfirm()"> Approve</button>
-
-                <p-dialog header="Delete Record" [(visible)]="display" [style]="{width: '35vw'}">
-                    <p>Do you want to delete this record?</p>
-                    <ng-template pTemplate="footer">
-                        <button class="pi pi-check risBtn risSave" (click)="deleteRoster()"> Yes</button>
-                        <button class="pi pi-times risBtn risClose" (click)="display=false"> No</button>
-                    </ng-template>
-                </p-dialog>
-
-                <p-table [value]="rosterPolicies" styleClass="p-datatable-striped p-datatable-sm" [paginator]="true" [rows]="10" selectionMode="single" [showCurrentPageReport]="true" responsiveLayout="scroll"
+                <button pButton pRipple type="button" label="New" (click)="showBasicDialog()" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
+                <button pButton pRipple type="button" label="Edit" (click)="loadRosterPolicyToEdit()" icon="pi pi-pencil" class="risBtn risEdit mr-2 mb-2"></button>
+                <button pButton pRipple type="button" label="Delete" icon="pi pi-trash" class="risBtn risDelete mr-2 mb-2" (click)="deleteModal($event)"> </button>
+                <button pButton pRipple type="button" label="Activity" icon="pi pi-box" class="risBtn risAll mr-2 mb-2"> </button>
+                <button pButton pRipple type="button" label="Approve" icon="pi pi-box" class="risBtn risAll mr-2 mb-2" (click)="approveModal($event)"> </button>
+                <p-confirmPopup key="approve"></p-confirmPopup>
+                <p-confirmPopup key="delete"></p-confirmPopup>
+        
+                <p-table [value]="rosterPolicies" styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm" [paginator]="true" [rows]="10" selectionMode="single" [showCurrentPageReport]="true" responsiveLayout="scroll"
                          [(selection)]="selectedPolicy" dataKey="roster_policy_id" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
                     <ng-template pTemplate="header">
                         <tr>
@@ -141,7 +134,7 @@
                     </ng-template>
                     <ng-template pTemplate="body" let-roster>
                         <tr [pSelectableRow]="roster">
-                    
+
                             <td>{{roster.roster_policy_name}}</td>
                             <td>{{roster.roster_cycle}}</td>
                             <td>{{roster.approvedBy}}</td>
