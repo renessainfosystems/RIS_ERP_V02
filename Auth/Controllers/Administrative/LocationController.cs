@@ -1,4 +1,5 @@
 ﻿
+using Auth.DataAccess.EntityDataAccess;
 using Auth.Model.Administrative.Model;
 using Auth.Repository.Administrative;
 using Auth.Utility;
@@ -18,13 +19,15 @@ namespace Auth.Controllers.Administrative
 
         //Intialize
         #region Constructor
+        private readonly IEntityDataAccess<Location> _entityDataAccess;
         private ILocationRepository _locationRepository;
 
         public LocationController(
-            ILocationRepository locationRepository
+            IEntityDataAccess<Location> entityDataAccess
+            ,ILocationRepository locationRepository
             )
         {
-
+            _entityDataAccess = entityDataAccess;
             _locationRepository = locationRepository;
         }
 
@@ -63,13 +66,15 @@ namespace Auth.Controllers.Administrative
 
         [HttpPost]
         public  dynamic Create([FromForm] Location oLocation)
-        {
-           
+        {           
             var message = new CommonMessage();
+            dynamic data = (dynamic)null;
             try
             {
+                oLocation.location_id = _entityDataAccess.GetAutoId("Administrative.Location", "location_id");
                 _locationRepository.Add(oLocation);
-                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage);
+                data = _locationRepository.GetById(oLocation.location_id);
+                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage, data);
             }
             catch (Exception ex)
             {
@@ -83,10 +88,12 @@ namespace Auth.Controllers.Administrative
         {
 
             var message = new CommonMessage();
+            dynamic data = (dynamic)null;
             try
             {
                 _locationRepository.Update(oLocation);
-                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonUpdateMessage);
+                data = _locationRepository.GetById(oLocation.location_id);
+                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonUpdateMessage, data);
             }
             catch (Exception ex)
             {
