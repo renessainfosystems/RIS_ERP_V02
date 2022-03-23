@@ -22,8 +22,8 @@ namespace Auth.Model.Administrative.Model
         public int country_id { get; set; }
         public int? division_id { get; set; }
         public int? district_id { get; set; }
+        public int? thana_id { get; set; }
         public string city { get; set; }
-        public string ps_area { get; set; }
         public string post_code { get; set; }
         public string block { get; set; }
         public string road_no { get; set; }
