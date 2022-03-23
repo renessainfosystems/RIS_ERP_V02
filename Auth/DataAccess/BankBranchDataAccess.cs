@@ -1,6 +1,7 @@
-﻿using Administrative.Model.ViewModel;
+﻿using Auth.Model.Administrative.ViewModel;
 using Auth.Model.Administrative.Model;
-using Auth.Utility;
+using Auth.Utility.Administrative;
+using Auth.Utility.Administrative.Enum;
 using Dapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -9,8 +10,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-using Utility.Administrative.Enum;
-using static Auth.Utility.CommonMessage;
 
 namespace DataAccess
 {
@@ -90,7 +89,7 @@ namespace DataAccess
                     if (dbOperation == 3)
                     {
                         dynamic data = await _dbConnection.ExecuteAsync("[Administrative].[SP_Bank_Branch_D]", parameters, commandType: CommandType.StoredProcedure, transaction: tran);
-                        message = CommonMessage.SetWarningMessage(CommonDeleteMessage);
+                        message = CommonMessage.SetWarningMessage(CommonMessage.CommonDeleteMessage);
                     }
                     else
                     {
@@ -102,7 +101,24 @@ namespace DataAccess
 
                             result = (from dr in dataList select BankBranchViewModel.ConvertToModel(dr)).ToList();
 
-                            message = CommonMessage.SetSuccessMessage(CommonSaveMessage, result);
+
+                            if (result != null && dbOperation == (int)GlobalEnumList.DBOperation.Approve)
+                            {
+                                return message = CommonMessage.SetSuccessMessage("Policy Approved", result);
+                            }
+
+                            if (result != null && dbOperation == (int)GlobalEnumList.DBOperation.Create)
+                            {
+                                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage, result);
+                            }
+                            else if (result != null && dbOperation == (int)GlobalEnumList.DBOperation.Update)
+                            {
+                                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonUpdateMessage, result);
+                            }
+                            else
+                            {
+                                message = CommonMessage.SetErrorMessage(CommonMessage.CommonErrorMessage);
+                            }
                         }
                     }
                 }
