@@ -400,11 +400,11 @@ export class CompanyGroupComponent implements OnInit {
     }
 
     openNext() {
-        this.index = (this.index === 3) ? 0 : this.index + 1;
+        this.index = (this.index === 2) ? 0 : this.index + 1;
     }
 
     openPrev() {
-        this.index = (this.index === 0) ? 3 : this.index - 1;
+        this.index = (this.index === 0) ? 2 : this.index - 1;
     }
 
 }
