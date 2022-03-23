@@ -138,7 +138,7 @@ export class LocationComponent implements OnInit {
 
         });
         this.loadAllCountryCboList();
-        this.loadVatApplicableEnumCboList();
+        this.loadVatApplicableEnumCboList();        
     }
 
     next() {
@@ -334,7 +334,7 @@ export class LocationComponent implements OnInit {
 
         if (this.locationForm.invalid) {
             return;
-        }
+        }       
 
         this.createLocation(locationdata);
     }
@@ -349,6 +349,7 @@ export class LocationComponent implements OnInit {
     createLocation(locationdata: any) {
 
         let formData = new FormData();
+        console.log(this.locationForm.value)
         for (const key of Object.keys(this.locationForm.value)) {
             const value = this.locationForm.value[key];
             if (key == "location_reg_date") {
@@ -362,7 +363,6 @@ export class LocationComponent implements OnInit {
         }
 
         if (this.locationIdUpdate == null) {
-
             this.LocationService.createLocation(formData).subscribe(
                 result => {
                     this.dataSaved = true;
