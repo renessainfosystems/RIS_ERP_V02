@@ -107,7 +107,7 @@ namespace Auth.DataAccess.Attendance
             try
             {
 
-                dynamic data = await _dbConnection.QueryAsync<dynamic>("[Attendance].[Roster_Policy_IUD]", parameters, commandType: CommandType.StoredProcedure);
+                dynamic data = await _dbConnection.QueryAsync("[Attendance].[Roster_Policy_IUD]", parameters, commandType: CommandType.StoredProcedure);
 
                 if (dbOperation == (int)DBOperation.Create && rosterPolicy.rosterDetails != null)
                 {
@@ -117,7 +117,7 @@ namespace Auth.DataAccess.Attendance
                         {
                             item.roster_policy_id = data[0].roster_policy_id;
                             var slabParameters = RosterDetailsParameterBinding(item, dbOperation);
-                            dynamic slabData = _dbConnection.QueryAsync<dynamic>("[Attendance].[SP_Roster_Policy_Details_IUD]", slabParameters, commandType: CommandType.StoredProcedure);
+                            dynamic slabData = _dbConnection.QueryFirstOrDefaultAsync("[Attendance].[SP_Roster_Policy_Details_IUD]", slabParameters, commandType: CommandType.StoredProcedure);
 
                         }
                     }
@@ -222,7 +222,7 @@ namespace Auth.DataAccess.Attendance
                 var sql = "DECLARE @pv_is_shared BIT SELECT @pv_is_shared = is_shared from Auth.Software_Sharing_Policy " +
                     "SELECT S.roster_policy_id,S.roster_policy_name,CAST(s.roster_cycle as varchar) + ' ' + 'Days'roster_cycle, CASE WHEN(approve_user_id IS NOT NULL) THEN user_name+'[' + FORMAT(approve_date_time, 'dd-MMM-yyyy') + ']' ELSE '' END approvedBy, s.is_active " +
                   "FROM Attendance.Roster_Policy s LEFT JOIN Auth.User_Info U ON s.approve_user_id = U.user_info_id  WHERE   S.company_group_id = CASE WHEN(@pv_is_shared = 1) THEN @param_company_group_id ELSE S.company_group_id END AND " +
-                  "S.company_id = CASE WHEN(@pv_is_shared = 0) THEN @param_company_id ELSE S.company_id END";
+                  "S.company_id = CASE WHEN(@pv_is_shared = 0) THEN @param_company_id ELSE S.company_id END ORDER BY roster_policy_id DESC";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@param_company_group_id", company_group_id);
                 parameters.Add("@param_company_id", company_id);

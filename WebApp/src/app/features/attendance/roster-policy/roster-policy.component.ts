@@ -138,8 +138,6 @@ export class RosterPolicyComponent implements OnInit {
            
             let roster_policy_id = this.rowData.roster_policy_id;
             rosterDetailsObj.roster_policy_id = roster_policy_id;
-            alert(roster_policy_id)
-
             this.RosterPolicyService.createRosterDetails(rosterDetailsObj).subscribe(data => {
                
                 if (data.MessageType == 1) {
