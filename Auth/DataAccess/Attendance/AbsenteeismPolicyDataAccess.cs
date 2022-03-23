@@ -68,6 +68,7 @@ namespace Auth.DataAccess.Attendance
 
             return parameters;
         }
+
         public async Task<dynamic> IUD_Absenteeism_Policy(AbsenteeismPolicy absenteeismPolicy, int dbOperation)
         {
             var message = new CommonMessage();

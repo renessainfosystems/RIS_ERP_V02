@@ -1,6 +1,6 @@
 
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { SelectionModel } from '@angular/cdk/collections';
 import { ToastrService } from 'ngx-toastr';
@@ -18,14 +18,34 @@ import { BankBranchService } from './bank-branch.service';
 export class BankBranchComponent implements OnInit {
 
 
-    is_BankBranch: any = null;
-    is_local: any = null;
+    bankBranchForm: FormGroup;
+    submitted = false;
 
+    //start grid and form show hide ********************
+    gridDisplay = false;
+    formDisplay = true;
+    toggleFormDisplay() {
+        this.gridDisplay = false;
+        this.formDisplay = true;
+    }
+    toggleGridDisplay() {
+        this.gridDisplay = true;
+        this.formDisplay = false;
+    }
+    toggleFormClose() {
+        this.toggleFormDisplay();
+        this.generalIndex();
+    }
+    //end grid and form show hide ********************
+
+    selectedBankBranchValue: string = '1';
+
+
+    index: number = 0;
     rowData: any;
     dataSaved = false;
-    bankBranchForm: any;
     allBankBranch: Observable<any[]>;
-    selection = new SelectionModel<BankBranch>(true, []);
+    selection = new SelectionModel<any>(true, []);
     massage = null;
     displayedColumns: string[] = ['BankBranchName', 'Remarks'];
     isBankBranchEdit: boolean = false;
@@ -59,10 +79,8 @@ export class BankBranchComponent implements OnInit {
     // for Insert and update data modal
     displayBasic: boolean = false;
     showBasicDialog() {
-        this.bankBranchForm.reset();
-        this.massage = null;
-        this.dataSaved = false;
-        this.displayBasic = true;
+        this.resetForm();
+        this.toggleGridDisplay();
     }
 
     onRowSelect(event) {
@@ -73,7 +91,6 @@ export class BankBranchComponent implements OnInit {
         this.rowSelected = false;
         this.rowData = null;
     }
-
 
     constructor(private formbulider: FormBuilder, private BankBranchService: BankBranchService, private toastr: ToastrService, private notifyService: NotificationService) {
 
@@ -88,10 +105,10 @@ export class BankBranchComponent implements OnInit {
 
     formInit() {
         this.bankBranchForm = this.formbulider.group({
-            bank_branch_name: ['', [Validators.required]],
+            bank_id: [null, [Validators.required]],
+            bank_branch_name: [null, [Validators.required]],
             bank_branch_short_name: [''],
-            bank_branch_routing: ['', [Validators.required]],
-            bank_id: [null],
+            bank_branch_routing: [null, [Validators.required]],
             bank_branch_contact_number: [''],
             bank_branch_email: [''],
             country_id: [null],
@@ -106,7 +123,7 @@ export class BankBranchComponent implements OnInit {
             flat_no: [''],
             address_note: [''],
             remarks: [''],
-            is_branch: [true, [Validators.required]]
+            is_branch: ['1', [Validators.required]]
 
         });
     }
@@ -182,49 +199,67 @@ export class BankBranchComponent implements OnInit {
             this.bankBranchForm.controls['flat_no'].setValue(data.FlatNo);
             this.bankBranchForm.controls['address_note'].setValue(data.AddressNote);
             this.bankBranchForm.controls['remarks'].setValue(data.Remarks);
+
+            if (data.IsBranch == true) {
+                data.IsBranch = '1';
+            }
+            else {
+                data.IsBranch = '0';
+            }
             this.bankBranchForm.controls['is_branch'].setValue(data.IsBranch);
             this.isBankBranchEdit = true;
 
         });
-        this.displayBasic = true;
+
+        this.toggleGridDisplay();
     }
 
-    deleteBankBranchInfo() {
-        if (this.rowData == null) {
-            return this.notifyService.ShowNotification(3, 'Please select row');
+    //for validation messate -----------
+    get f(): { [key: string]: AbstractControl } {
+        return this.bankBranchForm.controls;
+    }
+
+    onGeneral(): void {
+        this.submitted = true;
+        const bankBranchdata = this.bankBranchForm.value;
+        if (bankBranchdata.bank_id === null) {
+            return;
         }
-        let bank_branch_id = this.rowData.BankBranchId;
-        this.BankBranchService.DeleteBankBranch(bank_branch_id).subscribe(data => {
-            if (data.MessageType == 2) {
-                this.bankBranchs.splice(this.bankBranchs.findIndex(item => item.BankBranchId === bank_branch_id), 1);
-            }
-            this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
-        });
-        this.display = false;
+        else if (bankBranchdata.bank_branch_name === null) {
+            return;
+        }
+        else if (bankBranchdata.bank_branch_routing === null) {
+            return;
+        }    
+        else {
+            this.openNext();
+        }
+        if (this.bankBranchForm.invalid) {
+            return;
+        }
     }
 
     onFormSubmit() {
-        debugger
+        //for validation message -----------
+        this.submitted = true;
         const bankBranchdata = this.bankBranchForm.value;
-        if (!(bankBranchdata.bank_id)) {
-            return this.notifyService.ShowNotification(2, "Please select Bank")
+
+        if ((bankBranchdata.country_id === null)) {
+            return;
         }
-        if (!(bankBranchdata.bank_branch_name)) {
-            return this.notifyService.ShowNotification(2, "Please Input Bank Branch Name")
+        else if (bankBranchdata.division_id === null) {
+            return;
         }
-        if (!(bankBranchdata.bank_branch_routing)) {
-            return this.notifyService.ShowNotification(2, "Please Input Bank Routing Number")
+        else if (bankBranchdata.district_id === null) {
+            return;
         }
-        if (!(bankBranchdata.country_id)) {
-            return this.notifyService.ShowNotification(2, "Please select Country")
+        if (this.bankBranchForm.invalid) {
+            return;
         }
-        if (!(bankBranchdata.division_id)) {
-            return this.notifyService.ShowNotification(2, "Please select Division")
-        }
-        if (!(bankBranchdata.district_id)) {
-            return this.notifyService.ShowNotification(2, "Please select District")
-        }
-        if (bankBranchdata.is_branch == "true" || bankBranchdata.is_branch == null) {
+        //end validation messate -----------
+
+        this.dataSaved = false;
+        if (bankBranchdata.is_branch == "1" || bankBranchdata.is_branch == null) {
             bankBranchdata.is_branch = true;
         }
         else {
@@ -244,6 +279,9 @@ export class BankBranchComponent implements OnInit {
                     this.rowSelected = true;
                     this.rowData = result.Data[0];
                     this.displayBasic = false;
+                    this.toggleFormDisplay();
+                    this.generalIndex();
+                    this.submitted = false;
                 }
             });
         }
@@ -258,9 +296,26 @@ export class BankBranchComponent implements OnInit {
                     this.rowSelected = true;
                     this.rowData = result.Data[0];
                     this.displayBasic = false;
+                    this.toggleFormDisplay();
+                    this.generalIndex();
+                    this.submitted = false;
                 }
             });
         }
+    }
+
+    deleteBankBranchInfo() {
+        if (this.rowData == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+        let bank_branch_id = this.rowData.BankBranchId;
+        this.BankBranchService.DeleteBankBranch(bank_branch_id).subscribe(data => {
+            if (data.MessageType == 2) {
+                this.bankBranchs.splice(this.bankBranchs.findIndex(item => item.BankBranchId === bank_branch_id), 1);
+            }
+            this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
+        });
+        this.display = false;
     }
 
     resetForm() {
@@ -272,6 +327,23 @@ export class BankBranchComponent implements OnInit {
     clear() {
         this.resetForm();
     }
+
+    generalIndex() {
+        this.index = 0;
+    }
+
+    function(e) {
+        this.index = e.index;
+    }
+
+    openNext() {
+        this.index = (this.index === 4) ? 0 : this.index + 1;
+    }
+
+    openPrev() {
+        this.index = (this.index === 0) ? 4 : this.index - 1;
+    }
+
 
 }
 

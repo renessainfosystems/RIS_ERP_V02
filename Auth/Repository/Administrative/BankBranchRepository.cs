@@ -1,8 +1,9 @@
 ﻿using Auth.Model.Administrative.Model;
 using DataAccess;
-using Repository.Interface;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+
+
 
 namespace Auth.Repository.Administrative
 {
