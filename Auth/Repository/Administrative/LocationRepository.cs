@@ -40,6 +40,7 @@ namespace Auth.Repository.Administrative
                     var prefix = oLocation.location_prefix.ToUpper();
                     var autoCode = _entityDataAccess.GetAutoCode("Administrative.Location", "location_id");
                     oLocation.location_code = prefix + "" + autoCode + "";
+                    oLocation.is_active = true;
                     _entityDataAccess.Add(oLocation);
                     tran.Complete();
                 }                    
