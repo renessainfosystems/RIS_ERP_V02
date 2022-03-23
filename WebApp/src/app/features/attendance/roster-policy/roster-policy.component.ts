@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ConfirmationService } from 'primeng/api';
 import { NotificationService } from '../../../service/CommonMessage/notification.service';
 import { RosterPolicyService } from './roster-policy.service';
 
@@ -26,6 +27,7 @@ export class RosterPolicyComponent implements OnInit {
     //start grid and form show hide ********************
     gridDisplay = false;
     formDisplay = true;
+
     toggleFormDisplay() {
         this.gridDisplay = false;
         this.formDisplay = true;
@@ -36,25 +38,20 @@ export class RosterPolicyComponent implements OnInit {
     }
     toggleFormClose() {
         this.toggleFormDisplay();
+        this.resetForm();
     }
     //end grid and form show hide ********************
     // for delete data modal
     display: boolean = false;
-    showDialog() {
-        if (this.rowData == null) {
-            return this.notifyService.ShowNotification(3, 'Please select row');
-        }
-        else
-            this.display = true;
-    }
-    constructor(private formbulider: FormBuilder, private RosterPolicyService: RosterPolicyService, private notifyService: NotificationService) { }
+ 
+    constructor(private formbulider: FormBuilder, private confirmationService: ConfirmationService, private RosterPolicyService: RosterPolicyService, private notifyService: NotificationService) { }
 
     ngOnInit(): void {
         this.rosterPolicyForm = this.formbulider.group({
    
             roster_policy_name: [null, [Validators.required]],
-            next_shift_id: [null, [Validators.required]],
-            shift_id: [null, [Validators.required]],
+            next_shift_id: [null],
+            shift_id: [null],
             roster_cycle: [null, [Validators.required]],
             
 
@@ -75,20 +72,12 @@ export class RosterPolicyComponent implements OnInit {
 
 
     }
-    approveConfirm() {
-        if (this.rowData == null) {
-            return this.notifyService.ShowNotification(3, 'Please select row');
-        }
-        if (this.rowData.approvedBy) {
-            return this.notifyService.ShowNotification(3, "This policy already approved");
-        }
-        else
-            this.displayApprove = true;
-    }
+
     showBasicDialog() {
         // this.displayBasic = true;
         this.toggleGridDisplay();
         this.rosterPolicyForm.reset();
+        this.rosterPolicyForm.valid;
     }
     //for validation messate -----------
 
@@ -154,7 +143,7 @@ export class RosterPolicyComponent implements OnInit {
             this.RosterPolicyService.createRosterDetails(rosterDetailsObj).subscribe(data => {
                
                 if (data.MessageType == 1) {
-                  this.rosterPolicies.unshift(data.Data[0]);
+                    this.rosterDetails.unshift(data.Data[0]);
                 }
                 this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
             });
@@ -183,7 +172,7 @@ export class RosterPolicyComponent implements OnInit {
             this.RosterPolicyService.deleteRosterDetails(row.roster_policy_detail_id).subscribe(data => {
 
                 if (data.MessageType == 1) {
-                    this.rosterPolicies.splice(this.rosterPolicies.findIndex(item => item.roster_policy_detail_id === row.roster_policy_detail_id), 1);
+                    this.rosterDetails.splice(this.rosterDetails.findIndex(item => item.roster_policy_detail_id === row.roster_policy_detail_id), 1);
 
                 }
                 this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
@@ -206,7 +195,7 @@ export class RosterPolicyComponent implements OnInit {
         if (this.rowData.approvedBy) {
             return this.notifyService.ShowNotification(3, "This policy already approved, you can't edit this.");
         }
-        //this.resetForm();
+        this.resetForm();
         let roster_policy_id = this.rowData.roster_policy_id;
 
         this.RosterPolicyService.getRosterDetailsById(roster_policy_id).subscribe(res => {
@@ -244,7 +233,7 @@ export class RosterPolicyComponent implements OnInit {
             }
             this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
         });
-        //this.display = false;
+        this.display = false;
     }
     policyApprove() {
         if (this.rowData == null) {
@@ -271,20 +260,21 @@ export class RosterPolicyComponent implements OnInit {
 
     saveRosterPolicy() {
         const data = this.rosterPolicyForm.value;
-      
+    
         this.submitted = true;
 
         if (this.rosterPolicyForm.invalid) {
+       
             return;
         }
         if (this.isRosterEdit) {
-
+           
             data.roster_policy_id = this.rowData.roster_policy_id;
             this.RosterPolicyService.update(data).subscribe(result => {
 
                 this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
                 if (result.MessageType == 1) {
-                    //this.clear();
+                    this.resetForm();
                     this.rosterPolicies.splice(this.rosterPolicies.findIndex(item => item.roster_policy_id === data.roster_policy_id), 1);
                     this.rosterPolicies.unshift(result.Data[0]);
                     this.selectedPolicy = result.Data[0];
@@ -302,7 +292,7 @@ export class RosterPolicyComponent implements OnInit {
             this.RosterPolicyService.create(JSON.stringify(data)).subscribe(
                 result => {
                     if (result.MessageType == 1) {
-                        //this.clear();
+                        this.resetForm();
                         this.rosterPolicies.unshift(result.Data[0]);
                         this.selectedPolicy = result.Data[0];
                         this.rowSelected = true;
@@ -317,5 +307,51 @@ export class RosterPolicyComponent implements OnInit {
 
 
 
+    }
+    approveModal(event: Event) {
+        if (this.rowData == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+        if (this.rowData.approvedBy) {
+            return this.notifyService.ShowNotification(3, "This policy already approved");
+        }
+        this.confirmationService.confirm({
+            key: 'approve',
+            target: event.target,
+            message: 'Are you sure that you want to approve?',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                this.policyApprove();
+            },
+            reject: () => {
+   
+            }
+        });
+    }
+    deleteModal(event: Event) {
+        if (this.rowData == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+        if (this.rowData.approvedBy) {
+            return this.notifyService.ShowNotification(3, "This policy already approved");
+        }
+        this.confirmationService.confirm({
+            key: 'delete',
+            target: event.target,
+            message: 'Are you sure that you want to delete?',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                this.deleteRoster();
+            },
+            reject: () => {
+
+            }
+        });
+    }
+    resetForm() {
+        this.rosterPolicyForm.reset();
+        this.rosterDetails = [];
+        this.submitted = false;
+        this.isRosterEdit = false;
     }
 }

@@ -129,7 +129,7 @@ namespace Auth.DataAccess.Attendance
 
                 else if (dbOperation == (int)GlobalEnumList.DBOperation.Approve && data.Count > 0)
                 {
-                    return message = CommonMessage.SetSuccessMessage("Policy Approved");
+                    return message = CommonMessage.SetSuccessMessage("Policy Approved",data);
                 }
 
                 else if (dbOperation == (int)GlobalEnumList.DBOperation.Create && data.Count > 0)
