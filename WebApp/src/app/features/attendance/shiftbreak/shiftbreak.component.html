@@ -1,66 +1,50 @@
-<div class="p-card">
+<div class="grid ">
+    <div class="col-12 ">
+        <div class="card">
+            <h4>Shift Break Head</h4>
+            <div class="grid mb-2 mt-4">
 
-  <div class="me-auto">
-    <div class="p-card-title ">
-      <span class="pi pi-voucherTypes"> </span> Shift Break Head
-    </div>
-    <div class="p-card-body">
-      <!--********** start card body ********************-->
+                <form action="" [formGroup]="shiftbreakForm">
 
-      <div class="card">
-        <div class="grid mb-2">
+                    <span class="p-input ml-2 mr-2">
+                        <input id="lastname2" type="text" style="width:450px" maxlength="50"placeholder="Enter shift break name and press add button to save" class="from-control" formControlName="head_name" pInputText />
 
-          <form action="" [formGroup]="shiftbreakForm">
-           
-                <span class="p-input mr-1 ml-2">
-                  <input id="float-input p-fluid" type="text" maxlength="50" style="width:350px" formControlName="head_name" placeholder="Enter shift break name and press add button to save" pInputText required>
-                </span>
-        
-              
-                <button class="pi pi-plus risBtn risAdd mr-2 ml-2" (click)="saveShiftBreak()"> Add</button>
-                <button class="pi pi-trash risBtn risDelete mr-2" (click)="showDialog()"> Delete</button>
-                <button class="pi pi-box risBtn risAll mr-2"(click)="shiftBreakActivity()" > Activity</button>
+                    </span>
 
-             </form>
-          
-        </div>
-        <p-dialog header="Delete Record" [(visible)]="display" [style]="{width: '35vw'}">
-          <p>Do you want to delete this record?</p>
-          <ng-template pTemplate="footer">
-            <button class="pi pi-times risBtn risClose" (click)="display=false"> No</button>
-            <button class="pi pi-check risBtn risSave" (click)="deleteShiftBreak()"> Yes</button>
-          </ng-template>
-        </p-dialog>
+                    <button pButton pRipple type="button" label="Add" (click)="saveShiftBreak()" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
+                    <button pButton pRipple type="button" label="Delete" icon="pi pi-trash" class="risBtn risDelete mr-2 mb-2" (click)="deleteModal($event)"> </button>
+                    <button pButton pRipple type="button" label="Activity" icon="pi pi-box" (click)="shiftBreakActivity()" class="risBtn risAll mr-2 mb-2"> </button>
+                    <p-confirmPopup key="delete"></p-confirmPopup>
+                </form>
+            </div>
+            <!--end form display------------->
 
-        <div class="card-body">
+            <p-table [value]="shiftBreaks" [paginator]="true" [rows]="10" selectionMode="single" [(selection)]="selectedBreaks" dataKey="shift_break_head_id" [showCurrentPageReport]="true" responsiveLayout="scroll" styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm"
+                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
 
-          <!--************************start grid ************************-->
-          <p-table [value]="shiftBreaks" [paginator]="true" [rows]="10" selectionMode="single" [(selection)]="selectedBreaks" dataKey="shift_break_head_id" [showCurrentPageReport]="true" responsiveLayout="scroll" styleClass="p-datatable-striped p-datatable-sm"
-                   currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Break Name</th>
+                        <th>Activity</th>
 
-            <ng-template pTemplate="header">
-              <tr>
-                <th>Break Name</th>
-                <th>Activity</th>
-              
 
-              </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-break>
-              <tr [pSelectableRow]="break">
-                <td>{{break.head_name}}</td>
-                <td *ngIf="break.is_active===true">{{"Active"}}</td>
-                <td *ngIf="break.is_active===false">{{"InActive"}}</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-break>
+                    <tr [pSelectableRow]="break">
+                        <td>{{break.head_name}}</td>
+                        <td *ngIf="break.is_active===true">{{"Active"}}</td>
+                        <td *ngIf="break.is_active===false">{{"InActive"}}</td>
 
-              </tr>
-            </ng-template>
-          </p-table>
-
+                    </tr>
+                </ng-template>
+            </p-table>
+            <!--end grid display -------------->
         </div>
 
-        <!--********** end card body ********************-->
 
-      </div>
+
+        </div>
     </div>
-  </div>
-</div>
+
+

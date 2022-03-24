@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { ConfirmationService } from 'primeng/api';
 import { NotificationService } from '../../../service/CommonMessage/notification.service';
 import { ShiftbreakService } from './shiftbreak.service';
 
@@ -24,7 +25,7 @@ export class ShiftbreakComponent implements OnInit {
     else
       this.display = true;
   }
-  constructor(private formbulider: FormBuilder, private notifyService: NotificationService, private ShiftbreakService: ShiftbreakService) { }
+    constructor(private formbulider: FormBuilder, private confirmationService: ConfirmationService, private notifyService: NotificationService, private ShiftbreakService: ShiftbreakService) { }
 
   ngOnInit() {
     this.shiftbreakForm = this.formbulider.group({
@@ -105,7 +106,28 @@ export class ShiftbreakComponent implements OnInit {
       this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
     });
     this.display = false;
-  }
+    }
+
+    deleteModal(event: Event) {
+        if (this.rowData == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+        if (this.rowData.approvedBy) {
+            return this.notifyService.ShowNotification(3, "This policy already approved");
+        }
+        this.confirmationService.confirm({
+            key: 'delete',
+            target: event.target,
+            message: 'Are you sure that you want to delete?',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                this.deleteShiftBreak();
+            },
+            reject: () => {
+
+            }
+        });
+    }
   //next() {
   //  this.first = this.first + this.rows;
   //}
