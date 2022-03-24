@@ -3,7 +3,8 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
-using static Utility.Administrative.Enum.GlobalEnumList;
+using static Auth.Utility.Administrative.Enum.GlobalEnumList;
+
 
 /// <summary>
 /// Created By Jahid

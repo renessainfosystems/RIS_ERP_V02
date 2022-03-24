@@ -1,4 +1,4 @@
-﻿namespace Administrative.Model.ViewModel
+﻿namespace Auth.Model.Administrative.ViewModel
 {
     public class BankBranchViewModel
     {

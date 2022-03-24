@@ -8,7 +8,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Auth.Model.Administrative.Model
 {
-    [Table("Bank_Branch", Schema = "Procurement")]
     public class BankBranch
     {
 

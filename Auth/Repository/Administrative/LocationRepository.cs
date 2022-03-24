@@ -36,10 +36,11 @@ namespace Auth.Repository.Administrative
                     oLocation.company_id = (int)company_id;
                     oLocation.created_datetime = DateTime.Now;
                     oLocation.db_server_date_time = DateTime.Now;
-                    oLocation.location_id = _entityDataAccess.GetAutoId("Administrative.Location", "location_id");
+                    oLocation.location_id = oLocation.location_id;
                     var prefix = oLocation.location_prefix.ToUpper();
                     var autoCode = _entityDataAccess.GetAutoCode("Administrative.Location", "location_id");
                     oLocation.location_code = prefix + "" + autoCode + "";
+                    oLocation.is_active = true;
                     _entityDataAccess.Add(oLocation);
                     tran.Complete();
                 }                    

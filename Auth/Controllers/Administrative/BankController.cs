@@ -3,7 +3,7 @@ using Auth.Repository.Administrative;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System.Threading.Tasks;
-using Utility.Administrative.Enum;
+using Auth.Utility.Administrative.Enum;
 using FromBodyAttribute = Microsoft.AspNetCore.Mvc.FromBodyAttribute;
 using HttpGetAttribute = Microsoft.AspNetCore.Mvc.HttpGetAttribute;
 using HttpPostAttribute = Microsoft.AspNetCore.Mvc.HttpPostAttribute;

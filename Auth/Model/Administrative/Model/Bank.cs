@@ -32,8 +32,8 @@ namespace Auth.Model.Administrative.Model
             flat_no = "";
             address_note = "";
             remarks = "";
-            is_bank = false;       
-            is_local = false;
+            is_bank = true;       
+            is_local = true;
             //is_active = true;
 
 
