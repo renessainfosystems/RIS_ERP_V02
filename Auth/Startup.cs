@@ -255,6 +255,7 @@ namespace Auth
             #region Employee
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddScoped<EmployeeDataAccess, EmployeeDataAccess>();
+            services.AddScoped<IEmployeeCategoryTypeRepository, EmployeeCategoryTypeRepository>();
             #endregion
 
             #region Party
