@@ -48,7 +48,7 @@ export class LocationService {
   }
 
     getAllCountryCboList(): Observable<any[]> {
-    return this.http.get<Location[]>(this.ipconfig.base_IP + 'Country/CountryCboList');
+    return this.http.get<any[]>(this.ipconfig.base_IP + 'Country/CountryCboList');
   }
 
     getAllDivisionCboListByCountryId(country_id): Observable<any[]> {
@@ -58,7 +58,7 @@ export class LocationService {
     getAllDistrictCboListByDivisionId(division_id): Observable<any[]> {
         return this.http.get<any[]>(this.ipconfig.base_IP + 'District/DistrictCboListByDivisionId?division_id=' + division_id, httpOptions);
   }
-  getAllThanaCboListByDistrictId(district_id): Observable<any[]> {
+    getAllThanaCboListByDistrictId(district_id): Observable<any[]> {
     return this.http.get<any[]>(this.ipconfig.base_IP + 'Thana/ThanaCboListByDistrictId?district_id=' + district_id, httpOptions);
   }
     getVatApplicableEnumCboList(): Observable<any[]> {
