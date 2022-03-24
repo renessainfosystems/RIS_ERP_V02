@@ -71,9 +71,9 @@ export class AssociationComponent implements OnInit {
     ngOnInit() {
 
         this.formInit();
-        this.loadAllassociations();
+     this.loadAllassociations();
         this.loadAllOrganizationTypeEnum();
-        this.loadAllCountryCboList();
+        this.loadAllCountryCboList();   
     }
 
     formInit() {

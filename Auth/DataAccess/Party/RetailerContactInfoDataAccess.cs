@@ -108,24 +108,24 @@ namespace Auth.DataAccess.Party
 
                 if (dbOperation == (int)GlobalEnumList.DBOperation.Create)
                 {
-                    result = DealerContactInfoViewModel.ConvertToModel(data);
+                    result = RetailerContactInfoViewModel.ConvertToModel(data);
                     return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage, result);
                 }
                 if (dbOperation == (int)GlobalEnumList.DBOperation.Update)
                 {
-                    result = DealerContactInfoViewModel.ConvertToModel(data);
+                    result = RetailerContactInfoViewModel.ConvertToModel(data);
                     return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonUpdateMessage, result);
                 }
 
                 if (dbOperation == (int)GlobalEnumList.DBOperation.Delete)
                 {
-                    result = DealerContactInfoViewModel.ConvertToModel(data);
+                    result = RetailerContactInfoViewModel.ConvertToModel(data);
                     return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonDeleteMessage, result);
                 }
                
                 if (data.Count > 0)
                 {
-                    result = DealerContactInfoViewModel.ConvertToModel(data);
+                    result = RetailerContactInfoViewModel.ConvertToModel(data);
                     message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage, result);
                 }
                 else
@@ -212,7 +212,7 @@ namespace Auth.DataAccess.Party
                 if (data != null)
                 {
                     List<dynamic> dataList = data;
-                    result = (from dr in dataList select DealerContactInfoViewModel.ConvertToModel(dr)).ToList();
+                    result = (from dr in dataList select RetailerContactInfoViewModel.ConvertToModel(dr)).ToList();
                 }
             }
             catch (Exception ex)

@@ -343,8 +343,8 @@
                 </p-fieldset>
 
                 <p-fieldset legend="Employee List" [collapsed]="collapsedempDetails" (onBeforeToggle)="toggle()" [toggleable]="true">
+                  <div class="grid mb-2">
 
-                    <div class="grid mb-2">
                     <button class="pi pi-plus risBtn risAdd mr-2 " (click)="btnNew()"> New</button>
                     <button class="pi pi-pencil risBtn risEdit mr-2 " (click)="loadEmployeeToEdit()"> Edit</button>
                     <button class="pi pi-trash risBtn risDelete mr-2" (click)="showDialog()"> Delete</button>
@@ -395,13 +395,12 @@
                       </tr>
                     </ng-template>
                   </p-table>
-
                 </p-fieldset>
 
               </div>
             </p-tabPanel>
             <p-tabPanel class="geoTab " header="Address" >
-              <!--<p-fieldset legend="Present Address" [collapsed]="collapsed" (onBeforeToggle)="toggleAddress()" [toggleable]="true">-->
+              <p-fieldset legend="Present Address" [collapsed]="collapsed" (onBeforeToggle)="toggleAddress()" [toggleable]="true">
                 <div class="row">
                   <div class="p-fluid grid col-12 flex flex-wrap card-container">
 
@@ -508,8 +507,8 @@
                     </div>
                   </div>
                 </div>
-              <!--</p-fieldset>-->
-              <!--<p-fieldset legend="Permanent Address" collapsed="true" [toggleable]="true">-->
+              </p-fieldset>
+              <p-fieldset legend="Permanent Address" collapsed="true" [toggleable]="true">
                 <div class="row">
                   <div class="p-fluid grid col-12 flex flex-wrap card-container">
                     <div class="p-fluid grid col-12 flex justify-content-start flex-wrap card-container">
@@ -619,7 +618,7 @@
                     </div>
                   </div>
                 </div>
-              <!--</p-fieldset>-->
+              </p-fieldset>
               <ng-template pTemplate="footer">
                 <button type="submit" class="pi risBtn risAll" (click)="selected=true"><span class="pi pi-step-backward"></span> Previous </button>
                 <button type="submit" class="pi pi-save risBtn risSave" (click)="SaveEmployee()"> Save</button>

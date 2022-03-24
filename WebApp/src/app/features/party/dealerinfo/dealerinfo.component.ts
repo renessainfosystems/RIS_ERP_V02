@@ -1079,21 +1079,7 @@ export class DealerinfoComponent implements OnInit {
     
     dealerLocationIndex() {
         this.index = 4;
-    }
-
-    retailerIndex() {
-        this.index = 0;
-    }
-
-    retailerContactIndex() {
-        this.index = 3;
-    }
-
-
-    retailerLocationIndex() {
-        this.index = 4;
-    }
-
+    }    
 
     function(e) {
         this.index = e.index;

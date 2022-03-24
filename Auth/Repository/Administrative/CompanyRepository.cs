@@ -35,7 +35,7 @@ namespace Auth.Repository.Administrative
                     oCompany.company_corporate_id = (int)company_corporate_id;
                     oCompany.created_datetime = DateTime.Now;
                     oCompany.db_server_date_time = DateTime.Now;
-                    oCompany.company_id = _entityDataAccess.GetAutoId("Administrative.Company", "company_id");
+                    oCompany.company_id = oCompany.company_id;
                     var countryCode = _countryRepository.Get(oCompany.country_id).country_code;
                     var prefix = oCompany.company_prefix.ToUpper();
                     var autoCode = _entityDataAccess.GetAutoCode("Administrative.Company", "company_id");

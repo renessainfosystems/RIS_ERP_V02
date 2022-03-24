@@ -12,7 +12,7 @@ namespace Auth.Repository.Attendance
         Task<dynamic> GetRosterPolicyById(int roster_policy_id);
         Task<dynamic> GetRosterDetailsById(int roster_policy_id);
         Task<dynamic> IUD_RosterPolicy(RosterPolicy rosterPolicy, int dbOperation);
-        Task<dynamic> IUD_RosterPolicyDetails(RosterPolicy rosterPolicy, int dbOperation);
+        Task<dynamic> IUD_RosterPolicyDetails(RosterDetails rosterDetails, int dbOperation);
         Task<dynamic> GetAllRosterPolicyForDP();
     }
 }

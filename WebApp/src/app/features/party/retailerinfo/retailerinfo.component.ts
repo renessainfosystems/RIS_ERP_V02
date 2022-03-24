@@ -19,6 +19,7 @@ export class RetailerinfoComponent implements OnInit {
 
     retailerinfoForm: any;//RetailerFormName  
     retailerinfoList: any[];//List Retailerinfo
+    allDealerInfo: any[];//List Retailerinfo
     retailerinfodataSource: any[];//single retailerinfo
     selectedretailerinfo: any;// Selected Retailerinfo  
     isRetailerinfoEdit: boolean = false;
@@ -145,6 +146,7 @@ export class RetailerinfoComponent implements OnInit {
         //this.retailerinfoService.getAllRetailerLocationInfo().subscribe(data => this.retailerlocationinfoList = data);
 
         this.retailerinfoForm = this.formbulider.group({
+            dealer_info_id: ['', [Validators.required]],
             retailer_info_code: ['', [Validators.required]],
             retailer_info_short_name: ['', [Validators.required]],
             retailer_info_name: ['', [Validators.required]],            
@@ -283,6 +285,7 @@ export class RetailerinfoComponent implements OnInit {
         this.loadAllGenderEnum();
         this.loadAllReligionEnum();
         this.loadAllBloodGroupEnum();
+        this.loadAllDealerInfoCboList();
     }
 
     selectRow(retailerinfo) {
@@ -352,6 +355,7 @@ export class RetailerinfoComponent implements OnInit {
                 this.isRetailerinfoEdit = true;
             }
 
+            this.retailerinfoForm.controls['dealer_info_id'].setValue(data.DealerInfoId);
             this.retailerinfoForm.controls['retailer_info_code'].setValue(data.RetailerInfoCode);
             this.retailerinfoForm.controls['retailer_info_short_name'].setValue(data.RetailerInfoShortName);
             this.retailerinfoForm.controls['retailer_info_name'].setValue(data.RetailerInfoName);            
@@ -387,8 +391,8 @@ export class RetailerinfoComponent implements OnInit {
             this.retailerinfoForm.controls['house_no'].setValue(data.HouseNo);
             this.retailerinfoForm.controls['flat_no'].setValue(data.FlatNo);
             this.retailerinfoForm.controls['address_note'].setValue(data.AddressNote);
-            this.retailerinfoForm.controls['image_path'].setValue(data.ImagePath);
-            this.photourllink = data.ImagePath;
+            //this.retailerinfoForm.controls['image_path'].setValue(data.ImagePath);
+            //this.photourllink = data.ImagePath;
             this.loadAllRetailerContactinfos();
             this.loadAllRetailerLocationinfos();
 
@@ -424,28 +428,31 @@ export class RetailerinfoComponent implements OnInit {
         }
 
         if (!(data.domicile_enum_id)) {
-            return this.notifyService.ShowNotification(2, "Please enter domicile")
+            return this.notifyService.ShowNotification(2, "Please select domicile")
         }
         if (!(data.industry_sector_id)) {
-            return this.notifyService.ShowNotification(2, "Please enter industry sector")
+            return this.notifyService.ShowNotification(2, "Please select industry sector")
         }
         if (!(data.ownership_type_id)) {
-            return this.notifyService.ShowNotification(2, "Please enter ownership type")
+            return this.notifyService.ShowNotification(2, "Please select ownership type")
         }
         if (!(data.currency_id)) {
-            return this.notifyService.ShowNotification(2, "Please enter currency")
+            return this.notifyService.ShowNotification(2, "Please select currency")
         }
         if (!(data.country_id)) {
-            return this.notifyService.ShowNotification(2, "Please enter country")
+            return this.notifyService.ShowNotification(2, "Please select country")
         }
         if (!(data.division_id)) {
-            return this.notifyService.ShowNotification(2, "Please enter division")
+            return this.notifyService.ShowNotification(2, "Please select division")
         }
         if (!(data.district_id)) {
-            return this.notifyService.ShowNotification(2, "Please enter district")
+            return this.notifyService.ShowNotification(2, "Please select district")
         }
         if (!(data.thana_id)) {
-            return this.notifyService.ShowNotification(2, "Please enter thana")
+            return this.notifyService.ShowNotification(2, "Please select thana")
+        }
+        if (!(data.address_note)) {
+            return this.notifyService.ShowNotification(2, "Please enter address note")
         }
 
         let formData = new FormData();
@@ -468,11 +475,17 @@ export class RetailerinfoComponent implements OnInit {
             this.retailerinfoService.updateRetailerInfo(formData).subscribe(result => {
 
                 this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
-                this.loadAllRetailerinfos();
-                this.isRetailerinfoEdit = false;
-                this.collapsedempInfo = true;
-                this.collapsedempDetails = false;
-                this.onRowUnselect(event);
+
+                if (result.MessageType == 1) {
+                    this.retailerinfoList.splice(this.retailerinfoList.findIndex(item => item.RetailerInfoId === data.retailerinfoId), 1);
+                    this.retailerinfoList.unshift(result.Data);
+                    this.selectedretailerinfo = result.Data;
+                    this.rowData = result.Data;
+                    this.collapsedempInfo = true;
+                    this.collapsed = true;
+                    this.collapsedempDetails = false;
+                    this.retailerIndex();
+                }
             });
         }
         else {
@@ -480,10 +493,16 @@ export class RetailerinfoComponent implements OnInit {
             this.retailerinfoService.createRetailerInfo(formData).subscribe(
                 result => {
                     this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
-                    this.loadAllRetailerinfos();
-                    this.resetForm();
-                    this.collapsedempInfo = true;
-                    this.collapsedempDetails = false;
+                    if (result.MessageType == 1) {
+                        this.retailerinfoList.unshift(result.Data);
+                        this.selectedretailerinfo = result.Data;
+                        this.nodeSelected = true;
+                        this.rowData = result.Data;
+                        this.collapsedempInfo = true;
+                        this.collapsed = true;
+                        this.collapsedempDetails = false;
+                        this.retailerIndex();
+                    }
                 }
             );
         }
@@ -633,7 +652,13 @@ export class RetailerinfoComponent implements OnInit {
         });
     }
 
-    // All Retailer List 
+    // All Retailer List
+    loadAllDealerInfoCboList() {
+        this.retailerinfoService.getDealerInfoCboList().subscribe(data => {
+            this.allDealerInfo = data;
+        });
+    }
+
     loadAllRetailerinfos() {
         this.retailerinfoService.getAllRetailerInfo().subscribe(data => {
             this.retailerinfoList = data;
@@ -783,11 +808,16 @@ export class RetailerinfoComponent implements OnInit {
             this.retailerinfoService.updateRetailerContactInfo(formData).subscribe(result => {
 
                 this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
-                this.loadAllRetailerContactinfos();
-                this.isRetailerContactinfoEdit = false;
-                this.collapsedempInfo = true;
-                this.collapsedempDetails = false;
-                this.onRowUnselect(event);
+                if (result.MessageType == 1) {
+                    this.retailercontactinfoList.splice(this.retailercontactinfoList.findIndex(item => item.RetailerContactInfoId === data.retailerContactinfoId), 1);
+                    this.retailercontactinfoList.unshift(result.Data);
+                    this.selectedretailercontactinfo = result.Data;
+                    this.rowData = result.Data;
+                    this.collapsedempInfo = true;
+                    this.collapsed = true;
+                    this.collapsedempDetails = false;
+                    this.retailerContactIndex();
+                }
             });
         }
         else {
@@ -795,10 +825,16 @@ export class RetailerinfoComponent implements OnInit {
             this.retailerinfoService.createRetailerContactInfo(formData).subscribe(
                 result => {
                     this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
-                    this.loadAllRetailerContactinfos();
-                    this.resetForm();
-                    this.collapsedempInfo = true;
-                    this.collapsedempDetails = false;
+                    if (result.MessageType == 1) {
+                        this.retailercontactinfoList.unshift(result.Data);
+                        this.selectedretailercontactinfo = result.Data;
+                        this.nodeSelected = true;
+                        this.rowData = result.Data;
+                        this.collapsedempInfo = true;
+                        this.collapsed = true;
+                        this.collapsedempDetails = false;
+                        this.retailerContactIndex();
+                    }
                 }
             );
         }
@@ -948,11 +984,16 @@ export class RetailerinfoComponent implements OnInit {
             this.retailerinfoService.updateRetailerLocationInfo(formData).subscribe(result => {
 
                 this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
-                this.loadAllRetailerLocationinfos();
-                this.isRetailerLocationinfoEdit = false;
-                this.collapsedempInfo = true;
-                this.collapsedempDetails = false;
-                this.onRowUnselect(event);
+                if (result.MessageType == 1) {
+                    this.retailerlocationinfoList.splice(this.retailerlocationinfoList.findIndex(item => item.RetailerLocationInfoId === data.retailerLocationinfoId), 1);
+                    this.retailerlocationinfoList.unshift(result.Data);
+                    this.selectedretailerlocationinfo = result.Data;
+                    this.rowData = result.Data;
+                    this.collapsedempInfo = true;
+                    this.collapsed = true;
+                    this.collapsedempDetails = false;
+                    this.retailerLocationIndex();
+                }
             });
         }
         else {
@@ -960,10 +1001,16 @@ export class RetailerinfoComponent implements OnInit {
             this.retailerinfoService.createRetailerLocationInfo(formData).subscribe(
                 result => {
                     this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
-                    this.loadAllRetailerLocationinfos();
-                    this.resetForm();
-                    this.collapsedempInfo = true;
-                    this.collapsedempDetails = false;
+                    if (result.MessageType == 1) {
+                        this.retailerlocationinfoList.unshift(result.Data);
+                        this.selectedretailerlocationinfo = result.Data;
+                        this.nodeSelected = true;
+                        this.rowData = result.Data;
+                        this.collapsedempInfo = true;
+                        this.collapsed = true;
+                        this.collapsedempDetails = false;
+                        this.retailerLocationIndex();
+                    }
                 }
             );
         }
@@ -1010,6 +1057,20 @@ export class RetailerinfoComponent implements OnInit {
         });
         this.toggle();
     }
+
+    retailerIndex() {
+        this.index = 0;
+    }
+
+    retailerContactIndex() {
+        this.index = 2;
+    }
+
+
+    retailerLocationIndex() {
+        this.index = 3;
+    }
+
 
     function(e) {
         this.index = e.index;

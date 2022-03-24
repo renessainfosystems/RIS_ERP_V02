@@ -1,6 +1,7 @@
-﻿using Administrative.Model.ViewModel;
+﻿using Auth.Model.Administrative.ViewModel;
 using Auth.Model.Administrative.Model;
-using Auth.Utility;
+using Auth.Utility.Administrative;
+using Auth.Utility.Administrative.Enum;
 using Dapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -9,8 +10,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-using Utility.Administrative.Enum;
-using static Auth.Utility.CommonMessage;
 
 namespace DataAccess
 {
@@ -90,7 +89,7 @@ namespace DataAccess
                     if (dbOperation == 3)
                     {
                         dynamic data = await _dbConnection.ExecuteAsync("[Administrative].[SP_Bank_Branch_D]", parameters, commandType: CommandType.StoredProcedure, transaction: tran);
-                        message = CommonMessage.SetSuccessMessage(CommonDeleteMessage);
+                        message = CommonMessage.SetWarningMessage(CommonMessage.CommonDeleteMessage);
                     }
                     else
                     {
@@ -102,7 +101,24 @@ namespace DataAccess
 
                             result = (from dr in dataList select BankBranchViewModel.ConvertToModel(dr)).ToList();
 
-                            message = CommonMessage.SetSuccessMessage(CommonSaveMessage, result);
+
+                            if (result != null && dbOperation == (int)GlobalEnumList.DBOperation.Approve)
+                            {
+                                return message = CommonMessage.SetSuccessMessage("Policy Approved", result);
+                            }
+
+                            if (result != null && dbOperation == (int)GlobalEnumList.DBOperation.Create)
+                            {
+                                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage, result);
+                            }
+                            else if (result != null && dbOperation == (int)GlobalEnumList.DBOperation.Update)
+                            {
+                                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonUpdateMessage, result);
+                            }
+                            else
+                            {
+                                message = CommonMessage.SetErrorMessage(CommonMessage.CommonErrorMessage);
+                            }
                         }
                     }
                 }
@@ -133,18 +149,18 @@ namespace DataAccess
 
             try
             {
-                var sql = "SELECT bank_branch_id,bank_branch_name,bank_branch_short_name,bank_branch_routing,bank_id,bank_branch_contact_number,bank_branch_email,country_id,division_id,district_id,city,ps_area,post_code,block,road_no,house_no,flat_no,address_note,remarks,is_branch,is_active " +
-                    "FROM [Administrative].[Bank_Branch] ORDER BY bank_branch_name ASC";
+                var sql = @"SELECT BB.*,C.country_name,dv.division_name,ds.district_name,B.bank_name
+                            FROM [Administrative].[Bank_Branch] BB 
+                            left join[Administrative].[Bank] B on BB.bank_id = B.bank_id 
+                            left join[Administrative].[Country] C on BB.country_id = C.country_id 
+                            left join[Administrative].[Division] DV on BB.division_id = DV.division_id 
+                            left join[Administrative].[District] DS on BB.district_id = DS.district_id ";
 
                 dynamic data = await _dbConnection.QueryAsync<dynamic>(sql);
                 if (data != null)
                 {
                     List<dynamic> dataList = data;
                     result = (from dr in dataList select BankBranchViewModel.ConvertToModel(dr)).ToList();
-
-                    //  message = CommonMessage.SetSuccessMessage(CommonSaveMessage,result);
-
-
                 }
 
             }
@@ -170,8 +186,13 @@ namespace DataAccess
 
             try
             {
-                var sql = "SELECT bank_branch_id,bank_branch_name,bank_branch_short_name,bank_branch_routing,bank_id,bank_branch_contact_number,bank_branch_email,country_id,division_id,district_id,city,ps_area,post_code,block,road_no,house_no,flat_no,address_note,remarks,is_branch,is_active " +
-                    "FROM [Administrative].[Bank_Branch] WHERE  bank_branch_id=@bank_branch_id";
+                var sql = @"SELECT BB.*,C.country_name,dv.division_name,ds.district_name,B.bank_name
+                            FROM[Administrative].[Bank_Branch] BB
+                            left join[Administrative].[Bank] B on BB.bank_id = B.bank_id
+                            left join[Administrative].[Country] C on BB.country_id = C.country_id
+                            left join[Administrative].[Division] DV on BB.division_id = DV.division_id
+                            left join[Administrative].[District] DS on BB.district_id = DS.district_id
+                            WHERE bank_branch_id =@bank_branch_id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@bank_branch_id", bank_branch_id);
 

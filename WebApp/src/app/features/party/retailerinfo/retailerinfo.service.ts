@@ -189,4 +189,8 @@ export class RetailerInfoService {
     getRetailerLocationInfoById(retailer_location_info_id: Number): Observable<any> {
         return this.http.get(this.ipconfig.base_IP + 'RetailerLocationInfo/GetRetailerLocationInfoById?retailer_location_info_id=' + retailer_location_info_id, httpOptions);
     }
+
+    getDealerInfoCboList(): Observable<any[]> {
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'DealerInfo/GetDealerInfoCboList');
+    }
 }

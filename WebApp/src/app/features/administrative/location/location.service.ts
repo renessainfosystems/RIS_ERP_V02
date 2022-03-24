@@ -21,19 +21,19 @@ export class LocationService {
   constructor(private http: HttpClient,private ipconfig: IPConfiguration) { }
 
   
-  getAllLocation(): Observable<Location[]> {
+    getAllLocation(): Observable<any[]> {
 
-    return this.http.get<Location[]>(this.ipconfig.base_IP + 'Location/GetAllLocation');    
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'Location/GetAllLocation');
   }
   
-    createLocation(location: FormData): Observable<Location> {
+    createLocation(location: FormData): Observable<any> {
 
-        return this.http.post<Location>(this.ipconfig.base_IP + 'Location/Create', location, httpOptionsForFileUpload);
+        return this.http.post<any>(this.ipconfig.base_IP + 'Location/Create', location, httpOptionsForFileUpload);
 
   }
-    updateLocation(location: FormData): Observable<Location> {
+    updateLocation(location: FormData): Observable<any> {
   
-        return this.http.post<Location>(this.ipconfig.base_IP + 'Location/Update', location, httpOptionsForFileUpload);
+        return this.http.post<any>(this.ipconfig.base_IP + 'Location/Update', location, httpOptionsForFileUpload);
 
   }
   deleteLocation(location_id:Number): Observable<any> {
@@ -47,22 +47,22 @@ export class LocationService {
     return this.http.get(this.ipconfig.base_IP + 'Location/GetById?location_id=' + location_id, httpOptions);
   }
 
-  getAllCountryCboList(): Observable<Location[]> {
-    return this.http.get<Location[]>(this.ipconfig.base_IP + 'Country/CountryCboList');
+    getAllCountryCboList(): Observable<any[]> {
+    return this.http.get<any[]>(this.ipconfig.base_IP + 'Country/CountryCboList');
   }
 
-  getAllDivisionCboListByCountryId(country_id): Observable<Location[]> {
-    return this.http.get<Location[]>(this.ipconfig.base_IP + 'Division/DivisionCboListByCountryId?country_id=' + country_id, httpOptions);
+    getAllDivisionCboListByCountryId(country_id): Observable<any[]> {
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'Division/DivisionCboListByCountryId?country_id=' + country_id, httpOptions);
   }
 
-  getAllDistrictCboListByDivisionId(division_id): Observable<Location[]> {
-    return this.http.get<Location[]>(this.ipconfig.base_IP + 'District/DistrictCboListByDivisionId?division_id=' + division_id, httpOptions);
+    getAllDistrictCboListByDivisionId(division_id): Observable<any[]> {
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'District/DistrictCboListByDivisionId?division_id=' + division_id, httpOptions);
   }
-  getAllThanaCboListByDistrictId(district_id): Observable<any[]> {
+    getAllThanaCboListByDistrictId(district_id): Observable<any[]> {
     return this.http.get<any[]>(this.ipconfig.base_IP + 'Thana/ThanaCboListByDistrictId?district_id=' + district_id, httpOptions);
   }
-  getVatApplicableEnumCboList(): Observable<Location[]> {
-    return this.http.get<Location[]>(this.ipconfig.base_IP + 'AdministrativeEnum/VatApplicableEnum');
+    getVatApplicableEnumCboList(): Observable<any[]> {
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'AdministrativeEnum/VatApplicableEnum');
   }
 
   

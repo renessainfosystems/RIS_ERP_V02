@@ -1,4 +1,5 @@
 ﻿
+using Auth.DataAccess.EntityDataAccess;
 using Auth.Model.Administrative.Model;
 using Auth.Repository.Administrative;
 using Auth.Utility;
@@ -18,13 +19,15 @@ namespace Auth.Controllers.Administrative
 
         //Intialize
         #region Constructor
+        private readonly IEntityDataAccess<Company> _entityDataAccess;
         private ICompanyRepository _companyRepository;
 
         public CompanyController(
-            ICompanyRepository companyRepository
+            IEntityDataAccess<Company> entityDataAccess
+            ,ICompanyRepository companyRepository
             )
         {
-
+            _entityDataAccess = entityDataAccess;
             _companyRepository = companyRepository;
         }
 
@@ -66,18 +69,13 @@ namespace Auth.Controllers.Administrative
         public dynamic Create(Company oCompany)
         {
             var message = new CommonMessage();
+            dynamic data = (dynamic)null;
             try
-            {
-                //Unique key check
-                //var companNameExist = validateUniqueKey(oCompany.company_name);
-                //if (companNameExist.Count > 0)
-                //{
-                //    return message = CommonMessage.SetWarningMessage("Company name must be unique.Please try another name.");
-                //}
-
+            {                
+                oCompany.company_id = _entityDataAccess.GetAutoId("Administrative.Company", "company_id");
                 _companyRepository.Add(oCompany);
-
-                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage);
+                data = _companyRepository.GetById(oCompany.company_id);
+                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage, data);
             }
             catch (Exception ex)
             {
@@ -91,10 +89,12 @@ namespace Auth.Controllers.Administrative
         public dynamic Update(Company oCompany)
         {
             var message = new CommonMessage();
+            dynamic data = (dynamic)null;
             try
             {
                 _companyRepository.Update(oCompany);
-                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonUpdateMessage);
+                data = _companyRepository.GetById(oCompany.company_id);
+                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonUpdateMessage, data);
             }
             catch (Exception ex)
             {
@@ -126,15 +126,5 @@ namespace Auth.Controllers.Administrative
 
         }
 
-        //Unique key validation method
-        //private dynamic validateUniqueKey(string company_name)
-        //{
-
-        //    var companies = _companyRepository.GetAllCompany();
-        //    var result = (from c in companies
-        //                  where c.company_name == company_name
-        //                  select c.company_name).ToList();
-        //    return result;
-        //}
     }
 }

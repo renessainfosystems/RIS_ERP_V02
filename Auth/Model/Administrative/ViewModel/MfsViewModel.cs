@@ -8,15 +8,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Auth.Model.Administrative.ViewModel
 {
-    public class RegistryAuthorityViewModel
+    public class MfsViewModel
     {
         [Key]
-        public int registry_authority_id { get; set; }
+        public int mfs_id { get; set; }
         [Required]
-        public string registry_authority_name { get; set; }
-        public string registry_authority_short_name { get; set; }
+        public string mfs_name { get; set; }
         [Required]
         public int country_id { get; set; }
+
         public string country_name { get; set; }
         public string remarks { get; set; }
 

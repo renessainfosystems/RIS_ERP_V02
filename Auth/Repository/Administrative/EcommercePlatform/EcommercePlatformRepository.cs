@@ -12,16 +12,17 @@ namespace Auth.Repository.Administrative
 {
     public class EcommercePlatformRepository : IEcommercePlatformRepository
     {
-        protected readonly ApplicationDBContext _dbSet;
+        private readonly IEntityDataAccess<EcommercePlatformViewModel> _entityDataAccessVM;
         private readonly IEntityDataAccess<EcommercePlatform> _entityDataAccess;
+ 
 
         public EcommercePlatformRepository(
-            ApplicationDBContext dbSet
+            IEntityDataAccess<EcommercePlatformViewModel> entityDataAccessVM
             , IEntityDataAccess<EcommercePlatform> entityDataAccess
 
             )
         {
-            _dbSet = dbSet;
+            _entityDataAccessVM = entityDataAccessVM;
             _entityDataAccess = entityDataAccess;
 
         }
@@ -56,15 +57,14 @@ namespace Auth.Repository.Administrative
             }
         }
 
-        public IEnumerable<EcommercePlatformViewModel> GetAllByRawSql()
+        public IEnumerable<dynamic> GetAllByRawSql()
         {
             try
             {
-                var result = _dbSet.EcommercePlatformViewModels
-                      .FromSqlRaw(@"select EP.*,C.country_name from [Administrative].[Ecommerce_Platforms] EP 
-                       left join [Administrative].[Country] C on EP.country_id=C.country_id order by ecommerce_paltforms_id desc")
-                      .ToList();
-                return result;
+                var sql = @"select EP.*,C.country_name from [Administrative].[Ecommerce_Platforms] EP 
+                       left join [Administrative].[Country] C on EP.country_id=C.country_id order by ecommerce_paltforms_id desc";
+                return _entityDataAccessVM.SqlRawQuery(sql);
+
             }
             catch (Exception ex)
             {
@@ -72,15 +72,14 @@ namespace Auth.Repository.Administrative
             }
         }
 
-        public IEnumerable<EcommercePlatformViewModel> GetByIdRawSql(int ecommerce_paltforms_id)
+        public IEnumerable<dynamic> GetByIdRawSql(int ecommerce_paltforms_id)
         {
             try
             {
-                var result = _dbSet.EcommercePlatformViewModels
-                      .FromSqlRaw(@"select EP.*,C.country_name from [Administrative].[Ecommerce_Platforms] EP 
-                       left join [Administrative].[Country] C on EP.country_id= c.country_id where EP.ecommerce_paltforms_id='" + ecommerce_paltforms_id + "'")
-                      .ToList();
-                return result;
+
+                var sql = @"select EP.*,C.country_name from [Administrative].[Ecommerce_Platforms] EP 
+                       left join [Administrative].[Country] C on EP.country_id= c.country_id where EP.ecommerce_paltforms_id='" + ecommerce_paltforms_id + "'";
+                return _entityDataAccessVM.SqlRawQuery(sql);
             }
             catch (Exception ex)
             {

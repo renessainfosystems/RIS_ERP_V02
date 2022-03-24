@@ -1,4 +1,4 @@
-﻿namespace Administrative.Model.ViewModel
+﻿namespace Auth.Model.Administrative.ViewModel
 {
     public class BankViewModel
     {
@@ -21,8 +21,11 @@
         public string AddressNote { get; set; }
         public string Remarks { get; set; }
         public bool IsBank { get; set; }
-
         public bool IsLocal { get; set; }
+
+        public string CountryName { get; set; }
+        public string DivisionName { get; set; }
+        public string DistrictName { get; set; }
 
         //public bool IsActive { get; set; }
 
@@ -49,10 +52,14 @@
             model.FlatNo = bank.flat_no ?? "";
             model.AddressNote = bank.address_note ?? "";
             model.Remarks = bank.remarks ?? "";
-            model.IsBank = bank.is_bank ?? false;
-            model.IsLocal = bank.is_local ?? false;
+            model.IsBank = bank.is_bank ?? true;
+            model.IsLocal = bank.is_local ?? true;
 
-           // model.IsActive = bank.is_active ?? true;
+            model.CountryName = bank.country_name ?? "";
+            model.DivisionName = bank.division_name ?? "";
+            model.DistrictName = bank.district_name ?? "";
+
+            // model.IsActive = bank.is_active ?? true;
 
             return model;
 

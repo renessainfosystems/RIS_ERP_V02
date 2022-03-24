@@ -4,8 +4,10 @@ import { AttendanceCalendarComponent } from './attendance-calendar/attendance-ca
 import { AttendancebenefitpolicyComponent } from './attendancebenefitpolicy/attendancebenefitpolicy.component';
 import { HolidayComponent } from './holiday/holiday.component';
 import { LateEarlyPolicyComponent } from './late-early-policy/late-early-policy.component';
+import { LeavePolicyComponent } from './leave-policy/leave-policy.component';
 import { LeaveheadComponent } from './leavehead/leavehead.component';
 import { OvertimepolicyComponent } from './overtimepolicy/overtimepolicy.component';
+import { RosterPolicyComponent } from './roster-policy/roster-policy.component';
 import { ShiftbreakComponent } from './shiftbreak/shiftbreak.component';
 import { ShiftinformationComponent } from './shiftinformation/shiftinformation.component';
 
@@ -46,5 +48,14 @@ export const AttendanceRoutes: Routes = [
   {
     path: 'late-early-policy',
     component: LateEarlyPolicyComponent
-  }
+    },
+    {
+        path: 'roster-policy',
+        component: RosterPolicyComponent
+    },
+    {
+        path: 'leave-policy',
+        component: LeavePolicyComponent
+    }
+
 ];
