@@ -58,9 +58,9 @@ namespace DataAccess
         public DbSet<OrganogramDetailSupervisor> OrganogramDetailSupervisors { get; set; }
         public DbSet<Currency> Currencies { get; set; }
         public DbSet<DocumentType> DocumentTypes { get; set; }
-        public DbSet<DocumentTypeViewModel> DocumentTypeViewModels { get; set; }
+        //public DbSet<DocumentTypeViewModel> DocumentTypeViewModels { get; set; }
         public DbSet<Mfs> Mfss { get; set; }
-        public DbSet<MfsViewModel> MfsViewModels { get; set; }
+       // public DbSet<MfsViewModel> MfsViewModels { get; set; }
         public DbSet<LocationType> LocationTypes { get; set; }
         public DbSet<ContactType> ContactTypes { get; set; }
         public DbSet<MfsType> MfsTypes { get; set; }
