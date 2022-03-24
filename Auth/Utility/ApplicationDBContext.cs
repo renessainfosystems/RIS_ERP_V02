@@ -4,6 +4,7 @@ using Auth.Model.Attendance.Model;
 using Auth.Model.Auth.Model;
 using Auth.Model.DomainModel;
 using Auth.Model.Payroll;
+using Auth.Model.PIMS.Model;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -72,6 +73,7 @@ namespace DataAccess
         public DbSet<Regulator> Regulators { get; set; }
         public DbSet<RegulatorViewModel> RegulatorViewModels { get; set; }
         public DbSet<DepartmentType> DepartmentTypes { get; set; }
+        public DbSet<EmployeeCategoryType> EmployeeCategoryTypes { get; set; }
 
         #endregion
 

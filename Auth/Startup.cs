@@ -254,6 +254,7 @@ namespace Auth
 
             #region Employee
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            services.AddScoped<IEmployeeCategoryTypeRepository, EmployeeCategoryTypeRepository>();
             services.AddScoped<EmployeeDataAccess, EmployeeDataAccess>();
             #endregion
 
