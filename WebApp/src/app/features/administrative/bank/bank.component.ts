@@ -12,6 +12,7 @@ import { NotificationService } from '../../../service/CommonMessage/notification
     templateUrl: './bank.component.html',
     styleUrls: ['./bank.component.css'],
 })
+
 export class BankComponent implements OnInit {
 
     bankForm: FormGroup;
@@ -41,7 +42,6 @@ export class BankComponent implements OnInit {
     index: number = 0;
     rowData: any;
     dataSaved = false;
-/*    bankForm: any;*/
     allBank: Observable<any[]>;
     selection = new SelectionModel<any>(true, []);
     massage = null;
@@ -199,8 +199,6 @@ export class BankComponent implements OnInit {
             else {
                 data.IsLocal = '0';
             }
-
-
             this.bankForm.controls['is_bank'].setValue(data.IsBank);
             this.bankForm.controls['is_local'].setValue(data.IsLocal);
             this.isBankEdit = true;

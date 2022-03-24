@@ -893,10 +893,14 @@ namespace DataAccess.Procurement
 
             try
             {
-                var sql = "select SEP.ecommerce_platforms_id,EP.ecommerce_paltforms_name from " +
-                            " [Procurement].[Supplier_Ecommerce_Platforms] SEP " +
-                            " left join[Administrative].[Ecommerce_Platforms] EP on SEP.ecommerce_platforms_id = EP.ecommerce_paltforms_id " +
-                            " where SEP.supplier_id =  @supplier_id";
+                //var sql = "select SEP.ecommerce_platforms_id,EP.ecommerce_paltforms_name from " +
+                //            " [Procurement].[Supplier_Ecommerce_Platforms] SEP " +
+                //            " left join[Administrative].[Ecommerce_Platforms] EP on SEP.ecommerce_platforms_id = EP.ecommerce_paltforms_id " +
+                //            " where SEP.supplier_id =  @supplier_id";
+
+                var sql = " select EP.ecommerce_paltforms_id value,EP.ecommerce_paltforms_name label,CASE WHEN (SEP.ecommerce_platforms_id IS not NULL) THEN 'true' ELSE 'false' END checked " +
+"FROM[Administrative].[Ecommerce_Platforms] EP " +
+"LEFT JOIN[Procurement].[Supplier_Ecommerce_Platforms] SEP on SEP.ecommerce_platforms_id = EP.ecommerce_paltforms_id  AND SEP.supplier_id = @supplier_id";
 
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@supplier_id", supplier_id);

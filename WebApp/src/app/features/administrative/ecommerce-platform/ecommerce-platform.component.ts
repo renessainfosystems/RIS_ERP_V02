@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { SelectionModel } from '@angular/cdk/collections';
 import { EcommercePlatformService } from './ecommerce-platform.service';
@@ -16,9 +16,27 @@ import { NotificationService } from '../../../service/CommonMessage/notification
 })
 export class EcommercePlatformComponent implements OnInit {
 
+    ecommercePlatformForm: FormGroup;
+    submitted = false;
+
+    //start grid and form show hide ********************
+    gridDisplay = false;
+    formDisplay = true;
+    toggleFormDisplay() {
+        this.gridDisplay = false;
+        this.formDisplay = true;
+    }
+    toggleGridDisplay() {
+        this.gridDisplay = true;
+        this.formDisplay = false;
+    }
+    toggleFormClose() {
+        this.toggleFormDisplay();
+    }
+    //end grid and form show hide ********************
+
     rowData: any;
     dataSaved = false;
-    ecommercePlatformForm: any;
     allEcommercePlatform: Observable<any[]>;
     selection = new SelectionModel<any>(true, []);
     massage = null;
@@ -33,7 +51,6 @@ export class EcommercePlatformComponent implements OnInit {
     selectedEcommercePlatform: any;
     ecommercePlatforms: any[];
 
-
     // for delete data modal
     display: boolean = false;
     showDialog() {
@@ -47,17 +64,14 @@ export class EcommercePlatformComponent implements OnInit {
     // for Insert and update data modal
     displayBasic: boolean = false;
     showBasicDialog() {
-        this.ecommercePlatformForm.reset();
-        this.massage = null;
-        this.dataSaved = false;
-        this.displayBasic = true;
+        this.resetForm();
+        this.toggleGridDisplay();
     }
 
     onRowSelect(event) {
         this.rowSelected = true;
         this.rowData = event.data;
     }
-
     onRowUnselect(event) {
         this.rowSelected = false;
         this.rowData = null;
@@ -111,28 +125,32 @@ export class EcommercePlatformComponent implements OnInit {
             this.ecommercePlatformForm.controls['remarks'].setValue(data.remarks);
             this.isEcommercePlatformEdit = true;
         });
-        this.displayBasic = true;
+        this.toggleGridDisplay();
     }
 
-
-    deleteEcommercePlatformInfo() {
-        if (this.rowData == null) {
-            return this.notifyService.ShowNotification(3, 'Please select row');
-        }
-        let ecommerce_paltforms_id = this.rowData.ecommerce_paltforms_id;
-        this.EcommercePlatformService.DeleteEcommercePlatform(ecommerce_paltforms_id).subscribe(data => {
-            if (data.MessageType == 2) {
-                this.ecommercePlatforms.splice(this.ecommercePlatforms.findIndex(item => item.ecommerce_paltforms_id === ecommerce_paltforms_id), 1);
-            }
-            this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
-        });
-        this.display = false;
-        this.resetForm();
+    //for validation messate -----------
+    get f(): { [key: string]: AbstractControl } {
+        return this.ecommercePlatformForm.controls;
     }
 
 
     onFormSubmit() {
+        //for validation message -----------
+        this.submitted = true;
         const ecommercePlatformdata = this.ecommercePlatformForm.value;
+
+        if ((ecommercePlatformdata.country_id === null)) {
+            return;
+        }
+        else if (ecommercePlatformdata.ecommerce_paltforms_name === null) {
+            return;
+        }
+        if (this.ecommercePlatformForm.invalid) {
+            return;
+        }
+        //end validation messate -----------
+
+        this.dataSaved = false;
         if (!(ecommercePlatformdata.country_id)) {
             return this.notifyService.ShowNotification(2, "Please Select Country")
         }
@@ -151,6 +169,8 @@ export class EcommercePlatformComponent implements OnInit {
                     this.rowSelected = true;
                     this.rowData = result.Data[0];
                     this.displayBasic = false;
+                    this.toggleFormDisplay();
+                    this.submitted = false;
                 }
             });
         }
@@ -164,10 +184,28 @@ export class EcommercePlatformComponent implements OnInit {
                     this.rowSelected = true;
                     this.rowData = result.Data[0];
                     this.displayBasic = false;
+                    this.toggleFormDisplay();
+                    this.submitted = false;
                 }
             });
         }
 
+    }
+
+
+    deleteEcommercePlatformInfo() {
+        if (this.rowData == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+        let ecommerce_paltforms_id = this.rowData.ecommerce_paltforms_id;
+        this.EcommercePlatformService.DeleteEcommercePlatform(ecommerce_paltforms_id).subscribe(data => {
+            if (data.MessageType == 2) {
+                this.ecommercePlatforms.splice(this.ecommercePlatforms.findIndex(item => item.ecommerce_paltforms_id === ecommerce_paltforms_id), 1);
+            }
+            this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
+        });
+        this.display = false;
+        this.resetForm();
     }
 
     resetForm() {

@@ -34,7 +34,7 @@ namespace Auth.Repository.Administrative
             catch (Exception ex)
             {
                 if (ex.InnerException.Message.Contains("UC_regulator_name_country_id"))
-                    throw new Exception("This Ecommerce Platform name(" + oRegulator.regulator_name + ") is already exists.");
+                    throw new Exception("This Regulator name(" + oRegulator.regulator_name + ") is already exists.");
                 else
                     throw new Exception(ex.Message);
             }
@@ -48,7 +48,7 @@ namespace Auth.Repository.Administrative
             catch (Exception ex)
             {
                 if (ex.InnerException.Message.Contains("UC_regulator_name_country_id"))
-                    throw new Exception("This Ecommerce Platform name(" + oRegulator.regulator_name + ") is already exists.");
+                    throw new Exception("This Regulator name(" + oRegulator.regulator_name + ") is already exists.");
                 else
                     throw new Exception(ex.Message);
             }

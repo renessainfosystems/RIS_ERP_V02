@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { SelectionModel } from '@angular/cdk/collections';
 import { AssociationService } from './association.service';
@@ -14,9 +14,27 @@ import { NotificationService } from '../../../service/CommonMessage/notification
 })
 export class AssociationComponent implements OnInit {
 
+    associationForm: FormGroup;
+    submitted = false;
+
+    //start grid and form show hide ********************
+    gridDisplay = false;
+    formDisplay = true;
+    toggleFormDisplay() {
+        this.gridDisplay = false;
+        this.formDisplay = true;
+    }
+    toggleGridDisplay() {
+        this.gridDisplay = true;
+        this.formDisplay = false;
+    }
+    toggleFormClose() {
+        this.toggleFormDisplay();
+    }
+    //end grid and form show hide ********************
+
     rowData: any;
     dataSaved = false;
-    associationForm: any;
     allassociation: Observable<any[]>;
     selection = new SelectionModel<any>(true, []);
     massage = null;
@@ -44,14 +62,11 @@ export class AssociationComponent implements OnInit {
             this.display = true;
     }
 
-
     // for Insert and update data modal
     displayBasic: boolean = false;
     showBasicDialog() {
-        this.associationForm.reset();
-        this.massage = null;
-        this.dataSaved = false;
-        this.displayBasic = true;
+        this.resetForm();
+        this.toggleGridDisplay();
     }
 
     onRowSelect(event) {
@@ -71,9 +86,9 @@ export class AssociationComponent implements OnInit {
     ngOnInit() {
 
         this.formInit();
-     this.loadAllassociations();
+        this.loadAllassociations();
         this.loadAllOrganizationTypeEnum();
-        this.loadAllCountryCboList();   
+        this.loadAllCountryCboList();
     }
 
     formInit() {
@@ -84,6 +99,12 @@ export class AssociationComponent implements OnInit {
             organization_type_id_enum: [null, [Validators.required]],
             remarks: ['']
 
+        });
+    }
+
+    loadAllassociations() {
+        this.AssociationService.getAllAssociation().subscribe(data => {
+            this.associations = data;
         });
     }
 
@@ -114,9 +135,68 @@ export class AssociationComponent implements OnInit {
             this.associationForm.controls['remarks'].setValue(data.remarks);
             this.isAssociationEdit = true;
         });
-        this.displayBasic = true;
+        this.toggleGridDisplay();
     }
 
+    //for validation messate -----------
+    get f(): { [key: string]: AbstractControl } {
+        return this.associationForm.controls;
+    }
+
+
+    onFormSubmit() {
+        //for validation message -----------
+        this.submitted = true;
+        const associationdata = this.associationForm.value;
+
+        if ((associationdata.country_id === null)) {
+            return;
+        }
+        else if (associationdata.organization_type_id_enum === null) {
+            return;
+        }
+        else if (associationdata.association_name === null) {
+            return;
+        }
+        if (this.associationForm.invalid) {
+            return;
+        }
+        //end validation messate -----------
+
+        this.dataSaved = false;
+        if (this.isAssociationEdit) {
+            associationdata.association_id = this.rowData.association_id;
+            this.AssociationService.UpdateAssociation(associationdata).subscribe(result => {
+                this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
+                if (result.MessageType == 1) {
+                    this.clear();
+                    this.associations.splice(this.associations.findIndex(item => item.association_id === associationdata.association_id), 1);
+                    this.associations.unshift(result.Data[0]);
+                    this.selectedAssociation = result.Data[0];
+                    this.rowSelected = true;
+                    this.rowData = result.Data[0];
+                    this.displayBasic = false;
+                    this.toggleFormDisplay();
+                    this.submitted = false;
+                }
+            });
+        }
+        else {
+            this.AssociationService.CreateAssociation(JSON.stringify(associationdata)).subscribe(result => {
+                this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
+                if (result.MessageType == 1) {
+                    this.clear();
+                    this.associations.unshift(result.Data[0]);
+                    this.selectedAssociation = result.Data[0];
+                    this.rowSelected = true;
+                    this.rowData = result.Data[0];
+                    this.displayBasic = false;
+                    this.toggleFormDisplay();
+                    this.submitted = false;
+                }
+            });
+        }
+    }
 
     deleteRegistryAuthorityInfo() {
         if (this.rowData == null) {
@@ -131,53 +211,6 @@ export class AssociationComponent implements OnInit {
         });
         this.display = false;
         this.resetForm();
-    }
-
-    loadAllassociations() {
-        this.AssociationService.getAllAssociation().subscribe(data => {
-            this.associations = data;
-        });
-    }
-
-    onFormSubmit() {
-        const associationdata = this.associationForm.value;
-        if (!(associationdata.country_id)) {
-            return this.notifyService.ShowNotification(2, "Please Select Country")
-        }
-        if (!(associationdata.organization_type_id_enum)) {
-            return this.notifyService.ShowNotification(2, "Please Select Organization")
-        }
-        if (!(associationdata.association_name)) {
-            return this.notifyService.ShowNotification(2, "Please Input Association Name")
-        }
-        if (this.isAssociationEdit) {
-            associationdata.association_id = this.rowData.association_id;
-            this.AssociationService.UpdateAssociation(associationdata).subscribe(result => {
-                this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
-                if (result.MessageType == 1) {
-                    this.clear();
-                    this.associations.splice(this.associations.findIndex(item => item.association_id === associationdata.association_id), 1);
-                    this.associations.unshift(result.Data[0]);
-                    this.selectedAssociation = result.Data[0];
-                    this.rowSelected = true;
-                    this.rowData = result.Data[0];
-                    this.displayBasic = false;
-                }
-            });
-        }
-        else {
-            this.AssociationService.CreateAssociation(JSON.stringify(associationdata)).subscribe(result => {
-                this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
-                if (result.MessageType == 1) {
-                    this.clear();
-                    this.associations.unshift(result.Data[0]);   
-                    this.selectedAssociation = result.Data[0];
-                    this.rowSelected = true;
-                    this.rowData = result.Data[0];
-                    this.displayBasic = false;
-                }
-            });
-        }
     }
 
     resetForm() {

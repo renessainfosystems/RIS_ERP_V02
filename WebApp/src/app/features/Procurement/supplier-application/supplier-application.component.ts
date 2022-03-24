@@ -337,8 +337,8 @@ export class SupplierApplicationComponent implements OnInit {
             flat_no: [null],
             email: [null],
             mobile_no: [null],
-            phone_no: [null],
-            pabx: [null],
+            phone_no: [''],
+            pabx: [''],
 
         });
 
@@ -549,7 +549,6 @@ export class SupplierApplicationComponent implements OnInit {
     }
 
     onRowSelect(event) {
-        debugger
         this.nodeSelected = true;
         this.rowData = event.data;
 
@@ -637,54 +636,9 @@ export class SupplierApplicationComponent implements OnInit {
     // All Supplier List 
     loadAllSupplierinfos() {
         this.SupplierApplicationService.getAllSupplierInfo().subscribe(data => {
-            debugger
             this.supplierinfoList = data;
         });
     }
-
-    //supplierId() {
-    //  this.SupplierApplicationService.getSupplierId().subscribe(data => {
-    //    this.massage = null;
-    //    this.dataSaved = false;
-    //    this.supplierApplicationForm.controls['supplier_code'].setValue(data.SupplierCode);
-    //    this.supplier_id = data.SupplierId;
-    //  });
-    //}
-
-    //loadSupplierBasicInfo() {
-    //  this.SupplierApplicationService.getSupplierBasicInfo(this.supplier_id).subscribe(data => {
-    //    this.massage = null;
-    //    this.dataSaved = false;
-    //    this.supplierApplicationForm.controls['legal_name'].setValue(data.LegalName);
-    //    this.supplierApplicationForm.controls['short_name'].setValue(data.ShortName);
-    //    this.supplierApplicationForm.controls['year_established'].setValue(new Date(data.YearEstablished));
-    //    this.supplierApplicationForm.controls['domicile_enum_id'].setValue(data.DomicileEnumId);
-    //    this.supplierApplicationForm.controls['registry_authority_id'].setValue(data.RegistryAuthorityId);
-    //    this.supplierApplicationForm.controls['regulator_id'].setValue(data.RegulatorId);
-    //    this.supplierApplicationForm.controls['ownership_type_id'].setValue(data.OwnershipTypeId);
-    //    this.supplierApplicationForm.controls['name_in_local_language'].setValue(data.NameInLocalLanguage);
-    //    this.supplierApplicationForm.controls['address_in_local_language'].setValue(data.AddressInLocalLanguage);
-    //    this.supplierApplicationForm.controls['country_id'].setValue(data.CountryId);
-    //    this.onSelectByCountryId(data.CountryId);
-    //    this.supplierApplicationForm.controls['division_id'].setValue(data.DivisionId);
-    //    this.onSelectByDivisionId(data.DivisionId);
-    //    this.supplierApplicationForm.controls['district_id'].setValue(data.DistrictId);
-    //    this.supplierApplicationForm.controls['city'].setValue(data.City);
-    //    this.supplierApplicationForm.controls['ps_area'].setValue(data.PsArea);
-    //    this.supplierApplicationForm.controls['post_code'].setValue(data.PostCode);
-    //    this.supplierApplicationForm.controls['block'].setValue(data.Block);
-    //    this.supplierApplicationForm.controls['road_no'].setValue(data.RoadNo);
-    //    this.supplierApplicationForm.controls['house_no'].setValue(data.HouseNo);
-    //    this.supplierApplicationForm.controls['flat_no'].setValue(data.FlatNo);
-    //    this.supplierApplicationForm.controls['email'].setValue(data.Email);
-    //    this.supplierApplicationForm.controls['mobile_no'].setValue(data.MobileNo);
-    //    this.supplierApplicationForm.controls['phone_no'].setValue(data.PhoneNo);
-    //    this.supplierApplicationForm.controls['pabx'].setValue(data.Pabx);
-
-    //    //this.supplier_id = data.SupplierId;
-    //    //this.supplierApplicationForm.controls['supplier_id'].setValue(data.SupplierId);
-    //  });
-    //}
 
 
     loadAllSupplierLocation() {
@@ -801,37 +755,6 @@ export class SupplierApplicationComponent implements OnInit {
             this.categories = data;
         });
     }
-
-    //loadAllSupplierBusiness() {
-    //  let supplierId = this.supplier_id;
-    //  this.SupplierApplicationService.getAllSupplierBusiness(supplierId).subscribe(data => {
-    //    this.massage = null;
-    //    this.dataSaved = false;
-    //    this.businessApplicationForm.controls['business_activities_enum_id'].setValue(data.BusinessActivityEnumId);
-    //    this.businessApplicationForm.controls['management_staff_no'].setValue(data.ManagementStaffNo);
-    //    this.businessApplicationForm.controls['nonmanagement_staff_no'].setValue(data.NonmanagementStaffNo);
-    //    this.businessApplicationForm.controls['permanent_worker_no'].setValue(data.PermanentWorkerNo);
-    //    this.businessApplicationForm.controls['casual_worker_no'].setValue(data.CasualWorkerNo);
-
-    //  });
-    //}
-
-    //loadAllSupplierBusinessSubSector() {
-    //  let supplierId = this.supplier_id;
-    //  this.SupplierApplicationService.getAllSupplierBusinessSubSector(supplierId).subscribe(data => {
-    //    this.massage = null;
-    //    this.dataSaved = false;
-    //    this.subSectorDataSources = data;
-    //  });
-    //}
-
-    //loadAllSupplierBusinessEcommerce() {
-    //  let supplierId = this.supplier_id;
-    //  this.SupplierApplicationService.getAllSupplierBusinessEcommerce(supplierId).subscribe(data => {
-    //    this.massage = null;
-    //    this.dataSaved = false;
-    //  });
-    //}
 
     //Association dd load
 
@@ -1115,7 +1038,22 @@ export class SupplierApplicationComponent implements OnInit {
             this.subSectorDataSources = data;
         });
 
+        //this.SupplierApplicationService.getAllSupplierBusinessEcommerce(supplierId).subscribe(data => {
+        //});
+
         this.SupplierApplicationService.getAllSupplierBusinessEcommerce(supplierId).subscribe(data => {
+            debugger
+            for (let item of data) {
+                if (item.checked === 'false') {
+                    item.checked = false
+                }
+                else {
+                    item.checked = true
+                }
+            }
+
+            this.categories = data;
+            console.log(data)
         });
 
         this.SupplierApplicationService.getAllSupplierAssociation(supplierId).subscribe(data => {
@@ -1247,7 +1185,8 @@ export class SupplierApplicationComponent implements OnInit {
             else {
                 formData.append(key, value);
             }
-        } formData.append("domicile_enum_id", this.supplierApplicationForm.value.domicile_enum);
+        }
+        formData.append("domicile_enum_id", this.supplierApplicationForm.value.domicile_enum);
         formData.append("registry_authority_id", this.supplierApplicationForm.value.registry_authority_id);
         formData.append("regulator_id", this.supplierApplicationForm.value.regulator_id);
         formData.append("ownership_type_id", this.supplierApplicationForm.value.ownership_type_id);
@@ -1255,7 +1194,17 @@ export class SupplierApplicationComponent implements OnInit {
         formData.append("division_id", this.supplierApplicationForm.value.divisionObj);
         formData.append("district_id", this.supplierApplicationForm.value.districtObj);
 
-        debugger
+        var arr = [];
+        var object = {};
+        formData.forEach(function (value, key) {
+          arr[key] = value;
+          //fd.append(key, value);
+        });
+
+        var json = JSON.stringify(arr);
+        console.log(object)
+
+   
 
         if (this.rowData != null) {
 
