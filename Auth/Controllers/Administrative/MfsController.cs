@@ -91,7 +91,7 @@ namespace Auth.Controllers.Administrative
                 oMfs.mfs_id = _entityDataAccess.GetAutoId("Administrative.Mobile_Financial_Service", "mfs_id");
                 _mfsRepository.Add(oMfs);
                 data = _mfsRepository.GetByIdRawSql(oMfs.mfs_id);
-                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage);
+                message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage, data);
             }
             catch (Exception ex)
             {

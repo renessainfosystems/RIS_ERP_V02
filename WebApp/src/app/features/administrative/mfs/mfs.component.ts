@@ -133,7 +133,7 @@ export class MfsComponent implements OnInit {
             return this.notifyService.ShowNotification(2, "Please Select Country")
         }
         if (!(mfsdata.mfs_name)) {
-            return this.notifyService.ShowNotification(2, "Please Select Country Name")
+            return this.notifyService.ShowNotification(2, "Please Select MFS Name")
         }
         if (this.isMfsEdit) {
             mfsdata.mfs_id = this.rowData.mfs_id;
@@ -154,6 +154,7 @@ export class MfsComponent implements OnInit {
         else {
             this.MfsService.CreateMfs(JSON.stringify(mfsdata)).subscribe(result => {
                 this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
+                debugger
                 if (result.MessageType == 1) {
                     this.clear();
                     this.mfss.unshift(result.Data[0]);
@@ -162,6 +163,7 @@ export class MfsComponent implements OnInit {
                     this.rowData = result.Data[0];
                     this.toggleFormDisplay();
                     this.submitted = false;
+
                 }
             });
         }
