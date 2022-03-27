@@ -132,7 +132,7 @@ export class LocationComponent implements OnInit {
             web_url: [''],
             name_in_local_language: [''],
             address_in_local_language: [''],
-            remarks: ['']
+            remarks: ['test']
         });
         this.loadAllCountryCboList();
         this.loadVatApplicableEnumCboList();
@@ -348,9 +348,18 @@ export class LocationComponent implements OnInit {
         let formData = new FormData();
         for (const key of Object.keys(this.locationForm.value)) {
             const value = this.locationForm.value[key];
+            //if (value == "null") {
+            //    formData.append("phone", '');
+            //    formData.append("email", '');
+            //    formData.append("web_url", '');
+            //    formData.append("location_reg_no", '');
+            //    formData.append("remarks", '');
+            //}
             if (key == "location_reg_date") {
                 let date = new Date(value).toISOString();
                 formData.append("location_reg_date", date);
+
+                
             }
             else {
 
@@ -371,7 +380,7 @@ export class LocationComponent implements OnInit {
                         this.toggleFormDisplay();
                         this.generalIndex();
                         this.submitted = false;
-                        this.locationForm.reset();
+                        //this.locationForm.reset();
                     }
                 }
             );
@@ -399,7 +408,7 @@ export class LocationComponent implements OnInit {
                     this.toggleFormDisplay();
                     this.generalIndex();
                     this.submitted = false;
-                    this.locationForm.reset();
+                   // this.locationForm.reset();
                 }
             });
         }
