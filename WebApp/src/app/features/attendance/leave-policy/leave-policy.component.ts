@@ -15,7 +15,7 @@ export class LeavePolicyComponent implements OnInit {
 
     valCheck: string[] = [];
     valCheck2: string[] = [];
-
+    valRadio: string;
 
 
     leavePolicyForm: FormGroup;
@@ -28,14 +28,14 @@ export class LeavePolicyComponent implements OnInit {
     selectedShift: any;
 
     selectedleaveTypes: any;
-    leaveTypes: any[];
-
+    leaveHeads: any[];
+    salaryheads: any[];
     selectedNextShift: any;
     allShifts: any[];
 
     rowData: any;
     rowSelected: boolean = false;
-    isRosterEdit: boolean = false;
+    isLeavePolicyEdit: boolean = false;
     displayApprove: boolean = false;
     //start grid and form show hide ********************
     gridDisplay = false;
@@ -66,17 +66,56 @@ export class LeavePolicyComponent implements OnInit {
             next_shift_id: [null],
             shift_id: [null],
             code: [null],
-
-            max_carry_forward: [null],
-            max_carry_forwards: [null],
-            leave_type_id: [null],
-
+            remarks: [null],
+            is_proportionate: [false],
+            leave_head_id: [null, [Validators.required]],
+            default_leave_balance_day: [null],
+            default_leave_balance_min: [null],
+            max_enjoyable_limit_min: [null],
+            max_carry_leave_limit_min: [null],
+            max_carry_year: [null],
+            is_hourly: [null],
+            is_attachment_required: [null],
+            attachment_required_for_min: [null],
+            is_allow_sandwich: [null],
+            is_sandwich_dayoff: [null],
+            is_sandwich_holiday: [null],
+            is_sandwich_uneven: [null],
+            is_prefix: [null],
+            is_prefix_dayoff: [null],
+            is_prefix_holiday: [null],
+            is_prefix_uneven: [null],
+            is_sufix: [null],
+            is_sufix_dayoff: [null],
+            is_sufix_holiday: [null],
+            is_sufix_uneven: [null],
+            is_required_purpose: [null],
+            purpose_required_for_min: [null],
+            is_leave_area_required: [null],
+            area_required_for_min: [null],
+            is_responsible_person_required: [null],
+            responsible_person_required_for_min: [null],
+            is_negetive_balance: [null],
+            notice_period: [null],
+            notice_required_for_min: [null],
+            earn_day_count: [null],
+            is_earn_dayoff: [null],
+            is_earn_holiday: [null],
+            is_earn_uneven: [null],
+            is_earn_absent: [null],
+            encash_leave_balance_limit_min: [null],
+            encash_fixed_amount: [null],
+            encash_amount_percent: [null],
+            is_gross: [null],
+            salary_head_id: [null],
+            activation_days: [null],
+            is_activation_on_joining: ['1', [Validators.required]],
 
 
         });
         this.loadAllLeavePolicy();
-        this.loadAllShift();
-        this.loadAllRosterCycle();
+        this.loadSalaryHead();
+        this.loadLeaveHead();
     }
     onRowSelect(event) {
         this.rowSelected = true;
@@ -107,21 +146,19 @@ export class LeavePolicyComponent implements OnInit {
             this.leavePolicies = [];
         });
     }
-    loadAllShift() {
-        this.LeavePolicyService.getAllLeaveHeadForDP().subscribe(data => {
+    loadSalaryHead() {
+        this.LeavePolicyService.getPrimarySalaryHeadForDP().subscribe(data => {
 
-            this.leaveTypes = data;
+            this.salaryheads = data;
 
-            this.allShifts = data;
+            
 
         });
     }
-    loadAllRosterCycle() {
-        this.LeavePolicyService.getPrimarySalaryHeadForDP().subscribe(data => {
+    loadLeaveHead() {
+        this.LeavePolicyService.getAllLeaveHeadForDP().subscribe(data => {
 
-            this.allRosterCycle = data;
-
-            this.allShifts = data;
+            this.leaveHeads = data;
 
         });
     }
@@ -146,7 +183,7 @@ export class LeavePolicyComponent implements OnInit {
 
             this.leavePolicyForm.controls['leave_policy_name'].setValue(data.leave_policy_name);
             this.leavePolicyForm.controls['code'].setValue(data.code);
-            this.isRosterEdit = true;
+            this.isLeavePolicyEdit = true;
         });
 
         this.toggleGridDisplay();
@@ -196,7 +233,7 @@ export class LeavePolicyComponent implements OnInit {
         );
     }
 
-    saveRosterPolicy() {
+    saveLeavePolicy() {
         const data = this.leavePolicyForm.value;
 
         this.submitted = true;
@@ -205,7 +242,7 @@ export class LeavePolicyComponent implements OnInit {
 
             return;
         }
-        if (this.isRosterEdit) {
+        if (this.isLeavePolicyEdit) {
 
             data.leave_policy_id = this.rowData.leave_policy_id;
             this.LeavePolicyService.update(data).subscribe(result => {
@@ -290,7 +327,7 @@ export class LeavePolicyComponent implements OnInit {
         this.leavePolicyForm.reset();
         this.rosterDetails = [];
         this.submitted = false;
-        this.isRosterEdit = false;
+        this.isLeavePolicyEdit = false;
     }
 
 }
