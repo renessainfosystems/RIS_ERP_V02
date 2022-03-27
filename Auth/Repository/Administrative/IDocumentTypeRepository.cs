@@ -8,6 +8,7 @@ namespace Auth.Repository.Administrative
         void Add(DocumentType oDocumentType);
         void Update(DocumentType oDocumentType);
         IEnumerable<DocumentType> GetAllDocumentType();
+
         IEnumerable<dynamic> GetAllByRawSql();
         IEnumerable<dynamic> GetByIdRawSql(int document_type_id);
         DocumentType GetById(int document_type_id);
