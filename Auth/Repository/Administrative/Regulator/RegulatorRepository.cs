@@ -1,12 +1,9 @@
 ﻿using Auth.DataAccess.EntityDataAccess;
 using Auth.Model.Administrative.Model;
 using Auth.Model.Administrative.ViewModel;
-using Auth.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using DataAccess;
-using Microsoft.EntityFrameworkCore;
 
 namespace Auth.Repository.Administrative
 {
@@ -16,7 +13,7 @@ namespace Auth.Repository.Administrative
         private readonly IEntityDataAccess<Regulator> _entityDataAccess;
 
         public RegulatorRepository(
-            IEntityDataAccess<RegulatorViewModel> entityDataAccessVM
+           IEntityDataAccess<RegulatorViewModel> entityDataAccessVM
             , IEntityDataAccess<Regulator> entityDataAccess)
         {
             _entityDataAccessVM = entityDataAccessVM;
@@ -59,6 +56,8 @@ namespace Auth.Repository.Administrative
         {
             try
             {
+
+
                 var sql = @"select RT.*,C.country_name from [Administrative].[Regulator] RT 
                        left join [Administrative].[Country] C on RT.country_id=C.country_id order by regulator_id desc";
                 return _entityDataAccessVM.SqlRawQuery(sql);

@@ -1,12 +1,9 @@
 ﻿using Auth.DataAccess.EntityDataAccess;
 using Auth.Model.Administrative.Model;
 using Auth.Model.Administrative.ViewModel;
-using Auth.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using DataAccess;
-using Microsoft.EntityFrameworkCore;
 
 
 namespace Auth.Repository.Administrative
@@ -17,8 +14,9 @@ namespace Auth.Repository.Administrative
         private readonly IEntityDataAccess<RegistryAuthorityViewModel> _entityDataAccessVM;
         private readonly IEntityDataAccess<RegistryAuthority> _entityDataAccess;
 
+
         public RegistryAuthorityRepository(
-            IEntityDataAccess<RegistryAuthorityViewModel> entityDataAccessVM
+             IEntityDataAccess<RegistryAuthorityViewModel> entityDataAccessVM
             , IEntityDataAccess<RegistryAuthority> entityDataAccess
 
             )
@@ -82,6 +80,7 @@ namespace Auth.Repository.Administrative
         {
             try
             {
+
                 var sql = @"select RA.*,C.country_name from [Administrative].[Registry_Authority] RA 
                        left join [Administrative].[Country] C on RA.country_id = c.country_id where RA.registry_authority_id='" + registry_authority_id + "'";
                 return _entityDataAccessVM.SqlRawQuery(sql);

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MfsService } from './mfs.service';
@@ -13,10 +13,27 @@ import { NotificationService } from '../../../service/CommonMessage/notification
     styleUrls: ['./mfs.component.css']
 })
 export class MfsComponent implements OnInit {
+    mfsForm: FormGroup;
+    submitted = false;
+
+    //start grid and form show hide ********************
+    gridDisplay = false;
+    formDisplay = true;
+    toggleFormDisplay() {
+        this.gridDisplay = false;
+        this.formDisplay = true;
+    }
+    toggleGridDisplay() {
+        this.gridDisplay = true;
+        this.formDisplay = false;
+    }
+    toggleFormClose() {
+        this.toggleFormDisplay();
+    }
+    //end grid and form show hide ********************
 
     rowData: any;
     dataSaved = false;
-    mfsForm: any;
     allMfs: Observable<any[]>;
     selection = new SelectionModel<any>(true, []);
     massage = null;
@@ -39,14 +56,11 @@ export class MfsComponent implements OnInit {
         else
             this.display = true;
     }
-
     // for Insert and update data modal
-    displayBasic: boolean = false;
+    //displayBasic: boolean = false;
     showBasicDialog() {
-        this.mfsForm.reset();
-        this.massage = null;
-        this.dataSaved = false;
-        this.displayBasic = true;
+        this.resetForm();
+        this.toggleGridDisplay();
     }
 
     onRowSelect(event) {
@@ -86,6 +100,12 @@ export class MfsComponent implements OnInit {
         });
     }
 
+    loadAllMfs() {
+        this.MfsService.getAllMfs().subscribe(data => {
+            this.mfss = data;
+        });
+    }
+
     loadMfsToEdit() {
         if (this.rowData == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
@@ -99,31 +119,12 @@ export class MfsComponent implements OnInit {
             this.mfsForm.controls['remarks'].setValue(data.remarks);
             this.isMfsEdit = true;
         });
-        this.displayBasic = true;
+        this.toggleGridDisplay();
     }
 
-    deleteRegulatorInfo() {
-        if (this.rowData == null) {
-            return this.notifyService.ShowNotification(3, 'Please select row');
-        }
-        let mfs_id = this.rowData.mfs_id;
-        this.MfsService.DeleteMfs(mfs_id).subscribe(data => {
-            debugger
-            if (data.MessageType == 2) {
-                this.mfss.splice(this.mfss.findIndex(item => item.mfs_id === mfs_id), 1);
-            }
-            this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
-        });
-        this.display = false;
-        this.resetForm();
-    }
-
-
-    loadAllMfs() {
-        this.MfsService.getAllMfs().subscribe(data => {
-            debugger
-            this.mfss = data;
-        });
+    //for validation messate -----------
+    get f(): { [key: string]: AbstractControl } {
+        return this.mfsForm.controls;
     }
 
     onFormSubmit() {
@@ -145,7 +146,8 @@ export class MfsComponent implements OnInit {
                     this.selectedMfs = result.Data[0];
                     this.rowSelected = true;
                     this.rowData = result.Data[0];
-                    this.displayBasic = false;
+                    this.toggleFormDisplay();
+                    this.submitted = false;
                 }
             });
         }
@@ -158,10 +160,27 @@ export class MfsComponent implements OnInit {
                     this.selectedMfs = result.Data[0];
                     this.rowSelected = true;
                     this.rowData = result.Data[0];
-                    this.displayBasic = false;
+                    this.toggleFormDisplay();
+                    this.submitted = false;
                 }
             });
         }
+    }
+
+    deleteMfsInfo() {
+        if (this.rowData == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+        let mfs_id = this.rowData.mfs_id;
+        this.MfsService.DeleteMfs(mfs_id).subscribe(data => {
+            debugger
+            if (data.MessageType == 2) {
+                this.mfss.splice(this.mfss.findIndex(item => item.mfs_id === mfs_id), 1);
+            }
+            this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
+        });
+        this.display = false;
+        this.resetForm();
     }
 
     resetForm() {
@@ -173,29 +192,5 @@ export class MfsComponent implements OnInit {
     clear() {
         this.resetForm();
     }
-
-    //CreateMfs(mfsdata: any) {
-
-    //    if (this.mfsIdUpdate == null) {
-    //        this.MfsService.CreateMfs(mfsdata).subscribe(
-    //            result => {
-    //                this.dataSaved = true;
-    //                this.loadAllMfs();
-    //                this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
-    //                this.mfsIdUpdate = null;
-    //                this.displayBasic = false;
-    //            }
-    //        );
-    //    } else {
-    //        mfsdata.mfs_id = this.mfsIdUpdate;
-    //        this.MfsService.UpdateMfs(mfsdata).subscribe(result => {
-    //            this.dataSaved = true;
-    //            this.loadAllMfs();
-    //            this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
-    //            this.mfsIdUpdate = null;
-    //            this.displayBasic = false;
-    //        });
-    //    }
-    //}
 }
 

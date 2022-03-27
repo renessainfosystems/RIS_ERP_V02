@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { SelectionModel } from '@angular/cdk/collections';
 import { AssociationService } from './association.service';
@@ -14,9 +14,27 @@ import { NotificationService } from '../../../service/CommonMessage/notification
 })
 export class AssociationComponent implements OnInit {
 
+    associationForm: FormGroup;
+    submitted = false;
+
+    //start grid and form show hide ********************
+    gridDisplay = false;
+    formDisplay = true;
+    toggleFormDisplay() {
+        this.gridDisplay = false;
+        this.formDisplay = true;
+    }
+    toggleGridDisplay() {
+        this.gridDisplay = true;
+        this.formDisplay = false;
+    }
+    toggleFormClose() {
+        this.toggleFormDisplay();
+    }
+    //end grid and form show hide ********************
+
     rowData: any;
     dataSaved = false;
-    associationForm: any;
     allassociation: Observable<any[]>;
     selection = new SelectionModel<any>(true, []);
     massage = null;
@@ -43,15 +61,11 @@ export class AssociationComponent implements OnInit {
         else
             this.display = true;
     }
-
-
     // for Insert and update data modal
-    displayBasic: boolean = false;
+    //displayBasic: boolean = false;
     showBasicDialog() {
-        this.associationForm.reset();
-        this.massage = null;
-        this.dataSaved = false;
-        this.displayBasic = true;
+        this.resetForm();
+        this.toggleGridDisplay();
     }
 
     onRowSelect(event) {
@@ -71,9 +85,9 @@ export class AssociationComponent implements OnInit {
     ngOnInit() {
 
         this.formInit();
-     this.loadAllassociations();
+        this.loadAllassociations();
         this.loadAllOrganizationTypeEnum();
-        this.loadAllCountryCboList();   
+        this.loadAllCountryCboList();
     }
 
     formInit() {
@@ -99,6 +113,13 @@ export class AssociationComponent implements OnInit {
         });
     }
 
+
+    loadAllassociations() {
+        this.AssociationService.getAllAssociation().subscribe(data => {
+            this.associations = data;
+        });
+    }
+
     loadassociationToEdit() {
         if (this.rowData == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
@@ -114,29 +135,14 @@ export class AssociationComponent implements OnInit {
             this.associationForm.controls['remarks'].setValue(data.remarks);
             this.isAssociationEdit = true;
         });
-        this.displayBasic = true;
+        this.toggleGridDisplay();
     }
 
 
-    deleteRegistryAuthorityInfo() {
-        if (this.rowData == null) {
-            return this.notifyService.ShowNotification(3, 'Please select row');
-        }
-        let association_id = this.rowData.association_id;
-        this.AssociationService.DeleteAssociation(association_id).subscribe(data => {
-            if (data.MessageType == 2) {
-                this.associations.splice(this.associations.findIndex(item => item.association_id === association_id), 1);
-            }
-            this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
-        });
-        this.display = false;
-        this.resetForm();
-    }
 
-    loadAllassociations() {
-        this.AssociationService.getAllAssociation().subscribe(data => {
-            this.associations = data;
-        });
+    //for validation messate -----------
+    get f(): { [key: string]: AbstractControl } {
+        return this.associationForm.controls;
     }
 
     onFormSubmit() {
@@ -161,7 +167,8 @@ export class AssociationComponent implements OnInit {
                     this.selectedAssociation = result.Data[0];
                     this.rowSelected = true;
                     this.rowData = result.Data[0];
-                    this.displayBasic = false;
+                    this.toggleFormDisplay();
+                    this.submitted = false;
                 }
             });
         }
@@ -174,10 +181,26 @@ export class AssociationComponent implements OnInit {
                     this.selectedAssociation = result.Data[0];
                     this.rowSelected = true;
                     this.rowData = result.Data[0];
-                    this.displayBasic = false;
+                    this.toggleFormDisplay();
+                    this.submitted = false;
                 }
             });
         }
+    }
+
+    deleteAssociationInfo() {
+        if (this.rowData == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+        let association_id = this.rowData.association_id;
+        this.AssociationService.DeleteAssociation(association_id).subscribe(data => {
+            if (data.MessageType == 2) {
+                this.associations.splice(this.associations.findIndex(item => item.association_id === association_id), 1);
+            }
+            this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
+        });
+        this.display = false;
+        this.resetForm();
     }
 
     resetForm() {

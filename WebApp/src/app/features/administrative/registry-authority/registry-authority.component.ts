@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { SelectionModel } from '@angular/cdk/collections';
 import { RegistryAuthorityService } from './registry-authority.service';
@@ -13,9 +13,27 @@ import { NotificationService } from '../../../service/CommonMessage/notification
 })
 export class RegistryAuthorityComponent implements OnInit {
 
+    registryAuthorityForm: FormGroup;
+    submitted = false;
+
+    //start grid and form show hide ********************
+    gridDisplay = false;
+    formDisplay = true;
+    toggleFormDisplay() {
+        this.gridDisplay = false;
+        this.formDisplay = true;
+    }
+    toggleGridDisplay() {
+        this.gridDisplay = true;
+        this.formDisplay = false;
+    }
+    toggleFormClose() {
+        this.toggleFormDisplay();
+    }
+    //end grid and form show hide ********************
+
     rowData: any;
     dataSaved = false;
-    registryAuthorityForm: any;
     allRegistryAuthority: Observable<any[]>;
     selection = new SelectionModel<any>(true, []);
     massage = null;
@@ -39,15 +57,11 @@ export class RegistryAuthorityComponent implements OnInit {
         else
             this.display = true;
     }
-
-
     // for Insert and update data modal
-    displayBasic: boolean = false;
+    //displayBasic: boolean = false;
     showBasicDialog() {
-        this.registryAuthorityForm.reset();
-        this.massage = null;
-        this.dataSaved = false;
-        this.displayBasic = true;
+        this.resetForm();
+        this.toggleGridDisplay();
     }
 
     onRowSelect(event) {
@@ -109,22 +123,15 @@ export class RegistryAuthorityComponent implements OnInit {
             this.registryAuthorityForm.controls['remarks'].setValue(data.remarks);
             this.isRegistryAuthorityEdit = true;
         });
-        this.displayBasic = true;
+        this.toggleGridDisplay();
     }
 
-    deleteRegistryAuthorityInfo() {
-        if (this.rowData == null) {
-            return this.notifyService.ShowNotification(3, 'Please select row');
-        }
-        let registry_authority_id = this.rowData.registry_authority_id;
-        this.RegistryAuthorityService.DeleteRegistryAuthority(registry_authority_id).subscribe(data => {
-            if (data.MessageType == 2) {
-                this.registryAuthoritys.splice(this.registryAuthoritys.findIndex(item => item.registry_authority_id === registry_authority_id), 1);
-            }
-            this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
-        });
-        this.display = false;
+
+    //for validation messate -----------
+    get f(): { [key: string]: AbstractControl } {
+        return this.registryAuthorityForm.controls;
     }
+
 
     onFormSubmit() {
         const RegistryAuthoritydata = this.registryAuthorityForm.value;
@@ -145,7 +152,8 @@ export class RegistryAuthorityComponent implements OnInit {
                     this.selectedRegistryAuthority = result.Data[0];
                     this.rowSelected = true;
                     this.rowData = result.Data[0];
-                    this.displayBasic = false;
+                    this.toggleFormDisplay();
+                    this.submitted = false;
                 }
             });
         }
@@ -158,10 +166,25 @@ export class RegistryAuthorityComponent implements OnInit {
                     this.selectedRegistryAuthority = result.Data[0];
                     this.rowSelected = true;
                     this.rowData = result.Data[0];
-                    this.displayBasic = false;
+                    this.toggleFormDisplay();
+                    this.submitted = false;
                 }
             });
         }
+    }
+
+    deleteRegistryAuthorityInfo() {
+        if (this.rowData == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+        let registry_authority_id = this.rowData.registry_authority_id;
+        this.RegistryAuthorityService.DeleteRegistryAuthority(registry_authority_id).subscribe(data => {
+            if (data.MessageType == 2) {
+                this.registryAuthoritys.splice(this.registryAuthoritys.findIndex(item => item.registry_authority_id === registry_authority_id), 1);
+            }
+            this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
+        });
+        this.display = false;
     }
 
     resetForm() {
