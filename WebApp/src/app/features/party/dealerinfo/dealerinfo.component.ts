@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { NavigationEnd } from '@angular/router';
 import { NotificationService } from '../../../service/CommonMessage/notification.service';
 import DealerInfo from './dealerinfo.model';
@@ -18,6 +18,7 @@ export class DealerinfoComponent implements OnInit {
         static: true
     }) dealerContactinfoImage;
 
+    submitted = false;
     dealerinfoForm: any;//DealerFormName  
     dealerinfoList: any[];//List Dealerinfo
     dealerinfodataSource: any[];//single dealerinfo
@@ -96,6 +97,7 @@ export class DealerinfoComponent implements OnInit {
     rows = 10;
     //end dropdown List prperty
     rowData: any;
+    dataSaved = false;
     // for delete data modal
     display: boolean = false;
     rowSelected: boolean = false;
@@ -113,9 +115,33 @@ export class DealerinfoComponent implements OnInit {
             this.display = true;
     }
 
+    displayBasic: boolean = false;
+    showBasicDialog() {
+        this.resetForm();
+        this.toggleGridDisplay();
+    }
+
+    //start grid and form show hide ********************
+    gridDisplay = false;
+    formDisplay = true;
+    toggleFormDisplay() {
+        this.gridDisplay = false;
+        this.formDisplay = true;
+    }
+    toggleGridDisplay() {
+        this.gridDisplay = true;
+        this.formDisplay = false;
+    }
+    toggleFormClose() {
+        this.toggleFormDisplay();
+        this.dealerIndex();
+    }
+
+
+
     // for photo and signature upload
 
-    photourllink: string = "assets/images/user-photo1.png";
+    photourllink: string = "assets/images/defaultimg.jpeg";
     selectFile(event) {
         if (event.target.files) {
             var reader = new FileReader()
@@ -155,32 +181,26 @@ export class DealerinfoComponent implements OnInit {
             TIN: '',
             BIN: '',
             domicile_enum_id: ['', [Validators.required]],
-            domicile_enum_name: ['', [Validators.required]],
             business_type_enum_id: '',
-            business_type_enum_name: '',
             industry_sector_id: ['', [Validators.required]],
             industry_sub_sector_id: '',
             ownership_type_id: ['', [Validators.required]],
             organization_type_enum_id: '',
-            organization_type_enum_name: '',
             registry_authority_id: '',
             regulator_id: '',
             currency_id: ['', [Validators.required]],
             security_type_enum_id: '',
-            security_type_enum_name: '',
             prefered_method_enum_id: '',
-            prefered_method_enum_name: '',
             internal_credit_rating: [0],
             maximum_credit: [0],
             allowable_credit: [0],
             credit_days: [0],
-            mobile: '',
+            mobile: ['', [Validators.required]],
             phone: '',
-            email: '',
+            email: ['', [Validators.email, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
             web_url: '',
             logo_path: '',
             continent_enum_id: ['', [Validators.required]],
-            continent_enum_name: ['', [Validators.required]],
             country_id: ['', [Validators.required]],
             division_id: ['', [Validators.required]],
             district_id: ['', [Validators.required]],
@@ -290,13 +310,13 @@ export class DealerinfoComponent implements OnInit {
     onRowSelect(event) {
         debugger;
         // this.toggle();
-        this.nodeSelected = true;
+        this.rowSelected = true;
         this.rowData = event.data;
 
     }
     onRowUnselect(event) {
         // this.toggle();
-        this.nodeSelected = false;
+        this.rowSelected = false;
         this.rowData = null;
 
     }
@@ -359,22 +379,22 @@ export class DealerinfoComponent implements OnInit {
             this.dealerinfoForm.controls['TIN'].setValue(data.TIN);
             this.dealerinfoForm.controls['BIN'].setValue(data.BIN);
             this.dealerinfoForm.controls['domicile_enum_id'].setValue(data.DomicileEnumId);
-            this.dealerinfoForm.controls['domicile_enum_name'].setValue(data.DomicileEnumName);
+            //this.dealerinfoForm.controls['domicile_enum_name'].setValue(data.DomicileEnumName);
             this.dealerinfoForm.controls['business_type_enum_id'].setValue(data.BusinessTypeEnumId);
-            this.dealerinfoForm.controls['business_type_enum_name'].setValue(data.BusinessTypeEnumName);
+            //this.dealerinfoForm.controls['business_type_enum_name'].setValue(data.BusinessTypeEnumName);
             this.dealerinfoForm.controls['industry_sector_id'].setValue(data.IndustrySectorId);
             this.onSelectBySectorId(data.IndustrySectorId);
             this.dealerinfoForm.controls['industry_sub_sector_id'].setValue(data.IndustrySubSectorId);
             this.dealerinfoForm.controls['ownership_type_id'].setValue(data.OwnershipTypeId);
             this.dealerinfoForm.controls['organization_type_enum_id'].setValue(data.OrganazationTypeEnumId);
-            this.dealerinfoForm.controls['organization_type_enum_name'].setValue(data.OrganazationTypeEnumName);
+            //this.dealerinfoForm.controls['organization_type_enum_name'].setValue(data.OrganazationTypeEnumName);
             this.dealerinfoForm.controls['registry_authority_id'].setValue(data.RegistryAuthorityId);
             this.dealerinfoForm.controls['regulator_id'].setValue(data.RegulatorId);
             this.dealerinfoForm.controls['currency_id'].setValue(data.CurrencyId);
             this.dealerinfoForm.controls['security_type_enum_id'].setValue(data.SecurityTypeEnumId);
-            this.dealerinfoForm.controls['security_type_enum_name'].setValue(data.SecurityTypeEnumName);
+            //this.dealerinfoForm.controls['security_type_enum_name'].setValue(data.SecurityTypeEnumName);
             this.dealerinfoForm.controls['prefered_method_enum_id'].setValue(data.PreferedMethodEnumId);
-            this.dealerinfoForm.controls['prefered_method_enum_name'].setValue(data.PreferedMethodEnumName);
+            //this.dealerinfoForm.controls['prefered_method_enum_name'].setValue(data.PreferedMethodEnumName);
             this.dealerinfoForm.controls['internal_credit_rating'].setValue(data.InternalCreditRating);
             this.dealerinfoForm.controls['maximum_credit'].setValue(data.MaximumCredit);
             this.dealerinfoForm.controls['allowable_credit'].setValue(data.AllowableCredit);
@@ -384,7 +404,7 @@ export class DealerinfoComponent implements OnInit {
             this.dealerinfoForm.controls['email'].setValue(data.Email);
             this.dealerinfoForm.controls['web_url'].setValue(data.WebUrl);
             this.dealerinfoForm.controls['continent_enum_id'].setValue(data.ContinentEnumId);
-            this.dealerinfoForm.controls['continent_enum_name'].setValue(data.ContinentEnumName);
+            //this.dealerinfoForm.controls['continent_enum_name'].setValue(data.ContinentEnumName);
             this.dealerinfoForm.controls['country_id'].setValue(data.CountryId);
             this.onSelectByCountryId(data.CountryId);
             this.dealerinfoForm.controls['division_id'].setValue(data.DivisionId);
@@ -406,7 +426,7 @@ export class DealerinfoComponent implements OnInit {
             this.loadAllDealerLocationinfos();
 
         });
-        this.toggle();
+        this.toggleGridDisplay();
     }
 
     deleteDealerinfo() {
@@ -424,8 +444,91 @@ export class DealerinfoComponent implements OnInit {
         this.display = false;
     }
 
-    SaveDealerinfo() {
+    get f(): { [key: string]: AbstractControl } {
+        return this.dealerinfoForm.controls;
+    }
+
+    onGeneral(): void {
+        this.submitted = true;
         const data = this.dealerinfoForm.value;
+        if (data.dealer_info_name === null) {
+            return;
+        }
+        else if (data.dealer_info_short_name === null) {
+            return;
+        }
+        else if (data.domicile_enum_id === null) {
+            return;
+        }
+        else if (data.trade_license === null) {
+            return;
+        }
+        else if (data.mobile === null) {
+            return;
+        }
+        else {
+            this.openNext();
+        }
+        if (this.dealerinfoForm.invalid) {
+            return;
+        }
+    }
+
+    onBusiness(): void {
+        this.submitted = true;
+        const data = this.dealerinfoForm.value;
+        if (data.ownership_type_id === null) {
+            return;
+        }
+        else if (data.industry_sector_id === null) {
+            return;
+        }
+        else if (data.currency_id === null) {
+            return;
+        }        
+        else {
+            this.openNext();
+        }
+        if (this.dealerinfoForm.invalid) {
+            return;
+        }
+    }
+
+    onAddress(): void {
+        this.submitted = true;
+        const data = this.dealerinfoForm.value;
+        if (data.continent_enum_id === null) {
+            return;
+        }
+        else if (data.country_id === null) {
+            return;
+        }
+        else if (data.division_id === null) {
+            return;
+        }
+        else if (data.district_id === null) {
+            return;
+        }
+        else if (data.thana_id === null) {
+            return;
+        }
+        else {
+            this.openNext();
+        }
+        if (this.dealerinfoForm.invalid) {
+            return;
+        }
+    }
+
+
+    SaveDealerinfo() {
+        this.submitted = true;
+        const data = this.dealerinfoForm.value;
+
+        if (this.dealerinfoForm.invalid) {
+            return;
+        }
+       
         if (!(data.dealer_info_code)) {
             return this.notifyService.ShowNotification(2, "Please enter dealer code")
         }
@@ -693,23 +796,15 @@ export class DealerinfoComponent implements OnInit {
     }
 
     onSelectImage(event) {
-
         if (event.target.files) {
             var reader = new FileReader()
             reader.readAsDataURL(event.target.files[0])
             reader.onload = (event: any) => {
-                this.photourllink = event.target.result;
-            }
-            //alert(this.photourllink)
-            if (event.target.files.length > 0) {
-                const file = event.target.files[0];
-                this.dealerinfoImage.nativeElement.innerText = file.name;
-                this.dealerinfoForm.patchValue({
-                    ImageUpload: file
-                });
+                this.photourllink = event.target.result
             }
         }
     }
+
 
     // Contact Info Start
 
