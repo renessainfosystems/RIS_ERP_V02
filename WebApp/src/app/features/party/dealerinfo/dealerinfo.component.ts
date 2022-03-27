@@ -156,10 +156,40 @@ export class DealerinfoComponent implements OnInit {
 
     }
 
-    clear() {
+    clearDealerInfoForm() {
         this.dealerinfoForm = this.formbulider.group({
+            dealer_info_id: [''],
             dealer_info_code: [''],
             dealer_info_name: [''],
+            dealer_info_short_name: [''],
+            dealer_info_display_name: [''],
+            trade_license: [''],
+            year_established: [''],
+            TIN: [''],
+            BIN: [''],
+            business_type_enum_id: [''],
+            industry_sub_sector_id: [''],
+            organazation_type_enum_id: [''],
+            registry_authority_id: [''],
+            regulator_id: [''],
+            security_type_enum_id: [''],
+            prefered_method_enum_id: [''],
+            mobile: [''],
+            phone: [''],
+            email: [''],
+            web_url: [''],
+            maximum_credit: [''],
+            internal_credit_rating: [''],
+            allowable_credit: [''],
+            credit_days: [''],
+            logo_path: [''],
+            city: [''],
+            post_code: [''],
+            block: [''],
+            road_no: [''],
+            house_no: [''],
+            flat_no: [''],
+            address_note: [''],
             ImageUpload: new FormControl('')
         });
 
@@ -526,6 +556,23 @@ export class DealerinfoComponent implements OnInit {
         let formData = new FormData();
         for (const key of Object.keys(this.dealerinfoForm.value)) {
             const value = this.dealerinfoForm.value[key];
+            if (value == "null") {
+                formData.append("dealer_info_display_name", '');
+                formData.append("TIN", '');
+                formData.append("BIN", '');
+                formData.append("mobile", '');
+                formData.append("phone", '');
+                formData.append("email", '');
+                formData.append("web_url", '');
+                formData.append("city", '');
+                formData.append("post_code", '');
+                formData.append("block", '');
+                formData.append("road_no", '');
+                formData.append("house_no", '');
+                formData.append("flat_no", '');
+                formData.append("address_note", '');
+                formData.append("logo_path", '');
+            }
             if (key == "year_established") {
                 let date = new Date(value).toISOString();
                 formData.append("year_established", date);
@@ -546,10 +593,11 @@ export class DealerinfoComponent implements OnInit {
                     this.dealerinfoList.splice(this.dealerinfoList.findIndex(item => item.DealerInfoId === data.dealerinfoId), 1);
                     this.dealerinfoList.unshift(result.Data);
                     this.selecteddealerinfo = result.Data;
-                    this.rowData = result.Data;                    
-                    this.toggleFormDisplay();
+                    this.rowData = result.Data;
+                    this.onRowUnselect(event);
                     this.dealerIndex();
-                    this.dealerinfoForm.reset();
+                    this.resetForm();
+                    this.toggleFormDisplay();
                     this.submitted = false;
                 }                
             });
@@ -566,7 +614,7 @@ export class DealerinfoComponent implements OnInit {
                         this.rowData = result.Data;
                         this.toggleFormDisplay();
                         this.dealerIndex();
-                        this.dealerinfoForm.reset();
+                        this.resetForm();
                         this.submitted = false;
                     }
                 }
@@ -740,7 +788,7 @@ export class DealerinfoComponent implements OnInit {
     }
 
     resetForm() {
-        //this.dealerinfoForm.reset();
+        this.dealerinfoForm.reset();
         this.isDealerinfoEdit = false;
         this.loadAllDealerinfos();
         this.dealerinfodataSource = [];
