@@ -11,6 +11,46 @@ namespace Auth.Model.Administrative.Model
     [Table("Location", Schema = "Administrative")]
     public class Location
     {
+
+        public Location()
+        {
+            location_id = 0;
+            location_code = "";
+            location_name = "";
+            location_short_name = "";
+            location_prefix = "";
+            location_reg_no = "";
+            location_reg_date = new DateTime();
+            location_reg_file_path = "";
+            vat_applicable_type_enum_id = 0;
+            country_id = 0;
+            division_id = 0;
+            district_id = 0;
+            thana_id = 0;
+            city = "";
+            post_code = "";
+            block = "";
+            road_no = "";
+            house_no = "";
+            flat_no = "";
+            address_note = "";
+            phone = "";
+            email = "";
+            web_url = "";
+            remarks = "";
+            is_active = true;
+            name_in_local_language = "";
+            address_in_local_language = "";
+            //created_datetime = new DateTime();
+            //updated_datetime = new DateTime();
+            //db_server_date_time = new DateTime();
+            created_user_id = 0;
+            updated_user_id = 0;
+            company_corporate_id = 0;
+            company_group_id = 0;
+            company_id = 0;
+        }
+
         [Key]
         public int location_id { get; set; }
         public string location_code { get; set; }
@@ -46,6 +86,6 @@ namespace Auth.Model.Administrative.Model
         public long? updated_user_id { get; set; }
         public int company_corporate_id { get; set; }
         public int company_group_id { get; set; }
-        public int company_id { get; set; }
+        public int company_id { get; set; }        
     }
 }

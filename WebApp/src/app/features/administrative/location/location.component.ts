@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { SelectionModel } from '@angular/cdk/collections';
 import Location from './location.model';
@@ -15,7 +15,7 @@ import { NotificationService } from '../../../service/CommonMessage/notification
 export class LocationComponent implements OnInit {
 
     submitted = false;
-
+    locationForm: FormGroup;
     //start grid and form show hide ********************
     gridDisplay = false;
     formDisplay = true;
@@ -50,7 +50,7 @@ export class LocationComponent implements OnInit {
 
     rowData: any;
     dataSaved = false;
-    locationForm: FormGroup;
+
     allLocation: Observable<any[]>;
     selection = new SelectionModel<any>(true, []);
     locationIdUpdate = null;
@@ -103,42 +103,40 @@ export class LocationComponent implements OnInit {
 
     constructor(private formbulider: FormBuilder, private LocationService: LocationService, private toastr: ToastrService, private notifyService: NotificationService) {
 
-
     }
 
-    ngOnInit(): void {
-        this.LocationService.getAllLocation().subscribe(data => this.locations = data);
+    ngOnInit() {
 
         this.locationForm = this.formbulider.group({
-            location_code: [null],
-            location_name: [null, [Validators.required]],
-            location_short_name: [null, [Validators.required]],
-            location_prefix: [null, [Validators.required]],
-            country_id: [null, [Validators.required]],
-            division_id: [null],
-            district_id: [null],
-            thana_id: [null],
-            vat_applicable_type_enum_id: [null, [Validators.required]],
-            location_reg_no: [null],
+            location_code: [''],
+            location_name: ['', [Validators.required]],
+            location_short_name: ['', [Validators.required]],
+            location_prefix: ['', [Validators.required]],
+            country_id: ['', [Validators.required]],
+            division_id: [0],
+            district_id: [0],
+            thana_id: [0],
+            vat_applicable_type_enum_id: ['', [Validators.required]],
+            location_reg_no: [''],
             location_reg_date: [null],
-            location_reg_file_path: [null],
-            city: [null],
-            post_code: [null],
-            block: [null],
-            road_no: [null],
-            house_no: [null],
-            flat_no: [null],
-            address_note: [null],
-            phone: [null],
+            location_reg_file_path: [''],
+            city: [''],
+            post_code: [''],
+            block: [''],
+            road_no: [''],
+            house_no: [''],
+            flat_no: [''],
+            address_note: [''],
+            phone: [''],
             email: ['', [Validators.email, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
-            web_url: [null],
-            name_in_local_language: [null],
-            address_in_local_language: [null],
-            remarks: [null],
-
+            web_url: [''],
+            name_in_local_language: [''],
+            address_in_local_language: [''],
+            remarks: ['test']
         });
         this.loadAllCountryCboList();
-        this.loadVatApplicableEnumCboList();        
+        this.loadVatApplicableEnumCboList();
+        this.LocationService.getAllLocation().subscribe(data => this.locations = data);
     }
 
     next() {
@@ -262,7 +260,6 @@ export class LocationComponent implements OnInit {
             this.locationForm.controls['address_in_local_language'].setValue(data.address_in_local_language);
             this.locationForm.controls['remarks'].setValue(data.remarks);
             this.locationForm.controls['location_reg_file_path'].setValue(data.location_reg_file_path);
-
         });
         this.toggleGridDisplay();
     }
@@ -273,8 +270,9 @@ export class LocationComponent implements OnInit {
         }
         let locationId = this.rowData.location_id;
         this.LocationService.deleteLocation(locationId).subscribe(data => {
-            this.massage = null;
-            this.loadAllLocations();
+            if (data.MessageType == 1) {
+                this.locations.splice(this.locations.findIndex(item => item.association_id === locationId), 1);
+            }
             this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
         });
         this.display = false;
@@ -287,7 +285,6 @@ export class LocationComponent implements OnInit {
 
         });
     }
-
 
     //for validation messate -----------
     get f(): { [key: string]: AbstractControl } {
@@ -334,13 +331,13 @@ export class LocationComponent implements OnInit {
 
         if (this.locationForm.invalid) {
             return;
-        }       
+        }     
 
         this.createLocation(locationdata);
     }
 
     resetForm() {
-        this.locationForm.reset();
+        //this.locationForm.reset();
         this.massage = null;
         this.dataSaved = false;
         this.loadAllLocations();
@@ -349,12 +346,20 @@ export class LocationComponent implements OnInit {
     createLocation(locationdata: any) {
 
         let formData = new FormData();
-        console.log(this.locationForm.value)
         for (const key of Object.keys(this.locationForm.value)) {
             const value = this.locationForm.value[key];
+            //if (value == "null") {
+            //    formData.append("phone", '');
+            //    formData.append("email", '');
+            //    formData.append("web_url", '');
+            //    formData.append("location_reg_no", '');
+            //    formData.append("remarks", '');
+            //}
             if (key == "location_reg_date") {
                 let date = new Date(value).toISOString();
                 formData.append("location_reg_date", date);
+
+                
             }
             else {
 
@@ -374,8 +379,8 @@ export class LocationComponent implements OnInit {
                         this.rowData = result.Data;
                         this.toggleFormDisplay();
                         this.generalIndex();
-                        this.locationForm.reset();
                         this.submitted = false;
+                        //this.locationForm.reset();
                     }
                 }
             );
@@ -388,13 +393,13 @@ export class LocationComponent implements OnInit {
             formData.append("created_datetime", this.createdDate);
             formData.append("db_server_date_time", this.serverDate);
             formData.append("created_user_id", this.createdUserId);
-
+            let location_id = this.rowData.location_id;
             this.LocationService.updateLocation(formData).subscribe(result => {
                 this.dataSaved = true;
                 this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
                 this.locationIdUpdate = null;
                 if (result.MessageType == 1) {
-                    this.locations.splice(this.locations.findIndex(item => item.location_id === locationdata.location_id), 1);
+                    this.locations.splice(this.locations.findIndex(item => item.location_id === location_id), 1);
                     this.locations.unshift(result.Data);
                     this.selectedLocation = result.Data;
                     this.rowSelected = true;
@@ -402,8 +407,8 @@ export class LocationComponent implements OnInit {
                     this.onRowUnselect(event);
                     this.toggleFormDisplay();
                     this.generalIndex();
-                    this.locationForm.reset();
                     this.submitted = false;
+                   // this.locationForm.reset();
                 }
             });
         }
@@ -417,7 +422,6 @@ export class LocationComponent implements OnInit {
                 this.photourllink = event.target.result
             }
         }
-
     }
 
     generalIndex() {

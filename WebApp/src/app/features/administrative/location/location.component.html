@@ -6,211 +6,179 @@
             <div [hidden]="formDisplay">
                 <form action="" [formGroup]="locationForm">
                     <p-tabView [activeIndex]="index" (onChange)="function($event)">
-                        <p-tabPanel header="General Info">
-                            <div class="col-12">
-                                <div class="p-fluid p-formgrid grid">
-                                    <div class="field col-12 md:col-6">
-                                        <label pTooltip="Location Code" tooltipPosition="top">Location Code<span class="req">*</span></label>
-                                        <input pInputText id="firstname2" type="text" formControlName="location_code" placeholder="<<Auto Generate>>" pInputText disabled />
-                                    </div>
-                                    
-                                    <div class="field form-group col-12 md:col-6">
-                                        <label pTooltip="Location Name" tooltipPosition="top">Location Name<span class="req">*</span> </label>
-                                        <input id="lastname2" type="text" class="from-control" formControlName="location_name"
-                                               [ngClass]="{ 'is-invalid': submitted && f.location_name.errors }"
-                                               placeholder="" pInputText required />
-
-                                        <div *ngIf="submitted && f.location_name.errors" class="invalid-feedback">
-                                            <small *ngIf="f.location_name.errors.required" class="p-error">Location name is required</small>
-
+                        <p-tabPanel header="General Info">                      
+                                <div class="col-12">
+                                    <div class="p-fluid p-formgrid grid">
+                                        <div class="field col-12 md:col-6">
+                                            <label pTooltip="Location Code" tooltipPosition="top">Location Code<span class="req">*</span></label>
+                                            <input pInputText id="firstname2" type="text" formControlName="location_code" placeholder="<<Auto Generate>>" pInputText disabled />
                                         </div>
-                                    </div>
-                                    <div class="field col-12 md:col-6">
-                                        <label htmlFor="lastname2" pTooltip="Location Prefix" tooltipPosition="top">Prefix<span class="req">*</span> </label>
-                                        <input pInputText id="lastname2" type="text" formControlName="location_prefix" [ngClass]="{ 'is-invalid': submitted && f.location_prefix.errors }" placeholder="" pInputText maxlength="1" style="text-transform: uppercase" pKeyFilter="alpha" />
 
-                                        <div *ngIf="submitted && f.location_prefix.errors" class="invalid-feedback">
-                                            <small *ngIf="f.location_prefix.errors.required" class="p-error">Location prefix is required</small>
-                                        </div>
-                                    </div>
-                                    <div class="field col-12 md:col-6">
-                                        <label pTooltip="Short Name" tooltipPosition="top"> Short Name<span class="req">*</span> </label>
-                                        <input id="lastname2" type="text" formControlName="location_short_name" [ngClass]="{ 'is-invalid': submitted && f.location_short_name.errors }" placeholder="" pInputText required />
-
-                                        <div *ngIf="submitted && f.location_short_name.errors" class="invalid-feedback">
-                                            <small *ngIf="f.location_short_name.errors.required" class="p-error">Location short name is required</small>
-                                        </div>
-                                    </div>
-                                    <div class="field col-12 md:col-6">
-                                        <label pTooltip="Name In Local" tooltipPosition="top">Name In Local </label>
-                                        <input id="lastname2" type="text" formControlName="name_in_local_language" placeholder="" pInputText />
-                                    </div>
-
-                                    <div class="field col-12 md:col-6">
-                                        <label pTooltip="Phone" tooltipPosition="top">Phone </label>
-                                        <input id="lastname2" type="text" formControlName="phone" placeholder="" pInputText />
-                                    </div>
-                                    <div class="field col-12 md:col-6">
-                                        <label pTooltip="Email" tooltipPosition="top">Email </label>
-                                        <input id="lastname2" type="email" formControlName="email" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" placeholder="" pInputText />
-                                        <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
-                                            <small *ngIf="f.email.errors.email" class="p-error">Email must be a valid email address</small>
-                                        </div>
-                                    </div>
-                                    <div class="field col-12 md:col-6">
-                                        <label pTooltip="Web" tooltipPosition="top">Web </label>
-                                        <input id="lastname2" type="text" formControlName="web_url" placeholder="" pInputText />
-                                    </div>                                   
-                                    <div class="field col-12 md:col-6">
-                                        <label pTooltip="Remarks" tooltipPosition="top">Remarks </label>
-                                        <input id="lastname2" type="text" formControlName="remarks" placeholder="" pInputText />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="flex justify-content-end pr-2">
-                                <button pButton pRipple type="button" (click)="onGeneral()" label="Next" class="risBtn  mr-2 mb-2" icon="pi pi-step-forward"></button>
-                                <button pButton pRipple type="button" (click)="toggleFormClose()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
-                            </div>
-                        </p-tabPanel>
-                        <p-tabPanel header="Address Info">
-                            <div class="col-12">
-                                <div class="p-fluid p-formgrid grid">
-                                    <div class="field col-12 md:col-6">
-                                        <label pTooltip="Country of Domicile" tooltipPosition="top">CoD<span class="req">*</span></label>
-                                        <p-dropdown [options]="allCountry" formControlName="country_id" [ngClass]="{ 'is-invalid': submitted && f.country_id.errors }" placeholder="---Select---"
-                                                    optionLabel="country_name" optionValue="country_id" (onChange)="onSelectByCountryId($event.value)" [showClear]="true" [filter]="true" filterBy="country_name"></p-dropdown>
-
-                                        <div *ngIf="submitted && f.country_id.errors" class="invalid-feedback">
-                                            <small *ngIf="f.country_id.errors.required" class="p-error">CoD is required</small>
-                                        </div>
-                                    </div>
-                                    <div class="field col-12 md:col-6">
-                                        <label pTooltip="Division" tooltipPosition="top">Division</label>
-                                        <p-dropdown [options]="allDivision" formControlName="division_id" placeholder="---Select---"
-                                                    optionLabel="division_name" optionValue="division_id" (onChange)="onSelectByDivisionId($event.value)" [showClear]="true" [filter]="true" filterBy="division_name"></p-dropdown>
-                                    </div>
-                                    <div class="field col-12 md:col-6">
-                                        <label pTooltip="District" tooltipPosition="top">District</label>
-                                        <p-dropdown [options]="allDistrict" formControlName="district_id" placeholder="---Select---"
-                                                    optionLabel="district_name" optionValue="district_id" (onChange)="onSelectByDistrictId($event.value)" [showClear]="true" [filter]="true" filterBy="district_name"></p-dropdown>
-                                    </div>
-                                    <div class="field col-12 md:col-6">
-                                        <label pTooltip="Police Station" tooltipPosition="top">PS/Area</label>
-                                        <p-dropdown [options]="allThana" formControlName="thana_id" placeholder="---Select---"
-                                                    optionLabel="thana_name" optionValue="thana_id" [showClear]="true" [filter]="true" filterBy="thana_name"></p-dropdown>
-                                    </div>
-                                    <div class="field col-12 md:col-6">
-                                        <label pTooltip="City/Town" tooltipPosition="top">City/Town </label>
-                                        <input id="lastname2" type="text" formControlName="city" placeholder="" pInputText />
-                                    </div>
-                                    <div class="field col-12 md:col-6">
-                                        <label pTooltip="Post Code" tooltipPosition="top">Post Code </label>
-                                        <input id="lastname2" type="text" formControlName="post_code" placeholder="" pInputText />
-                                    </div>
-                                    <div class="field col-12 md:col-6">
-                                        <label pTooltip="Block" tooltipPosition="top">Block </label>
-                                        <input id="lastname2" type="text" formControlName="block" placeholder="" pInputText />
-                                    </div>
-                                    <div class="field col-12 md:col-6">
-                                        <label pTooltip="Road No" tooltipPosition="top">Road No </label>
-                                        <input id="lastname2" type="text" formControlName="road_no" placeholder="" pInputText />
-                                    </div>
-                                    <div class="field col-12 md:col-6">
-                                        <label pTooltip="House No" tooltipPosition="top">House No </label>
-                                        <input id="lastname2" type="text" formControlName="house_no" placeholder="" pInputText />
-                                    </div>
-                                    <div class="field col-12 md:col-6">
-                                        <label pTooltip="Flat No" tooltipPosition="top">Flat No </label>
-                                        <input id="lastname2" type="text" formControlName="flat_no" placeholder="" pInputText />
-                                    </div>
-                                    <div class="field col-12 md:col-6">
-                                        <label pTooltip="Address Note" tooltipPosition="top">Address Note </label>
-                                        <input id="lastname2" type="text" formControlName="address_note" placeholder="" pInputText />
-                                    </div>
-                                    <div class="field col-12 md:col-6">
-                                        <label pTooltip="Address In Local" tooltipPosition="top">Address In Local </label>
-                                        <input id="lastname2" type="text" formControlName="address_in_local_language" placeholder="" pInputText />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="flex justify-content-end pr-2">
-                                <button pButton pRipple type="button" (click)="openPrev()" label="Previous" class="risBtn  mr-2 mb-2" icon="pi pi-step-backward"></button>
-                                <button pButton pRipple type="button" (click)="onAddress()" label="Next" class="risBtn  mr-2 mb-2" icon="pi pi-step-forward"></button>
-                                <button pButton pRipple type="button" (click)="toggleFormClose()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
-                            </div>
-                        </p-tabPanel>
-                        <p-tabPanel header="Registration Info">
-                            <div class="col-12">
-                                <div class="p-fluid p-formgrid grid">
-                                    <div class="field col-12 md:col-6">
-                                        <label pTooltip="Police Station" tooltipPosition="top">VAT Type<span class="req">*</span> :</label>
-                                        <p-dropdown [options]="allVatApplicable" formControlName="vat_applicable_type_enum_id" [ngClass]="{ 'is-invalid': submitted && f.vat_applicable_type_enum_id.errors }" placeholder="---Select---"
-                                                    optionLabel="vat_applicable_type_enum_name" optionValue="vat_applicable_type_enum_id" [showClear]="true" [filter]="true" filterBy="thana_name"></p-dropdown>
-                                        <div *ngIf="submitted && f.vat_applicable_type_enum_id.errors" class="invalid-feedback">
-                                            <small *ngIf="f.vat_applicable_type_enum_id.errors.required" class="p-error">VAT Type is required</small>
-                                        </div>
-                                    </div>
-                                    <div class="field col-12 md:col-6">
-                                        <label pTooltip="Location Registration No" tooltipPosition="top">Registration No </label>
-                                        <input id="lastname2" type="text" formControlName="location_reg_no" placeholder="" pInputText />
-                                    </div>
-                                    <div class="field col-12 md:col-6">
-                                        <label pTooltip="Location Registration Date" tooltipPosition="top">Registration Date</label>
-                                        <p-calendar formControlName="location_reg_date" placeholder="" [showIcon]="true" [showButtonBar]="true"></p-calendar>
-                                    </div>
-                                    <div class="field col-12 md:col-6">
-                                        <label pTooltip="Location Registration File" tooltipPosition="top">Registration File</label>
-                                        <span class="p-float-label">
-                                            <div class="flex grid ">
-                                                <div class=" inputWrapper photo-signature align-self-end flex align-items-center justify-content-center">
-                                                    <img class="risBtn m-1" [src]="photourllink" style="width: 150px;" alt="">
-                                                    <input type="file" formControlName="location_reg_file_path" class="fileInput risBtn risAdd " style="width: 150px;" #userImage (change)="onSelectImage($event)">
-                                                </div>
-                                            </div>
-                                        </span>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <div class="flex justify-content-end pr-2">
-                                <button pButton pRipple type="button" (click)="openPrev()" label="Previous" class="risBtn  mr-2 mb-2" icon="pi pi-step-backward"></button>
-                                <button pButton pRipple type="button" (click)="onFormSubmit()" label="Save" class="risBtn risSave  mr-2 mb-2" icon="pi pi-step-forward"></button>
-                                <button pButton pRipple type="button" (click)="toggleFormClose()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
-                            </div>
-                        </p-tabPanel>
-                        <!--<p-tabPanel header="Upload Info">
-                            <div class="col-12">
-                                <div class="p-fluid p-formgrid grid">
-                                </div>
-                            </div>
-                            <div class="p-fluid grid col-12 flex justify-content-end flex-wrap card-container">-->
-                                <!---------------------dd---------------------------->
-
-                                <!--<div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
-                                    <div class="col-4 mt-2 text-right">
-                                        <label pTooltip="Location Logo" tooltipPosition="top" class=" d-md-inline-flex">Registration File:</label>
-                                    </div>
-                                    <div class="col-8 p-fluid">
-                                        <span class="p-float-label">
-                                            <div class="flex grid ">
-                                                <div class=" inputWrapper photo-signature align-self-end flex align-items-center justify-content-center">
-                                                    <img class="risBtn m-1" [src]="photourllink" style="width: 150px;" alt="">
-                                                    <input type="file" formControlName="location_reg_file_path" class="fileInput risBtn risAdd " style="width: 150px;" #userImage (change)="onSelectImage($event)">
-                                                </div>
-                                            </div>
-                                        </span>
-                                    </div>
-                                </div>
+                                        <div class="field form-group col-12 md:col-6">
+                                            <label pTooltip="Location Name" tooltipPosition="top">Location Name<span class="req">*</span> </label>
                                 
+                                            <input id="lastname2" type="text" class="from-control" formControlName="location_name"
+                                                   [ngClass]="{ 'is-invalid': submitted && f.location_name.errors }"
+                                                   placeholder="" pInputText required />
+                                            <div *ngIf="submitted && f.location_name.errors" class="invalid-feedback">
+                                                <small *ngIf="f.location_name.errors.required" class="p-error">Location name is required</small>
 
-                               
-                            </div>
-                            <div class="flex justify-content-end pr-2">
-                                <button pButton pRipple type="button" (click)="openPrev()" label="Previous" class="risBtn mr-2 mb-2" icon="pi pi-step-backward"></button>
-                                <button pButton pRipple type="button" (click)="onFormSubmit()" label="Save" class="risBtn risSave mr-2 mb-2" icon="pi pi-check"></button>
-                                <button pButton pRipple type="button" (click)="toggleFormClose()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
-                            </div>
-                        </p-tabPanel>-->
+                                            </div>
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label htmlFor="lastname2" pTooltip="Location Prefix" tooltipPosition="top">Prefix<span class="req">*</span> </label>
+                                            <input pInputText id="lastname2" type="text" formControlName="location_prefix" [ngClass]="{ 'is-invalid': submitted && f.location_prefix.errors }" placeholder="" pInputText maxlength="1" style="text-transform: uppercase" pKeyFilter="alpha" />
+
+                                            <div *ngIf="submitted && f.location_prefix.errors" class="invalid-feedback">
+                                                <small *ngIf="f.location_prefix.errors.required" class="p-error">Location prefix is required</small>
+                                            </div>
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label pTooltip="Short Name" tooltipPosition="top"> Short Name<span class="req">*</span> </label>
+                                            <input id="lastname2" type="text" formControlName="location_short_name" [ngClass]="{ 'is-invalid': submitted && f.location_short_name.errors }" placeholder="" pInputText required />
+
+                                            <div *ngIf="submitted && f.location_short_name.errors" class="invalid-feedback">
+                                                <small *ngIf="f.location_short_name.errors.required" class="p-error">Location short name is required</small>
+                                            </div>
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label pTooltip="Name In Local" tooltipPosition="top">Name In Local </label>
+                                            <input id="lastname2" type="text" formControlName="name_in_local_language" placeholder="" pInputText />
+                                        </div>
+
+                                        <div class="field col-12 md:col-6">
+                                            <label pTooltip="Phone" tooltipPosition="top">Phone </label>
+                                            <input id="lastname2" type="text" formControlName="phone" placeholder="" pInputText />
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label pTooltip="Email" tooltipPosition="top">Email </label>
+                                            <input id="lastname2" type="email" formControlName="email" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" placeholder="" pInputText />
+                                            <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                                                <small *ngIf="f.email.errors.email" class="p-error">Email must be a valid email address</small>
+                                            </div>
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label pTooltip="Web" tooltipPosition="top">Web </label>
+                                            <input id="lastname2" type="text" formControlName="web_url" placeholder="" pInputText />
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label pTooltip="Remarks" tooltipPosition="top">Remarks </label>
+                                            <input id="lastname2" type="text" formControlName="remarks" pInputText />
+                                        </div>
+                                    </div>
+                                </div>                         
+                                <div class="flex justify-content-end pr-2">
+                                    <button pButton pRipple type="button" (click)="onGeneral()" label="Next" class="risBtn  mr-2 mb-2" icon="pi pi-step-forward"></button>
+                                    <button pButton pRipple type="button" (click)="toggleFormClose()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
+                                </div>
+                        </p-tabPanel>
+                        <p-tabPanel header="Address Info">                       
+                                <div class="col-12">
+                                    <div class="p-fluid p-formgrid grid">
+                                        <div class="field col-12 md:col-6">
+                                            <label pTooltip="Country of Domicile" tooltipPosition="top">CoD<span class="req">*</span></label>
+                                            <p-dropdown [options]="allCountry" formControlName="country_id" [ngClass]="{ 'is-invalid': submitted && f.country_id.errors }" placeholder="---Select---"
+                                                        optionLabel="country_name" optionValue="country_id" (onChange)="onSelectByCountryId($event.value)" [showClear]="true" [filter]="true" filterBy="country_name"></p-dropdown>
+
+                                            <div *ngIf="submitted && f.country_id.errors" class="invalid-feedback">
+                                                <small *ngIf="f.country_id.errors.required" class="p-error">CoD is required</small>
+                                            </div>
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label pTooltip="Division" tooltipPosition="top">Division</label>
+                                            <p-dropdown [options]="allDivision" formControlName="division_id" placeholder="---Select---"
+                                                        optionLabel="division_name" optionValue="division_id" (onChange)="onSelectByDivisionId($event.value)" [showClear]="true" [filter]="true" filterBy="division_name"></p-dropdown>
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label pTooltip="District" tooltipPosition="top">District</label>
+                                            <p-dropdown [options]="allDistrict" formControlName="district_id" placeholder="---Select---"
+                                                        optionLabel="district_name" optionValue="district_id" (onChange)="onSelectByDistrictId($event.value)" [showClear]="true" [filter]="true" filterBy="district_name"></p-dropdown>
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label pTooltip="Police Station" tooltipPosition="top">PS/Area</label>
+                                            <p-dropdown [options]="allThana" formControlName="thana_id" placeholder="---Select---"
+                                                        optionLabel="thana_name" optionValue="thana_id" [showClear]="true" [filter]="true" filterBy="thana_name"></p-dropdown>
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label pTooltip="City/Town" tooltipPosition="top">City/Town </label>
+                                            <input id="lastname2" type="text" formControlName="city" placeholder="" pInputText />
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label pTooltip="Post Code" tooltipPosition="top">Post Code </label>
+                                            <input id="lastname2" type="text" formControlName="post_code" placeholder="" pInputText />
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label pTooltip="Block" tooltipPosition="top">Block </label>
+                                            <input id="lastname2" type="text" formControlName="block" placeholder="" pInputText />
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label pTooltip="Road No" tooltipPosition="top">Road No </label>
+                                            <input id="lastname2" type="text" formControlName="road_no" placeholder="" pInputText />
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label pTooltip="House No" tooltipPosition="top">House No </label>
+                                            <input id="lastname2" type="text" formControlName="house_no" placeholder="" pInputText />
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label pTooltip="Flat No" tooltipPosition="top">Flat No </label>
+                                            <input id="lastname2" type="text" formControlName="flat_no" placeholder="" pInputText />
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label pTooltip="Address Note" tooltipPosition="top">Address Note </label>
+                                            <input id="lastname2" type="text" formControlName="address_note" placeholder="" pInputText />
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label pTooltip="Address In Local" tooltipPosition="top">Address In Local </label>
+                                            <input id="lastname2" type="text" formControlName="address_in_local_language" placeholder="" pInputText />
+                                        </div>
+                                    </div>
+                                </div>                            
+                                <div class="flex justify-content-end pr-2">
+                                    <button pButton pRipple type="button" (click)="openPrev()" label="Previous" class="risBtn  mr-2 mb-2" icon="pi pi-step-backward"></button>
+                                    <button pButton pRipple type="button" (click)="onAddress()" label="Next" class="risBtn  mr-2 mb-2" icon="pi pi-step-forward"></button>
+                                    <button pButton pRipple type="button" (click)="toggleFormClose()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
+                                </div>
+                        </p-tabPanel>
+                        <p-tabPanel header="Registration Info">                            
+                                <div class="col-12">
+                                    <div class="p-fluid p-formgrid grid">
+                                        <div class="field col-12 md:col-6">
+                                            <label pTooltip="Police Station" tooltipPosition="top">VAT Type<span class="req">*</span> :</label>
+                                            <p-dropdown [options]="allVatApplicable" formControlName="vat_applicable_type_enum_id" [ngClass]="{ 'is-invalid': submitted && f.vat_applicable_type_enum_id.errors }" placeholder="---Select---"
+                                                        optionLabel="vat_applicable_type_enum_name" optionValue="vat_applicable_type_enum_id" [showClear]="true" [filter]="true" filterBy="thana_name"></p-dropdown>
+                                            <div *ngIf="submitted && f.vat_applicable_type_enum_id.errors" class="invalid-feedback">
+                                                <small *ngIf="f.vat_applicable_type_enum_id.errors.required" class="p-error">VAT Type is required</small>
+                                            </div>
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label pTooltip="Location Registration No" tooltipPosition="top">Registration No </label>
+                                            <input type="text" formControlName="location_reg_no" placeholder="" pInputText />
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label pTooltip="Location Registration Date" tooltipPosition="top">Registration Date</label>
+                                            <p-calendar formControlName="location_reg_date" placeholder="" [showIcon]="true" [showButtonBar]="true"></p-calendar>
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label pTooltip="Location Registration File" tooltipPosition="top">Registration File</label>
+                                            <span class="p-float-label">
+                                                <div class="flex grid ">
+                                                    <div class=" inputWrapper photo-signature align-self-end flex align-items-center justify-content-center">
+                                                        <img class="risBtn m-1" [src]="photourllink" style="width: 150px;" alt="">
+                                                        <input type="file" formControlName="location_reg_file_path" class="fileInput risBtn risAdd " style="width: 150px;" #userImage (change)="onSelectImage($event)">
+                                                    </div>
+                                                </div>
+                                            </span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                             
+                                <div class="flex justify-content-end pr-2">
+                                    <button pButton pRipple type="button" (click)="openPrev()" label="Previous" class="risBtn  mr-2 mb-2" icon="pi pi-step-backward"></button>
+                                    <button pButton pRipple type="button" (click)="onFormSubmit()" label="Save" class="risBtn risSave  mr-2 mb-2" icon="pi pi-step-forward"></button>
+                                    <button pButton pRipple type="button" (click)="toggleFormClose()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
+                                </div>
+                        </p-tabPanel>
                     </p-tabView>
                 </form>
             </div>

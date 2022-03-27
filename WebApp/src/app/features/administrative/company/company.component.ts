@@ -290,8 +290,9 @@ export class CompanyComponent implements OnInit {
         }
         let companyId = this.rowData.company_id;
         this.CompanyService.deleteCompany(companyId).subscribe(data => {
-            this.massage = null;
-            this.loadAllCompanys();
+            if (data.MessageType == 1) {
+                this.companys.splice(this.companys.findIndex(item => item.association_id === companyId), 1);
+            }
             this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
         });
         this.display = false;

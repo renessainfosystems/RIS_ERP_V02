@@ -257,8 +257,9 @@ export class CompanyGroupComponent implements OnInit {
         }
         let companyGroupId = this.rowData.company_group_id;
         this.CompanyGroupService.deleteCompanyGroup(companyGroupId).subscribe(data => {
-            this.massage = null;
-            this.loadAllCompanyGroups();
+            if (data.MessageType == 1) {
+                this.companyGroups.splice(this.companyGroups.findIndex(item => item.association_id === companyGroupId), 1);
+            }
             this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
         });
         this.display = false;
