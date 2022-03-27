@@ -1,6 +1,5 @@
-
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { SelectionModel } from '@angular/cdk/collections';
 import { DocumentTypeService } from './document-type.service';
@@ -17,9 +16,27 @@ import { NotificationService } from '../../../service/CommonMessage/notification
 })
 export class DocumentTypeComponent implements OnInit {
 
+    documentTypeForm: FormGroup;
+    submitted = false;
+
+    //start grid and form show hide ********************
+    gridDisplay = false;
+    formDisplay = true;
+    toggleFormDisplay() {
+        this.gridDisplay = false;
+        this.formDisplay = true;
+    }
+    toggleGridDisplay() {
+        this.gridDisplay = true;
+        this.formDisplay = false;
+    }
+    toggleFormClose() {
+        this.toggleFormDisplay();
+    }
+    //end grid and form show hide ********************
+
     rowData: any;
     dataSaved = false;
-    documentTypeForm: any;
     allDocumentType: Observable<any[]>;
     selection = new SelectionModel<any>(true, []);
     massage = null;
@@ -42,14 +59,11 @@ export class DocumentTypeComponent implements OnInit {
         else
             this.display = true;
     }
-
     // for Insert and update data modal
-    displayBasic: boolean = false;
+    //displayBasic: boolean = false;
     showBasicDialog() {
-        this.documentTypeForm.reset();
-        this.massage = null;
-        this.dataSaved = false;
-        this.displayBasic = true;
+        this.resetForm();
+        this.toggleGridDisplay();
     }
 
     onRowSelect(event) {
@@ -109,31 +123,31 @@ export class DocumentTypeComponent implements OnInit {
             this.isDocumentTypeEdit = true;
 
         });
-        this.displayBasic = true;
+        this.toggleGridDisplay();
     }
 
-    deleteRegulatorInfo() {
-        if (this.rowData == null) {
-            return this.notifyService.ShowNotification(3, 'Please select row');
-        }
-        let document_type_id = this.rowData.document_type_id;
-        this.DocumentTypeService.DeleteDocumentType(document_type_id).subscribe(data => {
-            if (data.MessageType == 2) {
-                this.documentTypes.splice(this.documentTypes.findIndex(item => item.document_type_id === document_type_id), 1);
-            }
-            this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
-        });
-        this.display = false;
+    //for validation messate -----------
+    get f(): { [key: string]: AbstractControl } {
+        return this.documentTypeForm.controls;
     }
 
     onFormSubmit() {
+
+        //for validation message -----------
+        this.submitted = true;
         const documentTypedata = this.documentTypeForm.value;
-        if (!(documentTypedata.country_id)) {
-            return this.notifyService.ShowNotification(2, "Please Select Country")
+
+        if ((documentTypedata.country_id === null)) {
+            return;
         }
-        if (!(documentTypedata.document_type_name)) {
-            return this.notifyService.ShowNotification(2, "Please input document type name")
+        else if (documentTypedata.document_type_name === null) {
+            return;
         }
+        if (this.documentTypeForm.invalid) {
+            return;
+        }
+        //end validation messate -----------
+
         if (this.isDocumentTypeEdit) {
             documentTypedata.document_type_id = this.rowData.document_type_id;
             this.DocumentTypeService.UpdateDocumentType(documentTypedata).subscribe(result => {
@@ -145,7 +159,8 @@ export class DocumentTypeComponent implements OnInit {
                     this.selectedDocumentType = result.Data[0];
                     this.rowSelected = true;
                     this.rowData = result.Data[0];
-                    this.displayBasic = false;
+                    this.toggleFormDisplay();
+                    this.submitted = false;
                 }
             });
         }
@@ -159,10 +174,25 @@ export class DocumentTypeComponent implements OnInit {
                     this.selectedDocumentType = result.Data[0];
                     this.rowSelected = true;
                     this.rowData = result.Data[0];
-                    this.displayBasic = false;
+                    this.toggleFormDisplay();
+                    this.submitted = false;
                 }
             });
         }
+    }
+
+    deleteDocumentTypeInfo() {
+        if (this.rowData == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+        let document_type_id = this.rowData.document_type_id;
+        this.DocumentTypeService.DeleteDocumentType(document_type_id).subscribe(data => {
+            if (data.MessageType == 2) {
+                this.documentTypes.splice(this.documentTypes.findIndex(item => item.document_type_id === document_type_id), 1);
+            }
+            this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
+        });
+        this.display = false;
     }
 
     resetForm() {

@@ -1,12 +1,9 @@
 ﻿using Auth.DataAccess.EntityDataAccess;
 using Auth.Model.Administrative.Model;
 using Auth.Model.Administrative.ViewModel;
-using Auth.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using DataAccess;
-using Microsoft.EntityFrameworkCore;
 
 namespace Auth.Repository.Administrative
 {
@@ -14,7 +11,6 @@ namespace Auth.Repository.Administrative
     {
         private readonly IEntityDataAccess<EcommercePlatformViewModel> _entityDataAccessVM;
         private readonly IEntityDataAccess<EcommercePlatform> _entityDataAccess;
- 
 
         public EcommercePlatformRepository(
             IEntityDataAccess<EcommercePlatformViewModel> entityDataAccessVM
@@ -64,7 +60,6 @@ namespace Auth.Repository.Administrative
                 var sql = @"select EP.*,C.country_name from [Administrative].[Ecommerce_Platforms] EP 
                        left join [Administrative].[Country] C on EP.country_id=C.country_id order by ecommerce_paltforms_id desc";
                 return _entityDataAccessVM.SqlRawQuery(sql);
-
             }
             catch (Exception ex)
             {
@@ -76,7 +71,6 @@ namespace Auth.Repository.Administrative
         {
             try
             {
-
                 var sql = @"select EP.*,C.country_name from [Administrative].[Ecommerce_Platforms] EP 
                        left join [Administrative].[Country] C on EP.country_id= c.country_id where EP.ecommerce_paltforms_id='" + ecommerce_paltforms_id + "'";
                 return _entityDataAccessVM.SqlRawQuery(sql);

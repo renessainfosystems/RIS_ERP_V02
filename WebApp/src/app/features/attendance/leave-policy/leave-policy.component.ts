@@ -6,11 +6,17 @@ import { NotificationService } from '../../../service/CommonMessage/notification
 import { LeavePolicyService } from './leave-policy.service';
 
 @Component({
-  selector: 'app-leave-policy',
-  templateUrl: './leave-policy.component.html',
-  styleUrls: ['./leave-policy.component.scss']
+    selector: 'app-leave-policy',
+    templateUrl: './leave-policy.component.html',
+    styleUrls: ['./leave-policy.component.scss']
 })
 export class LeavePolicyComponent implements OnInit {
+
+
+    valCheck: string[] = [];
+    valCheck2: string[] = [];
+
+
 
     leavePolicyForm: FormGroup;
     submitted = false;
@@ -20,8 +26,13 @@ export class LeavePolicyComponent implements OnInit {
     allRosterCycle: any[];
     rosterDetails: any[] = [];
     selectedShift: any;
+
+    selectedleaveTypes: any;
+    leaveTypes: any[];
+
     selectedNextShift: any;
     allShifts: any[];
+
     rowData: any;
     rowSelected: boolean = false;
     isRosterEdit: boolean = false;
@@ -55,6 +66,11 @@ export class LeavePolicyComponent implements OnInit {
             next_shift_id: [null],
             shift_id: [null],
             code: [null],
+
+            max_carry_forward: [null],
+            max_carry_forwards: [null],
+            leave_type_id: [null],
+
 
 
         });
@@ -93,12 +109,20 @@ export class LeavePolicyComponent implements OnInit {
     }
     loadAllShift() {
         this.LeavePolicyService.getAllLeaveHeadForDP().subscribe(data => {
+
+            this.leaveTypes = data;
+
             this.allShifts = data;
+
         });
     }
     loadAllRosterCycle() {
         this.LeavePolicyService.getPrimarySalaryHeadForDP().subscribe(data => {
+
+            this.allRosterCycle = data;
+
             this.allShifts = data;
+
         });
     }
 
@@ -116,7 +140,7 @@ export class LeavePolicyComponent implements OnInit {
         this.resetForm();
         let leave_policy_id = this.rowData.leave_policy_id;
 
-        
+
 
         this.LeavePolicyService.getLeavePolicyById(leave_policy_id).subscribe(data => {
 

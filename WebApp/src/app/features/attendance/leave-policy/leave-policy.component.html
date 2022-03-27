@@ -1,1 +1,182 @@
-<p>leave-policy works!</p>
+<div class="grid ">
+    <div class="col-12 ">
+        <div class="card">
+
+            <h4>Leave Policy</h4>
+            <div [hidden]="formDisplay" class="md:pl-3 md:pr-5">
+                <form action="" [formGroup]="leavePolicyForm">
+
+
+                    <div class="col-12">
+                        <div class="p-fluid p-formgrid grid ">
+
+                            <div class="field col-12 md:col-6 float-right">
+                                <label pTooltip="Company Code" tooltipPosition="top">Code<span class="req">*</span></label>
+                                <input pInputText id="firstname2" type="text" formControlName="" placeholder="1001" pInputText disabled />
+                            </div>
+
+                            <div class="field col-12 md:col-6 flex justify-content-start flex-wrap ">
+                                <label pTooltip="Company Name" tooltipPosition="top">Company Name<span class="req">*</span> </label>
+                                <input id="lastname2" type="text" class="from-contro flex align-items-center justify-content-centerl" formControlName="company_name"
+                                       [ngClass]="{ 'is-invalid': submitted && f.company_name.errors }"
+                                       placeholder="" pInputText required />
+
+                                <div *ngIf="submitted && f.company_name.errors" class="invalid-feedback">
+                                    <small *ngIf="f.company_name.errors.required" class="p-error">Company name is required</small>
+                                </div>
+                            </div>
+
+                            <div class="field col-12" style="padding-left: 0; padding-right: 13px;">
+                                <label pTooltip="Remarks" tooltipPosition="top">Remarks </label>
+                                <input id="lastname2" type="text" formControlName="remarks" placeholder="" pInputText />
+
+                            </div>
+                            <div class="field col-12 md:col-12 flex justify-content-start flex-wrap ">
+                                <div class="grid ">
+                                    <div class=" col-12 md:col-12">
+                                        <div class="field-checkbox mb-0">
+                                            <p-checkbox name="group1" value="Chicago" [(ngModel)]="valCheck" id="ch"></p-checkbox>
+                                            <label for="ch">Calculate all leaves proportionately as per date of join or confirmation date.</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="field col-12 md:col-6 flex justify-content-start flex-wrap ">
+                                <label pTooltip="Company Name" tooltipPosition="top">Leave<span class="req">*</span> </label>
+                                <input id="lastname2" type="text" class="from-contro flex align-items-center justify-content-centerl" formControlName="company_name"
+                                       [ngClass]="{ 'is-invalid': submitted && f.company_name.errors }"
+                                       placeholder="" pInputText required />
+
+
+
+                                <div *ngIf="submitted && f.company_name.errors" class="invalid-feedback">
+                                    <small *ngIf="f.company_name.errors.required" class="p-error">Company name is required</small>
+                                </div>
+                            </div>
+
+                            <div class="field col-12 md:col-6 float-right">
+                                <label pTooltip="Company Code" tooltipPosition="top">Description<span class="req">*</span></label>
+                                <input id="firstname2" type="text" formControlName="" placeholder="[General] [Applicable for Both]" pInputText disabled />
+
+                            </div>
+
+                            <div class="field col-12 md:col-6 float-right">
+                                <label pTooltip="Company Code" tooltipPosition="top">Default Balance<span class="req">*</span></label>
+                                <div class="grid">
+                                    <div class=" col-12 md:col-7">
+                                        <div class="field-checkbox mb-0">
+                                            <input id="firstname2" type="text" formControlName="" placeholder="" pInputText />
+                                            <label for="ch">Days</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="field col-12 md:col-6 float-right">
+                                <label pTooltip="Company Code" tooltipPosition="top">Max enjoyable limit<span class="req">*</span></label>
+                                <div class="grid">
+                                    <div class=" col-12 md:col-7">
+                                        <div class="field-checkbox mb-0">
+                                            <input id="firstname2" type="text" formControlName="company_name" placeholder="" pInputText />
+                                            <label for="ch">Days</label>
+                                            <label class="md:mr-2"> or </label>
+                                            <p-checkbox name="group1" value="Chicago" [(ngModel)]="valCheck" id="ch"></p-checkbox>
+                                            <label for="ch">All</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="field col-12 md:col-6 float-right">
+                                <label pTooltip="Company ff" tooltipPosition="top">Max enjoyable limit<span class="req">*</span></label>
+
+                                <div class="grid">
+                                    <div class=" col-12 md:col-7">
+
+                                        <div class="field-checkbox mb-0">
+                                            <input id="lastname2" type="text" formControlName="max_carry_forward" placeholder="" pInputText />
+                                            <label for="ch1">Days</label>
+                                            <label class="md:mr-2"> or </label>
+                                            <p-checkbox name="group2" value="Chicago1" id="ch1"></p-checkbox>
+                                            <label for="ch1">All</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="field col-12 md:col-6 float-right">
+                                <label pTooltip="Company Code" tooltipPosition="top">Max carry forward year <span class="req">*</span></label>
+                                <div class="grid">
+                                    <div class=" col-12 md:col-7">
+                                        <div class="field-checkbox mb-0">
+                                            <input id="firstname2" type="text" formControlName="max_carry_forward" placeholder="" pInputText />
+                                            <label for="ch">Days</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div></div>
+                        </div>
+                    </div>
+                    <div class="flex justify-content-end pr-2">
+                        <!-- <button pButton pRipple type="button" (click)="onGeneral()" label="Next" class="risBtn  mr-2 mb-2" icon="pi pi-step-forward"></button>-->
+                        <button pButton pRipple type="button" (click)="toggleFormClose()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
+                    </div>
+
+
+                </form>
+            </div>
+            <!--end form display------------->
+
+            <div [hidden]="gridDisplay">
+                <button pButton pRipple type="button" label="New" (click)="showBasicDialog()" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
+                <button pButton pRipple type="button" label="Edit" (click)="loadRosterPolicyToEdit()" icon="pi pi-pencil" class="risBtn risEdit mr-2 mb-2"></button>
+                <button pButton pRipple type="button" label="Delete" icon="pi pi-trash" class="risBtn risDelete mr-2 mb-2" (click)="deleteModal($event)"> </button>
+                <button pButton pRipple type="button" label="Activity" icon="pi pi-box" class="risBtn risAll mr-2 mb-2"> </button>
+                <button pButton pRipple type="button" label="Approve" icon="pi pi-box" class="risBtn risAll mr-2 mb-2" (click)="approveModal($event)"> </button>
+                <button pButton pRipple type="button" label="Copy" icon="pi pi-copy" class="risBtn risAll mr-2 mb-2" (click)="approveModal($event)"> </button>
+                <p-confirmPopup key="approve"></p-confirmPopup>
+                <p-confirmPopup key="delete"></p-confirmPopup>
+
+                <p-table [value]="leavePolicies" styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm" [paginator]="true" [rows]="10" selectionMode="single" [showCurrentPageReport]="true" responsiveLayout="scroll"
+                         [(selection)]="selectedPolicy" dataKey="leave_policy_id" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Policy Name</th>
+                            <th>Remarks</th>
+                            <th>Leave</th>
+                            <th>Total Leave</th>
+                            <th>Activation</th>
+                            <th>Max enjoyable limit</th>
+                            <th>Activity</th>
+                            <th>Approve</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-roster>
+                        <tr [pSelectableRow]="roster">
+
+                            <td>{{roster.leave_policy_name}}</td>
+                            <td>{{roster.remarks}}</td>
+                            <td>{{roster.leave}}</td>
+                            <td>{{roster.totalleave}}</td>
+                            <td>{{roster.activation}}</td>
+                            <td>{{roster.maxenjoyable}}</td>
+                            <td *ngIf="roster.is_active===true">{{"Active"}}</td>
+                            <td *ngIf="roster.is_active===false">{{"InActive"}}</td>
+                            <td>{{roster.approvedBy}}</td>
+
+
+                        </tr>
+                    </ng-template>
+
+                </p-table>
+                <!--end grid display -------------->
+            </div>
+
+
+
+        </div>
+    </div>
+</div>

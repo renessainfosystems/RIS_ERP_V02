@@ -15,9 +15,8 @@ namespace Auth.Repository.Administrative
         private readonly IEntityDataAccess<Mfs> _entityDataAccess;
 
         public MfsRepository(
-             IEntityDataAccess<MfsViewModel> entityDataAccessVM
+            IEntityDataAccess<MfsViewModel> entityDataAccessVM
             ,IEntityDataAccess<Mfs> entityDataAccess
-
             )
         {
             _entityDataAccessVM = entityDataAccessVM;
@@ -85,32 +84,27 @@ namespace Auth.Repository.Administrative
                     throw new Exception(ex.Message);
             }
         }
-
         public IEnumerable<dynamic> GetAllByRawSql()
         {
             try
             {
-                var sql = @"select MFS.*,C.country_name
-                       from[Administrative].[Mobile_Financial_Service] MFS 
-					   left join[Administrative].[Country] C on MFS.country_id = C.country_id order by mfs_id desc";
-                return _entityDataAccessVM.SqlRawQuery(sql);
 
+                var sql = @"select MFS.*,C.country_name from[Administrative].[Mobile_Financial_Service] MFS 
+                            left join[Administrative].[Country] C on MFS.country_id = C.country_id";
+                return _entityDataAccessVM.SqlRawQuery(sql);
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
         }
-
-
 
         public IEnumerable<dynamic> GetByIdRawSql(int mfs_id)
         {
             try
             {
-                var sql = @"select MFS.*,C.country_name
-                       from[Administrative].[Mobile_Financial_Service] MFS 
-					   left join[Administrative].[Country] C on MFS.country_id = C.country_id where MFS.mfs_id='" + mfs_id + "'";
+                var sql = @"select MFS.*,C.country_name from[Administrative].[Mobile_Financial_Service] MFS 
+                            left join[Administrative].[Country] C on MFS.country_id = C.country_id where MFS.mfs_id='" + mfs_id + "'";
                 return _entityDataAccessVM.SqlRawQuery(sql);
             }
             catch (Exception ex)
@@ -118,7 +112,6 @@ namespace Auth.Repository.Administrative
                 throw new Exception(ex.Message);
             }
         }
-
         private int GetAutoId()
         {
             try
