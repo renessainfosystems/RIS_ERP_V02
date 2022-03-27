@@ -1,5 +1,4 @@
 ﻿using Auth.Model.Administrative.Model;
-using Auth.Model.Administrative.ViewModel;
 using System.Collections.Generic;
 
 namespace Auth.Repository.Administrative

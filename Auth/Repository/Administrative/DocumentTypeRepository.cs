@@ -1,12 +1,10 @@
 ﻿using Auth.DataAccess.EntityDataAccess;
 using Auth.Model.Administrative.Model;
 using Auth.Model.Administrative.ViewModel;
-using Auth.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using DataAccess;
-using Microsoft.EntityFrameworkCore;
+
 
 
 namespace Auth.Repository.Administrative
@@ -17,7 +15,7 @@ namespace Auth.Repository.Administrative
         private readonly IEntityDataAccess<DocumentType> _entityDataAccess;
 
         public DocumentTypeRepository(
-            IEntityDataAccess<DocumentTypeViewModel> entityDataAccessVM
+             IEntityDataAccess<DocumentTypeViewModel> entityDataAccessVM
             ,IEntityDataAccess<DocumentType> entityDataAccess
 
             )
@@ -49,37 +47,6 @@ namespace Auth.Repository.Administrative
             _entityDataAccess.Remove(oDocumentType);
         }
 
-        public IEnumerable<dynamic> GetAllByRawSql()
-        {
-            try
-            {
-                var sql = @"select DT.*,C.country_name from[Administrative].[Document_Type] DT 
-                          left join[Administrative].[Country] C on DT.country_id = C.country_id order by document_type_id desc";
-                return _entityDataAccessVM.SqlRawQuery(sql);
-
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-
-
-        public IEnumerable<dynamic> GetByIdRawSql(int document_type_id)
-        {
-            try
-            {
-                var sql = @"select DT.*,C.country_name from[Administrative].[Document_Type] DT 
-                          left join[Administrative].[Country] C on DT.country_id = C.country_id where DT.document_type_id='" + document_type_id + "'";
-                return _entityDataAccessVM.SqlRawQuery(sql);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
         public IEnumerable<object> DocumentTypeCboList()
         {
             try
@@ -102,6 +69,35 @@ namespace Auth.Repository.Administrative
         public DocumentType GetById(int document_type_id)
         {
             return _entityDataAccess.GetById(document_type_id);
+        }
+
+        public IEnumerable<dynamic> GetAllByRawSql()
+        {
+            try
+            {
+
+                var sql = @"select DT.*,C.country_name from[Administrative].[Document_Type] DT 
+                            left join[Administrative].[Country] C on DT.country_id = C.country_id";
+                return _entityDataAccessVM.SqlRawQuery(sql);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public IEnumerable<dynamic> GetByIdRawSql(int document_type_id)
+        {
+            try
+            {
+                var sql = @"select DT.*,C.country_name from[Administrative].[Document_Type] DT 
+                            left join[Administrative].[Country] C on DT.country_id = C.country_id where DT.document_type_id='" + document_type_id + "'";
+                return _entityDataAccessVM.SqlRawQuery(sql);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public void Update(DocumentType oDocumentType)

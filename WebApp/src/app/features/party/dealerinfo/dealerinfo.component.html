@@ -1,1559 +1,368 @@
-<div class="p-card">
 
-    <div class="me-auto">
-        <div class="p-card-title ">
-            <span class="pi pi-Dealerinfo Dealerinfo"> </span>Dealerinfo Information
-        </div>
-        <div class="p-card-body">
-            <!--********** start card body ********************-->
-            <div class="card">
-
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <h4>Dealer Information</h4>
+            <div [hidden]="formDisplay">
                 <p-tabView [activeIndex]="index" (onChange)="function($event)">
-                    <!--Statr Dealer General Information-->
                     <p-tabPanel header="General Info">
-                        <form [formGroup]="dealerinfoForm">
-                            <p-fieldset legend="Dealer Basic Information" [collapsed]="collapsedempInfo" (onBeforeToggle)="toggle()" [toggleable]="true">
-                                <p-dialog header="Delete Record" [(visible)]="display" [style]="{width: '35vw'}">
-                                    <p>Do you want to delete this record?</p>
-                                    <ng-template pTemplate="footer">
-                                        <button class="pi pi-times risBtn risClose" (click)="display=false"> No</button>
-                                        <button class="pi pi-check risBtn risSave" (click)="deleteDealerinfo()"> Yes</button>
-                                    </ng-template>
-                                </p-dialog>
-                                <div class="row">
-                                    <div class="p-fluid grid col-12 flex flex-wrap card-container">
-                                        <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Dealer Code" tooltipPosition="top">Dealer Code<span class="req">*</span> : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="dealer_info_code" placeholder="Dealer Code" pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Dealer Legal Name" tooltipPosition="top">Dealer Legal Name<span class="req">*</span> : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="dealer_info_name" placeholder="Dealer Legal/Proprietor Name" pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Trade License" tooltipPosition="top">Trade License<span class="req">*</span> : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="trade_license" placeholder="Trade License" pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="BIN" tooltipPosition="top">BIN : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="BIN" placeholder="BIN" pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Mobile" tooltipPosition="top">Mobile : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="mobile" placeholder="Mobile" pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Email" tooltipPosition="top">Email : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="email" placeholder="Email" pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Web" tooltipPosition="top">Web : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="web_url" placeholder="Web url" pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Dealer Short Name" tooltipPosition="top">Dealer Short Name<span class="req">*</span> : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="dealer_info_short_name" placeholder="Dealer Short Name" pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Dealer Display Name" tooltipPosition="top">Dealer Display Name<span class="req">*</span> : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="dealer_info_display_name" placeholder="Dealer Display Name" pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Year Established" tooltipPosition="top">Year Established<span class="req">*</span> : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <p-calendar id="float-input p-fluid" formControlName="year_established" placeholder="Year Established Date" [showIcon]="true" selectOtherMonths="true"
-                                                                    inputId="navigators" showButtonBar="true" [monthNavigator]="true" [yearNavigator]="true" yearRange="2000:2050" dateFormat="dd/mm/yy">
-                                                        </p-calendar>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="TIN" tooltipPosition="top">TIN : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="TIN" placeholder="TIN" pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Domicile" tooltipPosition="top">Domicile<span class="req">*</span> : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <p-dropdown [options]="allDomicile" formControlName="domicile_enum_id" placeholder="Select Domicile"
-                                                                    optionLabel="domicile_enum_name" optionValue="domicile_enum_id" [showClear]="true"
-                                                                    [filter]="true" filterBy="domicile_enum_name">
-                                                        </p-dropdown>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Phone" tooltipPosition="top">Phone : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="phone" placeholder="Phone" pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Logo" tooltipPosition="top">Image : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <div class=" inputWrapper col-6 photo-signature align-self-end flex align-items-center justify-content-center">
-                                                        <img class="risBtn" [src]="photourllink" style="width: 130px;" alt="">
-                                                        <input type="file" class="fileInput risBtn risAdd" style="width: 130px;" #dealerinfoImage (change)="onSelectImage($event)">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
+                        <form action="" [formGroup]="dealerinfoForm">
+                            <div class="col-12">
+                                <div class="p-fluid p-formgrid grid">
+                                    <div class="field col-12 md:col-6">
+                                        <label pTooltip="Dealer Code" tooltipPosition="top">Dealer Code</label>
+                                        <input pInputText type="text" formControlName="dealer_info_code" placeholder="<<Auto Generate>>" disabled />
                                     </div>
-                                </div>
-                                <div class="p-fluid grid col-12 flex flex-wrap card-container">
-                                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
-                                        <div class="col-4 mt-2 text-right">
-                                        </div>
-                                        <div class="col-8 p-fluid">
-                                            <span class="p-float-label">
-
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
-                                        <div class="col-4 mt-2 text-right">
-                                        </div>
-                                        <div class="col-8 p-fluid text-right">
-                                            <span class="p-float-label">
-                                                <button type="submit" class="pi risBtn risAll" (click)="openNext()"> Next <span class="pi pi-step-forward"></span></button>
-                                            </span>
+                                    <div class="field col-12 md:col-6">
+                                        <label pTooltip="Image" tooltipPosition="top">Image </label>
+                                        <div class=" inputWrapper photo-signature align-self-end flex align-items-center ">
+                                            <img class="risBtn m-1" [src]="photourllink" style="width: 100px;" alt="">
+                                            <input type="file" formControlName="logo_path" class="fileInput risBtn risAdd " style="width: 100px;" #userImage (change)="onSelectImage($event)">
                                         </div>
                                     </div>
                                 </div>
-
-                            </p-fieldset>
-                            <p-fieldset legend="Dealer Information List" [collapsed]="collapsedempDetails" (onBeforeToggle)="toggle()" [toggleable]="true">
-                                <div class="grid mb-2">
-                                    <button class="pi pi-plus risBtn risAdd mr-2 " (click)="btnNew()"> New</button>
-                                    <button class="pi pi-pencil risBtn risEdit mr-2 " (click)="loadDealerinfoToEdit()"> Edit</button>
-                                    <button class="pi pi-trash risBtn risDelete mr-2" (click)="showDialog()"> Delete</button>
-                                </div>
-
-                                <p-table #dt1 [value]="dealerinfoList" [paginator]="true" [rows]="10" selectionMode="single" [(selection)]="selecteddealerinfo" dataKey="DealerInfoId" [showCurrentPageReport]="true" responsiveLayout="scroll" styleClass="p-datatable-striped p-datatable-sm"
-                                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)"
-                                         [globalFilterFields]="['DealerInfoCode','DealerInfoName']">
-                                    <ng-template pTemplate="caption">
-                                        <div class="flex">
-
-                                            <span class="p-input-icon-left ml-auto">
-                                                <i class="pi pi-search"></i>
-                                                <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Search by Any" />
-                                            </span>
+                            </div>
+                            <div class="col-12">
+                                <div class="p-fluid p-formgrid grid">
+                                    <div class="field form-group col-12 md:col-6">
+                                        <label pTooltip="Dealer Name" tooltipPosition="top">Dealer Name<span class="req">*</span> </label>
+                                        <input type="text" class="from-control" formControlName="dealer_info_name"
+                                               [ngClass]="{ 'is-invalid': submitted && f.dealer_info_name.errors }"
+                                               placeholder="" pInputText required />
+                                        <div *ngIf="submitted && f.dealer_info_name.errors" class="invalid-feedback">
+                                            <small *ngIf="f.dealer_info_name.errors.required" class="p-error">Dealer name is required</small>
                                         </div>
-                                    </ng-template>
-                                    <ng-template pTemplate="header">
-                                        <tr>
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label pTooltip="Dealer Short Name" tooltipPosition="top">Dealer Short Name<span class="req">*</span> </label>
+                                        <input pInputText type="text" formControlName="dealer_info_short_name" [ngClass]="{ 'is-invalid': submitted && f.dealer_info_short_name.errors }" placeholder="" />
 
-                                            <th pSortableColumn="Code">
+                                        <div *ngIf="submitted && f.dealer_info_short_name.errors" class="invalid-feedback">
+                                            <small *ngIf="f.dealer_info_short_name.errors.required" class="p-error">Dealer Short Name is required</small>
+                                        </div>
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label pTooltip="Dealer Display Name" tooltipPosition="top"> Dealer Display Name </label>
+                                        <input type="text" formControlName="dealer_info_display_name" placeholder="" pInputText />
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label pTooltip="Domicile" tooltipPosition="top">Domicile<span class="req">*</span></label>
+                                        <p-dropdown [options]="allDomicile" formControlName="domicile_enum_id" [ngClass]="{ 'is-invalid': submitted && f.domicile_enum_id.errors }" placeholder="---Select---"
+                                                    optionLabel="domicile_enum_name" optionValue="domicile_enum_id" [showClear]="true" [filter]="true" filterBy="domicile_enum_name"></p-dropdown>
 
-                                                Dealer Code
-                                                <p-columnFilter type="text" field="DealerInfoCode" display="menu"></p-columnFilter>
-                                                <p-sortIcon field="Code"></p-sortIcon>
+                                        <div *ngIf="submitted && f.domicile_enum_id.errors" class="invalid-feedback">
+                                            <small *ngIf="f.domicile_enum_id.errors.required" class="p-error">Domicile is required</small>
+                                        </div>
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label pTooltip="Trade License" tooltipPosition="top">Trade License<span class="req">*</span> </label>
+                                        <input pInputText type="text" formControlName="trade_license" [ngClass]="{ 'is-invalid': submitted && f.trade_license.errors }" placeholder="" />
 
-                                            </th>
-                                            <th pSortableColumn="DealerinfoName">
-                                                Dealer Name
-                                                <p-columnFilter type="text" field="DealerinfoName" display="menu"></p-columnFilter>
-                                            </th>
-                                            <th pSortableColumn="PersonalPhone">Phone</th>
-                                            <th pSortableColumn="PersonalEmail">Email</th>
-                                            <th pSortableColumn="PresentAddressNote">Address</th>
-                                            <th>Status</th>
-                                        </tr>
-                                    </ng-template>
-                                    <ng-template pTemplate="body" let-dealerinfo let-rowData let-columns="columns">
-                                        <tr [pSelectableRow]="dealerinfo">
-                                            <td>{{dealerinfo.DealerInfoCode}}</td>
-                                            <td>{{dealerinfo.DealerInfoName}}</td>
-                                            <td>{{dealerinfo.Phone}}</td>
-                                            <td>{{dealerinfo.Email}}</td>
-                                            <td>{{dealerinfo.AddressNote}}</td>
-                                            <td *ngIf="dealerinfo.IsActive===true">{{"Active"}}</td>
-                                            <td *ngIf="dealerinfo.IsActive===false">{{"In Active"}}</td>
-                                        </tr>
-                                    </ng-template>
+                                        <div *ngIf="submitted && f.trade_license.errors" class="invalid-feedback">
+                                            <small *ngIf="f.trade_license.errors.required" class="p-error">Trade License is required</small>
+                                        </div>
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label pTooltip="Year Established" tooltipPosition="top">Year Established </label>
+                                        <p-calendar formControlName="year_established" placeholder="" [showIcon]="true" [showButtonBar]="true"></p-calendar>
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label pTooltip=" TIN No" tooltipPosition="top">TIN No </label>
+                                        <input type="text" formControlName="TIN" placeholder="" pInputText />
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label pTooltip="BIN No" tooltipPosition="top">BIN No </label>
+                                        <input type="text" formControlName="BIN" placeholder="" pInputText />
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label pTooltip="Mobile" tooltipPosition="top">Mobile <span class="req">*</span> </label>
+                                        <input type="text" formControlName="mobile" [ngClass]="{ 'is-invalid': submitted && f.mobile.errors }" placeholder="" pInputText />
+                                        <div *ngIf="submitted && f.mobile.errors" class="invalid-feedback">
+                                            <small *ngIf="f.mobile.errors.required" class="p-error">Mobile number is required</small>
+                                        </div>
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label pTooltip="Phone" tooltipPosition="top">Phone </label>
+                                        <input type="text" formControlName="phone" placeholder="" pInputText />
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label pTooltip="Email" tooltipPosition="top">Email </label>
+                                        <input type="email" formControlName="email" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" placeholder="" pInputText />
+                                        <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                                            <small *ngIf="f.email.errors.email" class="p-error">Email must be a valid email address</small>
+                                        </div>
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label pTooltip="Web" tooltipPosition="top">Web </label>
+                                        <input type="text" formControlName="web_url" placeholder="" pInputText />
+                                    </div>
 
-                                </p-table>
-                            </p-fieldset>
+
+                                </div>
+                            </div>
                         </form>
+                        <div class="flex justify-content-end pr-2">
+                            <button pButton pRipple type="button" (click)="onGeneral()" label="Next" class="risBtn  mr-2 mb-2" icon="pi pi-step-forward"></button>
+                            <button pButton pRipple type="button" (click)="toggleFormClose()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
+                        </div>
                     </p-tabPanel>
                     <p-tabPanel header="Business Info">
-                        <form [formGroup]="dealerinfoForm">
-                            <p-fieldset legend="Business Information" [collapsed]="collapsed" (onBeforeToggle)="toggleAddress()" [toggleable]="true">
-                                <div class="row">
-                                    <div class="p-fluid grid col-12 flex flex-wrap card-container">
-
-                                        <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Indusrty Sector" tooltipPosition="top">Indusrty Sector<span class="req">*</span> : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <p-dropdown [options]="allIndustrySector" formControlName="industry_sector_id" placeholder="Select Industry Sector"
-                                                                    optionLabel="industry_sector_name" optionValue="industry_sector_id" [showClear]="true" (onChange)="onSelectBySectorId($event.value)"
-                                                                    [filter]="true" filterBy="industry_sector_name">
-                                                        </p-dropdown>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Ownership Type" tooltipPosition="top">Ownership Type<span class="req">*</span> : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <p-dropdown [options]="allOwnershipType" formControlName="ownership_type_id" placeholder="Select Ownership Type"
-                                                                    optionLabel="ownership_type_name" optionValue="ownership_type_id" [showClear]="true"
-                                                                    [filter]="true" filterBy="ownership_type_name">
-                                                        </p-dropdown>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Registry Authority" tooltipPosition="top">Registry Authority : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <p-dropdown [options]="allRegisterAuthority" formControlName="registry_authority_id" placeholder="Select Registry Authority"
-                                                                    optionLabel="registry_authority_name" optionValue="registry_authority_id" [showClear]="true"
-                                                                    [filter]="true" filterBy="registry_authority_name">
-                                                        </p-dropdown>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Currency" tooltipPosition="top">Currency<span class="req">*</span> : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <span class="p-float-label">
-                                                            <p-dropdown [options]="allCurrency" formControlName="currency_id" placeholder="Select Currency"
-                                                                        optionLabel="currency_name" optionValue="currency_id" [showClear]="true"
-                                                                        [filter]="true" filterBy="currency_name">
-                                                            </p-dropdown>
-                                                        </span>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Indusrty Sub Sector" tooltipPosition="top">Indusrty Sub Sector : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <p-dropdown [options]="allIndustrySubSector" formControlName="industry_sub_sector_id" placeholder="Select Industry Sub Sector"
-                                                                    optionLabel="industry_sub_sector_name" optionValue="industry_sub_sector_id" [showClear]="true"
-                                                                    [filter]="true" filterBy="industry_sub_sector_name">
-                                                        </p-dropdown>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Business Type" tooltipPosition="top">Business Type : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <p-dropdown [options]="allBusinessActivities" formControlName="business_type_enum_id" placeholder="Select Business Type"
-                                                                    optionLabel="business_type_enum_name" optionValue="business_type_enum_id" [showClear]="true"
-                                                                    [filter]="true" filterBy="business_type_enum_name">
-                                                        </p-dropdown>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Organazation Type" tooltipPosition="top">Organazation Type : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <p-dropdown [options]="allOrganazationType" formControlName="organization_type_enum_id" placeholder="Select Organazation Type"
-                                                                    optionLabel="organization_type_enum_name" optionValue="organization_type_enum_id" [showClear]="true"
-                                                                    [filter]="true" filterBy="organization_type_enum_name">
-                                                        </p-dropdown>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Regulator" tooltipPosition="top">Regulator : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <p-dropdown [options]="allRegulator" formControlName="regulator_id" placeholder="Select Regulator"
-                                                                    optionLabel="regulator_name" optionValue="regulator_id" [showClear]="true"
-                                                                    [filter]="true" filterBy="regulator_name">
-                                                        </p-dropdown>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </p-fieldset>
-                            <p-fieldset legend="Financial Information" collapsed="true" [toggleable]="true">
-                                <div class="row">
-                                    <div class="p-fluid grid col-12 flex flex-wrap card-container">
-                                        <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Internal Credit Rating" tooltipPosition="top">Internal Credit Rating : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="internal_credit_rating" placeholder="Internal Credit Rating" pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Maximum Credit" tooltipPosition="top">Maximum Credit : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="maximum_credit" placeholder="Maximum Credit" pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Allowable Credit" tooltipPosition="top">Allowable Credit : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="allowable_credit" placeholder="Allowable Credit" pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Prefered Method" tooltipPosition="top">Prefered Method : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <p-dropdown [options]="allPreferredMethod" formControlName="prefered_method_enum_id" placeholder="Select Preferred Method"
-                                                                    optionLabel="prefered_method_enum_name" optionValue="prefered_method_enum_id" [showClear]="true"
-                                                                    [filter]="true" filterBy="prefered_method_enum_name">
-                                                        </p-dropdown>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Credit Days" tooltipPosition="top">Credit Days : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="credit_days" placeholder="Credit Days" pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Security Requirment" tooltipPosition="top">Security Requirment : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <p-dropdown [options]="allSecurityType" formControlName="security_type_enum_id" placeholder="Select Preferred Method"
-                                                                    optionLabel="security_type_enum_name" optionValue="security_type_enum_id" [showClear]="true"
-                                                                    [filter]="true" filterBy="security_type_enum_name">
-                                                        </p-dropdown>
-                                                    </span>
-                                                </div>
-                                            </div>
+                        <form action="" [formGroup]="dealerinfoForm">
+                            <div class="col-12">
+                                <div class="p-fluid p-formgrid grid">
+                                    <div class="field col-12 md:col-6">
+                                        <label pTooltip="Ownership Type" tooltipPosition="top">Ownership Type<span class="req">*</span> </label>
+                                        <p-dropdown [options]="allOwnershipType" formControlName="ownership_type_id" [ngClass]="{ 'is-invalid': submitted && f.ownership_type_id.errors }" placeholder="---Select---"
+                                                    optionLabel="ownership_type_name" optionValue="ownership_type_id" [showClear]="true" [filter]="true" filterBy="ownership_type_name"></p-dropdown>
+                                        <div *ngIf="submitted && f.ownership_type_id.errors" class="invalid-feedback">
+                                            <small *ngIf="f.ownership_type_id.errors.required" class="p-error">Ownership Type is required</small>
                                         </div>
                                     </div>
-                                </div>
-                            </p-fieldset>
-                            <div class="p-fluid grid col-12 flex flex-wrap card-container">
-                                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
-                                    <div class="col-4 mt-2 text-right">
-                                        <button type="submit" class="pi risBtn risAll" (click)="openPrev()"><span class="pi pi-step-backward"></span> Previous </button>
-                                    </div>
-                                    <div class="col-8 p-fluid">
-                                        <span class="p-float-label">
+                                    <div class="field col-12 md:col-6">
+                                        <label pTooltip="Business Type" tooltipPosition="top">Business Type </label>
+                                        <p-dropdown [options]="allBusinessActivities" formControlName="business_type_enum_id" placeholder="---Select---"
+                                                    optionLabel="business_type_enum_name" optionValue="business_type_enum_id" [showClear]="true" [filter]="true" filterBy="business_type_enum_name"></p-dropdown>
 
-                                        </span>
                                     </div>
-                                </div>
-                                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
-                                    <div class="col-4 mt-2 text-right">
+                                    <div class="field col-12 md:col-6">
+                                        <label pTooltip="Indusrty Sector" tooltipPosition="top">Indusrty Sector<span class="req">*</span> </label>
+                                        <p-dropdown [options]="allIndustrySector" formControlName="industry_sector_id" [ngClass]="{ 'is-invalid': submitted && f.industry_sector_id.errors }" placeholder="---Select---"
+                                                    optionLabel="industry_sector_name" optionValue="industry_sector_id" (onChange)="onSelectBySectorId($event.value)" [showClear]="true" [filter]="true" filterBy="industry_sector_name"></p-dropdown>
+                                        <div *ngIf="submitted && f.industry_sector_id.errors" class="invalid-feedback">
+                                            <small *ngIf="f.industry_sector_id.errors.required" class="p-error">Indusrty Sector is required</small>
+                                        </div>
                                     </div>
-                                    <div class="col-8 p-fluid text-right">
-                                        <span class="p-float-label">
-                                            <button type="submit" class="pi risBtn risAll" (click)="openNext()"> Next <span class="pi pi-step-forward"></span></button>
-                                        </span>
+                                    <div class="field col-12 md:col-6">
+                                        <label pTooltip="Indusrty Sector" tooltipPosition="top">Indusrty SubSector </label>
+                                        <p-dropdown [options]="allIndustrySubSector" formControlName="industry_sub_sector_id" placeholder="---Select---"
+                                                    optionLabel="industry_sub_sector_name" optionValue="industry_sub_sector_id" [showClear]="true" [filter]="true" filterBy="industry_sector_name"></p-dropdown>
+
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label pTooltip="Registry Authority" tooltipPosition="top">Registry Authority </label>
+                                        <p-dropdown [options]="allRegisterAuthority" formControlName="registry_authority_id" placeholder="---Select---"
+                                                    optionLabel="registry_authority_name" optionValue="registry_authority_id" [showClear]="true" [filter]="true" filterBy="registry_authority_name"></p-dropdown>
+
+                                    </div>
+
+                                    <div class="field col-12 md:col-6">
+                                        <label pTooltip="Organazation Type" tooltipPosition="top">Organazation Type </label>
+                                        <p-dropdown [options]="allOrganazationType" formControlName="organization_type_enum_id" placeholder="---Select---"
+                                                    optionLabel="organization_type_enum_name" optionValue="organization_type_enum_id" [showClear]="true" [filter]="true" filterBy="organization_type_enum_name"></p-dropdown>
+
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label pTooltip="Regulator" tooltipPosition="top">Regulator</label>
+                                        <p-dropdown [options]="allRegulator" formControlName="regulator_id" placeholder="---Select---"
+                                                    optionLabel="regulator_name" optionValue="regulator_id" [showClear]="true" [filter]="true" filterBy="regulator_name"></p-dropdown>
+
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label pTooltip="Currency" tooltipPosition="top">Currency<span class="req">*</span> </label>
+                                        <p-dropdown [options]="allCurrency" formControlName="currency_id" [ngClass]="{ 'is-invalid': submitted && f.currency_id.errors }" placeholder="---Select---"
+                                                    optionLabel="currency_name" optionValue="currency_id" [showClear]="true" [filter]="true" filterBy="currency_name"></p-dropdown>
+                                        <div *ngIf="submitted && f.currency_id.errors" class="invalid-feedback">
+                                            <small *ngIf="f.currency_id.errors.required" class="p-error">Currency is required</small>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+
                         </form>
+                        <div class="flex justify-content-end pr-2">
+                            <button pButton pRipple type="button" (click)="openPrev()" label="Previous" class="risBtn  mr-2 mb-2" icon="pi pi-step-backward"></button>
+                            <button pButton pRipple type="button" (click)="onBusiness()" label="Next" class="risBtn  mr-2 mb-2" icon="pi pi-step-forward"></button>
+                            <button pButton pRipple type="button" (click)="toggleFormClose()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
+                        </div>
                     </p-tabPanel>
                     <p-tabPanel header="Address Info">
-                        <form [formGroup]="dealerinfoForm">
-                            <p-fieldset legend="Address Information" [collapsed]="collapsed" (onBeforeToggle)="toggleAddress()" [toggleable]="true">
-                                <div class="row">
-                                    <div class="p-fluid grid col-12 flex flex-wrap card-container">
-                                        <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class="d-none d-md-inline-flex">Continent<span class="req">*</span> :</label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <p-dropdown [options]="allContinent" formControlName="continent_enum_id" placeholder="Select Continent"
-                                                                    optionLabel="continent_enum_name" optionValue="continent_enum_id" [showClear]="true" [filter]="true" filterBy="continent_enum_name">
-                                                        </p-dropdown>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class="d-none d-md-inline-flex">Division/State<span class="req">*</span> :</label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <p-dropdown [options]="allDivision" formControlName="division_id" placeholder="Select Division"
-                                                                    optionLabel="division_name" optionValue="division_id" (onChange)="onSelectByDivisionId($event.value)" [showClear]="true"
-                                                                    [filter]="true" filterBy="division_name">
+                        <form action="" [formGroup]="dealerinfoForm">
+                            <div class="col-12">
+                                <div class="p-fluid p-formgrid grid">
+                                    <div class="field col-12 md:col-6">
+                                        <label pTooltip="Continent" tooltipPosition="top">Continent<span class="req">*</span></label>
+                                        <p-dropdown [options]="allContinent" formControlName="continent_enum_id" [ngClass]="{ 'is-invalid': submitted && f.continent_enum_id.errors }" placeholder="---Select---"
+                                                    optionLabel="continent_enum_name" optionValue="continent_enum_id" (onChange)="onSelectByCountryId($event.value)" [showClear]="true" [filter]="true" filterBy="continent_enum_name"></p-dropdown>
 
-                                                        </p-dropdown>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class="d-none d-md-inline-flex">Thana<span class="req">*</span> :</label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <p-dropdown [options]="allThana" formControlName="thana_id" placeholder="Select Thana"
-                                                                    optionLabel="thana_name" optionValue="thana_id" [showClear]="true"
-                                                                    [filter]="true" filterBy="thana_name">
-                                                        </p-dropdown>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="PS Area" tooltipPosition="top">PS Area : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="ps_area" placeholder="PS Area" pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Block" tooltipPosition="top">Block : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="block" placeholder="Block" pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="House No" tooltipPosition="top">House No : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="house_no" placeholder="House No" pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class="d-none d-md-inline-flex">Country<span class="req">*</span> :</label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <p-dropdown [options]="allCountry" formControlName="country_id" placeholder="Select Country"
-                                                                    optionLabel="country_name" optionValue="country_id" (onChange)="onSelectByCountryId($event.value)"
-                                                                    [showClear]="true" [filter]="true" filterBy="country_name">
-
-                                                        </p-dropdown>
-
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class="d-none d-md-inline-flex">District<span class="req">*</span> :</label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <p-dropdown [options]="allDistrict" formControlName="district_id" placeholder="Select District"
-                                                                    optionLabel="district_name" optionValue="district_id" [showClear]="true" (onChange)="onSelectByDistrictId($event.value)"
-                                                                    [filter]="true" filterBy="district_name">
-
-                                                        </p-dropdown>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class="d-none d-md-inline-flex">Zone :</label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <p-dropdown [options]="allZone" formControlName="zone_id" placeholder="Select Zone"
-                                                                    optionLabel="zone_name" optionValue="zone_id" [showClear]="true"
-                                                                    [filter]="true" filterBy="zone_name">
-                                                        </p-dropdown>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="PS Code" tooltipPosition="top">PS Code : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="post_code" placeholder="PS Code" pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Road No" tooltipPosition="top">Road No : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="road_no" placeholder="Road No" pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Flat No" tooltipPosition="top">Flat No : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="flat_no" placeholder="Flat No" pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="p-fluid grid col-12 flex justify-content-start flex-wrap card-container">
-                                            <div class="p-fluid grid col-12">
-                                                <div class="col-2 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Address Note" tooltipPosition="top">Address Note : </label>
-                                                </div>
-                                                <div class="col-10 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <textarea id="float-input p-fluid" type="text" formControlName="address_note" placeholder="Address Note" pInputText></textarea>
-                                                    </span>
-                                                </div>
-                                            </div>
+                                        <div *ngIf="submitted && f.continent_enum_id.errors" class="invalid-feedback">
+                                            <small *ngIf="f.continent_enum_id.errors.required" class="p-error">Continent is required</small>
                                         </div>
                                     </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label pTooltip="Country" tooltipPosition="top">Country<span class="req">*</span></label>
+                                        <p-dropdown [options]="allCountry" formControlName="country_id" [ngClass]="{ 'is-invalid': submitted && f.country_id.errors }" placeholder="---Select---"
+                                                    optionLabel="country_name" optionValue="country_id" (onChange)="onSelectByCountryId($event.value)" [showClear]="true" [filter]="true" filterBy="country_name"></p-dropdown>
+
+                                        <div *ngIf="submitted && f.country_id.errors" class="invalid-feedback">
+                                            <small *ngIf="f.country_id.errors.required" class="p-error">Country is required</small>
+                                        </div>
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label pTooltip="Division" tooltipPosition="top">Division<span class="req">*</span></label>
+                                        <p-dropdown [options]="allDivision" formControlName="division_id" [ngClass]="{ 'is-invalid': submitted && f.division_id.errors }" placeholder="---Select---"
+                                                    optionLabel="division_name" optionValue="division_id" (onChange)="onSelectByDivisionId($event.value)" [showClear]="true" [filter]="true" filterBy="division_name"></p-dropdown>
+
+                                        <div *ngIf="submitted && f.division_id.errors" class="invalid-feedback">
+                                            <small *ngIf="f.division_id.errors.required" class="p-error">Division is required</small>
+                                        </div>
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label pTooltip="District" tooltipPosition="top">District<span class="req">*</span></label>
+                                        <p-dropdown [options]="allDistrict" formControlName="district_id" [ngClass]="{ 'is-invalid': submitted && f.district_id.errors }" placeholder="---Select---"
+                                                    optionLabel="district_name" optionValue="district_id" (onChange)="onSelectByDistrictId($event.value)" [showClear]="true" [filter]="true" filterBy="district_name"></p-dropdown>
+
+                                        <div *ngIf="submitted && f.district_id.errors" class="invalid-feedback">
+                                            <small *ngIf="f.district_id.errors.required" class="p-error">District is required</small>
+                                        </div>
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label pTooltip="Thana" tooltipPosition="top">Thana<span class="req">*</span></label>
+                                        <p-dropdown [options]="allThana" formControlName="thana_id" [ngClass]="{ 'is-invalid': submitted && f.thana_id.errors }" placeholder="---Select---"
+                                                    optionLabel="thana_name" optionValue="thana_id" [showClear]="true" [filter]="true" filterBy="thana_name"></p-dropdown>
+                                        <div *ngIf="submitted && f.thana_id.errors" class="invalid-feedback">
+                                            <small *ngIf="f.thana_id.errors.required" class="p-error">Thana is required</small>
+                                        </div>
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label pTooltip="Zone" tooltipPosition="top">Zone</label>
+                                        <p-dropdown [options]="allZone" formControlName="zone_id" placeholder="---Select---"
+                                                    optionLabel="zone_name" optionValue="zone_id" [showClear]="true" [filter]="true" filterBy="zone_name"></p-dropdown>
+
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label pTooltip="City/Town" tooltipPosition="top">City/Town </label>
+                                        <input type="text" formControlName="city" placeholder="" pInputText />
+                                    </div>
+
+                                    <div class="field col-12 md:col-6">
+                                        <label pTooltip="Post Code" tooltipPosition="top">Post Code </label>
+                                        <input type="text" formControlName="post_code" placeholder="" pInputText />
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label pTooltip="Block" tooltipPosition="top">Block </label>
+                                        <input type="text" formControlName="block" placeholder="" pInputText />
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label pTooltip="Road No" tooltipPosition="top">Road No </label>
+                                        <input type="text" formControlName="road_no" placeholder="" pInputText />
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label pTooltip="House No" tooltipPosition="top">House No </label>
+                                        <input type="text" formControlName="house_no" placeholder="" pInputText />
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label pTooltip="Flat No" tooltipPosition="top">Flat No </label>
+                                        <input type="text" formControlName="flat_no" placeholder="" pInputText />
+                                    </div>
+                                    <div class="field col-12 md:col-12">
+                                        <label pTooltip="Address Note" tooltipPosition="top">Address Note </label>
+                                        <input type="text" formControlName="address_note" placeholder="" pInputText />
+                                    </div>
+
                                 </div>
-                            </p-fieldset>
-                            <div class="p-fluid grid col-12 flex flex-wrap card-container">
-                                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
-                                    <div class="col-4 mt-2 text-right">
-                                        <button type="submit" class="pi risBtn risAll" (click)="openPrev()"><span class="pi pi-step-backward"></span> Previous </button>
+                            </div>
+                        </form>
+                        <div class="flex justify-content-end pr-2">
+                            <button pButton pRipple type="button" (click)="openPrev()" label="Previous" class="risBtn  mr-2 mb-2" icon="pi pi-step-backward"></button>
+                            <button pButton pRipple type="button" (click)="onAddress()" label="Next" class="risBtn  mr-2 mb-2" icon="pi pi-step-forward"></button>
+                            <button pButton pRipple type="button" (click)="toggleFormClose()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
+                        </div>
+                    </p-tabPanel>
+                    <p-tabPanel header="Financial Info">
+                        <form action="" [formGroup]="dealerinfoForm">
+                            <div class="col-12">
+                                <div class="p-fluid p-formgrid grid">
+                                    <div class="field col-12 md:col-6">
+                                        <label pTooltip="Internal Credit Rating" tooltipPosition="top">Internal Credit Rating</label>
+                                        <input type="text" formControlName="internal_credit_rating" placeholder="" pInputText />
                                     </div>
-                                    <div class="col-8 p-fluid">
-                                        <span class="p-float-label">
+                                    <div class="field col-12 md:col-6">
+                                        <label pTooltip="Prefered Method" tooltipPosition="top">Prefered Method</label>
+                                        <p-dropdown [options]="allPreferredMethod" formControlName="prefered_method_enum_id" placeholder="---Select---"
+                                                    optionLabel="prefered_method_enum_name" optionValue="prefered_method_enum_id" [showClear]="true" [filter]="true" filterBy="prefered_method_enum_name"></p-dropdown>
 
-                                        </span>
                                     </div>
-                                </div>
-                                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
-                                    <div class="col-4 mt-2 text-right">
-                                        <button type="submit" class="pi pi-save risBtn risDraft mr-2" (click)="SaveDealerinfo()">Save</button>
+                                    <div class="field col-12 md:col-6">
+                                        <label pTooltip="Maximum Credit" tooltipPosition="top">Maximum Credit</label>
+                                        <input type="text" formControlName="maximum_credit" placeholder="" pInputText />
                                     </div>
-                                    <div class="col-8 p-fluid text-right">
-                                        <span class="p-float-label">
-                                            <button type="submit" class="pi risBtn risAll" (click)="openNext()"> Next <span class="pi pi-step-forward"></span></button>
-                                        </span>
+                                    <div class="field col-12 md:col-6">
+                                        <label pTooltip="Allowable Credit" tooltipPosition="top">Allowable Credit</label>
+                                        <input type="text" formControlName="allowable_credit" placeholder="" pInputText />
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label pTooltip="Credit Days" tooltipPosition="top">Credit Days </label>
+                                        <input type="text" formControlName="credit_days" placeholder="" pInputText />
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label pTooltip="Security Requirment" tooltipPosition="top">Security Requirment</label>
+                                        <p-dropdown [options]="allSecurityType" formControlName="security_type_enum_id" [ngClass]="{ 'is-invalid': submitted && f.security_type_enum_id.errors }" placeholder="---Select---"
+                                                    optionLabel="security_type_enum_name" optionValue="security_type_enum_id" [showClear]="true" [filter]="true" filterBy="security_type_enum_name"></p-dropdown>
+                                        <div *ngIf="submitted && f.security_type_enum_id.errors" class="invalid-feedback">
+                                            <small *ngIf="f.security_type_enum_id.errors.required" class="p-error">Security Requirment is required</small>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </form>
+                        <div class="flex justify-content-end pr-2">
+                            <button pButton pRipple type="button" (click)="openPrev()" label="Previous" class="risBtn  mr-2 mb-2" icon="pi pi-step-backward"></button>
+                            <button pButton pRipple type="button" (click)="SaveDealerinfo()" label="Save" class="risBtn risSave mr-2 mb-2" icon="pi pi-check"></button>
+                            <button pButton pRipple type="button" (click)="toggleFormClose()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
+                        </div>
                     </p-tabPanel>
-
-                    <!--Statr Dealer Contact Information-->
-                    <p-tabPanel header="Contact Info">
-                        <form [formGroup]="dealercontactForm">
-                            <p-fieldset legend="General Contact Information" [collapsed]="collapsedempInfo" (onBeforeToggle)="toggle()" [toggleable]="true">
-                                <div class="row">
-                                    <div class="p-fluid grid col-12 flex flex-wrap card-container">
-                                        <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Dealer Name" tooltipPosition="top">Dealer Name<span class="req">*</span> : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <p-dropdown [options]="allDealerInfo" formControlName="dealer_info_id" placeholder="Select Dealer"
-                                                                    optionLabel="dealer_info_name" optionValue="dealer_info_id" [showClear]="true" [filter]="true" filterBy="dealer_info_name">
-                                                        </p-dropdown>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Person Name" tooltipPosition="top">Person Name<span class="req">*</span> : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="person_name" placeholder="Person Name" pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Father Name" tooltipPosition="top">Father Name : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="father_name" placeholder="Father Name" pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Date Of Birth" tooltipPosition="top">Date of Birth<span class="req">*</span> : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <p-calendar id="float-input p-fluid" formControlName="date_of_birth" placeholder="Date of Birth" [showIcon]="true" selectOtherMonths="true"
-                                                                    inputId="navigators" showButtonBar="true" [monthNavigator]="true" [yearNavigator]="true" yearRange="2000:2050" dateFormat="dd/mm/yy">
-                                                        </p-calendar>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Nationality" tooltipPosition="top">Nationality : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="nationality" placeholder="Nationality" pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Birth Certificate No" tooltipPosition="top">Birth Certificate No : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="birth_certificate_no" placeholder="Birth Certificate No" pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Mobile" tooltipPosition="top">Mobile<span class="req">*</span> : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="mobile" placeholder="Mobile No" pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Email" tooltipPosition="top">Email : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="email" placeholder="example@gmail.com" pInputText>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Emergency Contact" tooltipPosition="top">Emergency Contact : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="emergency_contact" placeholder="Emergency Contact" pInputText>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Blood Group" tooltipPosition="top">Blood Group : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <p-dropdown [options]="allBloodGroup" formControlName="blood_group_enum_id" placeholder="Select Blood Group"
-                                                                    optionLabel="blood_group_enum_name" optionValue="blood_group_enum_id" [showClear]="true" [filter]="true" filterBy="blood_group_enum_name">
-                                                        </p-dropdown>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Contact Info Code" tooltipPosition="top">Contact Info Code<span class="req">*</span> : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="dealer_contact_info_code" placeholder="Contact Info Code" pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Person Degignation" tooltipPosition="top">Person Degignation<span class="req">*</span> : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="person_designation" placeholder="Person Degignation" pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Mother Name" tooltipPosition="top">Mother Name : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="mother_name" placeholder="Mother Name" pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Religion" tooltipPosition="top">Religion : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <p-dropdown [options]="allReligion" formControlName="religion_enum_id" placeholder="Select Religion"
-                                                                    optionLabel="religion_enum_name" optionValue="religion_enum_id" [showClear]="true" [filter]="true" filterBy="religion_enum_name">
-                                                        </p-dropdown>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="National Id" tooltipPosition="top">National Id : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="national_id_no" placeholder="National Id" pInputText>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Passport No" tooltipPosition="top">Passport No : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="passport_no" placeholder="Passport No" pInputText>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Phone" tooltipPosition="top">Phone : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="phone" placeholder="Phone No" pInputText>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Image" tooltipPosition="top">Image : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <div class=" inputWrapper col-6 photo-signature align-self-end flex align-items-center justify-content-center">
-                                                            <img class="risBtn" [src]="photourllink" style="width: 130px;" alt="">
-                                                            <input type="file" class="fileInput risBtn risAdd" style="width: 130px;" #dealerContactinfoImage (change)="onSelectContactImage($event)">
-                                                        </div>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </p-fieldset>
-                            <p-fieldset legend="Permanent Address Information" [collapsed]="collapsedempInfo" (onBeforeToggle)="toggle()" [toggleable]="true">
-                                <div class="row">
-                                    <div class="p-fluid grid col-12 flex flex-wrap card-container">
-                                        <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class="d-none d-md-inline-flex">Country<span class="req">*</span> :</label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <p-dropdown [options]="allCountry" formControlName="permanent_country_id" placeholder="Select Country"
-                                                                    optionLabel="country_name" optionValue="country_id" (onChange)="onSelectByCountryId($event.value)"
-                                                                    [showClear]="true" [filter]="true" filterBy="country_name">
-
-                                                        </p-dropdown>
-
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class="d-none d-md-inline-flex">District<span class="req">*</span> :</label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <p-dropdown [options]="allDistrict" formControlName="permanent_district_id" placeholder="Select District"
-                                                                    optionLabel="district_name" optionValue="district_id" [showClear]="true" (onChange)="onSelectByDistrictId($event.value)"
-                                                                    [filter]="true" filterBy="district_name">
-
-                                                        </p-dropdown>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class="d-none d-md-inline-flex">Zone :</label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <p-dropdown [options]="allZone" formControlName="permanent_zone_id" placeholder="Select Zone"
-                                                                    optionLabel="zone_name" optionValue="zone_id" [showClear]="true"
-                                                                    [filter]="true" filterBy="zone_name">
-                                                        </p-dropdown>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="PS Code" tooltipPosition="top">PS Code : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="permanent_post_code" placeholder="PS Code" pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Road No" tooltipPosition="top">Road No : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="permanent_road_no" placeholder="Road No" pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Flat No" tooltipPosition="top">Flat No : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="permanent_flat_no" placeholder="Flat No" pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class="d-none d-md-inline-flex">Division/State<span class="req">*</span> :</label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <p-dropdown [options]="allDivision" formControlName="permanent_division_id" placeholder="Select Division"
-                                                                    optionLabel="division_name" optionValue="division_id" (onChange)="onSelectByDivisionId($event.value)" [showClear]="true"
-                                                                    [filter]="true" filterBy="division_name">
-
-                                                        </p-dropdown>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class="d-none d-md-inline-flex">Thana<span class="req">*</span> :</label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <p-dropdown [options]="allThana" formControlName="permanent_thana_id" placeholder="Select Thana"
-                                                                    optionLabel="thana_name" optionValue="thana_id" [showClear]="true"
-                                                                    [filter]="true" filterBy="thana_name">
-                                                        </p-dropdown>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="PS Area" tooltipPosition="top">PS Area : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="permanent_ps_area" placeholder="PS Area" pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Block" tooltipPosition="top">Block : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="permanent_block" placeholder="Block" pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="House No" tooltipPosition="top">House No : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="permanent_house_no" placeholder="House No" pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </p-fieldset>
-                            <p-fieldset legend="Present Address Information" [collapsed]="collapsedempInfo" (onBeforeToggle)="toggle()" [toggleable]="true">
-                                <div class="row">
-                                    <div class="p-fluid grid col-12 flex flex-wrap card-container">
-                                        <div class="p-fluid grid col-12 flex justify-content-start flex-wrap card-container">
-                                            <p-checkbox [(ngModel)]="checked" binary="true" label="Same As Present Address" (onChange)="sameAddress($event)" inputId="binary"></p-checkbox>
-
-                                        </div>
-                                        <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class="d-none d-md-inline-flex">Country<span class="req">*</span> :</label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <p-dropdown [options]="allCountry" formControlName="present_country_id" placeholder="Select Country"
-                                                                    optionLabel="country_name" optionValue="country_id" (onChange)="onSelectByCountryId($event.value)"
-                                                                    [showClear]="true" [filter]="true" filterBy="country_name">
-
-                                                        </p-dropdown>
-
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class="d-none d-md-inline-flex">District<span class="req">*</span> :</label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <p-dropdown [options]="allDistrict" formControlName="present_district_id" placeholder="Select District"
-                                                                    optionLabel="district_name" optionValue="district_id" [showClear]="true" (onChange)="onSelectByDistrictId($event.value)"
-                                                                    [filter]="true" filterBy="district_name">
-
-                                                        </p-dropdown>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class="d-none d-md-inline-flex">Zone :</label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <p-dropdown [options]="allZone" formControlName="present_zone_id" placeholder="Select Zone"
-                                                                    optionLabel="zone_name" optionValue="zone_id" [showClear]="true"
-                                                                    [filter]="true" filterBy="zone_name">
-                                                        </p-dropdown>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="PS Code" tooltipPosition="top">PS Code : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="present_post_code" placeholder="PS Code" pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Road No" tooltipPosition="top">Road No : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="present_road_no" placeholder="Road No" pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Flat No" tooltipPosition="top">Flat No : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="present_flat_no" placeholder="Flat No" pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class="d-none d-md-inline-flex">Division/State<span class="req">*</span> :</label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <p-dropdown [options]="allDivision" formControlName="present_division_id" placeholder="Select Division"
-                                                                    optionLabel="division_name" optionValue="division_id" (onChange)="onSelectByDivisionId($event.value)" [showClear]="true"
-                                                                    [filter]="true" filterBy="division_name">
-
-                                                        </p-dropdown>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class="d-none d-md-inline-flex">Thana<span class="req">*</span> :</label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <p-dropdown [options]="allThana" formControlName="present_thana_id" placeholder="Select Thana"
-                                                                    optionLabel="thana_name" optionValue="thana_id" [showClear]="true"
-                                                                    [filter]="true" filterBy="thana_name">
-                                                        </p-dropdown>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="PS Area" tooltipPosition="top">PS Area : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="present_ps_area" placeholder="PS Area" pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Block" tooltipPosition="top">Block : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="present_block" placeholder="Block" pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="House No" tooltipPosition="top">House No : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="present_house_no" placeholder="House No" pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="p-fluid grid col-12 flex flex-wrap card-container">
-                                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
-                                        <div class="col-4 mt-2 text-right">
-                                            <button type="submit" class="pi risBtn risAll" (click)="openPrev()"><span class="pi pi-step-backward"></span> Previous </button>
-                                        </div>
-                                        <div class="col-8 p-fluid">
-                                            <span class="p-float-label">
-
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
-                                        <div class="col-4 mt-2 text-right">
-                                            <button type="submit" class="pi pi-save risBtn risDraft mr-2" (click)="SaveDealerContactInfo()">Save</button>
-                                        </div>
-                                        <div class="col-8 p-fluid text-right">
-                                            <span class="p-float-label">
-                                                <button type="submit" class="pi risBtn risAll" (click)="openNext()"> Next <span class="pi pi-step-forward"></span></button>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </p-fieldset>
-                            <p-fieldset legend="Dealer Information List" [collapsed]="collapsedempDetails" (onBeforeToggle)="toggle()" [toggleable]="true">
-
-                                <div class="grid mb-2">
-                                    <button class="pi pi-plus risBtn risAdd mr-2 " (click)="btnNew()"> New</button>
-                                    <button class="pi pi-pencil risBtn risEdit mr-2 " (click)="loadDealerContactinfoToEdit()"> Edit</button>
-                                    <button class="pi pi-trash risBtn risDelete mr-2" (click)="showDialog()"> Delete</button>
-                                </div>
-
-                                <p-table #dt1 [value]="dealercontactinfoList" [paginator]="true" [rows]="10" selectionMode="single" [(selection)]="selecteddealercontactinfo" dataKey="DealerContactInfoId" [showCurrentPageReport]="true" responsiveLayout="scroll" styleClass="p-datatable-striped p-datatable-sm"
-                                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)"
-                                         [globalFilterFields]="['DealerContactInfoCode','PersonName']">
-                                    <ng-template pTemplate="caption">
-                                        <div class="flex">
-
-                                            <span class="p-input-icon-left ml-auto">
-                                                <i class="pi pi-search"></i>
-                                                <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Search by Any" />
-                                            </span>
-                                        </div>
-                                    </ng-template>
-                                    <ng-template pTemplate="header">
-                                        <tr>
-                                            <th pSortableColumn="Code">
-                                                Dealer Contact Code
-                                                <p-columnFilter type="text" field="DealerInfoCode" display="menu"></p-columnFilter>
-                                                <p-sortIcon field="Code"></p-sortIcon>
-                                            </th>
-                                            <th pSortableColumn="DealerinfoName">
-                                                Contact Person Name
-                                                <p-columnFilter type="text" field="DealerinfoName" display="menu"></p-columnFilter>
-                                            </th>
-                                            <th pSortableColumn="PersonalPhone">Person Degignation</th>
-                                            <th pSortableColumn="PersonalPhone">Mobile</th>
-                                            <th pSortableColumn="PersonalEmail">Email</th>
-                                            <th pSortableColumn="PresentAddressNote">Emergency Contact</th>
-                                        </tr>
-                                    </ng-template>
-                                    <ng-template pTemplate="body" let-dealercontactinfo let-rowData let-columns="columns">
-
-                                        <tr [pSelectableRow]="dealercontactinfo">
-                                            <td>{{dealercontactinfo.DealerContactInfoCode}}</td>
-                                            <td>{{dealercontactinfo.PersonName}}</td>
-                                            <td>{{dealercontactinfo.PersonDesignation}}</td>
-                                            <td>{{dealercontactinfo.Mobile}}</td>
-                                            <td>{{dealercontactinfo.Email}}</td>
-                                            <td>{{dealercontactinfo.EmergencyContact}}</td>
-                                        </tr>
-                                    </ng-template>
-                                </p-table>
-                            </p-fieldset>
-                        </form>
-                    </p-tabPanel>
-
-                    <!--Statr Dealer Location Information-->
-                    <p-tabPanel header="Location Info">
-                        <form [formGroup]="dealerlocationForm">
-                            <p-fieldset legend="General Location Information" [collapsed]="collapsedempInfo" (onBeforeToggle)="toggle()" [toggleable]="true">
-                                <div class="row">
-                                    <div class="p-fluid grid col-12 flex flex-wrap card-container">
-                                        <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Dealer Name" tooltipPosition="top">Dealer Name<span class="req">*</span> : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <p-dropdown [options]="allDealerInfo" formControlName="dealer_info_id" placeholder="Select Dealer"
-                                                                    optionLabel="dealer_info_name" optionValue="dealer_info_id" [showClear]="true" [filter]="true" filterBy="dealer_info_name">
-                                                        </p-dropdown>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Location Short Name " tooltipPosition="top">Location Short Name<span class="req">*</span> :</label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="dealer_location_info_short_name" placeholder="Location Short Name " pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Trade License " tooltipPosition="top">Trade License :</label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="trade_license" placeholder="Trade License" pInputText>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Mobile " tooltipPosition="top">Mobile<span class="req">*</span> :</label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="mobile" placeholder="Mobile" pInputText>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Email" tooltipPosition="top">Email :</label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="email" placeholder="Email" pInputText>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class="d-none d-md-inline-flex">Country<span class="req">*</span> :</label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <p-dropdown [options]="allCountry" formControlName="country_id" placeholder="Select Country"
-                                                                    optionLabel="country_name" optionValue="country_id" (onChange)="onSelectByCountryId($event.value)"
-                                                                    [showClear]="true" [filter]="true" filterBy="country_name">
-
-                                                        </p-dropdown>
-
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class="d-none d-md-inline-flex">District<span class="req">*</span> :</label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <p-dropdown [options]="allDistrict" formControlName="district_id" placeholder="Select District"
-                                                                    optionLabel="district_name" optionValue="district_id" [showClear]="true" (onChange)="onSelectByDistrictId($event.value)"
-                                                                    [filter]="true" filterBy="district_name">
-
-                                                        </p-dropdown>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="PS Code" tooltipPosition="top">PS Code : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="post_code" placeholder="PS Code" pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Road No" tooltipPosition="top">Road No : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="road_no" placeholder="Road No" pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Flat No" tooltipPosition="top">Flat No : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="flat_no" placeholder="Flat No" pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Location Code " tooltipPosition="top">Location Code<span class="req">*</span> :</label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="dealer_location_info_code" placeholder="Location Code " pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Location Name " tooltipPosition="top">Location Name<span class="req">*</span> :</label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="dealer_location_info_name" placeholder="Location Name " pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Trade License Date" tooltipPosition="top">Trade License Date : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <p-calendar id="float-input p-fluid" formControlName="trade_license_date" placeholder="Trade License Date" [showIcon]="true" selectOtherMonths="true"
-                                                                    inputId="navigators" showButtonBar="true" [monthNavigator]="true" [yearNavigator]="true" yearRange="2000:2050" dateFormat="dd/mm/yy">
-                                                        </p-calendar>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Phone" tooltipPosition="top">Phone :</label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="phone" placeholder="Phone" pInputText>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Emergency Contact" tooltipPosition="top">Emergency Contact :</label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="emergency_contact" placeholder="Emergency Contact" pInputText>
-                                                    </span>
-                                                </div>
-                                            </div>
-
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class="d-none d-md-inline-flex">Division/State<span class="req">*</span> :</label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <p-dropdown [options]="allDivision" formControlName="division_id" placeholder="Select Division"
-                                                                    optionLabel="division_name" optionValue="division_id" (onChange)="onSelectByDivisionId($event.value)" [showClear]="true"
-                                                                    [filter]="true" filterBy="division_name">
-
-                                                        </p-dropdown>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class="d-none d-md-inline-flex">Thana<span class="req">*</span> :</label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <p-dropdown [options]="allThana" formControlName="thana_id" placeholder="Select Thana"
-                                                                    optionLabel="thana_name" optionValue="thana_id" [showClear]="true"
-                                                                    [filter]="true" filterBy="thana_name">
-                                                        </p-dropdown>
-                                                    </span>
-                                                </div>
-                                            </div>
-
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="PS Area" tooltipPosition="top">PS Area : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="ps_area" placeholder="PS Area" pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Block" tooltipPosition="top">Block : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="block" placeholder="Block" pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="p-fluid grid col-12 col-6 col-3">
-                                                <div class="col-4 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="House No" tooltipPosition="top">House No : </label>
-                                                </div>
-                                                <div class="col-8 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <input id="float-input p-fluid" type="text" formControlName="house_no" placeholder="House No" pInputText required>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="p-fluid grid col-12 flex justify-content-start flex-wrap card-container">
-                                            <div class="p-fluid grid col-12">
-                                                <div class="col-2 mt-2 text-right">
-                                                    <label for="" class=" d-md-inline-flex" pTooltip="Address Note" tooltipPosition="top">Address Note<span class="req">*</span> :</label>
-                                                </div>
-                                                <div class="col-10 p-fluid">
-                                                    <span class="p-float-label">
-                                                        <textarea id="float-input p-fluid" type="text" formControlName="address_note" placeholder="Address Note" pInputText></textarea>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="p-fluid grid col-12 flex flex-wrap card-container">
-                                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
-                                        <div class="col-4 mt-2 text-right">
-                                            <button type="submit" class="pi risBtn risAll" (click)="openPrev()"><span class="pi pi-step-backward"></span> Previous </button>
-                                        </div>
-                                        <div class="col-8 p-fluid">
-                                            <span class="p-float-label">
-
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
-                                        <div class="col-4 mt-2 text-right">
-                                            <button type="submit" class="pi pi-save risBtn risDraft mr-2" (click)="SaveDealerLocationInfo()">Save</button>
-                                        </div>
-                                        <div class="col-8 p-fluid text-right">
-                                            <span class="p-float-label">
-                                                <button type="submit" class="pi risBtn risAll" (click)="openNext()"> Next <span class="pi pi-step-forward"></span></button>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </p-fieldset>
-                            <p-fieldset legend="Dealer Information List" [collapsed]="collapsedempDetails" (onBeforeToggle)="toggle()" [toggleable]="true">
-                                <div class="grid mb-2">
-                                    <button class="pi pi-plus risBtn risAdd mr-2 " (click)="btnNew()"> New</button>
-                                    <button class="pi pi-pencil risBtn risEdit mr-2 " (click)="loadDealerLocationinfoToEdit()"> Edit</button>
-                                    <button class="pi pi-trash risBtn risDelete mr-2" (click)="showDialog()"> Delete</button>
-                                </div>
-
-                                <p-table #dt1 [value]="dealerlocationinfoList" [paginator]="true" [rows]="10" selectionMode="single" [(selection)]="selecteddealerlocationinfo" dataKey="DealerLocationInfoId" [showCurrentPageReport]="true" responsiveLayout="scroll" styleClass="p-datatable-striped p-datatable-sm"
-                                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)"
-                                         [globalFilterFields]="['DealerLocationInfoCode','DealerLocationInfoName']">
-                                    <ng-template pTemplate="caption">
-                                        <div class="flex">
-
-                                            <span class="p-input-icon-left ml-auto">
-                                                <i class="pi pi-search"></i>
-                                                <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Search by Any" />
-                                            </span>
-                                        </div>
-                                    </ng-template>
-                                    <ng-template pTemplate="header">
-                                        <tr>
-                                            <th pSortableColumn="Code">
-                                                Dealer Location Code
-                                                <p-columnFilter type="text" field="DealerLocationInfoCode" display="menu"></p-columnFilter>
-                                                <p-sortIcon field="Code"></p-sortIcon>
-                                            </th>
-                                            <th pSortableColumn="DealerinfoName">
-                                                Location Name
-                                                <p-columnFilter type="text" field="DealerLocationInfoName" display="menu"></p-columnFilter>
-                                            </th>
-                                            <th pSortableColumn="AddressNote">Location Address</th>
-                                            <th pSortableColumn="Mobile">Mobile</th>
-                                            <th pSortableColumn="Email">Email</th>
-                                            <th pSortableColumn="EmergencyContact">Emergency Contact</th>
-                                        </tr>
-                                    </ng-template>
-                                    <ng-template pTemplate="body" let-dealerlocationinfo let-rowData let-columns="columns">
-
-                                        <tr [pSelectableRow]="dealerlocationinfo">
-                                            <td>{{dealerlocationinfo.DealerLocationInfoCode}}</td>
-                                            <td>{{dealerlocationinfo.DealerLocationInfoName}}</td>
-                                            <td>{{dealerlocationinfo.AddressNote}}</td>
-                                            <td>{{dealerlocationinfo.Mobile}}</td>
-                                            <td>{{dealerlocationinfo.Email}}</td>
-                                            <td>{{dealerlocationinfo.EmergencyContact}}</td>
-                                        </tr>
-                                    </ng-template>
-                                </p-table>
-                            </p-fieldset>
-                        </form>
-                    </p-tabPanel>
-
                 </p-tabView>
-                <!--********** end card body ********************-->
 
+            </div>
 
+            <!--end form display------------->
+
+            <div [hidden]="gridDisplay">
+                <button pButton pRipple type="button" (click)="showBasicDialog()" label="New" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
+                <button pButton pRipple type="button" (click)="loadDealerinfoToEdit()" label="Edit" icon="pi pi-pencil" class="risBtn risEdit mr-2 mb-2"></button>
+                <button pButton pRipple type="button" (click)="showDialog()" label="Delete" icon="pi pi-trash" class="risBtn risDelete mr-2 mb-2"></button>
+                <p-dialog header="Delete Record" [(visible)]="display" [style]="{width: '35vw'}">
+                    <p>Do you want to delete this record?</p>
+                    <ng-template pTemplate="footer">
+                        <button class="pi pi-times risBtn risClose" (click)="display=false"> No</button>
+                        <button class="pi pi-check risBtn risSave" (click)="deleteLocationInfo()"> Yes</button>
+                    </ng-template>
+                </p-dialog>
+
+                <p-table [value]="dealerinfoList" styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm" [paginator]="true" [rows]="10" selectionMode="single" [showCurrentPageReport]="true" responsiveLayout="scroll"
+                         [(selection)]="selecteddealerinfo" dataKey="DealerInfoId" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th pSortableColumn="Code">
+                                Dealer Code
+                                <p-columnFilter type="text" field="DealerInfoCode" display="menu"></p-columnFilter>
+                                <p-sortIcon field="Code"></p-sortIcon>
+                            </th>
+                            <th pSortableColumn="DealerinfoName">
+                                Dealer Name
+                                <p-columnFilter type="text" field="DealerinfoName" display="menu"></p-columnFilter>
+                            </th>
+                            <th pSortableColumn="PersonalPhone">Phone</th>
+                            <th pSortableColumn="PersonalEmail">Email</th>
+                            <th pSortableColumn="PresentAddressNote">Address</th>
+                            <th>Status</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-dealerinfo let-rowData let-columns="columns">
+                        <tr [pSelectableRow]="dealerinfo">
+                            <td>{{dealerinfo.DealerInfoCode}}</td>
+                            <td>{{dealerinfo.DealerInfoName}}</td>
+                            <td>{{dealerinfo.Phone}}</td>
+                            <td>{{dealerinfo.Email}}</td>
+                            <td>{{dealerinfo.AddressNote}}</td>
+                            <td *ngIf="dealerinfo.IsActive===true">{{"Active"}}</td>
+                            <td *ngIf="dealerinfo.IsActive===false">{{"In Active"}}</td>
+                        </tr>
+                    </ng-template>
+
+                </p-table>
+                <!--end grid display -------------->
             </div>
         </div>
     </div>
 </div>
-

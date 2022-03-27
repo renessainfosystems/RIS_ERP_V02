@@ -5,6 +5,7 @@ using Auth.Utility;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
+
 /// <summary>
 /// Created By Adnan
 /// Dated: 01/02/2022
@@ -64,9 +65,11 @@ namespace Auth.Controllers.Procurement
             return data;
         }
 
+
         [HttpGet]
         public dynamic GetById(int document_type_id)
         {
+
             dynamic data = (dynamic)null;
             try
             {
@@ -89,6 +92,7 @@ namespace Auth.Controllers.Procurement
                 oDocumentType.document_type_id = _entityDataAccess.GetAutoId("Administrative.Document_Type", "document_type_id");
                 _documentTypeRepository.Add(oDocumentType);
                 data = _documentTypeRepository.GetByIdRawSql(oDocumentType.document_type_id);
+
                 message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage, data);
             }
             catch (Exception ex)
@@ -120,6 +124,7 @@ namespace Auth.Controllers.Procurement
         [HttpPost]
         public dynamic Delete(int document_type_id)
         {
+
             var message = new CommonMessage();
             try
             {

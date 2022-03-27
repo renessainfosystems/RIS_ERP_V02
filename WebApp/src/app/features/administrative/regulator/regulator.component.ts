@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { SelectionModel } from '@angular/cdk/collections';
 import { RegulatorService } from './regulator.service';
 import { ToastrService } from 'ngx-toastr';
 import { NotificationService } from '../../../service/CommonMessage/notification.service';
-
 
 
 
@@ -16,13 +15,31 @@ import { NotificationService } from '../../../service/CommonMessage/notification
 })
 export class RegulatorComponent implements OnInit {
 
+    regulatorForm: FormGroup;
+    submitted = false;
+
+    //start grid and form show hide ********************
+    gridDisplay = false;
+    formDisplay = true;
+    toggleFormDisplay() {
+        this.gridDisplay = false;
+        this.formDisplay = true;
+    }
+    toggleGridDisplay() {
+        this.gridDisplay = true;
+        this.formDisplay = false;
+    }
+    toggleFormClose() {
+        this.toggleFormDisplay();
+    }
+    //end grid and form show hide ********************
+
     rowData: any;
     dataSaved = false;
-    regulatorForm: any;
     allRegulator: Observable<any[]>;
     selection = new SelectionModel<any>(true, []);
     massage = null;
-    displayedColumns: string[] = ['associationName', 'Remarks'];
+    displayedColumns: string[] = ['regulatorName', 'Remarks'];
     isRegulatorEdit: boolean = false;
     rowSelected: boolean = false;
 
@@ -41,14 +58,11 @@ export class RegulatorComponent implements OnInit {
         else
             this.display = true;
     }
-
     // for Insert and update data modal
-    displayBasic: boolean = false;
+    //displayBasic: boolean = false;
     showBasicDialog() {
-        this.regulatorForm.reset();
-        this.massage = null;
-        this.dataSaved = false;
-        this.displayBasic = true;
+        this.resetForm();
+        this.toggleGridDisplay();
     }
 
     onRowSelect(event) {
@@ -80,6 +94,12 @@ export class RegulatorComponent implements OnInit {
         });
     }
 
+    loadAllRegulators() {
+        this.RegulatorService.getAllRegulator().subscribe(data => {
+            this.regulators = data;
+        });
+    }
+
     loadAllCountryCboList() {
         this.RegulatorService.getAllCountryCboList().subscribe(data => {
             this.allCountry = data;
@@ -99,38 +119,33 @@ export class RegulatorComponent implements OnInit {
             this.regulatorForm.controls['remarks'].setValue(data.remarks);
             this.isRegulatorEdit = true;
         });
-        this.displayBasic = true;
-    }
-
-    deleteRegulatorInfo() {
-        if (this.rowData == null) {
-            return this.notifyService.ShowNotification(3, 'Please select row');
-        }
-        let regulator_id = this.rowData.regulator_id;
-        this.RegulatorService.DeleteRegulator(regulator_id).subscribe(data => {
-            if (data.MessageType == 2) {
-                this.regulators.splice(this.regulators.findIndex(item => item.regulator_id === regulator_id), 1);
-            }
-            this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
-        });
-        this.display = false;
+        this.toggleGridDisplay();
     }
 
 
-    loadAllRegulators() {
-        this.RegulatorService.getAllRegulator().subscribe(data => {
-            this.regulators = data;
-        });
+
+    //for validation messate -----------
+    get f(): { [key: string]: AbstractControl } {
+        return this.regulatorForm.controls;
     }
 
     onFormSubmit() {
+        //for validation message -----------
+        this.submitted = true;
         const regulatordata = this.regulatorForm.value;
-        if (!(regulatordata.country_id)) {
-            return this.notifyService.ShowNotification(2, "Please Select Country")
+
+        if ((regulatordata.country_id === null)) {
+            return;
         }
-        if (!(regulatordata.regulator_name)) {
-            return this.notifyService.ShowNotification(2, "Please Input Regulator Name")
+        else if (regulatordata.regulator_name === null) {
+            return;
         }
+        if (this.regulatorForm.invalid) {
+            return;
+        }
+        //end validation messate -----------
+
+        this.dataSaved = false;
         if (this.isRegulatorEdit) {
             regulatordata.regulator_id = this.rowData.regulator_id;
             this.RegulatorService.UpdateRegulator(regulatordata).subscribe(result => {
@@ -142,7 +157,8 @@ export class RegulatorComponent implements OnInit {
                     this.selectedRegulator = result.Data[0];
                     this.rowSelected = true;
                     this.rowData = result.Data[0];
-                    this.displayBasic = false;
+                    this.toggleFormDisplay();
+                    this.submitted = false;
                 }
             });
         }
@@ -155,10 +171,26 @@ export class RegulatorComponent implements OnInit {
                     this.selectedRegulator = result.Data[0];
                     this.rowSelected = true;
                     this.rowData = result.Data[0];
-                    this.displayBasic = false;
+                    this.toggleFormDisplay();
+                    this.submitted = false;
                 }
             });
         }
+    }
+
+    deleteRegulatorInfo() {
+        if (this.rowData == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+        let regulator_id = this.rowData.regulator_id;
+        this.RegulatorService.DeleteRegulator(regulator_id).subscribe(data => {
+            if (data.MessageType == 2) {
+                this.regulators.splice(this.regulators.findIndex(item => item.regulator_id === regulator_id), 1);
+            }
+            this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
+
+        });
+        this.display = false;
     }
 
     resetForm() {

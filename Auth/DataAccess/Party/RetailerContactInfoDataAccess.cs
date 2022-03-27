@@ -64,7 +64,7 @@ namespace Auth.DataAccess.Party
                 parameters.Add("@param_permanent_district_id", retailerContactInfo.permanent_district_id, DbType.Int32);
                 parameters.Add("@param_permanent_thana_id", retailerContactInfo.permanent_thana_id, DbType.Int32);
                 parameters.Add("@param_permanent_zone_id", retailerContactInfo.permanent_zone_id, DbType.Int32);
-                parameters.Add("@param_permanent_ps_area", retailerContactInfo.permanent_ps_area, DbType.String);
+                parameters.Add("@param_permanent_city", retailerContactInfo.permanent_city, DbType.String);
                 parameters.Add("@param_permanent_post_code", retailerContactInfo.permanent_post_code, DbType.String);
                 parameters.Add("@param_permanent_block", retailerContactInfo.permanent_block, DbType.String);
                 parameters.Add("@param_permanent_road_no", retailerContactInfo.permanent_road_no, DbType.String);
@@ -75,7 +75,7 @@ namespace Auth.DataAccess.Party
                 parameters.Add("@param_present_district_id", retailerContactInfo.present_district_id, DbType.Int32);
                 parameters.Add("@param_present_thana_id", retailerContactInfo.present_thana_id, DbType.Int32);
                 parameters.Add("@param_present_zone_id", retailerContactInfo.present_zone_id, DbType.Int32);
-                parameters.Add("@param_present_ps_area", retailerContactInfo.present_ps_area, DbType.String);
+                parameters.Add("@param_present_city", retailerContactInfo.present_city, DbType.String);
                 parameters.Add("@param_present_post_code", retailerContactInfo.present_post_code, DbType.String);
                 parameters.Add("@param_present_block", retailerContactInfo.present_block, DbType.String);
                 parameters.Add("@param_present_road_no", retailerContactInfo.present_road_no, DbType.String);

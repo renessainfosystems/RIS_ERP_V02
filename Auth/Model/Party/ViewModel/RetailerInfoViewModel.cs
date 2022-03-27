@@ -38,7 +38,7 @@ namespace Auth.Model.Party.ViewModel
         public int DistrictId { get; set; }
         public int ThanaId { get; set; }
         public int? ZoneId { get; set; }
-        public string PSArea { get; set; }
+        public string City { get; set; }
         public string PostCode { get; set; }
         public string Block { get; set; }
         public string RoadNo { get; set; }
@@ -82,7 +82,7 @@ namespace Auth.Model.Party.ViewModel
             model.DistrictId = retailer.district_id ?? 0;
             model.ThanaId = retailer.thana_id ?? 0;
             model.ZoneId = retailer.zone_id ?? 0;
-            model.PSArea = retailer.ps_area ?? "";
+            model.City = retailer.city ?? "";
             model.PostCode = retailer.post_code ?? "";
             model.Block = retailer.block ?? "";
             model.RoadNo = retailer.road_no ?? "";

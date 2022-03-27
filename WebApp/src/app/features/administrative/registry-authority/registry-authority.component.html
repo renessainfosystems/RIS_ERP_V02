@@ -1,116 +1,96 @@
-<div class="p-card">
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <h4>Registry Authority</h4>
+            <div [hidden]="formDisplay">
+                <form action="" [formGroup]="registryAuthorityForm">
+                    <div class="col-12">
+                        <div class="p-fluid p-formgrid grid">
 
-    <div class="me-auto">
-        <div class="p-card-title ">
-            <span class="pi pi-registryAuthoritys"> </span> Registry Authority
-        </div>
-        <div class="p-card-body">
-            <!-- ********** start card body ******************** -->
+                            <div class="field col-12 md:col-6">
+                                <label pTooltip="Country" tooltipPosition="top">Country<span class="req">*</span></label>
+                                <p-dropdown [options]="allCountry" formControlName="country_id"
+                                            [ngClass]="{ 'is-invalid': submitted && f.country_id.errors }" placeholder="---Select---"
+                                            optionLabel="country_name" optionValue="country_id" [showClear]="true" [filter]="true" filterBy="country_name"></p-dropdown>
 
-            <div class="card">
-                <div class="grid mb-2">
-                    <button class="pi pi-plus risBtn risAdd mr-2" (click)="showBasicDialog()"> New</button>
-                    <button class="pi pi-pencil risBtn risEdit mr-2" (click)="loadRegistryAuthorityToEdit()"> Edit</button>
-                    <button class="pi pi-trash risBtn risDelete mr-2" (click)="showDialog()"> Delete</button>
-                </div>
+                                <div *ngIf="submitted && f.country_id.errors" class="invalid-feedback">
+                                    <small *ngIf="f.country_id.errors.required" class="p-error">Country</small>
+                                </div>
+                            </div>
+
+                            <div class="field form-group col-12 md:col-6">
+                                <label pTooltip="Registry Authority Name" tooltipPosition="top">Registry Authority Name<span class="req">*</span> </label>
+                                <input id="lastname2" type="text" class="from-control" formControlName="registry_authority_name"
+                                       [ngClass]="{ 'is-invalid': submitted && f.registry_authority_name.errors }"
+                                       placeholder="" pInputText required />
+
+                                <div *ngIf="submitted && f.registry_authority_name.errors" class="invalid-feedback">
+                                    <small *ngIf="f.registry_authority_name.errors.required" class="p-error">Registry Authority Name is required</small>
+
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label>Short Name </label>
+                                <input id="lastname2" type="text" formControlName="registry_authority_short_name" placeholder="" pInputText />
+                            </div>                         
+                            <div class="field col-12 md:col-6">
+                                <label>Remarks </label>
+                                <input id="lastname2" type="text" formControlName="remarks" placeholder="" pInputText />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-content-end pr-2">
+                        <button pButton pRipple type="button" (click)="onFormSubmit()" label="Save" class="risBtn risSave mr-2 mb-2" icon="pi pi-check"></button>
+                        <button pButton pRipple type="button" (click)="toggleFormClose()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
+                    </div>
+
+                </form>
+            </div>
+
+            <!--end form display------------->
+
+            <div [hidden]="gridDisplay">
+
+                <button pButton pRipple type="button" (click)="showBasicDialog()" label="New" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
+                <button pButton pRipple type="button" (click)="loadRegistryAuthorityToEdit()" label="Edit" icon="pi pi-pencil" class="risBtn risEdit mr-2 mb-2"></button>
+                <button pButton pRipple type="button" (click)="showDialog()" label="Delete" icon="pi pi-trash" class="risBtn risDelete mr-2 mb-2"></button>
 
                 <p-dialog header="Delete Record" [(visible)]="display" [style]="{width: '35vw'}">
                     <p>Do you want to delete this record?</p>
                     <ng-template pTemplate="footer">
-                        <button class="pi pi-times risBtn risClose" (click)="display=false"> No</button>
                         <button class="pi pi-check risBtn risSave" (click)="deleteRegistryAuthorityInfo()"> Yes</button>
+                        <button class="pi pi-times risBtn risClose" (click)="display=false"> No</button>
                     </ng-template>
                 </p-dialog>
 
-                <div class="card-body">
+                <p-table [value]="registryAuthoritys" styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm" [paginator]="true" [rows]="10" selectionMode="single" [showCurrentPageReport]="true" responsiveLayout="scroll"
+                         [(selection)]="selectedRegistryAuthority" dataKey="registry_authority_id" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
 
-                    <p-dialog header="registryAuthority" [(visible)]="displayBasic" [draggable]="true" [resizable]="false" [style]="{width: '40vw'}">
-                        <form action="" [formGroup]="registryAuthorityForm">
-                            <div class="">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Registry Authority Name</th>
+                            <th>Short Name</th>
+                            <th>Country Name</th>
+                            <th>Remarks</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-registryAuthority>
 
-                                <div class="p-fluid grid col-12">
-                                    <div class="col-4 mt-2 text-right">
-                                        <label for="" class=" d-none d-md-inline-flex">Country <span class="req">*</span> :</label>
-                                    </div>
-                                    <div class="col-8 p-fluid">
-                                        <span class="p-float-label">
-                                            <p-dropdown [options]="allCountry" [(ngModel)]="selectedCountry" formControlName="country_id" placeholder="Select Country"
-                                                        optionLabel="country_name" optionValue="country_id" [showClear]="true" [filter]="true" filterBy="country_name"></p-dropdown>
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <div class="p-fluid grid col-12">
-                                    <div class="col-4 mt-2 text-right">
-                                        <label for="" class=" d-none d-md-inline-flex">Name <span class="req">*</span> :</label>
-                                    </div>
-                                    <div class="col-8 p-fluid">
-                                        <span class="p-float-label">
-                                            <input id="float-input p-fluid" formControlName="registry_authority_name" type="text" placeholder="Registry Authority Name" pInputText autocomplete="off">
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="p-fluid grid col-12">
-                                    <div class="col-4 mt-2 text-right">
-                                        <label for="" class=" d-none d-md-inline-flex">Short Name:</label>
-                                    </div>
-                                    <div class="col-8 p-fluid">
-                                        <span class="p-float-label">
-                                            <input id="float-input p-fluid" formControlName="registry_authority_short_name" type="text" placeholder="Registry Authority Short Name" pInputText autocomplete="off">
-                                        </span>
-                                    </div>
-                                </div>
-
-
-                                <div class="p-fluid grid col-12">
-                                    <div class="col-4 mt-2 text-right">
-                                        <label for="" class=" d-none d-md-inline-flex">Remarks: </label>
-
-                                    </div>
-                                    <div class="col-8 p-fluid">
-                                        <span class="p-float-label">
-                                            <input id="float-input p-fluid" formControlName="remarks" type="text" placeholder="Remarks" pInputText>
-                                        </span>
-                                    </div>
-                                </div>
-
-
-                            </div>
-
-                        </form>
-                        <ng-template pTemplate="footer">
-                            <button type="submit" class="pi pi-save risBtn risSave" (click)="onFormSubmit()"> Save</button>
-                            <button class="pi pi-times risBtn risClose" (click)="displayBasic=false"> Close</button>
-                        </ng-template>
-                    </p-dialog>
-                    <!-- ************************start grid ************************ -->
-                    <p-table [value]="registryAuthoritys" dataKey="registry_authority_id" [paginator]="true" [rows]="10" selectionMode="single" [(selection)]="selectedRegistryAuthority" [showCurrentPageReport]="true" responsiveLayout="scroll" styleClass="p-datatable-striped p-datatable-sm"
-                             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
-
-                        <ng-template pTemplate="header">
-                            <tr>
-                                <th>Registry Authority Name</th>
-                                <th>Short Name</th>
-                                <th>Country Name</th>
-                                <th>Remarks</th>
-                            </tr>
-                        </ng-template>
-                        <ng-template pTemplate="body" let-registryAuthority>
-
-                            <tr [pSelectableRow]="registryAuthority">
-                                <td>{{registryAuthority.registry_authority_name}}</td>
-                                <td>{{registryAuthority.registry_authority_short_name}}</td>
-                                <td>{{registryAuthority.country_name}}</td>
-                                <td>{{registryAuthority.remarks}}</td>
-                            </tr>
-                        </ng-template>
-                    </p-table>
-                </div>
-
-                <!-- ********** end card body ******************** -->
-
+                        <tr [pSelectableRow]="registryAuthority">
+                            <td>{{registryAuthority.registry_authority_name}}</td>
+                            <td>{{registryAuthority.registry_authority_short_name}}</td>
+                            <td>{{registryAuthority.country_name}}</td>
+                            <td>{{registryAuthority.remarks}}</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+                <!--end grid display -------------->
             </div>
         </div>
     </div>
 </div>
+
+
+
 

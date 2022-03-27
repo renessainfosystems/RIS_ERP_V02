@@ -32,7 +32,7 @@ namespace Auth.Model.Party.ViewModel
         public int PermanentDistrictId { get; set; }
         public int PermanentThanaId { get; set; }
         public int? PermanentZoneId { get; set; }
-        public string PermanentPsArea { get; set; }
+        public string PermanentCity { get; set; }
         public string PermanentPostCode { get; set; }
         public string PermanentBlock { get; set; }
         public string PermanentRoadNo { get; set; }
@@ -43,7 +43,7 @@ namespace Auth.Model.Party.ViewModel
         public int PresentDistrictId { get; set; }
         public int PresentThanaId { get; set; }
         public int? PresentZoneId { get; set; }
-        public string PresentPsArea { get; set; }
+        public string PresentCity { get; set; }
         public string PresentPostCode { get; set; }
         public string PresentBlock { get; set; }
         public string PresentRoadNo { get; set; }
@@ -80,7 +80,7 @@ namespace Auth.Model.Party.ViewModel
             model.PermanentDistrictId = retailerContact.permanent_district_id ?? 0;
             model.PermanentThanaId = retailerContact.permanent_thana_id ?? 0;
             model.PermanentZoneId = retailerContact.permanent_zone_id ?? 0;
-            model.PermanentPsArea = retailerContact.permanent_ps_area ?? "";
+            model.PermanentCity = retailerContact.permanent_city ?? "";
             model.PermanentPostCode = retailerContact.permanent_post_code ?? "";
             model.PermanentBlock = retailerContact.permanent_block ?? "";
             model.PermanentRoadNo = retailerContact.permanent_road_no ?? "";
@@ -91,7 +91,7 @@ namespace Auth.Model.Party.ViewModel
             model.PresentDistrictId = retailerContact.present_district_id ?? 0;
             model.PresentThanaId = retailerContact.present_thana_id ?? 0;
             model.PresentZoneId = retailerContact.present_zone_id ?? 0;
-            model.PresentPsArea = retailerContact.present_ps_area ?? "";
+            model.PresentCity = retailerContact.present_city ?? "";
             model.PresentPostCode = retailerContact.present_post_code ?? "";
             model.PresentBlock = retailerContact.present_block ?? "";
             model.PresentRoadNo = retailerContact.present_road_no ?? "";

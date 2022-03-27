@@ -81,7 +81,7 @@ namespace Auth.DataAccess.Party
                 parameters.Add("@param_district_id", dealerInfo.district_id, DbType.Int32);
                 parameters.Add("@param_thana_id", dealerInfo.thana_id, DbType.Int32);
                 parameters.Add("@param_zone_id", dealerInfo.zone_id, DbType.Int32);
-                parameters.Add("@param_ps_area", dealerInfo.ps_area, DbType.String);
+                parameters.Add("@param_city", dealerInfo.city, DbType.String);
                 parameters.Add("@param_post_code", dealerInfo.post_code, DbType.String);
                 parameters.Add("@param_block", dealerInfo.block, DbType.String);
                 parameters.Add("@param_road_no", dealerInfo.road_no, DbType.String);

@@ -1,12 +1,9 @@
 ﻿using Auth.DataAccess.EntityDataAccess;
 using Auth.Model.Administrative.Model;
 using Auth.Model.Administrative.ViewModel;
-using Auth.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using DataAccess;
-using Microsoft.EntityFrameworkCore;
 
 
 namespace Auth.Repository.Administrative
@@ -15,10 +12,9 @@ namespace Auth.Repository.Administrative
     {
         private readonly IEntityDataAccess<AssociationViewModel> _entityDataAccessVM;
         private readonly IEntityDataAccess<Association> _entityDataAccess;
-
         public AssociationRepository(
-                 IEntityDataAccess<AssociationViewModel> entityDataAccessVM
-                 ,IEntityDataAccess<Association> entityDataAccess
+             IEntityDataAccess<AssociationViewModel> entityDataAccessVM
+            , IEntityDataAccess<Association> entityDataAccess
             )
         {
             _entityDataAccessVM = entityDataAccessVM;
@@ -62,19 +58,17 @@ namespace Auth.Repository.Administrative
         {
             try
             {
+  
                 var sql = @"select A.*,C.country_name,OT.organization_type_name_enum 
                        from[Administrative].[Association] A left join[Administrative].[Country] C on A.country_id = C.country_id
                        left join[DBEnum].[Organization_Type] OT on A.organization_type_id_enum = OT.organization_type_id_enum order by association_id desc";
                 return _entityDataAccessVM.SqlRawQuery(sql);
-
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
         }
-
-
 
         public IEnumerable<dynamic> GetByIdRawSql(int association_id)
         {
