@@ -9,55 +9,54 @@
 
                     <div class="col-12">
                         <div class="p-fluid p-formgrid grid ">
+                            <div class="field col-12 md:col-6 flex justify-content-start flex-wrap ">
+                                <label pTooltip="Company Name" tooltipPosition="top">Name<span class="req">*</span> </label>
+                                <input id="lastname2" type="text" class="from-contro flex align-items-center justify-content-centerl" formControlName="leave_policy_name"
+                                       [ngClass]="{ 'is-invalid': submitted && f.leave_policy_name.errors }"
+                                       placeholder="" pInputText required />
 
+                                <div *ngIf="submitted && f.leave_policy_name.errors" class="invalid-feedback">
+                                    <small *ngIf="f.leave_policy_name.errors.required" class="p-error">Leave policy name is required</small>
+                                </div>
+                            </div>
                             <div class="field col-12 md:col-6 float-right">
                                 <label pTooltip="Company Code" tooltipPosition="top">Code<span class="req">*</span></label>
                                 <input pInputText id="firstname2" type="text" formControlName="" placeholder="1001" pInputText disabled />
                             </div>
 
-                            <div class="field col-12 md:col-6 flex justify-content-start flex-wrap ">
-                                <label pTooltip="Company Name" tooltipPosition="top">Company Name<span class="req">*</span> </label>
-                                <input id="lastname2" type="text" class="from-contro flex align-items-center justify-content-centerl" formControlName="company_name"
-                                       [ngClass]="{ 'is-invalid': submitted && f.company_name.errors }"
-                                       placeholder="" pInputText required />
 
-                                <div *ngIf="submitted && f.company_name.errors" class="invalid-feedback">
-                                    <small *ngIf="f.company_name.errors.required" class="p-error">Company name is required</small>
-                                </div>
-                            </div>
 
                             <div class="field col-12" style="padding-left: 0; padding-right: 13px;">
                                 <label pTooltip="Remarks" tooltipPosition="top">Remarks </label>
                                 <input id="lastname2" type="text" formControlName="remarks" placeholder="" pInputText />
 
                             </div>
-                            <div class="field col-12 md:col-12 flex justify-content-start flex-wrap ">
+                            <div class="field col-12 md:col-12 ">
                                 <div class="grid ">
-                                    <div class=" col-12 md:col-12">
-                                        <div class="field-checkbox mb-0">
-                                            <p-checkbox name="group1" value="Chicago" [(ngModel)]="valCheck" id="ch"></p-checkbox>
-                                            <label for="ch">Calculate all leaves proportionately as per date of join or confirmation date.</label>
-                                        </div>
+
+                                    <div class="field-checkbox mb-0">
+                                        <p-checkbox name="is_proportionate" formControlName="is_proportionate"  id="ch"></p-checkbox>
+                                        <label for="ch">Calculate all leaves proportionately as per date of join or confirmation date.</label>
                                     </div>
+
                                 </div>
                             </div>
 
-                            <div class="field col-12 md:col-6 flex justify-content-start flex-wrap ">
+                            <div class="field col-12 md:col-6">
                                 <label pTooltip="Company Name" tooltipPosition="top">Leave<span class="req">*</span> </label>
-                                <input id="lastname2" type="text" class="from-contro flex align-items-center justify-content-centerl" formControlName="company_name"
-                                       [ngClass]="{ 'is-invalid': submitted && f.company_name.errors }"
-                                       placeholder="" pInputText required />
 
 
+                                <p-dropdown [options]="leaveHeads" formControlName="leave_head_id" placeholder="Select Leave Head"
+                                            optionLabel="head_name" optionValue="leave_head_id" [showClear]="true" [filter]="true" filterBy="division_name"></p-dropdown>
 
-                                <div *ngIf="submitted && f.company_name.errors" class="invalid-feedback">
-                                    <small *ngIf="f.company_name.errors.required" class="p-error">Company name is required</small>
+                                <div *ngIf="submitted && f.leave_head_id.errors" class="invalid-feedback">
+                                    <small *ngIf="f.leave_head_id.errors.required" class="p-error">Leave name is required</small>
                                 </div>
                             </div>
 
                             <div class="field col-12 md:col-6 float-right">
-                                <label pTooltip="Company Code" tooltipPosition="top">Description<span class="req">*</span></label>
-                                <input id="firstname2" type="text" formControlName="" placeholder="[General] [Applicable for Both]" pInputText disabled />
+                                <label pTooltip="Company Code" tooltipPosition="top">Description<span class="req"></span></label>
+                                <input id="firstname2" type="text" formControlName=""  pInputText disabled />
 
                             </div>
 
@@ -66,7 +65,7 @@
                                 <div class="grid">
                                     <div class=" col-12 md:col-7">
                                         <div class="field-checkbox mb-0">
-                                            <input id="firstname2" type="text" formControlName="" placeholder="" pInputText />
+                                            <input id="firstname2" type="text" formControlName="default_leave_balance_day" placeholder="" pInputText />
                                             <label for="ch">Days</label>
                                         </div>
                                     </div>
@@ -74,11 +73,11 @@
                             </div>
 
                             <div class="field col-12 md:col-6 float-right">
-                                <label pTooltip="Company Code" tooltipPosition="top">Max enjoyable limit<span class="req">*</span></label>
+                                <label pTooltip="Company Code" tooltipPosition="top">Max enjoyable limit<span class="req"></span></label>
                                 <div class="grid">
                                     <div class=" col-12 md:col-7">
                                         <div class="field-checkbox mb-0">
-                                            <input id="firstname2" type="text" formControlName="company_name" placeholder="" pInputText />
+                                            <input id="firstname2" type="text" formControlName="max_enjoyable_limit_min" placeholder="" pInputText />
                                             <label for="ch">Days</label>
                                             <label class="md:mr-2"> or </label>
                                             <p-checkbox name="group1" value="Chicago" [(ngModel)]="valCheck" id="ch"></p-checkbox>
@@ -89,13 +88,13 @@
                             </div>
 
                             <div class="field col-12 md:col-6 float-right">
-                                <label pTooltip="Company ff" tooltipPosition="top">Max enjoyable limit<span class="req">*</span></label>
+                                <label pTooltip="Company ff" tooltipPosition="top">Max carry forward limit<span class="req"></span></label>
 
                                 <div class="grid">
                                     <div class=" col-12 md:col-7">
 
                                         <div class="field-checkbox mb-0">
-                                            <input id="lastname2" type="text" formControlName="max_carry_forward" placeholder="" pInputText />
+                                            <input id="lastname2" type="text" formControlName="max_carry_leave_limit_min" placeholder="" pInputText />
                                             <label for="ch1">Days</label>
                                             <label class="md:mr-2"> or </label>
                                             <p-checkbox name="group2" value="Chicago1" id="ch1"></p-checkbox>
@@ -106,22 +105,345 @@
                             </div>
 
                             <div class="field col-12 md:col-6 float-right">
-                                <label pTooltip="Company Code" tooltipPosition="top">Max carry forward year <span class="req">*</span></label>
+                                <label pTooltip="Company Code" tooltipPosition="top">Max carry forward year <span class="req"></span></label>
                                 <div class="grid">
                                     <div class=" col-12 md:col-7">
                                         <div class="field-checkbox mb-0">
-                                            <input id="firstname2" type="text" formControlName="max_carry_forward" placeholder="" pInputText />
+                                            <input id="firstname2" type="text" formControlName="max_carry_year" placeholder="" pInputText />
                                             <label for="ch">Days</label>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            <div class="field col-12 md:col-6 float-right">
 
+
+
+
+                                <div class="field-checkbox mb-0">
+
+                                    <p-checkbox name="is_hourly" formControlName="is_hourly" id="ch1"></p-checkbox>
+                                    <label for="ch1" class="md:mr-5">Allow fraction (Hourly)</label>
+                                    <p-checkbox name="is_attachment_required" formControlName="is_attachment_required" id="ch1"></p-checkbox>
+                                    <label for="ch1">Attachment required</label>
+
+                                </div>
+
+
+
+
+
+                            </div>
+
+                            <div class="field col-12 md:col-6 float-right">
+                                <label pTooltip="Company Code" tooltipPosition="top">Required for <span class="req"></span></label>
+                                <div class="grid">
+                                    <div class=" col-12 md:col-12">
+                                        <div class="field-checkbox mb-0">
+                                            <input id="firstname2" type="text" formControlName="attachment_required_for_min" placeholder="" pInputText />
+                                            <label for="ch" class="col-12 md:col-8">Days of leave</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-6 float-right">
+
+                                <div class="field-checkbox mb-0">
+
+                                    <p-checkbox name="group2" formControlName="is_allow_sandwich" id="ch1"></p-checkbox>
+                                    <label for="ch1" class="md:mr-0">Allow Sandwich  leave fraction (Hourly)</label>
+
+
+                                </div>
+
+                            </div>
+
+                            <div class="field col-12 md:col-6 ">
+                                <label pTooltip="Company ff" tooltipPosition="top">Consider sandwich<span class="req"></span></label>
+
+                                <div class="field-checkbox mb-0 md:mr-1 ">
+
+                                    <p-checkbox name="is_sandwich_dayoff" formControlName="is_sandwich_dayoff" id="ch1"></p-checkbox>
+                                    <label for="ch1" class="md:mr-4">Day off </label>
+                                    <p-checkbox name="is_sandwich_holiday" formControlName="is_sandwich_holiday" id="ch1"></p-checkbox>
+                                    <label for="ch1" class="md:mr-4">Holiday</label>
+                                    <p-checkbox name="is_sandwich_uneven" formControlName="is_sandwich_uneven" id="ch1"></p-checkbox>
+                                    <label for="ch1">Uneven</label>
+                                </div>
+
+                            </div>
+
+                            <div class="field col-12 md:col-6 float-right">
+
+                                <div class="field-checkbox mb-0">
+
+                                    <p-checkbox name="is_sufix" formControlName="is_sufix" id="ch1"></p-checkbox>
+                                    <label for="ch1" class="md:mr-0">Allow Suffix</label>
+
+
+                                </div>
+
+                            </div>
+
+                            <div class="field col-12 md:col-6 float-right">
+                                <label pTooltip="Company ff" tooltipPosition="top">Consider Suffix<span class="req"></span></label>
+
+                                <div class="field-checkbox mb-0">
+
+                                    <p-checkbox name="is_sufix_dayoff" formControlName="is_sufix_dayoff" id="ch1"></p-checkbox>
+                                    <label for="ch1" class="md:mr-4">Day off</label>
+                                    <p-checkbox name="is_sufix_holiday" formControlName="is_sufix_holiday" id="ch1"></p-checkbox>
+                                    <label for="ch1" class="md:mr-4">Holiday</label>
+                                    <p-checkbox name="is_sufix_uneven" formControlName="is_sufix_uneven" id="ch1"></p-checkbox>
+                                    <label for="ch1">Uneven</label>
+                                </div>
+
+                            </div>
+                            <div class="field col-12 md:col-6 float-right">
+
+                                <div class="field-checkbox mb-0">
+
+                                    <p-checkbox name="is_prefix" formControlName="is_prefix" id="ch1"></p-checkbox>
+                                    <label for="ch1" class="md:mr-0">Allow prefix</label>
+
+
+                                </div>
+
+                            </div>
+
+                            <div class="field col-12 md:col-6 float-right">
+                                <label pTooltip="Company ff" tooltipPosition="top">Consider Prefix<span class="req"></span></label>
+
+                                <div class="field-checkbox mb-0">
+
+                                    <p-checkbox name="is_prefix_dayoff" formControlName="is_prefix_dayoff" id="ch1"></p-checkbox>
+                                    <label for="ch1" class="md:mr-4">Day off</label>
+                                    <p-checkbox name="is_prefix_holiday" formControlName="is_prefix_holiday" id="ch1"></p-checkbox>
+                                    <label for="ch1" class="md:mr-4">Holiday</label>
+                                    <p-checkbox name="is_prefix_uneven" formControlName="is_prefix_uneven" id="ch1"></p-checkbox>
+                                    <label for="ch1">Uneven</label>
+                                </div>
+
+                            </div>
+                            <div class="field col-12 md:col-6 flex justify-content-start flex-wrap mb-2 ">
+                                <div class="grid ">
+                                    <div class=" col-12 md:col-12">
+                                        <div class="field-checkbox mb-0">
+                                            <p-checkbox name="is_leave_area_required:" formControlName="is_required_purpose" [(ngModel)]="valCheck" id="ch"></p-checkbox>
+                                            <label for="ch">Required Purpose</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="field col-12 md:col-6 float-right">
+                                <label pTooltip="Company Code" tooltipPosition="top">Required for <span class="req"></span></label>
+                                <div class="grid">
+                                    <div class=" col-12 md:col-12">
+                                        <div class="field-checkbox mb-0">
+                                            <input id="firstname2" type="text" formControlName="purpose_required_for_min" placeholder="" pInputText />
+                                            <label for="ch" class="col-12 md:col-8">Days of leave</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-6 flex justify-content-start flex-wrap mb-2 ">
+                                <div class="grid ">
+                                    <div class=" col-12 md:col-12">
+                                        <div class="field-checkbox mb-0">
+                                            <p-checkbox name="is_leave_area_required:" formControlName="is_leave_area_required" [(ngModel)]="valCheck" id="ch"></p-checkbox>
+                                            <label for="ch">Leave enjoyable area required</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="field col-12 md:col-6 float-right">
+                                <label pTooltip="Company Code" tooltipPosition="top">Required for <span class="req"></span></label>
+                                <div class="grid">
+                                    <div class=" col-12 md:col-12">
+                                        <div class="field-checkbox mb-0">
+                                            <input id="firstname2" type="text" formControlName="area_required_for_min" placeholder="" pInputText />
+                                            <label for="ch" class="col-12 md:col-8">Days of leave</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="field col-12 md:col-6 flex justify-content-start flex-wrap mb-2 ">
+                                <div class="grid ">
+                                    <div class=" col-12 md:col-12">
+                                        <div class="field-checkbox mb-0">
+                                            <p-checkbox name="group1" formControlName="is_responsible_person_required" [(ngModel)]="valCheck" id="ch"></p-checkbox>
+                                            <label for="ch">Responsible person require</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="field col-12 md:col-6 float-right">
+                                <label pTooltip="Company Code" tooltipPosition="top">Required for <span class="req"></span></label>
+                                <div class="grid">
+                                    <div class=" col-12 md:col-12">
+                                        <div class="field-checkbox mb-0">
+                                            <input id="firstname2" type="text" formControlName="responsible_person_required_for_min" placeholder="" pInputText />
+                                            <label for="ch" class="col-12 md:col-8">Days of leave</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-12 float-right">
+                                <div class="grid ">
+
+                                    <div class="field-checkbox mb-0">
+                                        <p-checkbox name="is_negetive_balance" formControlName="is_negetive_balance" [(ngModel)]="valCheck" id="ch"></p-checkbox>
+                                        <label for="ch">Allow Negative Balance</label>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                            <div class="field col-12 md:col-6 float-right">
+                                <label pTooltip="Company ff" tooltipPosition="top">Notice Period<span class="req"></span></label>
+
+                                <div class="grid">
+                                    <div class=" col-12 md:col-12">
+
+                                        <div class="field-checkbox mb-0">
+                                            <input id="lastname2" type="text" formControlName="notice_period" placeholder="" pInputText />
+                                            <label for="ch1" class="col-12 md:col-8">Days before applying the leave</label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="field col-12 md:col-6 float-right">
+                                <label pTooltip="Company Code" tooltipPosition="top">Required for <span class="req"></span></label>
+                                <div class="grid">
+                                    <div class=" col-12 md:col-12">
+                                        <div class="field-checkbox mb-0">
+                                            <input id="firstname2" type="text" formControlName="notice_required_for_min" placeholder="" pInputText />
+                                            <label for="ch" class="col-12 md:col-8">Days of leave</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div class="field col-12 md:col-6 float-right">
+                                <label pTooltip="Company ff" tooltipPosition="top">Get 1 Day leave after<span class="req"></span></label>
+
+                                <div class="grid">
+                                    <div class=" col-12 md:col-12">
+
+                                        <div class="field-checkbox mb-0">
+                                            <input id="lastname2" type="text" formControlName="earn_day_count" placeholder="" pInputText />
+                                            <label for="ch1" class="col-12 md:col-8">Days of present</label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-6 float-right">
+                                <label pTooltip="Company ff" tooltipPosition="top">Consider for earned leave<span class="req"></span></label>
+
+                                <div class="grid">
+                                    <div class=" col-12 md:col-12">
+
+                                        <div class="field-checkbox mb-0">
+                                            <p-checkbox name="is_earn_dayoff" formControlName="is_earn_dayoff" id="ch1"></p-checkbox>
+                                            <label for="ch1" class="md:mr-2">Dayoff</label>
+                                            <p-checkbox name="is_earn_holiday" formControlName="is_earn_holiday" id="ch1"></p-checkbox>
+                                            <label for="ch1" class="md:mr-2">Holiday</label>
+                                            <p-checkbox name="is_earn_uneven" formControlName="is_earn_uneven" id="ch1"></p-checkbox>
+                                            <label for="ch1" class="md:mr-2">Uneven</label>
+                                            <p-checkbox name="is_earn_absent" formControlName="is_earn_absent" id="ch1"></p-checkbox>
+                                            <label for="ch1">Absent</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="field col-12 md:col-6 float-right">
+
+                                <div class="grid md:ml-0">
+                                    <div class=" col-12 md:col-6 ">
+                                        <label pTooltip="Company ff" tooltipPosition="top">Max encashment limit<span class="req"></span></label>
+
+                                        <div class="field-checkbox mb-0 mt-2">
+                                            <input id="lastname2" type="text" formControlName="encash_leave_balance_limit_min" placeholder="" pInputText />
+                                            <label for="ch1" class="col-12 md:col-3">Days</label>
+
+                                        </div>
+                                    </div>
+
+                                    <div class=" col-12 md:col-6">
+                                        <label pTooltip="Company ff" tooltipPosition="top">Encashment amount<span class="req"></span></label>
+                                        <div class="field-checkbox mb-0 mt-2">
+                                            <input id="lastname2" type="text" formControlName="encash_amount_percent" placeholder="" pInputText />
+                                            <label for="ch1" class="col-12 md:col-4">% off</label>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="field col-12 md:col-6 float-right">
+                              
+                                <div class="grid ">
+                                    <div class=" col-12 md:col-9 ">
+                                        <label pTooltip="Company ff" tooltipPosition="top">Salary Head<span class="req"></span></label>
+
+                                        <div class="field-checkbox mb-0 mt-2">
+                                            <p-checkbox name="is_gross" formControlName="is_gross" id="ch1"></p-checkbox>
+                                            <label for="ch1" class="col-12 md:col-3">Gross or</label>
+                                            <p-dropdown [options]="salaryheads"  formControlName="salary_head_id" placeholder="Select Salary Head"
+                                                        optionLabel="salary_head_name" optionValue="salary_head_id" [showClear]="true" [filter]="true" filterBy="division_name"></p-dropdown>
+
+                                        </div>
+                                    </div>
+
+                                    <div class=" col-12 md:col-3">
+                                        <label pTooltip="Company ff" tooltipPosition="top"> Or Amount<span class="req"></span></label>
+                                        <div class="field-checkbox mb-0 mt-2">
+                                          
+                                            <input id="firstname2" type="text" formControlName="encash_fixed_amount" placeholder="" pInputText />
+
+                                        </div>
+                                    </div>
+                                </div>
+                               
+                            </div>
+                            <div class="field col-12 md:col-6 float-right">
+                                <label pTooltip="Company ff" tooltipPosition="top">Activation after<span class="req"></span></label>
+
+                                <div class="grid">
+                                    <div class=" col-12 md:col-12">
+
+                                        <div class="field-checkbox mb-0">
+
+                                            <input id="firstname2" type="text" formControlName="activation_days" placeholder="" pInputText />
+
+                                            <label for="ch1" class="col-12 md:col-2"> Days of</label>
+                                            <p-radioButton name="is_activation_on_joining" value="1" formControlName="is_activation_on_joining" [(ngModel)]="valRadio" id="city1"></p-radioButton>
+                                            <label for="city1" class="md:mr-3">Joining</label>
+                                            <p-radioButton name="is_activation_on_joining" value="2" formControlName="is_activation_on_joining" id="city1"></p-radioButton>
+                                            <label for="city1">Confirmation</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div></div>
                         </div>
                     </div>
                     <div class="flex justify-content-end pr-2">
-                        <!-- <button pButton pRipple type="button" (click)="onGeneral()" label="Next" class="risBtn  mr-2 mb-2" icon="pi pi-step-forward"></button>-->
+                        <button pButton pRipple type="button" label="Save" (click)="saveLeavePolicy()"  class="risBtn risSave mr-2 mb-2" icon="pi pi-check"></button>
                         <button pButton pRipple type="button" (click)="toggleFormClose()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
                     </div>
 
