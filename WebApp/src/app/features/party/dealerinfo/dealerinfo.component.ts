@@ -291,7 +291,7 @@ export class DealerinfoComponent implements OnInit {
 
         this.dealercontactForm = this.formbulider.group({
             dealer_contact_info_code: [null],
-            dealer_info_id: ['', [Validators.required]],
+            dealer_info_id: [null],
             person_name: ['', [Validators.required]],
             person_designation: ['', [Validators.required]],
             father_name: [null],
@@ -913,7 +913,9 @@ export class DealerinfoComponent implements OnInit {
     SaveDealerContactInfo() {
         this.submittedContact = true;
         const data = this.dealercontactForm.value;        
-        
+        if (this.dealercontactForm.invalid) {
+            return;
+        }
         let formData = new FormData();
         for (const key of Object.keys(this.dealercontactForm.value)) {
             const value = this.dealercontactForm.value[key];
@@ -927,16 +929,11 @@ export class DealerinfoComponent implements OnInit {
             }
             else {
                 formData.append(key, value);
-            }
-
-            if (this.dealercontactForm.invalid) {
-                return;
-            }
+            }            
         }
 
         if (this.isDealerContactinfoEdit) {
-            //let dealerinfoId = this.rowData.DealerInfoId;
-            //formData.append("dealer_info_id", this.rowData.dealerinfoId);
+           
             data.dealerContactinfoId = this.rowData.DealerContactInfoId;
             formData.append("dealer_contact_info_id", this.rowData.DealerContactInfoId);
             this.dealerinfoService.updateDealerContactInfo(formData).subscribe(result => {
@@ -947,17 +944,15 @@ export class DealerinfoComponent implements OnInit {
                     this.dealercontactinfoList.splice(this.dealercontactinfoList.findIndex(item => item.DealerContactInfoId === data.dealerContactinfoId), 1);
                     this.dealercontactinfoList.unshift(result.Data);
                     this.selecteddealerinfo = result.Data;
-                    this.rowData = result.Data;
-                    this.collapsedempInfo = true;
-                    this.collapsed = true;
-                    this.collapsedempDetails = false;
+                    this.rowData = result.Data;                    
                     this.dealerContactIndex();
                 }
 
             });
+            
         }
         else {
-
+            formData.append("dealer_info_id", this.rowData.DealerInfoId);
             this.dealerinfoService.createDealerContactInfo(formData).subscribe(
                 result => {
                     this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
@@ -966,18 +961,15 @@ export class DealerinfoComponent implements OnInit {
                         this.dealercontactinfoList.unshift(result.Data);
                         this.selecteddealercontactinfo = result.Data;
                         this.nodeSelected = true;
-                        this.rowData = result.Data;
-                        this.collapsedempInfo = true;
-                        this.collapsed = true;
-                        this.collapsedempDetails = false;
+                        this.rowData = result.Data;                        
                         this.dealerContactIndex();
                     }
                 }
             );
-        }
+            
+        }       
         this.gridDisplayContact = false;
         this.formDisplayContact = true;
-
     }
 
     loadDealerContactinfoToEdit() {
@@ -1229,12 +1221,12 @@ export class DealerinfoComponent implements OnInit {
     functionContact(e) {
         this.indexContact = e.indexContact;
     }
-    openNext1() {
-        this.indexContact = (this.indexContact === 2) ? 0 : this.indexContact + 1;
+    openNextContact() {
+        this.indexContact = (this.indexContact === 1) ? 0 : this.indexContact + 1;
     }
 
-    openPrev1() {
-        this.indexContact = (this.indexContact === 0) ? 2 : this.indexContact - 1;
+    openPrevContact() {
+        this.indexContact = (this.indexContact === 0) ? 1 : this.indexContact - 1;
     }
 
 
