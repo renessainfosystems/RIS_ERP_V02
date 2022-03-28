@@ -19,6 +19,7 @@ export class DealerinfoComponent implements OnInit {
     }) dealerContactinfoImage;
 
     submitted = false;
+    submittedContact = false;
     dealerinfoForm: any;//DealerFormName  
     dealerinfoList: any[];//List Dealerinfo
     dealerinfodataSource: any[];//single dealerinfo
@@ -107,6 +108,7 @@ export class DealerinfoComponent implements OnInit {
     collapsed = false;
     checked: boolean = false;
     index: number = 0;
+    indexContact: number = 0;
     showDialog() {
         if (this.rowData == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
@@ -117,7 +119,7 @@ export class DealerinfoComponent implements OnInit {
 
     displayBasic: boolean = false;
     showBasicDialog() {
-        this.resetForm();
+        //this.resetForm();
         this.toggleGridDisplay();
     }
 
@@ -137,6 +139,47 @@ export class DealerinfoComponent implements OnInit {
         this.dealerIndex();
     }
 
+    showBasicDialogContactNew() {
+        this.dealercontactForm.reset();
+        this.toggleGridDisplay();
+        this.dealerContactIndex();
+        this.gridDisplayContact = true;
+        this.formDisplayContact = false;
+       
+    }
+
+    showBasicDialogContactGrid() {
+        //this.dealercontactForm.reset();
+        this.toggleGridDisplayContact();
+        this.toggleGridDisplay();
+        this.dealerContactIndex();
+       
+    }
+    showBasicDialogContactEdit() {
+        //this.dealercontactForm.reset();
+        this.toggleFormDisplayContact();
+        this.toggleGridDisplay();
+        this.dealerContactIndex();
+
+    }
+    
+    gridDisplayContact = false;
+    formDisplayContact = true;
+
+    toggleFormDisplayContact() {
+        this.gridDisplayContact = false;
+        this.formDisplayContact = true;
+        this.dealerContactIndex();
+    }
+    
+    toggleGridDisplayContact() {
+        this.gridDisplayContact = false;
+        this.formDisplayContact = true;
+    }
+    toggleFormCloseContact() {
+        this.toggleFormDisplayContact();
+        this.dealerContactIndex();
+    }
 
 
     // for photo and signature upload
@@ -251,42 +294,42 @@ export class DealerinfoComponent implements OnInit {
             dealer_info_id: ['', [Validators.required]],
             person_name: ['', [Validators.required]],
             person_designation: ['', [Validators.required]],
-            father_name: '',
-            mother_name: '',
-            date_of_birth: '',
-            religion_enum_id: '',
-            nationality: '',
-            national_id_no: '',
-            birth_certificate_no: '',
-            passport_no: '',
-            mobile: '',
-            phone: '',
-            email: '',
-            emergency_contact: '',
-            blood_group_enum_id: '',
-            image_path: '',
-            permanent_country_id: ['', [Validators.required]],
-            permanent_division_id: ['', [Validators.required]],
-            permanent_district_id: ['', [Validators.required]],
-            permanent_thana_id: ['', [Validators.required]],
-            permanent_zone_id: '',
-            permanent_city: '',
-            permanent_post_code: '',
-            permanent_block: '',
-            permanent_road_no: '',
-            permanent_house_no: '',
-            permanent_flat_no: '',
-            present_country_id: ['', [Validators.required]],
-            present_division_id: ['', [Validators.required]],
-            present_district_id: ['', [Validators.required]],
-            present_thana_id: ['', [Validators.required]],
-            present_zone_id: '',
-            present_city: '',
-            present_post_code: '',
-            present_block: '',
-            present_road_no: '',
-            present_house_no: '',
-            present_flat_no: '',
+            father_name: [null],
+            mother_name: [null],
+            date_of_birth: [null],
+            religion_enum_id: [0],
+            nationality: [null],
+            national_id_no: [null],
+            birth_certificate_no: [null],
+            passport_no: [null],
+            mobile: [null],
+            phone: [null],
+            email: [null, [Validators.email, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
+            emergency_contact: [null],
+            blood_group_enum_id: [0],
+            image_path: [null],
+            permanent_country_id: [0, [Validators.required]],
+            permanent_division_id: [0, [Validators.required]],
+            permanent_district_id: [0, [Validators.required]],
+            permanent_thana_id: [0, [Validators.required]],
+            permanent_zone_id: [0],
+            permanent_city: [null],
+            permanent_post_code: [null],
+            permanent_block: [null],
+            permanent_road_no: [null],
+            permanent_house_no: [null],
+            permanent_flat_no: [null],
+            present_country_id: [0, [Validators.required]],
+            present_division_id: [0, [Validators.required]],
+            present_district_id: [0, [Validators.required]],
+            present_thana_id: [0, [Validators.required]],
+            present_zone_id: [0],
+            present_city: [null],
+            present_post_code: [null],
+            present_block: [null],
+            present_road_no: [null],
+            present_house_no: [null],
+            present_flat_no: [null],
             ImageUpload: new FormControl(''),
 
         });
@@ -451,6 +494,27 @@ export class DealerinfoComponent implements OnInit {
         });
         this.toggleGridDisplay();
     }
+    loadDealerinfoContactGrid() {
+
+        debugger;
+        if (this.rowData == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+
+        let dealerinfoId = this.rowData.DealerInfoId;
+        this.dealerinfoService.getDealerInfoById(dealerinfoId).subscribe(data => {
+            if (data != null) {
+                this.isDealerinfoEdit = true;
+            }
+
+            /*this.dealerinfoForm.controls['dealer_info_code'].setValue(data.DealerInfoCode);*/
+            
+            this.loadAllDealerContactinfos();
+
+        });
+        this.showBasicDialogContactEdit();
+
+    }
 
     deleteDealerinfo() {
         this.showDialog();
@@ -596,9 +660,9 @@ export class DealerinfoComponent implements OnInit {
                     this.rowData = result.Data;
                     this.onRowUnselect(event);
                     this.dealerIndex();
-                    this.resetForm();
+                    this.dealerinfoForm.reset();
                     this.toggleFormDisplay();
-                    this.submitted = false;
+                    this.submitted = false;                   
                 }                
             });
         }
@@ -614,8 +678,8 @@ export class DealerinfoComponent implements OnInit {
                         this.rowData = result.Data;
                         this.toggleFormDisplay();
                         this.dealerIndex();
-                        this.resetForm();
-                        this.submitted = false;
+                        this.dealerinfoForm.reset();
+                        this.submitted = false;                        
                     }
                 }
             );
@@ -788,7 +852,7 @@ export class DealerinfoComponent implements OnInit {
     }
 
     resetForm() {
-        this.dealerinfoForm.reset();
+        //this.dealerinfoForm.reset();
         this.isDealerinfoEdit = false;
         this.loadAllDealerinfos();
         this.dealerinfodataSource = [];
@@ -815,7 +879,7 @@ export class DealerinfoComponent implements OnInit {
             this.dealercontactForm.controls['present_country_id'].setValue(data.permanent_country_id);
             this.onSelectByCountryId(data.permanent_country_id);
             this.dealercontactForm.controls['present_division_id'].setValue(data.permanent_division_id);
-            this.onSelectByDivisionId(data.present_division_id);
+            this.onSelectByDivisionId(data.permanent_division_id);
             this.dealercontactForm.controls['present_district_id'].setValue(data.permanent_district_id);
             this.onSelectByDistrictId(data.permanent_district_id);
             this.dealercontactForm.controls['present_thana_id'].setValue(data.permanent_thana_id);
@@ -826,7 +890,6 @@ export class DealerinfoComponent implements OnInit {
             this.dealercontactForm.controls['present_house_no'].setValue(data.permanent_house_no);
             this.dealercontactForm.controls['present_road_no'].setValue(data.permanent_road_no);
             this.dealercontactForm.controls['present_flat_no'].setValue(data.permanent_flat_no);
-
         }
         else {
             this.dealercontactForm.controls['present_country_id'].setValue('');
@@ -844,49 +907,16 @@ export class DealerinfoComponent implements OnInit {
     }
 
 
+    get g(): { [key: string]: AbstractControl } {
+        return this.dealercontactForm.controls;
+    }
+
     SaveDealerContactInfo() {
+        this.submittedContact = true;
         const data = this.dealercontactForm.value;
-        if (!(data.dealer_info_id)) {
-            return this.notifyService.ShowNotification(2, "Please enter dealer name")
-        }
-        if (!(data.dealer_contact_info_code)) {
-            return this.notifyService.ShowNotification(2, "Please enter dealer contact info code")
-        }
-        if (!(data.person_name)) {
-            return this.notifyService.ShowNotification(2, "Please enter contact person name")
-        }
-        if (!(data.person_designation)) {
-            return this.notifyService.ShowNotification(2, "Please enter contact person designation")
-        }
-        if (!(data.date_of_birth)) {
-            return this.notifyService.ShowNotification(2, "Please enter contact person designation")
-        }
-        if (!(data.mobile)) {
-            return this.notifyService.ShowNotification(2, "Please enter mobile number")
-        }
-        if (!(data.permanent_country_id)) {
-            return this.notifyService.ShowNotification(2, "Please enter permanent country")
-        }
-        if (!(data.permanent_division_id)) {
-            return this.notifyService.ShowNotification(2, "Please enter permanent division")
-        }
-        if (!(data.permanent_district_id)) {
-            return this.notifyService.ShowNotification(2, "Please enter permanent district")
-        }
-        if (!(data.permanent_thana_id)) {
-            return this.notifyService.ShowNotification(2, "Please enter permanent thana")
-        }
-        if (!(data.present_country_id)) {
-            return this.notifyService.ShowNotification(2, "Please enter present country")
-        }
-        if (!(data.present_division_id)) {
-            return this.notifyService.ShowNotification(2, "Please enter present division")
-        }
-        if (!(data.present_district_id)) {
-            return this.notifyService.ShowNotification(2, "Please enter present district")
-        }
-        if (!(data.present_thana_id)) {
-            return this.notifyService.ShowNotification(2, "Please enter present thana")
+
+        if (this.dealercontactForm.invalid) {
+            return;
         }
 
         let formData = new FormData();
@@ -941,12 +971,13 @@ export class DealerinfoComponent implements OnInit {
                 }
             );
         }
+        this.gridDisplayContact = false;
+        this.formDisplayContact = true;
 
     }
 
     loadDealerContactinfoToEdit() {
 
-        debugger;
         if (this.rowData == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
@@ -958,6 +989,7 @@ export class DealerinfoComponent implements OnInit {
             }
 
             this.dealercontactForm.controls['dealer_info_id'].setValue(data.DealerInfoId);
+            //this.dealercontactForm.controls['dealer_info_name'].setValue(data.DealerInfoName);
             this.dealercontactForm.controls['dealer_contact_info_code'].setValue(data.DealerContactInfoCode);
             this.dealercontactForm.controls['person_name'].setValue(data.PersonName);
             this.dealercontactForm.controls['person_designation'].setValue(data.PersonDesignation);
@@ -1006,10 +1038,11 @@ export class DealerinfoComponent implements OnInit {
             this.dealercontactForm.controls['present_house_no'].setValue(data.PresentHouseNo);
             this.dealercontactForm.controls['present_flat_no'].setValue(data.PresentFlatNo);
             this.dealercontactForm.controls['image_path'].setValue(data.ImagePath);
-            this.photourllink = data.ImagePath;
+            //this.photourllink = data.ImagePath;
 
         });
-        this.toggle();
+        this.gridDisplayContact = true;
+        this.formDisplayContact = false;
     }
 
     onSelectContactImage(event) {
@@ -1167,7 +1200,7 @@ export class DealerinfoComponent implements OnInit {
     }
         
     dealerContactIndex() {
-        this.index = 3;
+        this.index = 4;
     }
 
     
@@ -1186,5 +1219,20 @@ export class DealerinfoComponent implements OnInit {
     openPrev() {
         this.index = (this.index === 0) ? 4 : this.index - 1;
     }
+
+
+    // Contact Infomation Start
+    functionContact(e) {
+        this.indexContact = e.indexContact;
+    }
+    openNext1() {
+        this.indexContact = (this.indexContact === 2) ? 0 : this.indexContact + 1;
+    }
+
+    openPrev1() {
+        this.indexContact = (this.indexContact === 0) ? 2 : this.indexContact - 1;
+    }
+
+
 
 }
