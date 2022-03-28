@@ -269,7 +269,7 @@ export class DealerinfoComponent implements OnInit {
             credit_days: [0],
             mobile: ['', [Validators.required]],
             phone: [null],
-            email: [null, [Validators.email, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
+            email: ['', [Validators.email, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
             web_url: [null],
             logo_path: [null],
             continent_enum_id: ['', [Validators.required]],
@@ -290,7 +290,7 @@ export class DealerinfoComponent implements OnInit {
         });
 
         this.dealercontactForm = this.formbulider.group({
-            dealer_contact_info_code: ['', [Validators.required]],
+            dealer_contact_info_code: [null],
             dealer_info_id: ['', [Validators.required]],
             person_name: ['', [Validators.required]],
             person_designation: ['', [Validators.required]],
@@ -302,9 +302,9 @@ export class DealerinfoComponent implements OnInit {
             national_id_no: [null],
             birth_certificate_no: [null],
             passport_no: [null],
-            mobile: [null],
+            mobile: ['', [Validators.required]],
             phone: [null],
-            email: [null, [Validators.email, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
+            email: ['', [Validators.email, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
             emergency_contact: [null],
             blood_group_enum_id: [0],
             image_path: [null],
@@ -335,27 +335,27 @@ export class DealerinfoComponent implements OnInit {
         });
 
         this.dealerlocationForm = this.formbulider.group({
-            dealer_location_info_code: ['', [Validators.required]],
+            dealer_location_info_code: [null],
             dealer_info_id: ['', [Validators.required]],
             dealer_location_info_name: ['', [Validators.required]],
             dealer_location_info_short_name: ['', [Validators.required]],
-            trade_license: '',
-            trade_license_date: null,
-            mobile: '',
-            phone: '',
-            email: '',
-            emergency_contact: '',
+            trade_license: [null],
+            trade_license_date: [null],
+            mobile: ['', [Validators.required]],
+            phone: [null],
+            email: ['', [Validators.email, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
+            emergency_contact: [null],
             country_id: ['', [Validators.required]],
             division_id: ['', [Validators.required]],
             district_id: ['', [Validators.required]],
             thana_id: ['', [Validators.required]],
-            city: '',
-            post_code: '',
-            block: '',
-            road_no: '',
-            house_no: '',
-            flat_no: '',
-            address_note: '',
+            city: [null],
+            post_code: [null],
+            block: [null],
+            road_no: [null],
+            house_no: [null],
+            flat_no: [null],
+            address_note: [null],
 
         });
 
@@ -506,8 +506,6 @@ export class DealerinfoComponent implements OnInit {
             if (data != null) {
                 this.isDealerinfoEdit = true;
             }
-
-            /*this.dealerinfoForm.controls['dealer_info_code'].setValue(data.DealerInfoCode);*/
             
             this.loadAllDealerContactinfos();
 
@@ -538,19 +536,19 @@ export class DealerinfoComponent implements OnInit {
     onGeneral(): void {
         this.submitted = true;
         const data = this.dealerinfoForm.value;
-        if (data.dealer_info_name === null) {
+        if ((data.dealer_info_name == "") || (data.dealer_info_name == null) || (data.dealer_info_name == null)) {
             return;
         }
-        else if (data.dealer_info_short_name === null) {
+        else if ((data.dealer_info_short_name == "") || (data.dealer_info_short_name == null) || (data.dealer_info_short_name == undefined)) {
             return;
         }
-        else if (data.domicile_enum_id === null) {
+        else if ((data.domicile_enum_id == "") || (data.domicile_enum_id == null) || (data.domicile_enum_id == undefined)) {
             return;
         }
-        else if (data.trade_license === null) {
+        else if ((data.trade_license == "") || (data.trade_license == null) || (data.trade_license == undefined)) {
             return;
         }
-        else if (data.mobile === null) {
+        else if ((data.mobile == "") || (data.mobile == null) || (data.mobile == undefined)) {
             return;
         }
         else {
@@ -564,13 +562,13 @@ export class DealerinfoComponent implements OnInit {
     onBusiness(): void {
         this.submitted = true;
         const data = this.dealerinfoForm.value;
-        if (data.ownership_type_id === null) {
+        if ((data.ownership_type_id == "") || (data.ownership_type_id == null) || (data.ownership_type_id == undefined)) {
             return;
         }
-        else if (data.industry_sector_id === null) {
+        else if ((data.industry_sector_id == "") || (data.industry_sector_id == null) || (data.industry_sector_id == undefined)) {
             return;
         }
-        else if (data.currency_id === null) {
+        else if ((data.currency_id == "") || (data.currency_id == null) || (data.currency_id == undefined)) {
             return;
         }        
         else {
@@ -584,19 +582,19 @@ export class DealerinfoComponent implements OnInit {
     onAddress(): void {
         this.submitted = true;
         const data = this.dealerinfoForm.value;
-        if (data.continent_enum_id === null) {
+        if ((data.continent_enum_id == "") || (data.continent_enum_id == null) || (data.continent_enum_id == undefined)) {
             return;
         }
-        else if (data.country_id === null) {
+        else if ((data.country_id == "") || (data.country_id == null) || (data.country_id == undefined)) {
             return;
         }
-        else if (data.division_id === null) {
+        else if ((data.division_id == "") || (data.division_id == null) || (data.division_id == undefined)) {
             return;
         }
-        else if (data.district_id === null) {
+        else if ((data.district_id == "") || (data.district_id == null) || (data.district_id == undefined)) {
             return;
         }
-        else if (data.thana_id === null) {
+        else if ((data.thana_id == "") || (data.thana_id == null) || (data.thana_id == undefined)) {
             return;
         }
         else {
@@ -620,22 +618,23 @@ export class DealerinfoComponent implements OnInit {
         let formData = new FormData();
         for (const key of Object.keys(this.dealerinfoForm.value)) {
             const value = this.dealerinfoForm.value[key];
-            if (value == "null") {
-                formData.append("dealer_info_display_name", '');
-                formData.append("TIN", '');
-                formData.append("BIN", '');
-                formData.append("mobile", '');
-                formData.append("phone", '');
-                formData.append("email", '');
-                formData.append("web_url", '');
-                formData.append("city", '');
-                formData.append("post_code", '');
-                formData.append("block", '');
-                formData.append("road_no", '');
-                formData.append("house_no", '');
-                formData.append("flat_no", '');
-                formData.append("address_note", '');
-                formData.append("logo_path", '');
+            if ((value == "") || (value == null) || (value == undefined)) {
+                //formData.append("dealer_info_display_name", '');
+                //formData.append("TIN", '');
+                //formData.append("BIN", '');
+                //formData.append("mobile", '');
+                //formData.append("phone", '');
+                //formData.append("email", '');
+                //formData.append("web_url", '');
+                //formData.append("city", '');
+                //formData.append("post_code", '');
+                //formData.append("block", '');
+                //formData.append("road_no", '');
+                //formData.append("house_no", '');
+                //formData.append("flat_no", '');
+                //formData.append("address_note", '');
+                //formData.append("logo_path", '');
+                //return null;
             }
             if (key == "year_established") {
                 let date = new Date(value).toISOString();
@@ -913,15 +912,15 @@ export class DealerinfoComponent implements OnInit {
 
     SaveDealerContactInfo() {
         this.submittedContact = true;
-        const data = this.dealercontactForm.value;
-
-        if (this.dealercontactForm.invalid) {
-            return;
-        }
-
+        const data = this.dealercontactForm.value;        
+        
         let formData = new FormData();
         for (const key of Object.keys(this.dealercontactForm.value)) {
             const value = this.dealercontactForm.value[key];
+            if (key == "dealer_info_id") {
+                let dealerinfoId = this.rowData.DealerInfoId;
+                formData.append("dealer_info_id", dealerinfoId);
+            }
             if (key == "date_of_birth") {
                 let date = new Date(value).toISOString();
                 formData.append("date_of_birth", date);
@@ -929,10 +928,15 @@ export class DealerinfoComponent implements OnInit {
             else {
                 formData.append(key, value);
             }
+
+            if (this.dealercontactForm.invalid) {
+                return;
+            }
         }
 
         if (this.isDealerContactinfoEdit) {
-
+            //let dealerinfoId = this.rowData.DealerInfoId;
+            //formData.append("dealer_info_id", this.rowData.dealerinfoId);
             data.dealerContactinfoId = this.rowData.DealerContactInfoId;
             formData.append("dealer_contact_info_id", this.rowData.DealerContactInfoId);
             this.dealerinfoService.updateDealerContactInfo(formData).subscribe(result => {
