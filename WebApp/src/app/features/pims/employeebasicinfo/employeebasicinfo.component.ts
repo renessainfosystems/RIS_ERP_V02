@@ -1,10 +1,11 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { NavigationEnd } from '@angular/router';
 import { NotificationService } from '../../../service/CommonMessage/notification.service';
-
+import { ToastrService } from 'ngx-toastr';
 import Employee from './employeebasicinfo.model';
 import { EmployeeService } from './employeebasicinfo.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-employeebasicinfo',
@@ -12,6 +13,28 @@ import { EmployeeService } from './employeebasicinfo.service';
   styleUrls: ['./employeebasicinfo.component.css']
 })
 export class EmployeebasicinfoComponent implements OnInit {
+
+
+    companyForm: FormGroup;
+    submitted = false;
+
+    //start grid and form show hide ********************
+    gridDisplay = false;
+    formDisplay = true;
+    toggleFormDisplay() {
+        this.gridDisplay = false;
+        this.formDisplay = true;
+    }
+    toggleGridDisplay() {
+        this.gridDisplay = true;
+        this.formDisplay = false;
+    }
+    toggleFormClose() {
+        this.toggleFormDisplay();
+        this.generalIndex();
+    }
+    //end grid and form show hide ********************
+
   @ViewChild('employeeImage', {
     static: true
   }) employeeImage;
@@ -61,6 +84,7 @@ export class EmployeebasicinfoComponent implements OnInit {
   selectedPermanentDistrict: Employee;//Present District Selected Row List
   first = 0;
   rows = 10;
+  index: number = 0;
   //end dropdown List prperty
   rowData: any;
   // for delete data modal
@@ -81,10 +105,117 @@ export class EmployeebasicinfoComponent implements OnInit {
     else
       this.display = true;
   }
+    generalIndex() {
+        this.index = 0;
+    }
+    function(e) {
+        this.index = e.index;
+    }
+    openNext() {
+        this.index = (this.index === 3) ? 0 : this.index + 1;
+    }
 
+    openPrev() {
+        this.index = (this.index === 0) ? 3 : this.index - 1;
+    }
+    get f(): { [key: string]: AbstractControl } {
+        return this.employeeForm.controls;
+    }
+    onGeneral(): void {
+        this.submitted = true;
+        if (this.employeeForm.invalid) {
+            return;
+        }
+        const data = this.employeeForm.value;
+
+       
+        //if (companydata.company_group_id === null) {
+        //    return;
+        //}
+        //else if (companydata.company_name === null) {
+        //    return;
+        //}
+        //else if (companydata.company_prefix === null) {
+        //    return;
+        //}
+        //else if (companydata.company_short_name === null) {
+        //    return;
+        //}
+        //else if (companydata.currency_id === null) {
+        //    return;
+        //}
+        //else {
+
+
+        //if (!(data.code)) {
+        //    return this.notifyService.ShowNotification(2, "Please enter Code")
+        //}
+        //if (!(data.first_name)) {
+        //    return this.notifyService.ShowNotification(2, "Please enter First Name")
+        //}
+        //if (!(data.sur_name)) {
+        //    return this.notifyService.ShowNotification(2, "Please enter Sure Name")
+        //}
+        //if (!(data.marital_status_enum_id)) {
+        //    return this.notifyService.ShowNotification(2, "Please select Marital Status")
+        //}
+
+        //if (!(data.personal_phone)) {
+        //    return this.notifyService.ShowNotification(2, "Please enter Personal Phone")
+        //} if (!(data.personal_email)) {
+        //    return this.notifyService.ShowNotification(2, "Please enter Personal Email")
+        //} if (!(data.date_of_birth)) {
+        //    return this.notifyService.ShowNotification(2, "Please enter Date Of Birth")
+        //} if (!(data.national_id)) {
+        //    return this.notifyService.ShowNotification(2, "Please enter National Id")
+        //} if (!(data.nationality_id)) {
+        //    return this.notifyService.ShowNotification(2, "Please select Nationality")
+        //} if (!(data.country_of_birth_id)) {
+        //    return this.notifyService.ShowNotification(2, "Please select Country Of Birth")
+        //}
+        //if (!(data.ethnicity_id)) {
+        //    return this.notifyService.ShowNotification(2, "Please select Ethnicity")
+        //}
+        //if (!(data.gender_enum_id)) {
+        //    return this.notifyService.ShowNotification(2, "Please select Gender")
+        //} if (!(data.mother_name)) {
+        //    return this.notifyService.ShowNotification(2, "Please select Mother Name")
+        //} if (!(data.religion_enum_id)) {
+        //    return this.notifyService.ShowNotification(2, "Please select Religion")
+        //} if (!(data.residentcial_status_enum_id)) {
+        //    return this.notifyService.ShowNotification(2, "Please select Residentcial Status")
+        //} if (!(data.father_name)) {
+        //    return this.notifyService.ShowNotification(2, "Please intput father name.")
+        //} if (!(data.father_name)) {
+        //    return this.notifyService.ShowNotification(2, "Please intput father name.")
+        //}
+        //if (this.isEmployeeEdit) {
+        //    if (!(data.present_country_id)) {
+        //        return this.notifyService.ShowNotification(2, "Please select present country.")
+        //    }
+        //    if (!(data.present_division_id)) {
+        //        return this.notifyService.ShowNotification(2, "Please select present division.")
+        //    }
+        //    if (!(data.present_district_id)) {
+        //        return this.notifyService.ShowNotification(2, "Please select present district.")
+        //    }
+        //}
+        if (this.isEmployeeEdit == true) {
+            this.openNext();
+        } else {
+
+            this.onFormSubmit();
+            this.openNext();
+        }
+           
+       // }
+        //if (this.employeeForm.invalid) {
+        //    return;
+        //}
+    }
   // for photo and signature upload
 
-  photourllink: string = "assets/images/user-photo1.png";
+    photourllink: string = "assets/images/defaultimg.jpeg";
   selectFile(event) {
     if (event.target.files) {
       var reader = new FileReader()
@@ -96,6 +227,7 @@ export class EmployeebasicinfoComponent implements OnInit {
   }
 
   sigurllink: string = "assets/images/user-signature1.png";
+    //sigurllink: string = "assets/images/defaultimg.jpeg";
   selectSig(event) {
     if (event.target.files) {
       var reader = new FileReader()
@@ -116,8 +248,16 @@ export class EmployeebasicinfoComponent implements OnInit {
       }
     }
   }
+    showBasicDialog() {
+    this.resetForm();
+    this.toggleGridDisplay();    
+    }
 
-  constructor(private formbulider: FormBuilder, private notifyService: NotificationService, private employeeService: EmployeeService) { }
+
+    //resetForm() {
+    //    this.employeeForm.reset();
+    //}
+    constructor(private formbulider: FormBuilder, private notifyService: NotificationService, private employeeService: EmployeeService, private toastr: ToastrService) { }
 
   clear() {
     this.employeeForm = this.formbulider.group({
@@ -170,15 +310,15 @@ export class EmployeebasicinfoComponent implements OnInit {
       code: [null, [Validators.required]],
       employee_name: [null, [Validators.required]],
       first_name: [null, [Validators.required]],
-      middle_name: [null, [Validators.required]],
+      middle_name: [null],
       sur_name: ['', [Validators.required]],
-      father_name: ['', [Validators.required]],
-      mother_name: ['', [Validators.required]],
+      father_name: [null, [Validators.required]],
+      mother_name: [null, [Validators.required]],
       spouse_name: ['', [Validators.required]],
       date_of_marriage: ['', [Validators.required]],
       personal_phone: ['', [Validators.required]],
       official_phone: ['', [Validators.required]],
-      personal_email: ['', [Validators.required]],
+      personal_email: ['', [Validators.email, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
       official_email: ['', [Validators.required]],
       date_of_birth: ['', [Validators.required]],
       identification_mark: ['', [Validators.required]],
@@ -207,8 +347,8 @@ export class EmployeebasicinfoComponent implements OnInit {
       ethnicity_id: ['', [Validators.required]],
       EthnicityName: ['', [Validators.required]],
 
-      present_country_id: [null, [Validators.required]],
-      present_division_id: [null, [Validators.required]],
+      present_country_id: [null],
+      present_division_id: [null],
       present_district_id: [null, [Validators.required]],
       present_ps_area: ['', [Validators.required]],
       present_city: ['', [Validators.required]],
@@ -414,7 +554,8 @@ export class EmployeebasicinfoComponent implements OnInit {
 
     });
    // this.displayBasic = true;
-    this.toggle();
+     // this.toggle();
+      this.toggleGridDisplay();
   }
 
   deleteEmployee() {
@@ -432,7 +573,7 @@ export class EmployeebasicinfoComponent implements OnInit {
     this.display = false;
   }
 
-  SaveEmployee() {
+    onFormSubmit() {
     debugger
     //for Image Upload
    
@@ -477,6 +618,19 @@ export class EmployeebasicinfoComponent implements OnInit {
       return this.notifyService.ShowNotification(2, "Please select Residentcial Status")
     } if (!(data.father_name)) {
       return this.notifyService.ShowNotification(2, "Please intput father name.")
+    }if (!(data.father_name)) {
+      return this.notifyService.ShowNotification(2, "Please intput father name.")
+        }
+    if (this.isEmployeeEdit) {
+        if (!(data.present_country_id)) {
+            return this.notifyService.ShowNotification(2, "Please select present country.")
+        }
+        if (!(data.present_division_id)) {
+            return this.notifyService.ShowNotification(2, "Please select present division.")
+        }
+        if (!(data.present_district_id)) {
+            return this.notifyService.ShowNotification(2, "Please select present district.")
+        }
     }
     let formData = new FormData();
     for (const key of Object.keys(this.employeeForm.value)) {
@@ -488,7 +642,7 @@ export class EmployeebasicinfoComponent implements OnInit {
       else if (key == "date_of_birth") {
         let date = new Date(value).toISOString();
         formData.append("date_of_birth", date);
-      }
+      }     
       else {
 
         formData.append(key, value);
@@ -614,7 +768,13 @@ export class EmployeebasicinfoComponent implements OnInit {
     this.employeeService.getAllCountry().subscribe(data => {
       this.drpdwnPresentCountryList = data;
     });
-  }
+    }
+    resetForm() {
+        this.employeeForm.reset();
+        this.isEmployeeEdit = false;
+        this.loadAllEmployees();
+        this.employeedataSource = [];
+    }
   //loadPresentDivisiondrpdwn() {
   //  this.employeeService.getAllDivision().subscribe(data => {
   //    this.drpdwnPresentDivisionList = data;
@@ -700,12 +860,12 @@ export class EmployeebasicinfoComponent implements OnInit {
     );
 
   }
-  resetForm() {
-    this.employeeForm.reset();
-    this.isEmployeeEdit = false;
-    this.loadAllEmployees();
-    this.employeedataSource = [];
-  }
+  //resetForm() {
+  //  this.employeeForm.reset();
+  //  this.isEmployeeEdit = false;
+  //  this.loadAllEmployees();
+  //  this.employeedataSource = [];
+  //}
 
   onSelectImage(event) {
 

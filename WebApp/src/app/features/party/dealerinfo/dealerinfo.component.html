@@ -231,7 +231,7 @@
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label pTooltip="City/Town" tooltipPosition="top">City/Town </label>
-                                        <input type="text" formControlName="ps_area" placeholder="" pInputText />
+                                        <input type="text" formControlName="city" placeholder="" pInputText />
                                     </div>
 
                                     <div class="field col-12 md:col-6">
@@ -311,8 +311,321 @@
                             <button pButton pRipple type="button" (click)="toggleFormClose()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
                         </div>
                     </p-tabPanel>
-                </p-tabView>
+                    <p-tabPanel header="Contact Info">
+                        <div [hidden]="formDisplayContact">
+                            <p-tabView [(activeIndex)]="indexContact">
+                                <p-tabPanel header="Basic Info">
+                                    <form action="" [formGroup]="dealercontactForm">
+                                        
+                                        <div class="col-12">
+                                            <div class="p-fluid p-formgrid grid">
+                                                <div class="field col-12 md:col-6">
+                                                    <label pTooltip="Dealer Contact Code" tooltipPosition="top">Dealer Contact Code</label>
+                                                    <input type="text" formControlName="dealer_contact_info_code" placeholder="<<<Auto Generate>>>" pInputText disabled />
+                                                </div>
+                                                <div class="field col-12 md:col-6">
+                                                    <label pTooltip="Image" tooltipPosition="top">Image </label>
+                                                    <div class=" inputWrapper photo-signature align-self-end flex align-items-center ">
+                                                        <img class="risBtn m-1" [src]="photourllink" style="width: 110px;" alt="">
+                                                        <input type="file" formControlName="image_path" class="fileInput risBtn risAdd " style="width: 110px;" #userImage (change)="onSelectContactImage($event)">
+                                                    </div>
+                                                </div>
+                                                <div class="field col-12 md:col-6">
+                                                    <label pTooltip="Person Name" tooltipPosition="top">Person Name<span class="req">*</span></label>
+                                                    <input type="text" formControlName="person_name" [ngClass]="{ 'is-invalid': submittedContact && g.person_name.errors }" placeholder="" pInputText />
+                                                    <div *ngIf="submittedContact && g.person_name.errors" class="invalid-feedback">
+                                                        <small *ngIf="g.person_name.errors.required" class="p-error">Person name is required</small>
+                                                    </div>
+                                                </div>
+                                                <div class="field col-12 md:col-6">
+                                                    <label pTooltip="Person Designation" tooltipPosition="top">Person Designation<span class="req">*</span></label>
+                                                    <input type="text" formControlName="person_designation" [ngClass]="{ 'is-invalid': submittedContact && g.person_designation.errors }" placeholder="" pInputText />
+                                                    <div *ngIf="submittedContact && g.person_designation.errors" class="invalid-feedback">
+                                                        <small *ngIf="g.person_designation.errors.required" class="p-error">Person Designation is required</small>
+                                                    </div>
+                                                </div>
+                                                <div class="field col-12 md:col-6">
+                                                    <label pTooltip="Father Name" tooltipPosition="top">Father Name</label>
+                                                    <input type="text" formControlName="father_name" placeholder="" pInputText />
+                                                </div>
+                                                <div class="field col-12 md:col-6">
+                                                    <label pTooltip="Mother Name" tooltipPosition="top">Mother Name</label>
+                                                    <input type="text" formControlName="mother_name" placeholder="" pInputText />
+                                                </div>
+                                                <div class="field col-12 md:col-6">
+                                                    <label pTooltip="Date Of Birth" tooltipPosition="top">Date Of Birth</label>
+                                                    <p-calendar formControlName="date_of_birth" placeholder="" [showIcon]="true" [showButtonBar]="true"></p-calendar>
 
+                                                </div>
+                                                <div class="field col-12 md:col-6">
+                                                    <label pTooltip="Religion" tooltipPosition="top">Religion</label>
+                                                    <p-dropdown [options]="allReligion" formControlName="religion_enum_id" placeholder="---Select---"
+                                                                optionLabel="religion_enum_name" optionValue="religion_enum_id" [showClear]="true" [filter]="true" filterBy="religion_enum_name"></p-dropdown>
+
+                                                </div>
+                                                <div class="field col-12 md:col-6">
+                                                    <label pTooltip="Religion" tooltipPosition="top">Religion</label>
+                                                    <p-dropdown [options]="allBloodGroup" formControlName="blood_group_enum_id" placeholder="---Select---"
+                                                                optionLabel="blood_group_enum_name" optionValue="blood_group_enum_id" [showClear]="true" [filter]="true" filterBy="blood_group_enum_name"></p-dropdown>
+
+                                                </div>
+                                                <div class="field col-12 md:col-6">
+                                                    <label pTooltip="Nationality" tooltipPosition="top">Nationality</label>
+                                                    <input type="text" formControlName="nationality" placeholder="" pInputText />
+                                                </div>
+                                                <div class="field col-12 md:col-6">
+                                                    <label pTooltip="National Id" tooltipPosition="top">National Id</label>
+                                                    <input type="text" formControlName="national_id_no" placeholder="" pInputText />
+                                                </div>
+                                                <div class="field col-12 md:col-6">
+                                                    <label pTooltip="Birth Certificate No" tooltipPosition="top">Birth Certificate No</label>
+                                                    <input type="text" formControlName="birth_certificate_no" placeholder="" pInputText />
+                                                </div>
+                                                <div class="field col-12 md:col-6">
+                                                    <label pTooltip="Passport No" tooltipPosition="top">Passport No</label>
+                                                    <input type="text" formControlName="passport_no" placeholder="" pInputText />
+                                                </div>
+                                                <div class="field col-12 md:col-6">
+                                                    <label pTooltip="Mobile" tooltipPosition="top">Mobile <span class="req">*</span> </label>
+                                                    <input type="text" formControlName="mobile" [ngClass]="{ 'is-invalid': submittedContact && g.mobile.errors }" placeholder="" pInputText />
+
+                                                    <div *ngIf="submittedContact && g.mobile.errors" class="invalid-feedback">
+                                                        <small *ngIf="g.mobile.errors.required" class="p-error">Mobile number is required</small>
+                                                    </div>
+                                                </div>
+                                                <div class="field col-12 md:col-6">
+                                                    <label pTooltip="Phone" tooltipPosition="top">Phone </label>
+                                                    <input type="text" formControlName="phone" placeholder="" pInputText />
+                                                </div>
+                                                <div class="field col-12 md:col-6">
+                                                    <label pTooltip="Email" tooltipPosition="top">Email </label>
+                                                    <input type="email" formControlName="email" [ngClass]="{ 'is-invalid': submittedContact && g.email.errors }" placeholder="" pInputText />
+                                                    <div *ngIf="submittedContact && g.email.errors" class="invalid-feedback">
+                                                        <small *ngIf="g.email.errors.email" class="p-error">Email must be a valid email address</small>
+                                                    </div>
+
+                                                </div>
+                                                <div class="field col-12 md:col-6">
+                                                    <label pTooltip="Emergency Contact" tooltipPosition="top">Emergency Contact </label>
+                                                    <input type="text" formControlName="emergency_contact" placeholder="" pInputText />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <div class="flex justify-content-end pr-2">
+                                        <button pButton pRipple type="button" (click)="openPrevContact()" label="Previous" class="risBtn  mr-2 mb-2" icon="pi pi-step-backward"></button>
+                                        <button pButton pRipple type="button" (click)="openNextContact()" label="Next" class="risBtn risSave mr-2 mb-2" icon="pi pi-step-forward"></button>
+                                        <button pButton pRipple type="button" (click)="toggleFormCloseContact()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
+                                    </div>
+                                </p-tabPanel>
+                                <p-tabPanel header="Address Info">
+                                    <form action="" [formGroup]="dealercontactForm">
+                                        <div class="col-12">
+                                            <h6>Parmanent Address</h6>
+                                            <div class="p-fluid p-formgrid grid">
+                                                <div class="field col-12 md:col-6">
+                                                    <label pTooltip="Country" tooltipPosition="top">Country<span class="req">*</span></label>
+                                                    <p-dropdown [options]="allCountry" formControlName="permanent_country_id" [ngClass]="{ 'is-invalid': submittedContact && g.permanent_country_id.errors }" placeholder="---Select---"
+                                                                optionLabel="country_name" optionValue="country_id" (onChange)="onSelectByCountryId($event.value)" [showClear]="true" [filter]="true" filterBy="country_name"></p-dropdown>
+
+                                                    <div *ngIf="submittedContact && g.permanent_country_id.errors" class="invalid-feedback">
+                                                        <small *ngIf="g.permanent_country_id.errors.required" class="p-error">Country is required</small>
+                                                    </div>
+                                                </div>
+                                                <div class="field col-12 md:col-6">
+                                                    <label pTooltip="Division" tooltipPosition="top">Division<span class="req">*</span></label>
+                                                    <p-dropdown [options]="allDivision" formControlName="permanent_division_id" [ngClass]="{ 'is-invalid': submittedContact && g.permanent_division_id.errors }" placeholder="---Select---"
+                                                                optionLabel="division_name" optionValue="division_id" (onChange)="onSelectByDivisionId($event.value)" [showClear]="true" [filter]="true" filterBy="division_name"></p-dropdown>
+
+                                                    <div *ngIf="submittedContact && g.permanent_division_id.errors" class="invalid-feedback">
+                                                        <small *ngIf="g.permanent_division_id.errors.required" class="p-error">Division is required</small>
+                                                    </div>
+                                                </div>
+                                                <div class="field col-12 md:col-6">
+                                                    <label pTooltip="District" tooltipPosition="top">District<span class="req">*</span></label>
+                                                    <p-dropdown [options]="allDistrict" formControlName="permanent_district_id" [ngClass]="{ 'is-invalid': submittedContact && g.permanent_district_id.errors }" placeholder="---Select---"
+                                                                optionLabel="district_name" optionValue="district_id" (onChange)="onSelectByDistrictId($event.value)" [showClear]="true" [filter]="true" filterBy="district_name"></p-dropdown>
+
+                                                    <div *ngIf="submittedContact && g.permanent_district_id.errors" class="invalid-feedback">
+                                                        <small *ngIf="g.permanent_district_id.errors.required" class="p-error">District is required</small>
+                                                    </div>
+                                                </div>
+                                                <div class="field col-12 md:col-6">
+                                                    <label pTooltip="Thana" tooltipPosition="top">Thana<span class="req">*</span></label>
+                                                    <p-dropdown [options]="allThana" formControlName="permanent_thana_id" [ngClass]="{ 'is-invalid': submittedContact && g.permanent_thana_id.errors }" placeholder="---Select---"
+                                                                optionLabel="thana_name" optionValue="thana_id" [showClear]="true" [filter]="true" filterBy="thana_name"></p-dropdown>
+                                                    <div *ngIf="submittedContact && g.permanent_thana_id.errors" class="invalid-feedback">
+                                                        <small *ngIf="g.permanent_thana_id.errors.required" class="p-error">Thana is required</small>
+                                                    </div>
+                                                </div>
+                                                <div class="field col-12 md:col-6">
+                                                    <label pTooltip="Zone" tooltipPosition="top">Zone</label>
+                                                    <p-dropdown [options]="allZone" formControlName="permanent_zone_id" placeholder="---Select---"
+                                                                optionLabel="zone_name" optionValue="zone_id" [showClear]="true" [filter]="true" filterBy="zone_name"></p-dropdown>
+
+                                                </div>
+                                                <div class="field col-12 md:col-6">
+                                                    <label pTooltip="City/Town" tooltipPosition="top">City/Town </label>
+                                                    <input type="text" formControlName="permanent_city" placeholder="" pInputText />
+                                                </div>
+
+                                                <div class="field col-12 md:col-6">
+                                                    <label pTooltip="Post Code" tooltipPosition="top">Post Code </label>
+                                                    <input type="text" formControlName="permanent_post_code" placeholder="" pInputText />
+                                                </div>
+                                                <div class="field col-12 md:col-6">
+                                                    <label pTooltip="Block" tooltipPosition="top">Block </label>
+                                                    <input type="text" formControlName="permanent_block" placeholder="" pInputText />
+                                                </div>
+                                                <div class="field col-12 md:col-6">
+                                                    <label pTooltip="Road No" tooltipPosition="top">Road No </label>
+                                                    <input type="text" formControlName="permanent_road_no" placeholder="" pInputText />
+                                                </div>
+                                                <div class="field col-12 md:col-6">
+                                                    <label pTooltip="House No" tooltipPosition="top">House No </label>
+                                                    <input type="text" formControlName="permanent_house_no" placeholder="" pInputText />
+                                                </div>
+                                                <div class="field col-12 md:col-6">
+                                                    <label pTooltip="Flat No" tooltipPosition="top">Flat No </label>
+                                                    <input type="text" formControlName="permanent_flat_no" placeholder="" pInputText />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <h6>Present Address</h6>
+                                            <div class="p-fluid grid col-12 flex justify-content-start flex-wrap card-container">
+                                                <p-checkbox  binary="true" label="Same As Present Address" (onChange)="sameAddress($event)" inputId="binary"></p-checkbox>
+
+                                            </div>
+                                            <div class="p-fluid p-formgrid grid">
+                                                <div class="field col-12 md:col-6">
+                                                    <label pTooltip="Country" tooltipPosition="top">Country<span class="req">*</span></label>
+                                                    <p-dropdown [options]="allCountry" formControlName="present_country_id" [ngClass]="{ 'is-invalid': submittedContact && g.present_country_id.errors }" placeholder="---Select---"
+                                                                optionLabel="country_name" optionValue="country_id" (onChange)="onSelectByCountryId($event.value)" [showClear]="true" [filter]="true" filterBy="country_name"></p-dropdown>
+
+                                                    <div *ngIf="submittedContact && g.present_country_id.errors" class="invalid-feedback">
+                                                        <small *ngIf="g.present_country_id.errors.required" class="p-error">Country is required</small>
+                                                    </div>
+                                                </div>
+                                                <div class="field col-12 md:col-6">
+                                                    <label pTooltip="Division" tooltipPosition="top">Division<span class="req">*</span></label>
+                                                    <p-dropdown [options]="allDivision" formControlName="present_division_id" [ngClass]="{ 'is-invalid': submittedContact && g.present_division_id.errors }" placeholder="---Select---"
+                                                                optionLabel="division_name" optionValue="division_id" (onChange)="onSelectByDivisionId($event.value)" [showClear]="true" [filter]="true" filterBy="division_name"></p-dropdown>
+
+                                                    <div *ngIf="submittedContact && g.present_division_id.errors" class="invalid-feedback">
+                                                        <small *ngIf="g.present_division_id.errors.required" class="p-error">Division is required</small>
+                                                    </div>
+                                                </div>
+                                                <div class="field col-12 md:col-6">
+                                                    <label pTooltip="District" tooltipPosition="top">District<span class="req">*</span></label>
+                                                    <p-dropdown [options]="allDistrict" formControlName="present_district_id" [ngClass]="{ 'is-invalid': submittedContact && g.present_district_id.errors }" placeholder="---Select---"
+                                                                optionLabel="district_name" optionValue="district_id" (onChange)="onSelectByDistrictId($event.value)" [showClear]="true" [filter]="true" filterBy="district_name"></p-dropdown>
+
+                                                    <div *ngIf="submittedContact && g.present_district_id.errors" class="invalid-feedback">
+                                                        <small *ngIf="g.present_district_id.errors.required" class="p-error">District is required</small>
+                                                    </div>
+                                                </div>
+                                                <div class="field col-12 md:col-6">
+                                                    <label pTooltip="Thana" tooltipPosition="top">Thana<span class="req">*</span></label>
+                                                    <p-dropdown [options]="allThana" formControlName="present_thana_id" [ngClass]="{ 'is-invalid': submittedContact && g.present_thana_id.errors }" placeholder="---Select---"
+                                                                optionLabel="thana_name" optionValue="thana_id" [showClear]="true" [filter]="true" filterBy="thana_name"></p-dropdown>
+                                                    <div *ngIf="submittedContact && g.present_thana_id.errors" class="invalid-feedback">
+                                                        <small *ngIf="g.present_thana_id.errors.required" class="p-error">Thana is required</small>
+                                                    </div>
+                                                </div>
+                                                <div class="field col-12 md:col-6">
+                                                    <label pTooltip="Zone" tooltipPosition="top">Zone</label>
+                                                    <p-dropdown [options]="allZone" formControlName="present_zone_id" placeholder="---Select---"
+                                                                optionLabel="zone_name" optionValue="zone_id" [showClear]="true" [filter]="true" filterBy="zone_name"></p-dropdown>
+
+                                                </div>
+                                                <div class="field col-12 md:col-6">
+                                                    <label pTooltip="City/Town" tooltipPosition="top">City/Town </label>
+                                                    <input type="text" formControlName="present_city" placeholder="" pInputText />
+                                                </div>
+
+                                                <div class="field col-12 md:col-6">
+                                                    <label pTooltip="Post Code" tooltipPosition="top">Post Code </label>
+                                                    <input type="text" formControlName="present_post_code" placeholder="" pInputText />
+                                                </div>
+                                                <div class="field col-12 md:col-6">
+                                                    <label pTooltip="Block" tooltipPosition="top">Block </label>
+                                                    <input type="text" formControlName="present_block" placeholder="" pInputText />
+                                                </div>
+                                                <div class="field col-12 md:col-6">
+                                                    <label pTooltip="Road No" tooltipPosition="top">Road No </label>
+                                                    <input type="text" formControlName="present_road_no" placeholder="" pInputText />
+                                                </div>
+                                                <div class="field col-12 md:col-6">
+                                                    <label pTooltip="House No" tooltipPosition="top">House No </label>
+                                                    <input type="text" formControlName="present_house_no" placeholder="" pInputText />
+                                                </div>
+                                                <div class="field col-12 md:col-6">
+                                                    <label pTooltip="Flat No" tooltipPosition="top">Flat No </label>
+                                                    <input type="text" formControlName="present_flat_no" placeholder="" pInputText />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <div class="flex justify-content-end pr-2">
+                                        <button pButton pRipple type="button" (click)="openPrevContact()" label="Previous" class="risBtn  mr-2 mb-2" icon="pi pi-step-backward"></button>
+                                        <button pButton pRipple type="button" (click)="SaveDealerContactInfo()" label="Save" class="risBtn  mr-2 mb-2" icon="pi pi-check"></button>
+                                        <button pButton pRipple type="button" (click)="toggleFormCloseContact()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
+                                    </div>
+                                </p-tabPanel>
+                            </p-tabView>
+                        </div>
+                        <div [hidden]="gridDisplayContact">
+                            <button pButton pRipple type="button" (click)="showBasicDialogContactNew()" label="New" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
+                            <button pButton pRipple type="button" (click)="loadDealerContactinfoToEdit()" label="Edit" icon="pi pi-pencil" class="risBtn risEdit mr-2 mb-2"></button>
+                            <button pButton pRipple type="button" (click)="showDialog()" label="Delete" icon="pi pi-trash" class="risBtn risDelete mr-2 mb-2"></button>
+                            <p-dialog header="Delete Record" [(visible)]="display" [style]="{width: '35vw'}">
+                                <p>Do you want to delete this record?</p>
+                                <ng-template pTemplate="footer">
+                                    <button class="pi pi-times risBtn risClose" (click)="display=false"> No</button>
+                                    <button class="pi pi-check risBtn risSave" (click)="deleteLocationInfo()"> Yes</button>
+                                </ng-template>
+                            </p-dialog>
+
+                            <p-table [value]="dealercontactinfoList" styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm" [paginator]="true" [rows]="10" selectionMode="single" [showCurrentPageReport]="true" responsiveLayout="scroll"
+                                     [(selection)]="selecteddealercontactinfo" dataKey="DealerContactInfoId" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th pSortableColumn="PersonalPhone">Id</th>
+                                        <th pSortableColumn="Code">
+                                            Dealer Contact Code
+                                            <p-columnFilter type="text" field="DealerContactInfoCode" display="menu"></p-columnFilter>
+                                            <p-sortIcon field="Code"></p-sortIcon>
+                                        </th>
+                                        <th pSortableColumn="DealerinfoName">
+                                            Contact Person Name
+                                            <p-columnFilter type="text" field="DealerinfoName" display="menu"></p-columnFilter>
+                                        </th>
+                                        <th pSortableColumn="PersonalPhone">Person Degignation</th>
+                                        <th pSortableColumn="PersonalPhone">Mobile</th>
+                                        <th pSortableColumn="PersonalEmail">Email</th>
+                                        <th pSortableColumn="PresentAddressNote">Emergency Contact</th>
+                                    </tr>
+                                </ng-template>
+
+                                <ng-template pTemplate="body" let-dealercontactinfo let-rowData let-columns="columns">
+
+                                    <tr [pSelectableRow]="dealercontactinfo">
+                                        <td>{{dealercontactinfo.DealerInfoId}}</td>
+                                        <td>{{dealercontactinfo.DealerContactInfoCode}}</td>
+                                        <td>{{dealercontactinfo.PersonName}}</td>
+                                        <td>{{dealercontactinfo.PersonDesignation}}</td>
+                                        <td>{{dealercontactinfo.Mobile}}</td>
+                                        <td>{{dealercontactinfo.Email}}</td>
+                                        <td>{{dealercontactinfo.EmergencyContact}}</td>
+                                    </tr>
+                                </ng-template>
+
+                            </p-table>
+                            <!--end grid display -------------->
+                        </div>
+                    </p-tabPanel>
+                </p-tabView>
             </div>
 
             <!--end form display------------->
@@ -321,6 +634,8 @@
                 <button pButton pRipple type="button" (click)="showBasicDialog()" label="New" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
                 <button pButton pRipple type="button" (click)="loadDealerinfoToEdit()" label="Edit" icon="pi pi-pencil" class="risBtn risEdit mr-2 mb-2"></button>
                 <button pButton pRipple type="button" (click)="showDialog()" label="Delete" icon="pi pi-trash" class="risBtn risDelete mr-2 mb-2"></button>
+                <button pButton pRipple type="button" (click)="loadDealerinfoContactGrid()" label="Contact Info" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
+
                 <p-dialog header="Delete Record" [(visible)]="display" [style]="{width: '35vw'}">
                     <p>Do you want to delete this record?</p>
                     <ng-template pTemplate="footer">

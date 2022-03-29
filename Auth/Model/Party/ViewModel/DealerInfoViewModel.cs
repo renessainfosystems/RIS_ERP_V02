@@ -56,7 +56,7 @@ namespace Auth.Model.Party.ViewModel
         public int DistrictId { get; set; }
         public int ThanaId { get; set; }
         public int? ZoneId { get; set; }
-        public string PSArea { get; set; }
+        public string City { get; set; }
         public string PostCode { get; set; }
         public string Block { get; set; }
         public string RoadNo { get; set; }
@@ -112,7 +112,7 @@ namespace Auth.Model.Party.ViewModel
             model.DistrictId = dealer.district_id ?? 0;
             model.ThanaId = dealer.thana_id ?? 0;
             model.ZoneId = dealer.zone_id ?? 0;
-            model.PSArea = dealer.ps_area ?? "";
+            model.City = dealer.city ?? "";
             model.PostCode = dealer.post_code ?? "";
             model.Block = dealer.block ?? "";
             model.RoadNo = dealer.road_no ?? "";
@@ -120,13 +120,6 @@ namespace Auth.Model.Party.ViewModel
             model.FlatNo = dealer.flat_no ?? "";
             model.AddressNote = dealer.address_note ?? "";
             model.IsActive = dealer.is_active ?? false;
-
-            //model.DomicileEnumName = EnumDisplay.GetDisplayName((EnumDomicile)dealer.domicile_enum_id) ?? "";
-            //model.ContinentEnumName = EnumDisplay.GetDisplayName((EnumContinent)dealer.continent_enum_id) ?? "";
-            //model.BusinessTypeEnumName = EnumDisplay.GetDisplayName((EnumBusinessActivities)dealer.business_type_enum_id) ?? "";
-            //model.OrganazationTypeEnumName = EnumDisplay.GetDisplayName((EnumOrganizationType)dealer.organazation_type_enum_id) ?? "";
-            //model.SecurityTypeEnumName = EnumDisplay.GetDisplayName((EnumSecurityType)dealer.security_type_enum_id) ?? "";
-            //model.PreferedMethodEnumName = EnumDisplay.GetDisplayName((EnumPreferredMethod)dealer.prefered_method_enum_id) ?? "";
 
             return model;
         }

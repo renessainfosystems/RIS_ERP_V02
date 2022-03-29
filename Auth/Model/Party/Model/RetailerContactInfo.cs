@@ -37,7 +37,7 @@ namespace Auth.Model.Party.Model
         public int permanent_district_id { get; set; }
         public int permanent_thana_id { get; set; }
         public int? permanent_zone_id { get; set; }
-        public string permanent_ps_area { get; set; }
+        public string permanent_city { get; set; }
         public string permanent_post_code { get; set; }
         public string permanent_block { get; set; }
         public string permanent_road_no { get; set; }
@@ -48,7 +48,7 @@ namespace Auth.Model.Party.Model
         public int present_district_id { get; set; }
         public int present_thana_id { get; set; }
         public int? present_zone_id { get; set; }
-        public string present_ps_area { get; set; }
+        public string present_city { get; set; }
         public string present_post_code { get; set; }
         public string present_block { get; set; }
         public string present_road_no { get; set; }
