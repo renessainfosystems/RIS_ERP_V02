@@ -7,34 +7,34 @@ namespace Auth.Model.Attendance.Model
 {
     public class LeavePolicy
     {
-        //public LeavePolicy()
-        //{
-        //    leave_policy_id = 0;
-        //    leave_policy_name = "";
-        //    code = "";
-        //    default_leave_balance_min = 0;
-        //    leave_head_id = 0;
-        //    default_leave_balance_day = 0;
-        //    max_enjoyable_limit_min = 0;
-        //    max_carry_leave_limit_min = 0;
-        //    attachment_required_for_min = 0;
-        //    purpose_required_for_min = 0;
-        //    max_carry_year = 0;
-        //    area_required_for_min = 0;
-        //    responsible_person_required_for_min = 0;
-        //    notice_period = 0;
-        //    notice_required_for_min = 0;
-        //    earn_day_count = 0;
-        //    encash_leave_balance_limit_min = 0;
-        //    encash_fixed_amount = 0;
-        //    salary_head_id = 0;
-        //    activation_days = 0;
-        //    encash_amount_percent = 0;
-        //    is_active = true;
-        //    remarks = "";
-        //    is_proportionate = false;
+        public LeavePolicy()
+        {
+            leave_policy_id = 0;
+            leave_policy_name = "";
+            code = "";
+            default_leave_balance_min = 0;
+            leave_head_id = 0;
+            default_leave_balance_day = 0;
+            max_enjoyable_limit_min = 0;
+            max_carry_leave_limit_min = 0;
+            attachment_required_for_min = 0;
+            purpose_required_for_min = 0;
+            max_carry_year = 0;
+            area_required_for_min = 0;
+            responsible_person_required_for_min = 0;
+            notice_period = 0;
+            notice_required_for_min = 0;
+            earn_day_count = 0;
+            encash_leave_balance_limit_min = 0;
+            encash_fixed_amount = 0;
+            salary_head_id = 0;
+            activation_days = 0;
+            encash_amount_percent = 0;
+            is_active = true;
+            remarks = "";
+            is_proportionate = false;
 
-        //}
+        }
         public int leave_policy_id { get; set; }
         public string? leave_policy_name { get; set; }
         public string? code { get; set; }
