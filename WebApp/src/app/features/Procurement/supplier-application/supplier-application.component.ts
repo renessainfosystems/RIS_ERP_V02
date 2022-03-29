@@ -290,13 +290,18 @@ export class SupplierApplicationComponent implements OnInit {
 
     //end dropdown List prperty
     // for delete data modal
-    display: boolean = false;
     rowSelected: boolean = false;
     selected = true;
     collapsedempInfo = true;
     collapsedempDetails = false;
     collapsed = false;
     checked: boolean = false;
+
+    // for delete data modaldisplay
+    display: boolean = false;
+    displaySubmit: boolean = false;
+    displayBasic: boolean = false;
+
     showDialog() {
         if (this.rowData == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
@@ -305,10 +310,13 @@ export class SupplierApplicationComponent implements OnInit {
             this.display = true;
     }
 
-    displayBasic: boolean = false;
     showBasicDialog() {
        /* this.resetForm();*/
         this.toggleGridDisplay();
+    }
+
+    showSubmitDialog() {
+        this.displaySubmit = true;
     }
 
 
@@ -413,9 +421,9 @@ export class SupplierApplicationComponent implements OnInit {
         this.locationApplicationForm = this.formbulider.group({
             location_type_id: [null],
             supplier_location_name: [null],
-            country_id_location: [null],
-            division_id_location: [null, [Validators.required]],
-            district_id_location: [null, [Validators.required]],
+            country_id: [null],
+            division_id: [null, [Validators.required]],
+            district_id: [null, [Validators.required]],
             city: [null],
             ps_area: [null],
             post_code: [null],
@@ -694,8 +702,8 @@ export class SupplierApplicationComponent implements OnInit {
     loadAllCountryCboList() {
         this.SupplierApplicationService.getAllCountryCboList().subscribe(data => {
             this.allCountry = data;
-            //this.allCountryAssociation = data;
-            //this.allCountryLocation = data;
+            this.allCountryAssociation = data;
+            this.allCountryLocation = data;
         });
     }
 
@@ -709,15 +717,16 @@ export class SupplierApplicationComponent implements OnInit {
             this.allDivision = null;
     }
 
-    //onSelectByCountryIdLocation(countryId: Number) {
-    //    if (countryId != null) {
-    //        this.SupplierApplicationService.getAllDivisionCboListByCountryId(countryId).subscribe(data => {
-    //            this.allDivisionLocation = data;
-    //        });
-    //    }
-    //    else
-    //        this.allDivisionLocation = null;
-    //}
+    onSelectByCountryIdLocation(countryId: Number) {
+        if (countryId != null) {
+            this.SupplierApplicationService.getAllDivisionCboListByCountryId(countryId).subscribe(data => {
+                debugger
+                this.allDivisionLocation = data;
+            });
+        }
+        else
+            this.allDivisionLocation = null;
+    }
 
     onSelectByDivisionId(divisionId: Number) {
         if (divisionId != null) {
@@ -730,32 +739,17 @@ export class SupplierApplicationComponent implements OnInit {
 
     }
 
-    onSelectByDistrictId(districtId: Number) {
-        if (districtId != null) {
-            this.SupplierApplicationService.getAllThanaCboListByDistrictId(districtId).subscribe(data => {
-                this.allThana = data;
+
+    onSelectByDivisionIdLocation(divisionId: Number) {
+        if (divisionId != null) {
+            this.SupplierApplicationService.getAllDistrictCboListByDivisionId(divisionId).subscribe(data => {
+                this.allDistrictLocation = data;
             });
         }
         else
-            this.allThana = null;
+            this.allDistrictLocation = null;
+
     }
-
-    loadAllZoneCboList() {
-        this.SupplierApplicationService.getAllZone().subscribe(data => {
-            this.allZone = data;
-        });
-    }
-
-    //onSelectByDivisionIdLocation(divisionId: Number) {
-    //    if (divisionId != null) {
-    //        this.SupplierApplicationService.getAllDistrictCboListByDivisionId(divisionId).subscribe(data => {
-    //            this.allDistrictLocation = data;
-    //        });
-    //    }
-    //    else
-    //        this.allDistrictLocation = null;
-
-    //}
 
     //Business dd load
 
@@ -771,10 +765,12 @@ export class SupplierApplicationComponent implements OnInit {
         });
     }
 
-    onSelectBySectorId() {
-        let IndustrysectorObj = this.businessApplicationForm.get('industry_sector_id')?.value;
-        let IndustrySectorId = IndustrysectorObj.industry_sector_id;
+    onSelectBySectorId(IndustrySectorId: Number) {
+        //debugger
+        //let IndustrysectorObj = this.businessApplicationForm.get('industry_sector_id')?.value;
+        //let IndustrySectorId = IndustrysectorObj.industry_sector_id;
         if (IndustrySectorId != null) {
+            debugger
             this.SupplierApplicationService.getAllIndustrySubSectorCboList(IndustrySectorId).subscribe(data => {
                 this.allSubSector = data;
             });
@@ -1001,9 +997,9 @@ export class SupplierApplicationComponent implements OnInit {
     }
 
 
-    onSelectByBankTypeId() {
-        let bankTypeObj = this.bankingApplicationForm.get('bank_type_id')?.value;
-        let bankTypeId = bankTypeObj.bank_type_id;
+    onSelectByBankTypeId(bankTypeId: Number) {
+        //let bankTypeObj = this.bankingApplicationForm.get('bank_type_id')?.value;
+        //let bankTypeId = bankTypeObj.bank_type_id;
         if (bankTypeId != null) {
             this.SupplierApplicationService.getAllBankCboListByBankTypeId(bankTypeId).subscribe(data => {
                 this.allBank = data;
@@ -1071,7 +1067,6 @@ export class SupplierApplicationComponent implements OnInit {
             this.supplierApplicationForm.controls['division_id'].setValue(data.DivisionId);
             this.onSelectByDivisionId(data.DivisionId);
             this.supplierApplicationForm.controls['district_id'].setValue(data.DistrictId);
-         /*   this.onSelectByDistrictId(data.DistrictId);*/
             this.supplierApplicationForm.controls['city'].setValue(data.City);
             this.supplierApplicationForm.controls['ps_area'].setValue(data.PsArea);
             this.supplierApplicationForm.controls['post_code'].setValue(data.PostCode);
@@ -1295,32 +1290,32 @@ export class SupplierApplicationComponent implements OnInit {
         this.display = false;
     }
 
-    //submitSupplierInfo() {
-    //    if (this.rowData == null) {
-    //        return this.notifyService.ShowNotification(3, 'Please select row');
-    //    }
-    //    let supplierId = this.rowData.SupplierId;
+    submitSupplierInfo() {
+        if (this.rowData == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+        let supplierId = this.rowData.SupplierId;
 
-    //    if (this.bankingDataSources.length == 0) {
-    //        return this.notifyService.ShowNotification(2, "Please add at least one Bank Account Information")
-    //    }
-    //    if (this.SecurityDepositDataSources.length == 0) {
-    //        return this.notifyService.ShowNotification(2, "Please add Security Deposit")
-    //    }
-    //    else {
-    //        this.SupplierApplicationService.SubmitSupplierInfoData(supplierId).subscribe(data => {
-    //            this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage);
-    //            this.displaySubmit = false;
-    //            this.loadAllSupplierinfos();
-    //            this.resetForm();
-    //            this.index = (this.index === 3) ? 0 : this.index + 1;
-    //            this.index = 0;
-    //            this.collapsedBasicInfo = true;
-    //            this.collapsedBasicDetails = false;
-    //        });
-    //    }
+        if (this.bankingDataSources.length == 0) {
+            return this.notifyService.ShowNotification(2, "Please add at least one Bank Account Information")
+        }
+        if (this.SecurityDepositDataSources.length == 0) {
+            return this.notifyService.ShowNotification(2, "Please add Security Deposit")
+        }
+        else {
+            this.SupplierApplicationService.SubmitSupplierInfoData(supplierId).subscribe(data => {
+                this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage);
+                this.displaySubmit = false;
+                this.loadAllSupplierinfos();
+                this.resetForm();
+                this.index = (this.index === 3) ? 0 : this.index + 1;
+                this.index = 0;
+                //this.collapsedBasicInfo = true;
+                //this.collapsedBasicDetails = false;
+            });
+        }
 
-    //}
+    }
 
     //Business Submit
     addSubSectorToTable(a) {
@@ -1664,7 +1659,7 @@ export class SupplierApplicationComponent implements OnInit {
         if (!(locationData.supplier_location_name)) {
             return this.notifyService.ShowNotification(2, "Please input Location Name")
         }
-        if (!(locationData.country_id_location)) {
+        if (!(locationData.country_id)) {
             return this.notifyService.ShowNotification(2, "Please select Country")
         }
         if (!(locationData.division_id_location)) {
@@ -1708,7 +1703,7 @@ export class SupplierApplicationComponent implements OnInit {
 
             else {
                 locationData.supplier_id = this.rowData.SupplierId;
-                locationData.country_id = locationData.country_id_location;
+                locationData.country_id = locationData.country_id;
                 locationData.division_id = locationData.division_id_location;
                 locationData.district_id = locationData.district_id_location;
 
