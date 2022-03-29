@@ -1,4 +1,3 @@
-
 <div class="grid">
     <div class="col-12">
         <div class="card">
@@ -583,7 +582,7 @@
                                 <p>Do you want to delete this record?</p>
                                 <ng-template pTemplate="footer">
                                     <button class="pi pi-times risBtn risClose" (click)="display=false"> No</button>
-                                    <button class="pi pi-check risBtn risSave" (click)="deleteLocationInfo()"> Yes</button>
+                                    <button class="pi pi-check risBtn risSave" (click)="deleteDealerContactinfo()"> Yes</button>
                                 </ng-template>
                             </p-dialog>
 
@@ -696,7 +695,7 @@
                                 <p-tabPanel header="Address Info">
                                     <form action="" [formGroup]="dealerlocationForm">
                                         <div class="col-12">
-                                            <div class="p-fluid p-formgrid grid">                                                
+                                            <div class="p-fluid p-formgrid grid">
                                                 <div class="field col-12 md:col-6">
                                                     <label pTooltip="Country" tooltipPosition="top">Country<span class="req">*</span></label>
                                                     <p-dropdown [options]="allCountry" formControlName="country_id" [ngClass]="{ 'is-invalid': submittedLocation && h.country_id.errors }" placeholder="---Select---"
@@ -757,7 +756,7 @@
                                                 <div class="field col-12 md:col-6">
                                                     <label pTooltip="Flat No" tooltipPosition="top">Flat No </label>
                                                     <input type="text" formControlName="flat_no" placeholder="" pInputText />
-                                                </div>                                               
+                                                </div>
                                                 <div class="field col-12">
                                                     <label pTooltip="Address Note" tooltipPosition="top">Address Note </label>
                                                     <input type="text" formControlName="address_note" [ngClass]="{ 'is-invalid': submittedLocation && h.address_note.errors }" placeholder="" pInputText />
@@ -784,7 +783,7 @@
                                 <p>Do you want to delete this record?</p>
                                 <ng-template pTemplate="footer">
                                     <button class="pi pi-times risBtn risClose" (click)="display=false"> No</button>
-                                    <button class="pi pi-check risBtn risSave" (click)="deleteLocationInfo()"> Yes</button>
+                                    <button class="pi pi-check risBtn risSave" (click)="deleteDealerLocationinfo()"> Yes</button>
                                 </ng-template>
                             </p-dialog>
 
@@ -826,9 +825,7 @@
                     </p-tabPanel>
                 </p-tabView>
             </div>
-
             <!--end form display------------->
-
             <div [hidden]="gridDisplay">
                 <button pButton pRipple type="button" (click)="showBasicDialog()" label="New" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
                 <button pButton pRipple type="button" (click)="loadDealerinfoToEdit()" label="Edit" icon="pi pi-pencil" class="risBtn risEdit mr-2 mb-2"></button>
@@ -840,7 +837,7 @@
                     <p>Do you want to delete this record?</p>
                     <ng-template pTemplate="footer">
                         <button class="pi pi-times risBtn risClose" (click)="display=false"> No</button>
-                        <button class="pi pi-check risBtn risSave" (click)="deleteLocationInfo()"> Yes</button>
+                        <button class="pi pi-check risBtn risSave" (click)="deleteDealerinfo()"> Yes</button>
                     </ng-template>
                 </p-dialog>
 

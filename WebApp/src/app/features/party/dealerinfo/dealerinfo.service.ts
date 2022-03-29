@@ -38,7 +38,7 @@ export class DealerInfoService {
         return this.http.get<any[]>(this.ipconfig.base_IP + 'DealerInfo/GetAllDealerInfo', httpOptions);
 
     }
-    getDealerInfoById(dealer_info_id: Number): Observable<any> {
+    getDealerInfoById(dealer_info_id: number): Observable<any> {
         return this.http.get(this.ipconfig.base_IP + 'DealerInfo/GetDealerInfoById?dealer_info_id=' + dealer_info_id, httpOptions);
     }
 

@@ -579,9 +579,7 @@ export class DealerinfoComponent implements OnInit {
         });
         this.showBasicDialogLocationEdit();
         this.index = 5;
-    }
-
-    
+    }      
 
     deleteDealerinfo() {
         this.showDialog();
@@ -589,10 +587,11 @@ export class DealerinfoComponent implements OnInit {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
 
-        let dealerinfoId = this.rowData.dealerinfo_id;
-        this.dealerinfoService.getDealerInfoById(dealerinfoId).subscribe(data => {
-
-            this.loadAllDealerinfos();
+        let dealerinfoId = this.rowData.DealerInfoId;
+        this.dealerinfoService.deleteDealerInfo(dealerinfoId).subscribe(data => {
+            if (data.MessageType == 1) {
+                this.dealerinfoList.splice(this.dealerinfoList.findIndex(item => item.DealerInfoId === data.dealerinfoId), 1);
+            }
             this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
         });
         this.display = false;
@@ -1131,6 +1130,21 @@ export class DealerinfoComponent implements OnInit {
         this.formDisplayContact = false;
     }
 
+    deleteDealerContactinfo() {
+        this.showDialog();
+        if (this.rowData == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+        let dealerContactinfoId = this.rowData.DealerContactInfoId;
+        this.dealerinfoService.deleteDealerContactInfo(dealerContactinfoId).subscribe(data => {
+            if (data.MessageType == 1) {
+                this.dealercontactinfoList.splice(this.dealercontactinfoList.findIndex(item => item.DealerContactInfoId === data.dealerContactinfoId), 1);
+            }
+            this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
+        });
+        this.display = false;
+    }
+
     onSelectContactImage(event) {
 
         if (event.target.files) {
@@ -1280,6 +1294,21 @@ export class DealerinfoComponent implements OnInit {
         });
         this.gridDisplayLocation = true;
         this.formDisplayLocation = false;
+    }
+
+    deleteDealerLocationinfo() {
+        this.showDialog();
+        if (this.rowData == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+        let dealerLocationinfoId = this.rowData.DealerLocationInfoId;
+        this.dealerinfoService.deleteDealerContactInfo(dealerLocationinfoId).subscribe(data => {
+            if (data.MessageType == 1) {
+                this.dealerlocationinfoList.splice(this.dealerlocationinfoList.findIndex(item => item.DealerLocationInfoId === data.dealerLocationinfoId), 1);
+            }
+            this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
+        });
+        this.display = false;
     }
 
     
