@@ -28,10 +28,10 @@ export class LeavePolicyService {
         return this.http.post<any>(this.ipconfig.base_IP + 'LeavePolicy/Approve', { leave_policy_id }, httpOptions);
 
     }
-    Copy(leavePolicy: any): Observable<any> {
+    Copy(leave_policy_id: any): Observable<any> {
 
         return this.http.post<any>(this.ipconfig.base_IP + 'LeavePolicy/Copy', {
-            leavePolicy
+            leave_policy_id
         }, httpOptions);
 
     }
@@ -53,9 +53,9 @@ export class LeavePolicyService {
 
         return this.http.get(this.ipconfig.base_IP + 'LeavePolicy/GetAllLeavePolicy', httpOptions);
     }
-    getLeavePolicyByName(): Observable<any> {
+    getLeavePolicyByName(policy_or_leave_name: string): Observable<any> {
 
-        return this.http.get(this.ipconfig.base_IP + 'LeavePolicy/GetLeavePolicyByName', httpOptions);
+        return this.http.get(this.ipconfig.base_IP + 'LeavePolicy/GetLeavePolicyByName?policy_or_leave_name='+policy_or_leave_name, httpOptions);
     }
     getPrimarySalaryHeadForDP(): Observable<any[]> {
         let salary_head_type_id = 1;
@@ -64,7 +64,7 @@ export class LeavePolicyService {
     }
     getAllLeaveHeadForDP(): Observable<any[]> {
 
-        return this.http.get<any[]>(this.ipconfig.base_IP + 'LeaveHead/GetAllLeaveHeadForDP', httpOptions);
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'LeaveHead/GetAllLeaveHead', httpOptions);
 
     }
 }
