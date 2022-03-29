@@ -123,7 +123,12 @@ export class EmployeebasicinfoComponent implements OnInit {
     }
     onGeneral(): void {
         this.submitted = true;
-        const employeedata = this.employeeForm.value;
+        if (this.employeeForm.invalid) {
+            return;
+        }
+        const data = this.employeeForm.value;
+
+       
         //if (companydata.company_group_id === null) {
         //    return;
         //}
@@ -140,9 +145,65 @@ export class EmployeebasicinfoComponent implements OnInit {
         //    return;
         //}
         //else {
+
+
+        //if (!(data.code)) {
+        //    return this.notifyService.ShowNotification(2, "Please enter Code")
+        //}
+        //if (!(data.first_name)) {
+        //    return this.notifyService.ShowNotification(2, "Please enter First Name")
+        //}
+        //if (!(data.sur_name)) {
+        //    return this.notifyService.ShowNotification(2, "Please enter Sure Name")
+        //}
+        //if (!(data.marital_status_enum_id)) {
+        //    return this.notifyService.ShowNotification(2, "Please select Marital Status")
+        //}
+
+        //if (!(data.personal_phone)) {
+        //    return this.notifyService.ShowNotification(2, "Please enter Personal Phone")
+        //} if (!(data.personal_email)) {
+        //    return this.notifyService.ShowNotification(2, "Please enter Personal Email")
+        //} if (!(data.date_of_birth)) {
+        //    return this.notifyService.ShowNotification(2, "Please enter Date Of Birth")
+        //} if (!(data.national_id)) {
+        //    return this.notifyService.ShowNotification(2, "Please enter National Id")
+        //} if (!(data.nationality_id)) {
+        //    return this.notifyService.ShowNotification(2, "Please select Nationality")
+        //} if (!(data.country_of_birth_id)) {
+        //    return this.notifyService.ShowNotification(2, "Please select Country Of Birth")
+        //}
+        //if (!(data.ethnicity_id)) {
+        //    return this.notifyService.ShowNotification(2, "Please select Ethnicity")
+        //}
+        //if (!(data.gender_enum_id)) {
+        //    return this.notifyService.ShowNotification(2, "Please select Gender")
+        //} if (!(data.mother_name)) {
+        //    return this.notifyService.ShowNotification(2, "Please select Mother Name")
+        //} if (!(data.religion_enum_id)) {
+        //    return this.notifyService.ShowNotification(2, "Please select Religion")
+        //} if (!(data.residentcial_status_enum_id)) {
+        //    return this.notifyService.ShowNotification(2, "Please select Residentcial Status")
+        //} if (!(data.father_name)) {
+        //    return this.notifyService.ShowNotification(2, "Please intput father name.")
+        //} if (!(data.father_name)) {
+        //    return this.notifyService.ShowNotification(2, "Please intput father name.")
+        //}
+        //if (this.isEmployeeEdit) {
+        //    if (!(data.present_country_id)) {
+        //        return this.notifyService.ShowNotification(2, "Please select present country.")
+        //    }
+        //    if (!(data.present_division_id)) {
+        //        return this.notifyService.ShowNotification(2, "Please select present division.")
+        //    }
+        //    if (!(data.present_district_id)) {
+        //        return this.notifyService.ShowNotification(2, "Please select present district.")
+        //    }
+        //}
         if (this.isEmployeeEdit == true) {
             this.openNext();
         } else {
+
             this.onFormSubmit();
             this.openNext();
         }
@@ -249,15 +310,15 @@ export class EmployeebasicinfoComponent implements OnInit {
       code: [null, [Validators.required]],
       employee_name: [null, [Validators.required]],
       first_name: [null, [Validators.required]],
-      middle_name: [null, [Validators.required]],
+      middle_name: [null],
       sur_name: ['', [Validators.required]],
-      father_name: ['', [Validators.required]],
-      mother_name: ['', [Validators.required]],
+      father_name: [null, [Validators.required]],
+      mother_name: [null, [Validators.required]],
       spouse_name: ['', [Validators.required]],
       date_of_marriage: ['', [Validators.required]],
       personal_phone: ['', [Validators.required]],
       official_phone: ['', [Validators.required]],
-      personal_email: ['', [Validators.required]],
+      personal_email: ['', [Validators.email, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
       official_email: ['', [Validators.required]],
       date_of_birth: ['', [Validators.required]],
       identification_mark: ['', [Validators.required]],
@@ -286,8 +347,8 @@ export class EmployeebasicinfoComponent implements OnInit {
       ethnicity_id: ['', [Validators.required]],
       EthnicityName: ['', [Validators.required]],
 
-      present_country_id: [null, [Validators.required]],
-      present_division_id: [null, [Validators.required]],
+      present_country_id: [null],
+      present_division_id: [null],
       present_district_id: [null, [Validators.required]],
       present_ps_area: ['', [Validators.required]],
       present_city: ['', [Validators.required]],
@@ -557,6 +618,19 @@ export class EmployeebasicinfoComponent implements OnInit {
       return this.notifyService.ShowNotification(2, "Please select Residentcial Status")
     } if (!(data.father_name)) {
       return this.notifyService.ShowNotification(2, "Please intput father name.")
+    }if (!(data.father_name)) {
+      return this.notifyService.ShowNotification(2, "Please intput father name.")
+        }
+    if (this.isEmployeeEdit) {
+        if (!(data.present_country_id)) {
+            return this.notifyService.ShowNotification(2, "Please select present country.")
+        }
+        if (!(data.present_division_id)) {
+            return this.notifyService.ShowNotification(2, "Please select present division.")
+        }
+        if (!(data.present_district_id)) {
+            return this.notifyService.ShowNotification(2, "Please select present district.")
+        }
     }
     let formData = new FormData();
     for (const key of Object.keys(this.employeeForm.value)) {
@@ -568,7 +642,7 @@ export class EmployeebasicinfoComponent implements OnInit {
       else if (key == "date_of_birth") {
         let date = new Date(value).toISOString();
         formData.append("date_of_birth", date);
-      }
+      }     
       else {
 
         formData.append(key, value);

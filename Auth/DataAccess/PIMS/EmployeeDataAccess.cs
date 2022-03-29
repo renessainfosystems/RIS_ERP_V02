@@ -229,14 +229,14 @@ namespace Auth.DataAccess.PIMS
             try
             {
                 string sql = @"SELECT [employee_id] ,[code] ,[title_enum_id] ,[employee_name],[first_name],[middle_name],[sur_name],[father_name]
-      ,[mother_name],[gender_enum_id],[marital_status_enum_id],[spouse_name],[date_of_marriage],[personal_phone],[official_phone]
-      ,[personal_email],[official_email],[date_of_birth],[identification_mark],[national_id],[passport_no],[birth_id],[driving_license_no]
-      ,[nationality_id],[religion_enum_id],[country_of_birth_id],[blood_group_enum_id],[ethnicity_id],[residentcial_status_enum_id]
-      ,[present_country_id],[present_division_id],[present_district_id],[present_city],[present_ps_area],[present_post_code]
-      ,[present_block],[present_road_no],[present_house_no],[present_flat_no],[present_address_note],[permanent_country_id],[permanent_division_id]
-      ,[permanent_district_id],[permanent_city],[permanent_ps_area],[permanent_post_code],[permanent_block],[permanent_road_no],[permanent_house_no]
-      ,[permanent_flat_no],[permanent_address_note],[company_corporate_id],[company_group_id],[company_id],[created_user_id],[created_datetime]
-      ,[updated_user_id],[updated_datetime],[db_server_date_time],[is_active],[employee_old_id],[employee_old_code]FROM [PIMS].[Employee] O WHERE O.company_group_id =@company_group_id";
+                            ,[mother_name],[gender_enum_id],[marital_status_enum_id],[spouse_name],[date_of_marriage],[personal_phone],[official_phone]
+                            ,[personal_email],[official_email],[date_of_birth],[identification_mark],[national_id],[passport_no],[birth_id],[driving_license_no]
+                            ,[nationality_id],[religion_enum_id],[country_of_birth_id],[blood_group_enum_id],[ethnicity_id],[residentcial_status_enum_id]
+                            ,[present_country_id],[present_division_id],[present_district_id],[present_city],[present_ps_area],[present_post_code]
+                            ,[present_block],[present_road_no],[present_house_no],[present_flat_no],[present_address_note],[permanent_country_id],[permanent_division_id]
+                            ,[permanent_district_id],[permanent_city],[permanent_ps_area],[permanent_post_code],[permanent_block],[permanent_road_no],[permanent_house_no]
+                            ,[permanent_flat_no],[permanent_address_note],[company_corporate_id],[company_group_id],[company_id],[created_user_id],[created_datetime]
+                            ,[updated_user_id],[updated_datetime],[db_server_date_time],[is_active],[employee_old_id],[employee_old_code]FROM [PIMS].[Employee] O WHERE O.company_group_id =@company_group_id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@company_group_id", company_group_id);
                 dynamic data = await _dbConnection.QueryAsync<dynamic>(sql,parameters);
@@ -273,14 +273,14 @@ namespace Auth.DataAccess.PIMS
             try
             {
                 var sql = @"SELECT [employee_id] ,[code] ,[title_enum_id] ,[employee_name],[first_name],[middle_name],[sur_name],[father_name]
-      ,[mother_name],[gender_enum_id],[marital_status_enum_id],[spouse_name],[date_of_marriage],[personal_phone],[official_phone]
-      ,[personal_email],[official_email],[date_of_birth],[identification_mark],[national_id],[passport_no],[birth_id],[driving_license_no]
-      ,[nationality_id],[religion_enum_id],[country_of_birth_id],[blood_group_enum_id],[ethnicity_id],[residentcial_status_enum_id]
-      ,[present_country_id],[present_division_id],[present_district_id],[present_city],[present_ps_area],[present_post_code]
-      ,[present_block],[present_road_no],[present_house_no],[present_flat_no],[present_address_note],[permanent_country_id],[permanent_division_id]
-      ,[permanent_district_id],[permanent_city],[permanent_ps_area],[permanent_post_code],[permanent_block],[permanent_road_no],[permanent_house_no]
-      ,[permanent_flat_no],[permanent_address_note],[company_corporate_id],[company_group_id],[company_id],[created_user_id],[created_datetime]
-      ,[updated_user_id],[updated_datetime],[db_server_date_time],[is_active],[employee_old_id],[employee_old_code],[employee_image_path],[signature_image_path]FROM[PIMS].[Employee] O WHERE o.employee_id=@employee_id";
+                        ,[mother_name],[gender_enum_id],[marital_status_enum_id],[spouse_name],[date_of_marriage],[personal_phone],[official_phone]
+                        ,[personal_email],[official_email],[date_of_birth],[identification_mark],[national_id],[passport_no],[birth_id],[driving_license_no]
+                        ,[nationality_id],[religion_enum_id],[country_of_birth_id],[blood_group_enum_id],[ethnicity_id],[residentcial_status_enum_id]
+                        ,[present_country_id],[present_division_id],[present_district_id],[present_city],[present_ps_area],[present_post_code]
+                        ,[present_block],[present_road_no],[present_house_no],[present_flat_no],[present_address_note],[permanent_country_id],[permanent_division_id]
+                        ,[permanent_district_id],[permanent_city],[permanent_ps_area],[permanent_post_code],[permanent_block],[permanent_road_no],[permanent_house_no]
+                        ,[permanent_flat_no],[permanent_address_note],[company_corporate_id],[company_group_id],[company_id],[created_user_id],[created_datetime]
+                        ,[updated_user_id],[updated_datetime],[db_server_date_time],[is_active],[employee_old_id],[employee_old_code],[employee_image_path],[signature_image_path]FROM[PIMS].[Employee] O WHERE o.employee_id=@employee_id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@employee_id", employee_id);
 
