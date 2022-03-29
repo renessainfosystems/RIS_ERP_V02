@@ -140,7 +140,7 @@ export class DealerinfoComponent implements OnInit {
     }
 
     showBasicDialogContactNew() {
-        this.dealercontactForm.reset();
+        //this.dealercontactForm.reset();
         this.toggleGridDisplay();
         this.dealerContactIndex();
         this.gridDisplayContact = true;
@@ -294,7 +294,7 @@ export class DealerinfoComponent implements OnInit {
             dealer_info_id: [null],
             person_name: ['', [Validators.required]],
             person_designation: ['', [Validators.required]],
-            father_name: [null],
+            father_name: ['test'],
             mother_name: [null],
             date_of_birth: [null],
             religion_enum_id: [0],
@@ -306,7 +306,7 @@ export class DealerinfoComponent implements OnInit {
             phone: [null],
             email: ['', [Validators.email, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
             emergency_contact: [null],
-            blood_group_enum_id: [0],
+            blood_group_enum_id: 0,
             image_path: [null],
             permanent_country_id: [0, [Validators.required]],
             permanent_division_id: [0, [Validators.required]],
@@ -910,6 +910,26 @@ export class DealerinfoComponent implements OnInit {
         return this.dealercontactForm.controls;
     }
 
+    onContactBasic(): void {
+        this.submittedContact = true;
+        const data = this.dealercontactForm.value;
+        if ((data.person_name == "") || (data.person_name == null) || (data.person_name == undefined)) {
+            return;
+        }
+        else if ((data.person_designation == "") || (data.person_designation == null) || (data.person_designation == undefined)) {
+            return;
+        }
+        else if ((data.mobile == "") || (data.mobile == null) || (data.mobile == undefined)) {
+            return;
+        }
+        else {
+            this.openNextContact();
+        }
+        if (this.dealercontactForm.invalid) {
+            return;
+        }
+    }
+
     SaveDealerContactInfo() {
         this.submittedContact = true;
         const data = this.dealercontactForm.value;        
@@ -944,12 +964,14 @@ export class DealerinfoComponent implements OnInit {
                     this.dealercontactinfoList.splice(this.dealercontactinfoList.findIndex(item => item.DealerContactInfoId === data.dealerContactinfoId), 1);
                     this.dealercontactinfoList.unshift(result.Data);
                     this.selecteddealerinfo = result.Data;
-                    this.rowData = result.Data;                    
-                    this.dealerContactIndex();
+                    this.rowData = result.Data;
+                    this.onRowUnselect(event);
+                    this.dealerContactIndex();                    
                 }
 
             });
-            
+            this.gridDisplayContact = false;
+            this.formDisplayContact = true;
         }
         else {
             formData.append("dealer_info_id", this.rowData.DealerInfoId);
@@ -960,16 +982,16 @@ export class DealerinfoComponent implements OnInit {
                     if (result.MessageType == 1) {
                         this.dealercontactinfoList.unshift(result.Data);
                         this.selecteddealercontactinfo = result.Data;
-                        this.nodeSelected = true;
-                        this.rowData = result.Data;                        
+                        this.rowData = result.Data;
+                        this.onRowUnselect(event);
                         this.dealerContactIndex();
                     }
                 }
             );
-            
+            this.gridDisplayContact = false;
+            this.formDisplayContact = true;
         }       
-        this.gridDisplayContact = false;
-        this.formDisplayContact = true;
+        
     }
 
     loadDealerContactinfoToEdit() {
@@ -1197,6 +1219,7 @@ export class DealerinfoComponent implements OnInit {
         
     dealerContactIndex() {
         this.index = 4;
+        this.indexContact = 0;
     }
 
     
@@ -1218,9 +1241,11 @@ export class DealerinfoComponent implements OnInit {
 
 
     // Contact Infomation Start
+
     functionContact(e) {
         this.indexContact = e.indexContact;
     }
+
     openNextContact() {
         this.indexContact = (this.indexContact === 1) ? 0 : this.indexContact + 1;
     }

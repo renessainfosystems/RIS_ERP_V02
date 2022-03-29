@@ -313,7 +313,7 @@
                     </p-tabPanel>
                     <p-tabPanel header="Contact Info">
                         <div [hidden]="formDisplayContact">
-                            <p-tabView [(activeIndex)]="indexContact">
+                            <p-tabView [(activeIndex)]="indexContact" (onChange)="functionContact($event)">
                                 <p-tabPanel header="Basic Info">
                                     <form action="" [formGroup]="dealercontactForm">
                                         
@@ -364,7 +364,7 @@
 
                                                 </div>
                                                 <div class="field col-12 md:col-6">
-                                                    <label pTooltip="Religion" tooltipPosition="top">Religion</label>
+                                                    <label pTooltip="Religion" tooltipPosition="top">Blood Group</label>
                                                     <p-dropdown [options]="allBloodGroup" formControlName="blood_group_enum_id" placeholder="---Select---"
                                                                 optionLabel="blood_group_enum_name" optionValue="blood_group_enum_id" [showClear]="true" [filter]="true" filterBy="blood_group_enum_name"></p-dropdown>
 
@@ -414,7 +414,7 @@
                                     </form>
                                     <div class="flex justify-content-end pr-2">
                                         <button pButton pRipple type="button" (click)="openPrevContact()" label="Previous" class="risBtn  mr-2 mb-2" icon="pi pi-step-backward"></button>
-                                        <button pButton pRipple type="button" (click)="openNextContact()" label="Next" class="risBtn risSave mr-2 mb-2" icon="pi pi-step-forward"></button>
+                                        <button pButton pRipple type="button" (click)="onContactBasic()" label="Next" class="risBtn mr-2 mb-2" icon="pi pi-step-forward"></button>
                                         <button pButton pRipple type="button" (click)="toggleFormCloseContact()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
                                     </div>
                                 </p-tabPanel>
@@ -569,7 +569,7 @@
                                     </form>
                                     <div class="flex justify-content-end pr-2">
                                         <button pButton pRipple type="button" (click)="openPrevContact()" label="Previous" class="risBtn  mr-2 mb-2" icon="pi pi-step-backward"></button>
-                                        <button pButton pRipple type="button" (click)="SaveDealerContactInfo()" label="Save" class="risBtn  mr-2 mb-2" icon="pi pi-check"></button>
+                                        <button pButton pRipple type="button" (click)="SaveDealerContactInfo()" label="Save" class="risBtn risSave mr-2 mb-2" icon="pi pi-check"></button>
                                         <button pButton pRipple type="button" (click)="toggleFormCloseContact()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
                                     </div>
                                 </p-tabPanel>
@@ -591,7 +591,7 @@
                                      [(selection)]="selecteddealercontactinfo" dataKey="DealerContactInfoId" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
                                 <ng-template pTemplate="header">
                                     <tr>
-                                        <th pSortableColumn="PersonalPhone">Id</th>
+                                        <!--<th pSortableColumn="PersonalPhone">Id</th>-->
                                         <th pSortableColumn="Code">
                                             Dealer Contact Code
                                             <p-columnFilter type="text" field="DealerContactInfoCode" display="menu"></p-columnFilter>
@@ -611,7 +611,7 @@
                                 <ng-template pTemplate="body" let-dealercontactinfo let-rowData let-columns="columns">
 
                                     <tr [pSelectableRow]="dealercontactinfo">
-                                        <td>{{dealercontactinfo.DealerInfoId}}</td>
+                                        <td hidden>{{dealercontactinfo.DealerInfoId}}</td>
                                         <td>{{dealercontactinfo.DealerContactInfoCode}}</td>
                                         <td>{{dealercontactinfo.PersonName}}</td>
                                         <td>{{dealercontactinfo.PersonDesignation}}</td>
