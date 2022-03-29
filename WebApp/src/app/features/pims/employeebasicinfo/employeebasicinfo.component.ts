@@ -1,10 +1,11 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { NavigationEnd } from '@angular/router';
 import { NotificationService } from '../../../service/CommonMessage/notification.service';
-
+import { ToastrService } from 'ngx-toastr';
 import Employee from './employeebasicinfo.model';
 import { EmployeeService } from './employeebasicinfo.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-employeebasicinfo',
@@ -12,6 +13,28 @@ import { EmployeeService } from './employeebasicinfo.service';
   styleUrls: ['./employeebasicinfo.component.css']
 })
 export class EmployeebasicinfoComponent implements OnInit {
+
+
+    companyForm: FormGroup;
+    submitted = false;
+
+    //start grid and form show hide ********************
+    gridDisplay = false;
+    formDisplay = true;
+    toggleFormDisplay() {
+        this.gridDisplay = false;
+        this.formDisplay = true;
+    }
+    toggleGridDisplay() {
+        this.gridDisplay = true;
+        this.formDisplay = false;
+    }
+    toggleFormClose() {
+        this.toggleFormDisplay();
+        this.generalIndex();
+    }
+    //end grid and form show hide ********************
+
   @ViewChild('employeeImage', {
     static: true
   }) employeeImage;
@@ -61,6 +84,7 @@ export class EmployeebasicinfoComponent implements OnInit {
   selectedPermanentDistrict: Employee;//Present District Selected Row List
   first = 0;
   rows = 10;
+  index: number = 0;
   //end dropdown List prperty
   rowData: any;
   // for delete data modal
@@ -81,10 +105,46 @@ export class EmployeebasicinfoComponent implements OnInit {
     else
       this.display = true;
   }
+    generalIndex() {
+        this.index = 0;
+    }
+    function(e) {
+        this.index = e.index;
+    }
+    openNext() {
+        this.index = (this.index === 3) ? 0 : this.index + 1;
+    }
 
+    openPrev() {
+        this.index = (this.index === 0) ? 3 : this.index - 1;
+    }
+    get f(): { [key: string]: AbstractControl } {
+        return this.employeeForm.controls;
+    }
+    onGeneral(): void {
+        this.submitted = true;
+        if (this.employeeForm.invalid) {
+            return;
+        }
+        const data = this.employeeForm.value;
+
+       
+        if (this.isEmployeeEdit == true) {
+            this.openNext();
+        } else {
+
+            this.onFormSubmit();
+            this.openNext();
+        }
+           
+       // }
+        //if (this.employeeForm.invalid) {
+        //    return;
+        //}
+    }
   // for photo and signature upload
 
-  photourllink: string = "assets/images/user-photo1.png";
+    photourllink: string = "assets/images/defaultimg.jpeg";
   selectFile(event) {
     if (event.target.files) {
       var reader = new FileReader()
@@ -96,6 +156,7 @@ export class EmployeebasicinfoComponent implements OnInit {
   }
 
   sigurllink: string = "assets/images/user-signature1.png";
+    //sigurllink: string = "assets/images/defaultimg.jpeg";
   selectSig(event) {
     if (event.target.files) {
       var reader = new FileReader()
@@ -116,8 +177,16 @@ export class EmployeebasicinfoComponent implements OnInit {
       }
     }
   }
+    showBasicDialog() {
+    //this.resetForm();
+    this.toggleGridDisplay();    
+    }
 
-  constructor(private formbulider: FormBuilder, private notifyService: NotificationService, private employeeService: EmployeeService) { }
+
+    //resetForm() {
+    //    this.employeeForm.reset();
+    //}
+    constructor(private formbulider: FormBuilder, private notifyService: NotificationService, private employeeService: EmployeeService, private toastr: ToastrService) { }
 
   clear() {
     this.employeeForm = this.formbulider.group({
@@ -167,72 +236,66 @@ export class EmployeebasicinfoComponent implements OnInit {
   }
   ngOnInit(): void {
     this.employeeForm = this.formbulider.group({    
-      code: [null, [Validators.required]],
-      employee_name: [null, [Validators.required]],
-      first_name: [null, [Validators.required]],
-      middle_name: [null, [Validators.required]],
-      sur_name: ['', [Validators.required]],
-      father_name: ['', [Validators.required]],
-      mother_name: ['', [Validators.required]],
-      spouse_name: ['', [Validators.required]],
-      date_of_marriage: ['', [Validators.required]],
-      personal_phone: ['', [Validators.required]],
-      official_phone: ['', [Validators.required]],
-      personal_email: ['', [Validators.required]],
-      official_email: ['', [Validators.required]],
-      date_of_birth: ['', [Validators.required]],
-      identification_mark: ['', [Validators.required]],
-      passport_no: ['', [Validators.required]],
-      birth_id: ['', [Validators.required]],
-      driving_license_no: ['', [Validators.required]],
-      //drownlist field
-      title_enum_id: [null, [Validators.required]],
-      title_enum_name: ['', [Validators.required]],
-      gender_enum_id: [null, [Validators.required]],
-      gender_enum_name: [null, [Validators.required]],
-      religion_enum_id: [null, [Validators.required]],
-      ReligionName: ['', [Validators.required]],
-      blood_group_enum_id: [null, [Validators.required]],
-      BloodGroupName: ['', [Validators.required]],
-      residentcial_status_enum_id: [null, [Validators.required]],
-      ResidencialStatusName: ['', [Validators.required]],
-      marital_status_enum_id: [null, [Validators.required]],
-      marital_status_enum_name: ['', [Validators.required]],
-      national_id: ['', [Validators.required]],
-      employee_old_code: ['', [Validators.required]],
-      nationality_id: ['', [Validators.required]],
-      NationalityName: ['', [Validators.required]],
-      country_of_birth_id: ['', [Validators.required]],
-      CountryOfBirthName: ['', [Validators.required]],
-      ethnicity_id: ['', [Validators.required]],
-      EthnicityName: ['', [Validators.required]],
+      code: ['', [Validators.required]],
+    first_name: ['', [Validators.required]],
+    middle_name: [''],
+    sur_name: ['', [Validators.required]],
+    father_name: ['', [Validators.required]],
+    mother_name: ['', [Validators.required]],
+    spouse_name: [''],
+    date_of_marriage: [null],
+    personal_phone: ['', [Validators.required]],
+    official_phone: [''],
+    personal_email: ['',[Validators.required,Validators.email, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
+    official_email: [''],
+    date_of_birth: ['', [Validators.required]],
+    identification_mark: [''],
+    passport_no: [''],
+    birth_id: [''],
+    driving_license_no: [''],
+    //drownlist field
+    title_enum_id: ['', [Validators.required]],    
+    gender_enum_id: ['', [Validators.required]],     
+    religion_enum_id: ['', [Validators.required]],
+    ReligionName: [''],
+    blood_group_enum_id: ['', [Validators.required]],      
+    residentcial_status_enum_id: ['', [Validators.required]],     
+    marital_status_enum_id: ['', [Validators.required]],
+    national_id: ['', [Validators.required]],
+    employee_old_code: [''],
+    nationality_id: ['', [Validators.required]],
+    NationalityName: [''],
+    country_of_birth_id: ['', [Validators.required]],
+    CountryOfBirthName: [''],
+    ethnicity_id: ['', [Validators.required]],
+    EthnicityName: [''],
 
-      present_country_id: [null, [Validators.required]],
-      present_division_id: [null, [Validators.required]],
-      present_district_id: [null, [Validators.required]],
-      present_ps_area: ['', [Validators.required]],
-      present_city: ['', [Validators.required]],
-      present_post_code: ['', [Validators.required]],
-      present_block: ['', [Validators.required]],
-      present_road_no: ['', [Validators.required]],
-      present_house_no: ['', [Validators.required]],
-      present_flat_no: ['', [Validators.required]],
-      present_address_note: ['', [Validators.required]],
+    present_country_id: [0],
+    present_division_id: [0],
+    present_district_id: [0],
+    present_ps_area: [''],
+    present_city: [''],
+    present_post_code: [''],
+    present_block: [''],
+    present_road_no: [''],
+    present_house_no: [''],
+    present_flat_no: [''],
+    present_address_note: [''],
 
-      permanent_country_id: [null, [Validators.required]],
-      permanent_division_id: [null, [Validators.required]],
-      permanent_district_id: [null, [Validators.required]],
-      permanent_city: ['', [Validators.required]],
-      permanent_ps_area: ['', [Validators.required]],
-      permanent_post_code: ['', [Validators.required]],
-      permanent_block: ['', [Validators.required]],
-      permanent_road_no: ['', [Validators.required]],
-      permanent_house_no: ['', [Validators.required]],
-      permanent_flat_no: ['', [Validators.required]],
-      permanent_address_note: ['', [Validators.required]],
+    permanent_country_id: [0],
+    permanent_division_id: [0],
+    permanent_district_id: [0],
+    permanent_city: [''],
+    permanent_ps_area: [''],
+    permanent_post_code: [''],
+    permanent_block: [''],
+    permanent_road_no: [''],
+    permanent_house_no: [''],
+    permanent_flat_no: [''],
+    permanent_address_note: [''],
 
-      ImageUpload: new FormControl('', [Validators.required]),
-      SignatureUpload: new FormControl('', [Validators.required])
+    ImageUpload: new FormControl(null),
+    SignatureUpload: new FormControl(null)
      
     });
     //Load Dropdown
@@ -361,17 +424,17 @@ export class EmployeebasicinfoComponent implements OnInit {
       this.employeeForm.controls['driving_license_no'].setValue(data.DrivingLicenseNo);
       //#DropDownLoad
       this.employeeForm.controls['title_enum_id'].setValue(data.Title_Enum_Id);
-      this.employeeForm.controls['title_enum_name'].setValue(data.TitleName);
+      
       this.employeeForm.controls['gender_enum_id'].setValue(data.GenderEnumId);
-      this.employeeForm.controls['gender_enum_name'].setValue(data.GenderName);
+       
       this.employeeForm.controls['religion_enum_id'].setValue(data.ReligionEnumId);
-      this.employeeForm.controls['ReligionName'].setValue(data.ReligionName);
+    
       this.employeeForm.controls['blood_group_enum_id'].setValue(data.BloodGroupEnumId);
-      this.employeeForm.controls['BloodGroupName'].setValue(data.BloodGroupName);
+  
       this.employeeForm.controls['residentcial_status_enum_id'].setValue(data.ResidentcialStatusEnumId);
-      this.employeeForm.controls['ResidencialStatusName'].setValue(data.ResidencialStatusName);
+     
       this.employeeForm.controls['marital_status_enum_id'].setValue(data.MaritalStatusEnumId);
-      this.employeeForm.controls['marital_status_enum_name'].setValue(data.MaritalName);
+     
 
       this.employeeForm.controls['nationality_id'].setValue(data.NationalityId);
       this.employeeForm.controls['country_of_birth_id'].setValue(data.CountryOfBirthId);
@@ -414,7 +477,8 @@ export class EmployeebasicinfoComponent implements OnInit {
 
     });
    // this.displayBasic = true;
-    this.toggle();
+     // this.toggle();
+      this.toggleGridDisplay();
   }
 
   deleteEmployee() {
@@ -432,51 +496,64 @@ export class EmployeebasicinfoComponent implements OnInit {
     this.display = false;
   }
 
-  SaveEmployee() {
+    onFormSubmit() {
     debugger
     //for Image Upload
    
     const data = this.employeeForm.value;
 
-    if (!(data.code)) {
-      return this.notifyService.ShowNotification(2, "Please enter Code")
-    }
-    if (!(data.first_name)) {
-      return this.notifyService.ShowNotification(2, "Please enter First Name")
-    }
-    if (!(data.sur_name)) {
-      return this.notifyService.ShowNotification(2, "Please enter Sure Name")
-    }
-    if (!(data.marital_status_enum_id)) {
-      return this.notifyService.ShowNotification(2, "Please select Marital Status")
-    }
+    //if (!(data.code)) {
+    //  return this.notifyService.ShowNotification(2, "Please enter Code")
+    //}
+    //if (!(data.first_name)) {
+    //  return this.notifyService.ShowNotification(2, "Please enter First Name")
+    //}
+    //if (!(data.sur_name)) {
+    //  return this.notifyService.ShowNotification(2, "Please enter Sure Name")
+    //}
+    //if (!(data.marital_status_enum_id)) {
+    //  return this.notifyService.ShowNotification(2, "Please select Marital Status")
+    //}
 
-    if (!(data.personal_phone)) {
-      return this.notifyService.ShowNotification(2, "Please enter Personal Phone")
-    } if (!(data.personal_email)) {
-      return this.notifyService.ShowNotification(2, "Please enter Personal Email")
-    } if (!(data.date_of_birth)) {
-      return this.notifyService.ShowNotification(2, "Please enter Date Of Birth")
-    } if (!(data.national_id)) {
-      return this.notifyService.ShowNotification(2, "Please enter National Id")
-    } if (!(data.nationality_id)) {
-      return this.notifyService.ShowNotification(2, "Please select Nationality")
-    } if (!(data.country_of_birth_id)) {
-      return this.notifyService.ShowNotification(2, "Please select Country Of Birth")
-    }
-    if (!(data.ethnicity_id)) {
-      return this.notifyService.ShowNotification(2, "Please select Ethnicity")
-    }
-    if (!(data.gender_enum_id)) {
-      return this.notifyService.ShowNotification(2, "Please select Gender")
-    } if (!(data.mother_name)) {
-      return this.notifyService.ShowNotification(2, "Please select Mother Name")
-    } if (!(data.religion_enum_id)) {
-      return this.notifyService.ShowNotification(2, "Please select Religion")
-    }  if (!(data.residentcial_status_enum_id)) {
-      return this.notifyService.ShowNotification(2, "Please select Residentcial Status")
-    } if (!(data.father_name)) {
-      return this.notifyService.ShowNotification(2, "Please intput father name.")
+    //if (!(data.personal_phone)) {
+    //  return this.notifyService.ShowNotification(2, "Please enter Personal Phone")
+    //} if (!(data.personal_email)) {
+    //  return this.notifyService.ShowNotification(2, "Please enter Personal Email")
+    //} if (!(data.date_of_birth)) {
+    //  return this.notifyService.ShowNotification(2, "Please enter Date Of Birth")
+    //} if (!(data.national_id)) {
+    //  return this.notifyService.ShowNotification(2, "Please enter National Id")
+    //} if (!(data.nationality_id)) {
+    //  return this.notifyService.ShowNotification(2, "Please select Nationality")
+    //} if (!(data.country_of_birth_id)) {
+    //  return this.notifyService.ShowNotification(2, "Please select Country Of Birth")
+    //}
+    //if (!(data.ethnicity_id)) {
+    //  return this.notifyService.ShowNotification(2, "Please select Ethnicity")
+    //}
+    //if (!(data.gender_enum_id)) {
+    //  return this.notifyService.ShowNotification(2, "Please select Gender")
+    //} if (!(data.mother_name)) {
+    //  return this.notifyService.ShowNotification(2, "Please select Mother Name")
+    //} if (!(data.religion_enum_id)) {
+    //  return this.notifyService.ShowNotification(2, "Please select Religion")
+    //}  if (!(data.residentcial_status_enum_id)) {
+    //  return this.notifyService.ShowNotification(2, "Please select Residentcial Status")
+    //} if (!(data.father_name)) {
+    //  return this.notifyService.ShowNotification(2, "Please intput father name.")
+    //}if (!(data.father_name)) {
+    //  return this.notifyService.ShowNotification(2, "Please intput father name.")
+    //    }
+    if (this.isEmployeeEdit) {
+        if (!(data.present_country_id)) {
+            return this.notifyService.ShowNotification(2, "Please select present country.")
+        }
+        if (!(data.present_division_id)) {
+            return this.notifyService.ShowNotification(2, "Please select present division.")
+        }
+        if (!(data.present_district_id)) {
+            return this.notifyService.ShowNotification(2, "Please select present district.")
+        }
     }
     let formData = new FormData();
     for (const key of Object.keys(this.employeeForm.value)) {
@@ -488,7 +565,7 @@ export class EmployeebasicinfoComponent implements OnInit {
       else if (key == "date_of_birth") {
         let date = new Date(value).toISOString();
         formData.append("date_of_birth", date);
-      }
+      }     
       else {
 
         formData.append(key, value);
@@ -511,6 +588,7 @@ export class EmployeebasicinfoComponent implements OnInit {
         this.loadAllEmployees();
         this.isEmployeeEdit = false;
       });
+        this.ngOnInit();
     }
     else {
      
@@ -519,7 +597,8 @@ export class EmployeebasicinfoComponent implements OnInit {
           this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
           this.loadAllEmployees();
         }
-      );
+        );
+        this.ngOnInit();
     }
 
     // this.displayBasic = false;
@@ -614,7 +693,13 @@ export class EmployeebasicinfoComponent implements OnInit {
     this.employeeService.getAllCountry().subscribe(data => {
       this.drpdwnPresentCountryList = data;
     });
-  }
+    }
+    resetForm() {
+        //this.employeeForm.reset();
+        this.isEmployeeEdit = false;
+        this.loadAllEmployees();
+        this.employeedataSource = [];
+    }
   //loadPresentDivisiondrpdwn() {
   //  this.employeeService.getAllDivision().subscribe(data => {
   //    this.drpdwnPresentDivisionList = data;
@@ -700,12 +785,12 @@ export class EmployeebasicinfoComponent implements OnInit {
     );
 
   }
-  resetForm() {
-    this.employeeForm.reset();
-    this.isEmployeeEdit = false;
-    this.loadAllEmployees();
-    this.employeedataSource = [];
-  }
+  //resetForm() {
+  //  this.employeeForm.reset();
+  //  this.isEmployeeEdit = false;
+  //  this.loadAllEmployees();
+  //  this.employeedataSource = [];
+  //}
 
   onSelectImage(event) {
 

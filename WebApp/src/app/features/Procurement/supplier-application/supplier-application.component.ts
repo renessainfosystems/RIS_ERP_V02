@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { FormControl, FormBuilder, Validators } from '@angular/forms';
+import { FormControl, FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { SelectionModel } from '@angular/cdk/collections';
 import { ToastrService } from 'ngx-toastr';
@@ -22,29 +22,59 @@ export class SupplierApplicationComponent implements OnInit {
         static: true
     }) supplierImage;
 
+    supplierApplicationForm: FormGroup;
+    businessApplicationForm: FormGroup;
+    associationsApplicationForm: FormGroup;
+    legalDocumentApplicationForm: FormGroup;
+    locationApplicationForm: FormGroup;
+    warehouseApplicationForm: FormGroup;
+    contactApplicationForm: FormGroup;
+    ContactLocationApplicationForm: FormGroup;
+    financialApplicationForm: FormGroup;
+    mobileBankingApplicationForm: FormGroup;
+    bankingApplicationForm: FormGroup;
+
+
+
+    submitted = false;
+
+    //start grid and form show hide ********************
+    gridDisplay = false;
+    formDisplay = true;
+    toggleFormDisplay() {
+        this.gridDisplay = false;
+        this.formDisplay = true;
+    }
+    toggleGridDisplay() {
+        this.gridDisplay = true;
+        this.formDisplay = false;
+    }
+    toggleFormClose() {
+        this.toggleFormDisplay();
+    }
+    //end grid and form show hide ********************
+
+
     fileToUploadLegalForm: File | null = null;
     fileToUploadNID: File | null = null;
     fileToUploadSecurity: File | null = null;
-    FileUpload: null;
-
+   
 
     // for photo and signature upload
     fileurllink: null;
     photourllink: string = "assets/images/user-photo1.png";
 
-    //selectFile(event) {
-    //  if (event.target.files) {
-    //    var reader = new FileReader()
-    //    reader.readAsDataURL(event.target.files[0])
-    //    reader.onload = (event: any) => {
-    //      this.photourllink = event.target.result
-    //    }
-    //  }
-    //}
-    /*  supplier_id: any = 1;*/
+    selectFile(event) {
+      if (event.target.files) {
+        var reader = new FileReader()
+        reader.readAsDataURL(event.target.files[0])
+        reader.onload = (event: any) => {
+          this.photourllink = event.target.result
+        }
+      }
+    }
 
-    showTab1 = true;
-    showTab2 = true;
+    /*  supplier_id: any = 1;*/
 
     showBasicEdit = true;
 
@@ -54,11 +84,11 @@ export class SupplierApplicationComponent implements OnInit {
     selectedSubSectorTable: SupplierApplication;
     selectedLocationTable: SupplierApplication;
     selectedContactTable: SupplierApplication;
+    selectedContactLocationTable: SupplierApplication;
     selectedSecurityDepositTable: SupplierApplication;
     selectedMobileBankingTable: SupplierApplication;
     selectedBankingTable: SupplierApplication;
-    selectedProductTable: SupplierApplication;
-    selectedContactLocationTable: SupplierApplication;
+ 
 
     subSectorDataSources: any[] = [];
     associationDataSources: any[] = [];
@@ -66,17 +96,17 @@ export class SupplierApplicationComponent implements OnInit {
     locationDataSources: any[] = [];
     warehouseDataSources: any[] = [];
     contactDataSources: any[] = [];
+    contactLocationDataSources: any[] = [];
     SecurityDepositDataSources: any[] = [];
     mobileBankingDataSources: any[] = [];
     bankingDataSources: any[] = [];
-    productDataSources: any[] = [];
-    contactLocationDataSources: any[] = [];
+ 
 
     supplierinfoList: any[];//List Supplierinfo
     selectedsupplierinfo: any;// Selected Dealerinfo
     isSupplierinfoEdit: boolean = false;
 
-    selectedDocumentInfo: any;// Selected DocumentInfoinfo
+ /*   selectedDocumentInfo: any;// Selected DocumentInfoinfo*/
 
     bank_swift_code: any;
     uploadedFiles: any[] = [];
@@ -87,20 +117,7 @@ export class SupplierApplicationComponent implements OnInit {
 
     rowData: any;
     dataSaved = false;
-    supplierApplicationForm: any;//FormName
 
-
-    businessApplicationForm: any;//FormName
-    associationsApplicationForm: any;//FormName
-    legalDocumentApplicationForm: any;//FormName
-    locationApplicationForm: any;//FormName
-    warehouseApplicationForm: any;//FormName
-    contactApplicationForm: any;//FormName
-    financialApplicationForm: any;//FormName
-    mobileBankingApplicationForm: any;//FormName
-    bankingApplicationForm: any;//FormName
-    ContactLocationApplicationForm: any;//FormName
-    /*  ProductApplicationForm: any;//FormName*/
 
     nodeSelected: boolean = false;
     allSupplierApplication: Observable<SupplierApplication[]>;
@@ -109,7 +126,7 @@ export class SupplierApplicationComponent implements OnInit {
     massage = null;
 
 
-    //Business Info
+    //Basic Info
 
     selectedDomicile: any;
     allDomicile: any[];
@@ -134,6 +151,13 @@ export class SupplierApplicationComponent implements OnInit {
 
     selectedDistrict: any;
     allDistrict: any[];
+
+    selectedThana: any;
+    allThana: any[];
+
+    selectedZone: any;
+    allZone: any[];
+    
 
     //Business Info
 
@@ -216,7 +240,7 @@ export class SupplierApplicationComponent implements OnInit {
     selectedWarehouse: any;
     allWarehouse: any[];
 
-    //Contact Location
+   // Contact Location
     selectedContactLocation: any;
     allContactLocation: any[];
 
@@ -253,11 +277,6 @@ export class SupplierApplicationComponent implements OnInit {
     first = 0;
     rows = 10;
 
-    collapsed = true;
-
-    collapsedBasicInfo = true;
-    collapsedBasicDetails = false;
-
     collapsedLocationInfo = true;
     collapsedWarehouseInfo = false;
 
@@ -269,9 +288,19 @@ export class SupplierApplicationComponent implements OnInit {
     collapsedMobileBankingInfo = true;
     collapsedBankingInfo = false;
 
+    //end dropdown List prperty
+    // for delete data modal
+    rowSelected: boolean = false;
+    selected = true;
+    collapsedempInfo = true;
+    collapsedempDetails = false;
+    collapsed = false;
+    checked: boolean = false;
+
     // for delete data modaldisplay
     display: boolean = false;
     displaySubmit: boolean = false;
+    displayBasic: boolean = false;
 
     showDialog() {
         if (this.rowData == null) {
@@ -281,31 +310,22 @@ export class SupplierApplicationComponent implements OnInit {
             this.display = true;
     }
 
+    showBasicDialog() {
+       /* this.resetForm();*/
+        this.toggleGridDisplay();
+    }
+
     showSubmitDialog() {
         this.displaySubmit = true;
     }
 
-
-    // for search
-    disabled: boolean = true;
-    value1: string;
-
-
-    // for modal
-
-    displayModal: boolean;
-
-    displayBasic: boolean;
-    showBasicDialog() {
-        this.displayBasic = true;
-    }
 
 
     constructor(private formbulider: FormBuilder, private SupplierApplicationService: SupplierApplicationService, private toastr: ToastrService, private notifyService: NotificationService, private sanitizer: DomSanitizer) {
 
     }
 
-    checked: boolean = false;
+
 
     selectedPaymentFrequency: boolean = false;
 
@@ -343,23 +363,6 @@ export class SupplierApplicationComponent implements OnInit {
         });
 
         this.loadAllSupplierinfos();
-        //this.supplierId();
-        //this.loadSupplierBasicInfo();
-        //this.loadAllSupplierLocation();
-        //this.loadAllSupplierBusiness();
-        //this.loadAllSupplierBusinessSubSector();
-        //this.loadAllSupplierBusinessEcommerce();
-        //this.loadAllSupplierAssociation();
-        //this.LoadAllLegalDocument();
-        //this.loadAllSupplierWarehouse();
-      /*  this.loadAllSupplierContact();*/
-        //this.loadAllSupplierCreditDeposit();
-        //this.loadAllSupplierCreditHistory();
-        //this.loadAllSupplierMFS();
-        //this.loadAllSupplierBankAccount();
-
-
-
         this.loadAllDomicileEnum();
         this.loadAllRegistryAuthorityCboList();
         this.loadAllRegulatorCboList();
@@ -414,13 +417,13 @@ export class SupplierApplicationComponent implements OnInit {
         this.loadAllDocumentCboList();
 
 
-        //Location
+        ////Location
         this.locationApplicationForm = this.formbulider.group({
             location_type_id: [null],
             supplier_location_name: [null],
-            country_id_location: [null],
-            division_id_location: [null, [Validators.required]],
-            district_id_location: [null, [Validators.required]],
+            country_id: [null],
+            division_id: [null, [Validators.required]],
+            district_id: [null, [Validators.required]],
             city: [null],
             ps_area: [null],
             post_code: [null],
@@ -435,7 +438,7 @@ export class SupplierApplicationComponent implements OnInit {
         });
         this.loadAllLocationTypeCboList();
 
-        //Warehouse
+        ////Warehouse
         this.warehouseApplicationForm = this.formbulider.group({
             supplier_location_id: [null],
             supplier_warehouse_name: [null],
@@ -443,7 +446,7 @@ export class SupplierApplicationComponent implements OnInit {
         });
 
 
-        //Contact
+        ////Contact
         this.contactApplicationForm = this.formbulider.group({
             contact_type_id: ['', [Validators.required]],
             first_name: ['', [Validators.required]],
@@ -485,7 +488,7 @@ export class SupplierApplicationComponent implements OnInit {
         });
 
 
-        //Financial Info
+        ////Financial Info
 
         this.financialApplicationForm = this.formbulider.group({
             currency_id: [null, [Validators.required]],
@@ -549,7 +552,6 @@ export class SupplierApplicationComponent implements OnInit {
     }
 
     onRowSelect(event) {
-        debugger
         this.nodeSelected = true;
         this.rowData = event.data;
 
@@ -571,16 +573,7 @@ export class SupplierApplicationComponent implements OnInit {
 
     }
 
-    toggleBasicInfo() {
-        if (this.collapsedBasicInfo) {
-            this.collapsedBasicDetails = true;
-            this.collapsedBasicInfo = false;
-        }
-        else {
-            this.collapsedBasicInfo = true;
-            this.collapsedBasicDetails = false;
-        }
-    }
+
 
     toggle() {
         if (this.collapsedLocationInfo) {
@@ -625,12 +618,7 @@ export class SupplierApplicationComponent implements OnInit {
     }
 
 
-    btnNew() {
 
-        this.toggleBasicInfo();
-        this.resetForm();
-
-    }
 
     // Basic dd Load
 
@@ -687,15 +675,6 @@ export class SupplierApplicationComponent implements OnInit {
     //}
 
 
-    loadAllSupplierLocation() {
-        let supplierId = this.rowData.SupplierId;
-        this.SupplierApplicationService.getAllSupplierLocation(supplierId).subscribe(data => {
-            this.locationDataSources = data;
-            this.allLocation = data;
-            this.allContactLocation = data;
-        });
-    }
-
     loadAllDomicileEnum() {
         this.SupplierApplicationService.getAllDomicileEnum().subscribe(data => {
             this.allDomicile = data;
@@ -741,6 +720,7 @@ export class SupplierApplicationComponent implements OnInit {
     onSelectByCountryIdLocation(countryId: Number) {
         if (countryId != null) {
             this.SupplierApplicationService.getAllDivisionCboListByCountryId(countryId).subscribe(data => {
+                debugger
                 this.allDivisionLocation = data;
             });
         }
@@ -758,6 +738,7 @@ export class SupplierApplicationComponent implements OnInit {
             this.allDistrict = null;
 
     }
+
 
     onSelectByDivisionIdLocation(divisionId: Number) {
         if (divisionId != null) {
@@ -784,10 +765,12 @@ export class SupplierApplicationComponent implements OnInit {
         });
     }
 
-    onSelectBySectorId() {
-        let IndustrysectorObj = this.businessApplicationForm.get('industry_sector_id')?.value;
-        let IndustrySectorId = IndustrysectorObj.industry_sector_id;
+    onSelectBySectorId(IndustrySectorId: Number) {
+        //debugger
+        //let IndustrysectorObj = this.businessApplicationForm.get('industry_sector_id')?.value;
+        //let IndustrySectorId = IndustrysectorObj.industry_sector_id;
         if (IndustrySectorId != null) {
+            debugger
             this.SupplierApplicationService.getAllIndustrySubSectorCboList(IndustrySectorId).subscribe(data => {
                 this.allSubSector = data;
             });
@@ -843,7 +826,7 @@ export class SupplierApplicationComponent implements OnInit {
 
 
     onSelectByAssociationId(associationId: Number) {
-        if (associationId != null) {
+        //if (associationId != null) {
             this.SupplierApplicationService.getAllDataByAssociationId(associationId).subscribe(data => {
                 this.associationsApplicationForm.controls['organization_type_id_enum'].setValue(data.organization_type_id_enum);
                 this.associationsApplicationForm.controls['abbreviation'].setValue(data.abbreviation);
@@ -855,9 +838,7 @@ export class SupplierApplicationComponent implements OnInit {
                 }
             });
         }
-        else
-            this.allDivision = null;
-    }
+
 
     loadAllOrganizationTypeEnum() {
         this.SupplierApplicationService.getAllOrganizationTypeEnum().subscribe(data => {
@@ -879,7 +860,7 @@ export class SupplierApplicationComponent implements OnInit {
     }
 
 
-    //Legal dd load
+    ////Legal dd load
     loadAllDocumentCboList() {
         this.SupplierApplicationService.getAllDocumentCboList().subscribe(data => {
             this.allDocument = data;
@@ -900,7 +881,7 @@ export class SupplierApplicationComponent implements OnInit {
         });
     }
 
-    //Warehouse dd load
+    ////Warehouse dd load
     loadAllSupplierWarehouse() {
         let supplierId = this.rowData.SupplierId;
         this.SupplierApplicationService.getAllSupplierWarehouse(supplierId).subscribe(data => {
@@ -908,7 +889,7 @@ export class SupplierApplicationComponent implements OnInit {
         });
     }
 
-    //Contact dd load
+    ////Contact dd load
     loadAllContactTypeCboList() {
         this.SupplierApplicationService.getAllContactTypeCboList().subscribe(data => {
             this.allContactType = data;
@@ -966,7 +947,7 @@ export class SupplierApplicationComponent implements OnInit {
         });
     }
 
-    // Financial dd load
+    //// Financial dd load
 
 
     LoadAllCurrencyCboList() {
@@ -1016,9 +997,9 @@ export class SupplierApplicationComponent implements OnInit {
     }
 
 
-    onSelectByBankTypeId() {
-        let bankTypeObj = this.bankingApplicationForm.get('bank_type_id')?.value;
-        let bankTypeId = bankTypeObj.bank_type_id;
+    onSelectByBankTypeId(bankTypeId: Number) {
+        //let bankTypeObj = this.bankingApplicationForm.get('bank_type_id')?.value;
+        //let bankTypeId = bankTypeObj.bank_type_id;
         if (bankTypeId != null) {
             this.SupplierApplicationService.getAllBankCboListByBankTypeId(bankTypeId).subscribe(data => {
                 this.allBank = data;
@@ -1050,12 +1031,12 @@ export class SupplierApplicationComponent implements OnInit {
 
 
 
-    resetForm() {
-        this.supplierApplicationForm.reset();
-        this.isSupplierinfoEdit = false;
-        this.loadAllSupplierinfos();
-        //  this.dealerinfodataSource = [];
-    }
+    //resetForm() {
+    //    this.supplierApplicationForm.reset();
+    //    this.isSupplierinfoEdit = false;
+    //    this.loadAllSupplierinfos();
+    //    //  this.dealerinfodataSource = [];
+    //}
 
 
     loadSupplierinfoToEdit() {
@@ -1140,8 +1121,8 @@ export class SupplierApplicationComponent implements OnInit {
                 this.isSupplierinfoEdit = true;
             }
             this.locationDataSources = data;
-            this.allLocation = data;
-            this.allContactLocation = data;
+            //this.allLocation = data;
+            //this.allContactLocation = data;
 
         });
 
@@ -1189,7 +1170,12 @@ export class SupplierApplicationComponent implements OnInit {
             }
         });
 
-        this.toggleBasicInfo();
+        this.toggleGridDisplay();
+    }
+
+    //for validation messate -----------
+    get f(): { [key: string]: AbstractControl } {
+        return this.supplierApplicationForm.controls;
     }
 
     onFormSubmit() {
@@ -1324,8 +1310,8 @@ export class SupplierApplicationComponent implements OnInit {
                 this.resetForm();
                 this.index = (this.index === 3) ? 0 : this.index + 1;
                 this.index = 0;
-                this.collapsedBasicInfo = true;
-                this.collapsedBasicDetails = false;
+                //this.collapsedBasicInfo = true;
+                //this.collapsedBasicDetails = false;
             });
         }
 
@@ -1377,6 +1363,7 @@ export class SupplierApplicationComponent implements OnInit {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
 
+        //let supplierId = this.rowData.SupplierId;
 
         if (category.checked) {
             let supplierId = this.rowData.SupplierId;
@@ -1650,11 +1637,11 @@ export class SupplierApplicationComponent implements OnInit {
 
 
 
-    removeDocument(a, row) {
-        this.documentDataSources = this.documentDataSources.slice(0, a).concat(this.documentDataSources.slice(a + 1));
-    }
+    //removeDocument(a, row) {
+    //    this.documentDataSources = this.documentDataSources.slice(0, a).concat(this.documentDataSources.slice(a + 1));
+    //}
 
-    // Location submit
+    //// Location submit
 
 
     onLocationFormSubmit() {
@@ -1672,7 +1659,7 @@ export class SupplierApplicationComponent implements OnInit {
         if (!(locationData.supplier_location_name)) {
             return this.notifyService.ShowNotification(2, "Please input Location Name")
         }
-        if (!(locationData.country_id_location)) {
+        if (!(locationData.country_id)) {
             return this.notifyService.ShowNotification(2, "Please select Country")
         }
         if (!(locationData.division_id_location)) {
@@ -1716,13 +1703,13 @@ export class SupplierApplicationComponent implements OnInit {
 
             else {
                 locationData.supplier_id = this.rowData.SupplierId;
-                locationData.country_id = locationData.country_id_location;
+                locationData.country_id = locationData.country_id;
                 locationData.division_id = locationData.division_id_location;
                 locationData.district_id = locationData.district_id_location;
 
                 this.SupplierApplicationService.updateLocationData(locationData).subscribe(data => {
                     this.dataSaved = true;
-                    this.loadAllSupplierLocation();
+                  /*  this.loadAllSupplierLocation();*/
                     this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage);
                     this.resetForm();
                 });
@@ -1753,7 +1740,7 @@ export class SupplierApplicationComponent implements OnInit {
         }
     }
 
-    //Warehouse
+    ////Warehouse
 
 
     onWarehouseFormSubmit() {
@@ -1828,7 +1815,7 @@ export class SupplierApplicationComponent implements OnInit {
 
 
 
-    //Contacts
+    ////Contacts
 
     onContactFormSubmit() {
 
@@ -2017,7 +2004,7 @@ export class SupplierApplicationComponent implements OnInit {
         }
     }
 
-    //Financial Info
+    ////Financial Info
 
     addSecurityDepositToTable(a) {
 
@@ -2108,12 +2095,12 @@ export class SupplierApplicationComponent implements OnInit {
         });
     }
 
-    removeSecurityDeposit(a, row) {
-        this.SecurityDepositDataSources = this.SecurityDepositDataSources.slice(0, a).concat(this.SecurityDepositDataSources.slice(a + 1));
-    }
+    //removeSecurityDeposit(a, row) {
+    //    this.SecurityDepositDataSources = this.SecurityDepositDataSources.slice(0, a).concat(this.SecurityDepositDataSources.slice(a + 1));
+    //}
 
 
-    /// Mobile
+    ///// Mobile
 
 
     onMobileBankingFormSubmit() {
@@ -2180,7 +2167,7 @@ export class SupplierApplicationComponent implements OnInit {
     }
 
 
-    // Banking
+    //// Banking
 
     onBankingFormSubmit() {
 
@@ -2248,31 +2235,28 @@ export class SupplierApplicationComponent implements OnInit {
     }
 
 
+    //deleteContact() {
+    //    this.showDialog();
+    //}
 
 
-
-    deleteContact() {
-        this.showDialog();
-    }
-
-
-    onSelectImage(event) {
-        if (event.target.files) {
-            var reader = new FileReader()
-            reader.readAsDataURL(event.target.files[0])
-            reader.onload = (event: any) => {
-                this.photourllink = event.target.result
-            }
-            alert(this.photourllink)
-            if (event.target.files.length > 0) {
-                const file = event.target.files[0];
-                this.supplierImage.nativeElement.innerText = file.name;
-                this.supplierApplicationForm.patchValue({
-                    ImageUpload: file,
-                });
-            }
-        }
-    }
+    //onSelectImage(event) {
+    //    if (event.target.files) {
+    //        var reader = new FileReader()
+    //        reader.readAsDataURL(event.target.files[0])
+    //        reader.onload = (event: any) => {
+    //            this.photourllink = event.target.result
+    //        }
+    //        alert(this.photourllink)
+    //        if (event.target.files.length > 0) {
+    //            const file = event.target.files[0];
+    //            this.supplierImage.nativeElement.innerText = file.name;
+    //            this.supplierApplicationForm.patchValue({
+    //                ImageUpload: file,
+    //            });
+    //        }
+    //    }
+    //}
 
 
     handleLegalFormFileInput(files: FileList) {
@@ -2297,6 +2281,16 @@ export class SupplierApplicationComponent implements OnInit {
 
     openPrev() {
         this.index = (this.index === 0) ? 6 : this.index - 1;
+    }
+
+    resetForm() {
+        //this.associationForm.reset();
+        //this.isAssociationEdit = false;
+        //this.formInit();
+    }
+
+    clear() {
+    /*    this.resetForm();*/
     }
 
 

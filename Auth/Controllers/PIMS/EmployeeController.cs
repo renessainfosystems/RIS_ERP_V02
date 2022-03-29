@@ -34,14 +34,14 @@ namespace Auth.Controllers.PIMS
         [HttpPost]
         public async Task<dynamic> Create([FromForm] Employee Employee)
         {
-            if (Employee.ImageUpload != null)
-            {
-                Employee.employee_image_path = GetImagePath(Employee.ImageUpload);
-            }
-            if (Employee.SignatureUpload != null)
-            {
-                Employee.signature_image_path = GetSignaturePath(Employee.SignatureUpload);
-            }
+            //if (Employee.ImageUpload != null)
+            //{
+            //    Employee.employee_image_path = GetImagePath(Employee.ImageUpload);
+            //}
+            //if (Employee.SignatureUpload != null)
+            //{
+            //    Employee.signature_image_path = GetSignaturePath(Employee.SignatureUpload);
+            //}
 
             return await _EmployeeRepository.IUD_Employee(Employee, (int)GlobalEnumList.DBOperation.Create);
         }

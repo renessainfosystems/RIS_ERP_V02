@@ -129,8 +129,7 @@ namespace Auth.DataAccess.Party
 
                 if (dbOperation == (int)GlobalEnumList.DBOperation.Delete)
                 {
-                    result = DealerInfoViewModel.ConvertToModel(data);
-                    return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonDeleteMessage, result);
+                    return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonDeleteMessage);
                 }
 
                 if (data.Count > 0)

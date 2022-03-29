@@ -1,634 +1,583 @@
-<div class="p-card">
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <!--<h4>Employee Information</h4>-->
+            <h5>Employee List</h5>
+            <!--<div class="me-auto">-->
+            <div [hidden]="formDisplay">
+                <!--<div class="p-card-title ">
+                    <span class="pi pi-Employee Employee"> </span>Employee Information
+                </div>-->
+                <!--<div class="p-card-body">-->
+                <!--********** start card body ********************-->
+                <!--<div class="card">-->
+                <form action="" [formGroup]="employeeForm">
+                    <p-tabView [activeIndex]="index" (onChange)="function($event)">
+                        <p-tabPanel class="geoTab " header="Basic Info" [selected]="selected">
+                            <div class="card-body">
+                                <div class="col-12">
+                                     <div class="p-fluid p-formgrid grid">
+                                    <div class="field col-6 md:col-6">
+                                       
+                                        <div class="field col-12 md:col-12">
+                                            <label for="" class=" d-md-inline-flex" pTooltip="Code" tooltipPosition="top">Code<span class="req">*:</span> </label>
+                                            <input id="float-input p-fluid" type="text" formControlName="code" [ngClass]="{ 'is-invalid': submitted && f.code.errors }" placeholder="Employee Code" pInputText>
 
-  <div class="me-auto">
-    <div class="p-card-title ">
-      <span class="pi pi-Employee Employee"> </span>Employee Information
-    </div>
-    <div class="p-card-body">
-      <!--********** start card body ********************-->
+                                            <div *ngIf="submitted && f.code.errors" class="invalid-feedback">
+                                                <small *ngIf="f.code.errors.required" class="p-error">Code is required</small>
+                                            </div>
+                                        </div>
+                                        <div class="field col-12 md:col-12">
+                                            <label for="" class=" d-md-inline-flex" pTooltip="Title" tooltipPosition="top">Title<span class="req">*:</span> </label>
+                                            <p-dropdown [options]="drpdwntitleList" [ngClass]="{ 'is-invalid': submitted && f.title_enum_id.errors }" formControlName="title_enum_id" placeholder="Select Employee Title"
+                                                        optionLabel="title_enum_name" optionValue="title_enum_id" [showClear]="true"></p-dropdown>
 
-      <div class="card">
-        <form action="" [formGroup]="employeeForm">
-          <p-tabView>
-            <p-tabPanel class="geoTab " header="Basic Info" [selected]="selected">
-              <div class="card-body">
+                                            <div *ngIf="submitted && f.title_enum_id.errors" class="invalid-feedback">
+                                                <small *ngIf="f.title_enum_id.errors.required" class="p-error">Title is required</small>
+                                            </div>
+                                        </div>
+                                           
 
-                <p-fieldset legend="Add-Edit Employee" [collapsed]="collapsedempInfo" (onBeforeToggle)="toggle()" [toggleable]="true">
-                  <!--<p-dialog header="Delete Record"  [style]="{width: '35vw'}">-->
-                  <p-dialog header="Delete Record" [(visible)]="display" [style]="{width: '35vw'}">
+                                         
+
+
+                                    </div>
+                                    <div class="field col-6 md:col-6">                                        
+                                            <div class="p-fluid p-formgrid grid">
+                                                <div class="p-fluid grid col-12 flex justify-content-start flex-wrap card-container">
+                                                    <div class="flex grid  ">
+                                                        <!--<div class="field col-12 md:col-12">-->
+                                                        <div class=" inputWrapper col-6 photo-signature align-self-end flex align-items-center justify-content-center">
+                                                            <img class="risBtn m-1" [src]="photourllink" style="width: 150px;" alt="">
+                                                            <input type="file" class="fileInput risBtn risAdd " style="width: 150px;" #employeeImage (change)="onSelectImage($event)">
+                                                        </div>
+                                                        <div class=" inputWrapper col-5 photo-signature align-self-end flex align-items-end justify-content-center">
+                                                            <img class="risBtn m-1" [src]="sigurllink" style="width: 140px;" alt="">
+                                                            <input type="file" class="fileInput risBtn risAdd " style="width: 140px; " #employeeSignature (change)="onSelectSignature($event)">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>                                        
+                                       
+                                    </div>
+                                </div>
+                                </div>
+
+
+                                <div class="col-12">
+                                    <div class="p-fluid p-formgrid grid">
+
+
+                                        <div class="field col-12 md:col-6">
+                                            <label for="" class=" d-md-inline-flex" pTooltip="First Name" tooltipPosition="top">First Name<span class="req">*:</span> </label>
+                                            <input id="float-input p-fluid" type="text" [ngClass]="{ 'is-invalid': submitted && f.first_name.errors }" formControlName="first_name" placeholder="First Name" pInputText>
+                                            <div *ngIf="submitted && f.first_name.errors" class="invalid-feedback">
+                                                <small *ngIf="f.first_name.errors.required" class="p-error">First Name is required</small>
+                                            </div>
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label for="" class=" d-md-inline-flex" pTooltip="Middle Name" tooltipPosition="top">Middle Name : </label>
+                                            <input id="float-input p-fluid" type="text" formControlName="middle_name" placeholder="Middle Name" pInputText>
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label for="" class=" d-md-inline-flex" pTooltip="Sure Name" tooltipPosition="top">Sure Name<span class="req">*:</span> </label>
+                                            <input id="float-input p-fluid" type="text" [ngClass]="{ 'is-invalid': submitted && f.sur_name.errors }" formControlName="sur_name" placeholder="Sure Name" pInputText>
+                                            <div *ngIf="submitted && f.sur_name.errors" class="invalid-feedback">
+                                                <small *ngIf="f.sur_name.errors.required" class="p-error">Sure Name is required</small>
+                                            </div>
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label for="" class=" d-md-inline-flex" pTooltip="Gender" tooltipPosition="top">Gender <span class="req">*:</span> </label>
+
+                                            <p-dropdown [options]="drpdwngenderList" formControlName="gender_enum_id" [ngClass]="{ 'is-invalid': submitted && f.gender_enum_id.errors }"  placeholder="Select Gender"
+                                                        optionLabel="gender_enum_name" optionValue="gender_enum_id" [showClear]="true"></p-dropdown>
+
+                                            <div *ngIf="submitted && f.gender_enum_id.errors" class="invalid-feedback">
+                                                <small *ngIf="f.gender_enum_id.errors.required" class="p-error">Gender is required</small>
+                                            </div>
+
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label for="" class=" d-md-inline-flex" pTooltip="Fathers Name" tooltipPosition="top">Fathers Name <span class="req">*:</span> </label>
+                                            <input id="float-input p-fluid" type="text" formControlName="father_name" placeholder="Fathers Name" [ngClass]="{ 'is-invalid': submitted && f.father_name.errors }" pInputText>
+                                            <div *ngIf="submitted && f.father_name.errors" class="invalid-feedback">
+                                                <small *ngIf="f.father_name.errors.required" class="p-error">Fathers Name is required</small>
+                                            </div>
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label for="" class=" d-md-inline-flex" pTooltip="Mothers Name" tooltipPosition="top">Mothers Name <span class="req">*:</span> </label>
+
+                                            <input id="float-input p-fluid" type="text" formControlName="mother_name" placeholder="Mothers Name"  [ngClass]="{ 'is-invalid': submitted && f.mother_name.errors }" pInputText>
+                                            <div *ngIf="submitted && f.mother_name.errors" class="invalid-feedback">
+                                                <small *ngIf="f.mother_name.errors.required" class="p-error">Mothers Name is required</small>
+                                            </div>
+
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label for="" class=" d-md-inline-flex" pTooltip="Marital Status" tooltipPosition="top">Marital Status <span class="req">*:</span> </label>
+
+
+                                            <p-dropdown [options]="drpdwnmaritalStatusList" formControlName="marital_status_enum_id" placeholder="Select Marital Status"
+                                                        optionLabel="marital_status_enum_name" optionValue="marital_status_enum_id" [ngClass]="{ 'is-invalid': submitted && f.marital_status_enum_id.errors }"  [showClear]="true"></p-dropdown>
+                                            <div *ngIf="submitted && f.marital_status_enum_id.errors" class="invalid-feedback">
+                                                <small *ngIf="f.marital_status_enum_id.errors.required" class="p-error">Marital Status is required</small>
+                                            </div>
+
+
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label for="" class=" d-md-inline-flex" pTooltip="Spouse Name" tooltipPosition="top">Spouse Name : </label>
+                                            <input id="float-input p-fluid" type="text" formControlName="spouse_name"  placeholder="Spouse Name" pInputText>
+
+                                           
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label for="" class=" d-md-inline-flex" pTooltip="Date Of Marriage" tooltipPosition="top">Date Of Marriage :</label>
+                                            <p-calendar id="float-input p-fluid" formControlName="date_of_marriage" placeholder="Date Of Marriage"
+                                                        [showIcon]="true" inputId="icon"></p-calendar>
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label for="" class=" d-md-inline-flex" pTooltip="Employee Previous Code" tooltipPosition="top">Previous Code : </label>
+                                            <input id="float-input p-fluid" type="text" formControlName="employee_old_code" placeholder="Employee Previous Code" pInputText>
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label for="" class=" d-md-inline-flex" pTooltip="Personal Phone" tooltipPosition="top">Personal Phone <span class="req">*:</span> </label>
+                                            <input i="float-input p-fluid" type="text" formControlName="personal_phone"  [ngClass]="{ 'is-invalid': submitted && f.personal_phone.errors }"  placeholder="Personal Phone" pInputText>
+
+                                            <div *ngIf="submitted && f.personal_phone.errors" class="invalid-feedback">
+                                                <small *ngIf="f.personal_phone.errors.required" class="p-error">Personal Phone is required</small>
+                                            </div>
+                                        </div>
+
+                                        <div class="field col-12 md:col-6">
+                                            <label for="" class=" d-md-inline-flex" pTooltip="Official Phone" tooltipPosition="top">Official Phone : </label>
+                                            <input id="float-input p-fluid" type="text" formControlName="official_phone" placeholder="Official Phone" pInputText>
+
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label for="" class=" d-md-inline-flex" pTooltip="Personal Email" tooltipPosition="top">Personal Email <span class="req">*:</span> </label>
+                                            <input id="float-input p-fluid" type="email" formControlName="personal_email" [ngClass]="{ 'is-invalid': submitted && f.personal_email.errors }" placeholder="Personal Email" pInputText>
+                                            <div *ngIf="submitted && f.personal_email.errors" class="invalid-feedback">
+                                                <small *ngIf="f.personal_email.errors.required" class="p-error">Personal Email is Required</small>
+                                                <small *ngIf="f.personal_email.errors.email" class="p-error">Personal Email must be valid email address</small>
+                                            </div>
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label for="" class=" d-md-inline-flex" pTooltip="Office Email" tooltipPosition="top">Office Email : </label>
+                                            <input id="float-input p-fluid" type="text" formControlName="official_email" placeholder="Office Email" pInputText>
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label for="" class=" d-md-inline-flex" pTooltip="Date Of Birth" tooltipPosition="top">Date Of Birth <span class="req">*:</span> </label>
+                                            <p-calendar id="float-input p-fluid" formControlName="date_of_birth" placeholder="Date Of Birth"
+                                                        [showIcon]="true" inputId="icon"></p-calendar>
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label for="" class=" d-md-inline-flex" pTooltip="Identification Mark" tooltipPosition="top">Identification : </label>
+
+                                            <input id="float-input p-fluid" type="text" formControlName="identification_mark" placeholder="Identification Mark" pInputText>
+
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label for="" class=" d-md-inline-flex" pTooltip="National ID" tooltipPosition="top">National ID <span class="req">*:</span> </label>
+                                            <!--</div>
+    <div class="col-5 p-fluid">-->
+                                            <!--<span class="p-float-label">-->
+                                            <input id="float-input p-fluid" type="text" formControlName="national_id" [ngClass]="{ 'is-invalid': submitted && f.national_id.errors }" placeholder="National ID" pInputText>
+                                            <div *ngIf="submitted && f.national_id.errors" class="invalid-feedback">
+                                                <small *ngIf="f.national_id.errors.required" class="p-error">National ID is required</small>
+                                            </div>
+                                            <!--</span>-->
+                                            <!--</div>
+    <div class="col-3 p-fluid">-->
+                                            <!--<p-fileUpload mode="basic" name="myfile[]" url="./upload.php" accept="image/*" maxFileSize="1000000" (onUpload)="onSelectImage($event)"></p-fileUpload>-->
+                                            <!--<img class="risBtn m-1" [src]="filellink" style="width: 50px; height:30px;" alt="">
+    <input type="file" class="fileInput risBtn risAdd " style="width: 140px; " #nationalIdFile (change)="onSelectFile($event)">-->
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label for="" class=" d-md-inline-flex" pTooltip="Birth Certificate" tooltipPosition="top">Birth ID : </label>
+
+                                            <input id="float-input p-fluid" type="text" formControlName="birth_id" placeholder="Birth Certificate No" pInputText>
+
+                                        </div>
+                                        <!--<div class="col-3 p-fluid">
+
+        <img class="risBtn m-1" [src]="filellink" style="width: 50px; height:30px;" alt="">
+        <input type="file" class="fileInput risBtn risAdd " style="width: 140px; " #nationalIdFile (change)="onSelectFile($event)">
+    </div>-->
+                                        <div class="field col-12 md:col-6">
+                                            <label for="" class=" d-md-inline-flex" pTooltip="Passport No" tooltipPosition="top">Passport No  </label>
+                                            <!--</div>
+        <div class="col-5 p-fluid">
+            <span class="p-float-label">-->
+                                            <input id="float-input p-fluid" type="text" formControlName="passport_no" placeholder="Passport No" pInputText>
+                                            <!--</span>
+        </div>
+        <div class="col-3 p-fluid">-->
+                                            <!--<p-fileUpload mode="basic" name="myfile[]" url="./upload.php" accept="image/*" maxFileSize="1000000" (onUpload)="onSelectImage($event)"></p-fileUpload>-->
+                                            <!--<img class="risBtn m-1" [src]="filellink" style="width: 50px; height:30px;" alt="">
+        <input type="file" class="fileInput risBtn risAdd " style="width: 140px; " #nationalIdFile (change)="onSelectFile($event)">-->
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label for="" class=" d-md-inline-flex" pTooltip="Driving License No" tooltipPosition="top">Driving License No: </label>
+
+                                            <input id="float-input p-fluid" type="text" formControlName="driving_license_no" placeholder="Driving License No" pInputText>
+
+                                        </div>
+                                        <!--<div class="col-3 p-fluid">
+        <img class="risBtn m-1" [src]="filellink" style="width: 50px; height:30px;" alt="">
+        <input type="file" class="fileInput risBtn risAdd " style="width: 140px; " #nationalIdFile (change)="onSelectFile($event)">
+    </div>-->
+                                        <div class="field col-12 md:col-6">
+                                            <label for="" class=" d-md-inline-flex" pTooltip="Nationality" tooltipPosition="top">Nationality <span class="req">*:</span> </label>
+
+                                            <p-dropdown [options]="drpdwnNationalityList" formControlName="nationality_id" placeholder="--Select--" [ngClass]="{ 'is-invalid': submitted && f.nationality_id.errors }"
+                                                        optionLabel="country_name" optionValue="country_id" [showClear]="true" [filter]="true" filterBy="country_name">
+                                            </p-dropdown>
+                                            <div *ngIf="submitted && f.nationality_id.errors" class="invalid-feedback">
+                                                <small *ngIf="f.nationality_id.errors.required" class="p-error">Nationality is required</small>
+                                            </div>
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label for="" class=" d-md-inline-flex" pTooltip="Religion" tooltipPosition="top">Religion<span class="req">*:</span></label>
+
+                                            <p-dropdown [options]="drpdwnreligionList" formControlName="religion_enum_id" placeholder="--Select--" [ngClass]="{ 'is-invalid': submitted && f.religion_enum_id.errors }"
+                                                        optionLabel="religion_enum_name" optionValue="religion_enum_id" [showClear]="true"></p-dropdown>
+                                            <div *ngIf="submitted && f.religion_enum_id.errors" class="invalid-feedback">
+                                                <small *ngIf="f.religion_enum_id.errors.required" class="p-error">Religion is required</small>
+                                            </div>
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label for="" class=" d-md-inline-flex" pTooltip="Country Of Birth" tooltipPosition="top">Country Of Birth<span class="req">*:</span> </label>
+
+                                            <p-dropdown [options]="drpdwnCountryOfBirthList" formControlName="country_of_birth_id" placeholder="--Select--" [ngClass]="{ 'is-invalid': submitted && f.country_of_birth_id.errors }"
+                                                        optionLabel="country_name" optionValue="country_id" [showClear]="true" [filter]="true" filterBy="country_name">
+                                            </p-dropdown>
+                                            <div *ngIf="submitted && f.country_of_birth_id.errors" class="invalid-feedback">
+                                                <small *ngIf="f.country_of_birth_id.errors.required" class="p-error">Country Of Birth is required</small>
+                                            </div>
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label for="" class=" d-md-inline-flex" pTooltip="Blood Group" tooltipPosition="top">Blood Group<span class="req">*:</span></label>
+
+                                            <p-dropdown [options]="drpdwnbloodGroupList" formControlName="blood_group_enum_id" placeholder="--Select--" [ngClass]="{ 'is-invalid': submitted && f.blood_group_enum_id.errors }"
+                                                        optionLabel="blood_group_enum_name" optionValue="blood_group_enum_id" [showClear]="true"></p-dropdown>
+
+                                            <div *ngIf="submitted && f.blood_group_enum_id.errors" class="invalid-feedback">
+                                                <small *ngIf="f.blood_group_enum_id.errors.required" class="p-error">Blood Group is required</small>
+                                            </div>
+
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label for="" class=" d-md-inline-flex" pTooltip="Ethnicity" tooltipPosition="top">Ethnicity<span class="req">*:</span></label>
+
+                                            <p-dropdown [options]="drpdwnEthnicityList" formControlName="ethnicity_id" placeholder="--Select--" [ngClass]="{ 'is-invalid': submitted && f.ethnicity_id.errors }"
+                                                        optionLabel="country_name" optionValue="country_id" [showClear]="true" [filter]="true" filterBy="country_name">
+                                            </p-dropdown>
+                                            <div *ngIf="submitted && f.ethnicity_id.errors" class="invalid-feedback">
+                                                <small *ngIf="f.ethnicity_id.errors.required" class="p-error">Blood Group is required</small>
+                                            </div>
+                                        </div>
+
+
+
+                                        <!--<div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">-->
+
+
+                                        <div class="field col-12 md:col-6">
+                                            <label for="" class=" d-md-inline-flex" pTooltip="Residential Status" tooltipPosition="top">Residential Status: </label>
+
+                                            <p-dropdown [options]="drpdwnresidencialStatusList"  formControlName="residentcial_status_enum_id" placeholder="Select Residencial Status"
+                                                        optionLabel="residentcial_status_enum_name" optionValue="residentcial_status_enum_id" [showClear]="true"></p-dropdown>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
+
+
+
+
+                                <div class="flex justify-content-end pr-2">
+                                    <button pButton pRipple type="button" (click)="onGeneral()" label="Next" class="risBtn  mr-2 mb-2" icon="pi pi-step-forward"></button>
+                                    <button pButton pRipple type="button" (click)="toggleFormClose()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
+
+
+                                </div>
+
+                                <!--<p-table #dt1 [value]="employeeList" [paginator]="true" [rows]="10" selectionMode="single" [(selection)]="selectedemployee" dataKey="EmployeeId" [showCurrentPageReport]="true" responsiveLayout="scroll" styleClass="p-datatable-striped p-datatable-sm"
+                                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)"
+                                         [globalFilterFields]="['Code','EmployeeName','PersonalPhone','PersonalEmail','PresentAddressNote']">
+                                    <ng-template pTemplate="caption">
+                                        <div class="flex">
+
+                                            <span class="p-input-icon-left ml-auto">
+                                                <i class="pi pi-search"></i>
+                                                <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Search by Any" />
+                                            </span>
+                                        </div>
+                                    </ng-template>
+                                    <ng-template pTemplate="header">
+                                        <tr>
+
+                                            <th pSortableColumn="Code">
+
+                                                Code
+                                                <p-columnFilter type="text" field="Code" display="menu"></p-columnFilter>
+                                                <p-sortIcon field="Code"></p-sortIcon>
+
+                                            </th>
+                                            <th pSortableColumn="EmployeeName">
+                                                Employee Name
+                                                <p-columnFilter type="text" field="EmployeeName" display="menu"></p-columnFilter>
+                                            </th>
+                                            <th pSortableColumn="PersonalPhone">Personal Phone</th>
+                                            <th pSortableColumn="PersonalEmail">Personal Email</th>
+                                            <th pSortableColumn="PresentAddressNote">Address</th>
+                                            <th>Activity</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-employee let-rowData let-columns="columns">
+                                        <tr [pSelectableRow]="employee">
+                                            <td>{{employee.Code}}</td>
+                                            <td>{{employee.EmployeeName}}</td>
+                                            <td>{{employee.PersonalPhone}}</td>
+                                            <td>{{employee.PersonalEmail}}</td>
+                                            <td>{{employee.PresentAddressNote}}</td>
+                                            <td *ngIf="employee.IsActive===true">{{"Active"}}</td>
+                                            <td *ngIf="employee.IsActive===false">{{"InActive"}}</td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>-->
+                                <!--</p-fieldset>-->
+
+                            </div>
+                        </p-tabPanel>
+
+                        <p-tabPanel class="geoTab " header="Address">
+                            <div class="col-12">
+
+                                <div class="p-fluid p-formgrid grid">
+                                    <div class="field col-12 md:col-12">
+
+                                        <h5>Present Address</h5>
+                                    </div>
+
+                                    <div class="field col-12 md:col-6">
+
+                                        <label pTooltip="Country" tooltipPosition="top">Country<span class="req">*</span></label>
+
+                                        <p-dropdown [options]="drpdwnPresentCountryList" formControlName="present_country_id" [ngClass]="{ 'is-invalid': submitted && f.present_country_id.errors }" placeholder="---Select---"
+                                                    optionLabel="country_name" optionValue="country_id" (onChange)="onSelectByPresentCountryId($event.value)" [showClear]="true" [filter]="true" filterBy="country_name"></p-dropdown>
+                                        <!--<div *ngIf="submitted && f.present_country_id.errors" class="invalid-feedback">
+                                            <small *ngIf="f.present_country_id.errors.required" class="p-error">Country is required</small>
+                                        </div>-->
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label for="" class=" d-md-inline-flex" pTooltip="State/Division" tooltipPosition="top">State/Division<span class="req">*:</span> </label>
+
+                                        <p-dropdown [options]="drpdwnPresentDivisionList" formControlName="present_division_id" [ngClass]="{ 'is-invalid': submitted && f.present_division_id.errors }" placeholder="---Select---"
+                                                    optionLabel="division_name" optionValue="division_id" (onChange)="onSelectByPresentDivisionId($event.value)" [showClear]="true"></p-dropdown>
+
+                                        <!--<div *ngIf="submitted && f.present_division_id.errors" class="invalid-feedback">
+                                            <small *ngIf="f.present_division_id.errors.required" class="p-error">State Or Division is required</small>
+                                        </div>-->
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label for="" class=" d-md-inline-flex" pTooltip="District" tooltipPosition="top">District<span class="req">*:</span> </label>
+
+
+                                        <p-dropdown [options]="drpdwnPresentDistrictList" formControlName="present_district_id" [ngClass]="{ 'is-invalid': submitted && f.present_district_id.errors }" placeholder="---Select---"
+                                                    optionLabel="district_name" optionValue="district_id" [showClear]="true">
+                                        </p-dropdown>
+                                        <!--<div *ngIf="submitted && f.present_district_id.errors" class="invalid-feedback">
+                                            <small *ngIf="f.present_district_id.errors.required" class="p-error">District is required</small>
+                                        </div>-->
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label for="" class=" d-md-inline-flex" pTooltip="City/Town" tooltipPosition="top">City/Town<span class="req">*:</span> </label>
+                                        <input id="float-input p-fluid" type="text" formControlName="present_city" placeholder="City/Town" pInputText>
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label for="" class=" d-md-inline-flex" pTooltip="PS/Area" tooltipPosition="top">PS/Area<span class="req">*:</span> </label>
+                                        <input id="float-input p-fluid" type="text" formControlName="present_ps_area" placeholder="PS/Area" pInputText>
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label for="" class=" d-md-inline-flex" pTooltip="Post Code" tooltipPosition="top">Post Code : </label>
+                                        <input id="float-input p-fluid" type="text" formControlName="present_post_code" placeholder="Post Code" pInputText>
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label for="" class=" d-md-inline-flex" pTooltip="Block" tooltipPosition="top">Block :</label>
+                                        <input id="float-input p-fluid" type="text" formControlName="present_block" placeholder="Block" pInputText>
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label for="" class=" d-md-inline-flex" pTooltip="Road No" tooltipPosition="top">Road No :</label>
+                                        <input id="float-input p-fluid" type="text" formControlName="present_road_no" placeholder="Road No" pInputText>
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label for="" class=" d-md-inline-flex" pTooltip="House No" tooltipPosition="top">House No :</label>
+                                        <input id="float-input p-fluid" type="text" formControlName="present_house_no" placeholder="House No" pInputText>
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label for="" class=" d-md-inline-flex" pTooltip="Flat No" tooltipPosition="top">Flat No : </label>
+                                        <input id="float-input p-fluid" type="text" formControlName="present_flat_no" placeholder="Flat No" pInputText>
+
+                                    </div>
+
+
+                                    <div class="field col-12 md:col-12">
+
+                                        <label for="" class=" d-md-inline-flex" pTooltip="Address" tooltipPosition="top">Address</label>
+
+                                        <textarea rows="2" id="float-input p-fluid" formControlName="present_address_note" class="inputfield w-full" cols="50" pInputTextarea></textarea>
+
+
+                                    </div>
+
+                                    <hr />
+                                    <h5>Permanent Address</h5>
+
+                                    <!--<div class="p-fluid grid col-12 flex flex-wrap card-container">-->
+                                    <div class="field col-12 md:col-12">
+                                        <!--<p-checkbox [(ngModel)]="checked" binary="true" label="Same As Present Address" (onChange)="sameAddress($event)" inputId="binary"></p-checkbox>-->
+                                        <p-checkbox  binary="true" label="Same As Present Address" (onChange)="sameAddress($event)" inputId="binary"></p-checkbox>
+
+                                    </div>
+                                    <!--<div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">-->
+                                    <div class="field col-12 md:col-6">
+                                        <label for="" class=" d-md-inline-flex" pTooltip="Country" tooltipPosition="top">Country :</label>
+                                        <p-dropdown [options]="drpdwnPermanentCountryList" formControlName="permanent_country_id" placeholder="---Select---"
+                                                    optionLabel="country_name" optionValue="country_id" (onChange)="onSelectByPermanentCountryId($event.value)" [showClear]="true" [filter]="true" filterBy="country_name">
+                                        </p-dropdown>
+
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label for="" class=" d-md-inline-flex" pTooltip="State/Division" tooltipPosition="top">State/Division :</label>
+                                        <p-dropdown [options]="drpdwnPermanentDivisionList" formControlName="permanent_division_id" placeholder="---Select---"
+                                                    optionLabel="division_name" optionValue="division_id" (onChange)="onSelectByPermanentDivisionId($event.value)" [showClear]="true">
+                                        </p-dropdown>
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label for="" class=" d-md-inline-flex" pTooltip="District" tooltipPosition="top">District :</label>
+
+
+                                        <p-dropdown [options]="drpdwnPermanentDistrictList" formControlName="permanent_district_id" placeholder="---Select---"
+                                                    optionLabel="district_name" optionValue="district_id" [showClear]="true">
+                                        </p-dropdown>
+
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label for="" class=" d-md-inline-flex" pTooltip="City/Town" tooltipPosition="top">City/Town :</label>
+                                        <input id="float-input p-fluid" type="text" formControlName="permanent_city" placeholder="City/Town" pInputText>
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label for="" class=" d-md-inline-flex" pTooltip="PS/Area" tooltipPosition="top">PS/Area :</label>
+                                        <input id="float-input p-fluid" type="text" formControlName="permanent_ps_area" placeholder="PS/Area" pInputText>
+
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label for="" class=" d-md-inline-flex" pTooltip="Post Code" tooltipPosition="top">Post Code : </label>
+                                        <input id="float-input p-fluid" type="text" formControlName="permanent_post_code" placeholder="Post Code" pInputText>
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label for="" class=" d-md-inline-flex" pTooltip="Block" tooltipPosition="top">Block :</label>
+                                        <input id="float-input p-fluid" type="text" formControlName="permanent_block" placeholder="Block" pInputText>
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label for="" class=" d-md-inline-flex" pTooltip="Road No" tooltipPosition="top">Road No :</label>
+                                        <input id="float-input p-fluid" type="text" formControlName="permanent_road_no" placeholder="Road No" pInputText>
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label for="" class=" d-md-inline-flex" pTooltip="House No" tooltipPosition="top">House No :</label>
+                                        <input id="float-input p-fluid" type="text" formControlName="permanent_house_no" placeholder="House No" pInputText>
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label for="" class=" d-md-inline-flex" pTooltip="Flat No" tooltipPosition="top">Flat No : </label>
+                                        <input id="float-input p-fluid" type="text" formControlName="permanent_flat_no" placeholder="Flat No" pInputText>
+                                    </div>
+                                    <div class="field col-12 md:col-12">
+                                        <label for="" class=" d-md-inline-flex" pTooltip="Address" tooltipPosition="top">Address :</label>
+                                        <textarea rows="2" id="float-input p-fluid" formControlName="permanent_address_note" class="inputfield w-full" cols="50" pInputTextarea></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex justify-content-end pr-2">
+                                <button pButton pRipple type="button" (click)="openPrev()" label="Previous" class="risBtn mr-2 mb-2" icon="pi pi-step-backward"></button>
+                                <button pButton pRipple type="button" (click)="onFormSubmit()" label="Save" class="risBtn risSave mr-2 mb-2" icon="pi pi-check"></button>
+                                <button pButton pRipple type="button" (click)="toggleFormClose()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
+                            </div>
+                        </p-tabPanel>
+                    </p-tabView>
+                    <!--********** end card body ********************-->
+                </form>
+                <!--</div>
+                </div>-->
+            </div>
+
+
+            <div [hidden]="gridDisplay">
+                <!--<button class="risBtn risAdd mr-2 mb-2" icon="pi pi-plus" label="New" (click)="btnNew()"></button>-->
+                <button pButton pRipple type="button" (click)="showBasicDialog()" label="New" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
+                <!--<button class="pi pi-pencil risBtn risEdit mr-2 " (click)="loadEmployeeToEdit()"> Edit</button>-->
+                <button pButton pRipple type="button" (click)="loadEmployeeToEdit()" label="Edit" icon="pi pi-pencil" class="risBtn risEdit mr-2 mb-2"></button>
+                <!--<button class="pi pi-trash risBtn risDelete mr-2" (click)="showDialog()"> Delete</button>-->
+                <button pButton pRipple type="button" (click)="showDialog()" label="Delete" icon="pi pi-trash" class="risBtn risDelete mr-2 mb-2"></button>
+                <button pButton pRipple type="button" (click)="employeeActiveInactive()" label="Activity" icon="pi pi-box" class="risBtn risAll mr-2 mb-2"></button>
+                <!--<button class="pi pi-box risBtn risAll  mr-2" (click)="employeeActiveInactive()"> Activity</button>-->
+                <p-dialog header="Delete Record" [(visible)]="display" [style]="{width: '35vw'}">
                     <p>Do you want to delete this record?</p>
                     <ng-template pTemplate="footer">
-                      <button class="pi pi-times risBtn risClose" (click)="display=false"> No</button>
-                      <button class="pi pi-check risBtn risSave" (click)="deleteEmployee()"> Yes</button>
+                        <button class="pi pi-times risBtn risClose" (click)="display=false"> No</button>
+                        <button class="pi pi-check risBtn risSave" (click)="deleteEmployee()"> Yes</button>
                     </ng-template>
-                  </p-dialog>
-
-                  <div class="row">
-                    <div class="p-fluid grid col-12 flex flex-wrap card-container">
-
-                      <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
-                        <div class="col-4 mt-2 text-right">
-                          <label for="" class=" d-md-inline-flex" pTooltip="Code" tooltipPosition="top">Code<span class="req">*:</span> </label>
-                        </div>
-                        <div class="col-8 p-fluid">
-                          <span class="p-float-label">
-                            <input id="float-input p-fluid" type="text" formControlName="code" placeholder="Employee Code" pInputText required>
-                          </span>
-                        </div>
-                        <div class="col-4 mt-2 text-right">
-                          <label for="" class=" d-md-inline-flex" pTooltip="Title" tooltipPosition="top">Title<span class="req">*:</span> </label>
-                        </div>
-                        <div class="col-8 p-fluid">
-                          <span class="p-float-label">
-                            <!--<input id="float-input p-fluid" type="text" formControlName="TitleEnumid" placeholder="Title" pInputText required>-->
-                            <p-dropdown [options]="drpdwntitleList" [(ngModel)]="selectedTitle" formControlName="title_enum_id" placeholder="Select Employee Title"
-                                        optionLabel="title_enum_name" optionValue="title_enum_id" [showClear]="true"></p-dropdown>
-                          </span>
-                        </div>
-                        <div class="col-4 mt-2 text-right">
-                          <label for="" class=" d-md-inline-flex" pTooltip="First Name" tooltipPosition="top">First Name<span class="req">*:</span> </label>
-                        </div>
-                        <div class="col-8 p-fluid">
-                          <span class="p-float-label">
-                            <input id="float-input p-fluid" type="text" formControlName="first_name" placeholder="First Name" pInputText>
-                          </span>
-                        </div>
-                        <div class="col-4 mt-2 text-right">
-                          <label for="" class=" d-md-inline-flex" pTooltip="Middle Name" tooltipPosition="top">Middle Name : </label>
-                        </div>
-                        <div class="col-8 p-fluid">
-                          <span class="p-float-label">
-                            <input id="float-input p-fluid" type="text" formControlName="middle_name" placeholder="Middle Name" pInputText>
-                          </span>
-                        </div>
-
-                      </div>
-                      <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
-                        <div class="flex grid  ">
-                          <div class=" inputWrapper col-6 photo-signature align-self-end flex align-items-center justify-content-center">
-                            <img class="risBtn m-1" [src]="photourllink" style="width: 150px;" alt="">
-                            <input type="file" class="fileInput risBtn risAdd " style="width: 150px;" #employeeImage (change)="onSelectImage($event)">
-                          </div>
-                          <div class=" inputWrapper col-5 photo-signature align-self-end flex align-items-end justify-content-center">
-                            <img class="risBtn m-1" [src]="sigurllink" style="width: 140px;" alt="">
-                            <input type="file" class="fileInput risBtn risAdd " style="width: 140px; " #employeeSignature (change)="onSelectSignature($event)">
-                          </div>
-                        </div>
-
-                      </div>
-
-
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="p-fluid grid col-12 flex flex-wrap card-container">
-                      <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
-                        <div class="col-4 mt-2 text-right">
-                          <label for="" class=" d-md-inline-flex" pTooltip="Sure Name" tooltipPosition="top">Sure Name<span class="req">*:</span> </label>
-                        </div>
-                        <div class="col-8 p-fluid">
-                          <span class="p-float-label">
-                            <input id="float-input p-fluid" type="text" formControlName="sur_name" placeholder="Sure Name" pInputText required>
-                          </span>
-                        </div>
-                        <div class="col-4 mt-2 text-right">
-                          <label for="" class=" d-md-inline-flex" pTooltip="Fathers Name" tooltipPosition="top">Fathers Name <span class="req">*:</span> </label>
-                        </div>
-                        <div class="col-8 p-fluid">
-                          <span class="p-float-label">
-                            <input id="float-input p-fluid" type="text" formControlName="father_name" placeholder="Fathers Name" pInputText required>
-                          </span>
-                        </div>
-
-                        <div class="col-4 mt-2 text-right">
-                          <label for="" class=" d-md-inline-flex" pTooltip="Marital Status" tooltipPosition="top">Marital Status <span class="req">*:</span> </label>
-                        </div>
-                        <div class="col-8 p-fluid">
-                          <span class="p-float-label">
-
-                            <p-dropdown [options]="drpdwnmaritalStatusList" [(ngModel)]="selectedMaritalStatus" formControlName="marital_status_enum_id" placeholder="Select Marital Status"
-                                        optionLabel="marital_status_enum_name" optionValue="marital_status_enum_id" [showClear]="true"></p-dropdown>
-
-
-                          </span>
-                        </div>
-                        <div class="col-4 mt-2 text-right">
-                          <label for="" class=" d-md-inline-flex" pTooltip="Date Of Marriage" tooltipPosition="top">Date Of Marriage :</label>
-                        </div>
-                        <div class="col-8 p-fluid">
-                          <span class="p-float-label">
-
-                            <p-calendar id="float-input p-fluid" formControlName="date_of_marriage" placeholder="Date Of Marriage"
-                                        [showIcon]="true" inputId="icon"></p-calendar>
-                          </span>
-                        </div>
-
-                        <div class="col-4 mt-2 text-right">
-                          <label for="" class=" d-md-inline-flex" pTooltip="Personal Phone" tooltipPosition="top">Personal Phone <span class="req">*:</span> </label>
-                        </div>
-                        <div class="col-8 p-fluid">
-                          <span class="p-float-label">
-                            <input id="float-input p-fluid" type="text" formControlName="personal_phone" placeholder="Personal Phone" pInputText required>
-                          </span>
-                        </div>
-                        <div class="col-4 mt-2 text-right">
-                          <label for="" class=" d-md-inline-flex" pTooltip="Personal Email" tooltipPosition="top">Personal Email <span class="req">*:</span> </label>
-                        </div>
-                        <div class="col-8 p-fluid">
-                          <span class="p-float-label">
-                            <input id="float-input p-fluid" type="text" formControlName="personal_email" placeholder="Personal Email" pInputText required>
-                          </span>
-                        </div>
-                        <div class="col-4 mt-2 text-right">
-                          <label for="" class=" d-md-inline-flex" pTooltip="Date Of Birth" tooltipPosition="top">Date Of Birth <span class="req">*:</span> </label>
-                        </div>
-                        <div class="col-8 p-fluid">
-                          <span class="p-float-label">
-                            <p-calendar id="float-input p-fluid" formControlName="date_of_birth" placeholder="Date Of Birth"
-                                        [showIcon]="true" inputId="icon"></p-calendar>
-                          </span>
-                        </div>
-                        <div class="col-4 mt-2 text-right">
-                          <label for="" class=" d-md-inline-flex" pTooltip="National ID" tooltipPosition="top">National ID <span class="req">*:</span> </label>
-                        </div>
-                        <div class="col-5 p-fluid">
-                          <span class="p-float-label">
-                            <input id="float-input p-fluid" type="text" formControlName="national_id" placeholder="National ID" pInputText required>
-                          </span>
-                        </div>
-                        <div class="col-3 p-fluid">
-                          <!--<p-fileUpload mode="basic" name="myfile[]" url="./upload.php" accept="image/*" maxFileSize="1000000" (onUpload)="onSelectImage($event)"></p-fileUpload>-->
-                          <img class="risBtn m-1" [src]="filellink" style="width: 50px; height:30px;" alt="">
-                          <input type="file" class="fileInput risBtn risAdd " style="width: 140px; " #nationalIdFile (change)="onSelectFile($event)">
-                        </div>
-                        <div class="col-4 mt-2 text-right">
-                          <label for="" class=" d-md-inline-flex" pTooltip="Passport No" tooltipPosition="top">Passport No  </label>
-                        </div>
-                        <div class="col-5 p-fluid">
-                          <span class="p-float-label">
-                            <input id="float-input p-fluid" type="text" formControlName="passport_no" placeholder="Passport No" pInputText required>
-                          </span>
-                        </div>
-                        <div class="col-3 p-fluid">
-                          <!--<p-fileUpload mode="basic" name="myfile[]" url="./upload.php" accept="image/*" maxFileSize="1000000" (onUpload)="onSelectImage($event)"></p-fileUpload>-->
-                          <img class="risBtn m-1" [src]="filellink" style="width: 50px; height:30px;" alt="">
-                          <input type="file" class="fileInput risBtn risAdd " style="width: 140px; " #nationalIdFile (change)="onSelectFile($event)">
-                        </div>
-                        <div class="col-4 mt-2 text-right">
-                          <label for="" class=" d-md-inline-flex" pTooltip="Nationality" tooltipPosition="top">Nationality <span class="req">*:</span> </label>
-                        </div>
-                        <div class="col-8 p-fluid">
-                          <span class="p-float-label">
-                            <p-dropdown [options]="drpdwnNationalityList" [(ngModel)]="selectedNationality" formControlName="nationality_id" placeholder="Select Nationality"
-                                        optionLabel="country_name" optionValue="country_id" [showClear]="true" [filter]="true" filterBy="country_name">
-                            </p-dropdown>
-                          </span>
-                        </div>
-                        <div class="col-4 mt-2 text-right">
-                          <label for="" class=" d-md-inline-flex" pTooltip="Country Of Birth" tooltipPosition="top">Country Of Birth<span class="req">*:</span> </label>
-                        </div>
-                        <div class="col-8 p-fluid">
-                          <span class="p-float-label">
-                            <p-dropdown [options]="drpdwnCountryOfBirthList" [(ngModel)]="selectedCountryOfBirth" formControlName="country_of_birth_id" placeholder="Select Country Of Birth"
-                                        optionLabel="country_name" optionValue="country_id" [showClear]="true" [filter]="true" filterBy="country_name">
-                            </p-dropdown>
-                          </span>
-                        </div>
-
-                        <div class="col-4 mt-2 text-right">
-                          <label for="" class=" d-md-inline-flex" pTooltip="Ethnicity" tooltipPosition="top">Ethnicity<span class="req">*:</span></label>
-                        </div>
-                        <div class="col-8 p-fluid">
-                          <span class="p-float-label">
-                            <p-dropdown [options]="drpdwnEthnicityList" [(ngModel)]="selectedEthnicity" formControlName="ethnicity_id" placeholder="Select Ethnicity"
-                                        optionLabel="country_name" optionValue="country_id" [showClear]="true" [filter]="true" filterBy="country_name">
-                            </p-dropdown>
-                          </span>
-                        </div>
-
-
-                      </div>
-                      <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
-
-                        <div class="col-4 mt-2 text-right">
-                          <label for="" class=" d-md-inline-flex" pTooltip="Gender" tooltipPosition="top">Gender <span class="req">*:</span> </label>
-                        </div>
-                        <div class="col-8 p-fluid">
-                          <span class="p-float-label">
-                            <p-dropdown [options]="drpdwngenderList" [(ngModel)]="selectedGender" formControlName="gender_enum_id" placeholder="Select Gender"
-                                        optionLabel="gender_enum_name" optionValue="gender_enum_id" [showClear]="true"></p-dropdown>
-                          </span>
-                        </div>
-                        <div class="col-4 mt-2 text-right">
-                          <label for="" class=" d-md-inline-flex" pTooltip="Mothers Name" tooltipPosition="top">Mothers Name <span class="req">*:</span> </label>
-                        </div>
-                        <div class="col-8 p-fluid">
-                          <span class="p-float-label">
-                            <input id="float-input p-fluid" type="text" formControlName="mother_name" placeholder="Mothers Name" pInputText required>
-                          </span>
-                        </div>
-                        <div class="col-4 mt-2 text-right">
-                          <label for="" class=" d-md-inline-flex" pTooltip="Spouse Name" tooltipPosition="top">Spouse Name : </label>
-                        </div>
-                        <div class="col-8 p-fluid">
-                          <span class="p-float-label">
-                            <input id="float-input p-fluid" type="text" formControlName="spouse_name" placeholder="Spouse Name" pInputText required>
-                          </span>
-                        </div>
-                        <div class="col-4 mt-2 text-right">
-                          <label for="" class=" d-md-inline-flex" pTooltip="Employee Previous Code" tooltipPosition="top">Previous Code : </label>
-                        </div>
-                        <div class="col-8 p-fluid">
-                          <span class="p-float-label">
-                            <input id="float-input p-fluid" type="text" formControlName="employee_old_code" placeholder="Employee Previous Code" pInputText required>
-                          </span>
-                        </div>
-
-                        <div class="col-4 mt-2 text-right">
-                          <label for="" class=" d-md-inline-flex" pTooltip="Official Phone" tooltipPosition="top">Official Phone : </label>
-                        </div>
-                        <div class="col-8 p-fluid">
-                          <span class="p-float-label">
-                            <input id="float-input p-fluid" type="text" formControlName="official_phone" placeholder="Official Phone" pInputText required>
-                          </span>
-                        </div>
-                        <div class="col-4 mt-2 text-right">
-                          <label for="" class=" d-md-inline-flex" pTooltip="Office Email" tooltipPosition="top">Office Email : </label>
-                        </div>
-                        <div class="col-8 p-fluid">
-                          <span class="p-float-label">
-                            <input id="float-input p-fluid" type="text" formControlName="official_email" placeholder="Office Email" pInputText required>
-                          </span>
-                        </div>
-                        <div class="col-4 mt-2 text-right">
-                          <label for="" class=" d-md-inline-flex" pTooltip="Identification Mark" tooltipPosition="top">Identification : </label>
-                        </div>
-                        <div class="col-8 p-fluid">
-                          <span class="p-float-label">
-                            <input id="float-input p-fluid" type="text" formControlName="identification_mark" placeholder="Identification Mark" pInputText required>
-                          </span>
-                        </div>
-                        <div class="col-4 mt-2 text-right">
-                          <label for="" class=" d-md-inline-flex" pTooltip="Birth Certificate" tooltipPosition="top">Birth ID : </label>
-                        </div>
-                        <div class="col-5 p-fluid">
-                          <span class="p-float-label">
-                            <input id="float-input p-fluid" type="text" formControlName="birth_id" placeholder="Birth Certificate No" pInputText required>
-                          </span>
-                        </div>
-                        <div class="col-3 p-fluid">
-                          <!--<p-fileUpload mode="basic" name="myfile[]" url="./upload.php" accept="image/*" maxFileSize="1000000" (onUpload)="onSelectImage($event)"></p-fileUpload>-->
-                          <img class="risBtn m-1" [src]="filellink" style="width: 50px; height:30px;" alt="">
-                          <input type="file" class="fileInput risBtn risAdd " style="width: 140px; " #nationalIdFile (change)="onSelectFile($event)">
-                        </div>
-                        <div class="col-4 mt-2 text-right">
-                          <label for="" class=" d-md-inline-flex" pTooltip="Driving License No" tooltipPosition="top">Driving License No: </label>
-                        </div>
-                        <div class="col-5 p-fluid">
-                          <span class="p-float-label">
-                            <input id="float-input p-fluid" type="text" formControlName="driving_license_no" placeholder="Driving License No" pInputText required>
-                          </span>
-                        </div>
-                        <div class="col-3 p-fluid">
-                          <!--<p-fileUpload mode="basic" name="myfile[]" url="./upload.php" accept="image/*" maxFileSize="1000000" (onUpload)="onSelectImage($event)"></p-fileUpload>-->
-                          <img class="risBtn m-1" [src]="filellink" style="width: 50px; height:30px;" alt="">
-                          <input type="file" class="fileInput risBtn risAdd " style="width: 140px; " #nationalIdFile (change)="onSelectFile($event)">
-                        </div>
-                        <div class="col-4 mt-2 text-right">
-                          <label for="" class=" d-md-inline-flex" pTooltip="Religion" tooltipPosition="top">Religion<span class="req">*:</span></label>
-                        </div>
-                        <div class="col-8 p-fluid">
-                          <span class="p-float-label">
-                            <p-dropdown [options]="drpdwnreligionList" [(ngModel)]="selectedReligion" formControlName="religion_enum_id" placeholder="Select Religion"
-                                        optionLabel="religion_enum_name" optionValue="religion_enum_id" [showClear]="true"></p-dropdown>
-                          </span>
-                        </div>
-                        <div class="col-4 mt-2 text-right">
-                          <label for="" class=" d-md-inline-flex" pTooltip="Blood Group" tooltipPosition="top">Blood Group<span class="req">*:</span></label>
-                        </div>
-                        <div class="col-8 p-fluid">
-                          <span class="p-float-label">
-                            <p-dropdown [options]="drpdwnbloodGroupList" [(ngModel)]="selectedBloodGroup" formControlName="blood_group_enum_id" placeholder="Select Religion"
-                                        optionLabel="blood_group_enum_name" optionValue="blood_group_enum_id" [showClear]="true"></p-dropdown>
-                          </span>
-                        </div>
-
-                        <div class="col-4 mt-2 text-right">
-                          <label for="" class=" d-md-inline-flex" pTooltip="Residential Status" tooltipPosition="top">Residential Status: </label>
-                        </div>
-                        <div class="col-8 p-fluid">
-                          <span class="p-float-label">
-                            <p-dropdown [options]="drpdwnresidencialStatusList" [(ngModel)]="selectedResidencialStatus" formControlName="residentcial_status_enum_id" placeholder="Select Residencial Status"
-                                        optionLabel="residentcial_status_enum_name" optionValue="residentcial_status_enum_id" [showClear]="true"></p-dropdown>
-                          </span>
-                        </div>
-
-                      </div>
-
-
-                    </div>
-                  </div>
-                  <div class="row">
-
-                    <div class="col-12" style="text-align: right">
-                      <button type="submit" class="pi risBtn risAll" (click)="SaveEmployee()"> Next <span class="pi pi-step-forward"></span></button>
-                    </div>
-
-                  </div>
-
-
-
-
-
-                </p-fieldset>
-
-                <p-fieldset legend="Employee List" [collapsed]="collapsedempDetails" (onBeforeToggle)="toggle()" [toggleable]="true">
-                  <div class="grid mb-2">
-
-                    <button class="pi pi-plus risBtn risAdd mr-2 " (click)="btnNew()"> New</button>
-                    <button class="pi pi-pencil risBtn risEdit mr-2 " (click)="loadEmployeeToEdit()"> Edit</button>
-                    <button class="pi pi-trash risBtn risDelete mr-2" (click)="showDialog()"> Delete</button>
-                    <button class="pi pi-box risBtn risAll  mr-2" (click)="employeeActiveInactive()"> Activity</button>
-
-                  </div>
-                  <p-table #dt1 [value]="employeeList" [paginator]="true" [rows]="10" selectionMode="single" [(selection)]="selectedemployee" dataKey="EmployeeId" [showCurrentPageReport]="true" responsiveLayout="scroll" styleClass="p-datatable-striped p-datatable-sm"
-                           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)"
-                           [globalFilterFields]="['Code','EmployeeName','PersonalPhone','PersonalEmail','PresentAddressNote']">
+                </p-dialog>
+                <p-table #dt1 [value]="employeeList" [paginator]="true" [rows]="10" selectionMode="single" [(selection)]="selectedemployee" dataKey="EmployeeId" [showCurrentPageReport]="true" responsiveLayout="scroll" styleClass="p-datatable-striped p-datatable-sm"
+                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)"
+                         [globalFilterFields]="['Code','EmployeeName','PersonalPhone','PersonalEmail','PresentAddressNote']">
                     <ng-template pTemplate="caption">
-                      <div class="flex">
+                        <div class="flex">
 
-                        <span class="p-input-icon-left ml-auto">
-                          <i class="pi pi-search"></i>
-                          <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Search by Any" />
-                        </span>
-                      </div>
+                            <span class="p-input-icon-left ml-auto">
+                                <i class="pi pi-search"></i>
+                                <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Search by Any" />
+                            </span>
+                        </div>
                     </ng-template>
                     <ng-template pTemplate="header">
-                      <tr>
+                        <tr>
 
-                        <th pSortableColumn="Code">
+                            <th pSortableColumn="Code">
 
-                          Code
-                          <p-columnFilter type="text" field="Code" display="menu"></p-columnFilter>
-                          <p-sortIcon field="Code"></p-sortIcon>
+                                Code
+                                <p-columnFilter type="text" field="Code" display="menu"></p-columnFilter>
+                                <p-sortIcon field="Code"></p-sortIcon>
 
-                        </th>
-                        <th pSortableColumn="EmployeeName">
-                          Employee Name
-                          <p-columnFilter type="text" field="EmployeeName" display="menu"></p-columnFilter>
-                        </th>
-                        <th pSortableColumn="PersonalPhone">Personal Phone</th>
-                        <th pSortableColumn="PersonalEmail">Personal Email</th>
-                        <th pSortableColumn="PresentAddressNote">Address</th>
-                        <th>Activity</th>
-                      </tr>
+                            </th>
+                            <th pSortableColumn="EmployeeName">
+                                Employee Name
+                                <p-columnFilter type="text" field="EmployeeName" display="menu"></p-columnFilter>
+                            </th>
+                            <th pSortableColumn="PersonalPhone">Personal Phone</th>
+                            <th pSortableColumn="PersonalEmail">Personal Email</th>
+                            <th pSortableColumn="PresentAddressNote">Address</th>
+                            <th>Activity</th>
+                        </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-employee let-rowData let-columns="columns">
-                      <tr [pSelectableRow]="employee" >
-                        <td>{{employee.Code}}</td>
-                        <td>{{employee.EmployeeName}}</td>
-                        <td>{{employee.PersonalPhone}}</td>
-                        <td>{{employee.PersonalEmail}}</td>
-                        <td>{{employee.PresentAddressNote}}</td>
-                        <td *ngIf="employee.IsActive===true">{{"Active"}}</td>
-                        <td *ngIf="employee.IsActive===false">{{"InActive"}}</td>
-                      </tr>
+                        <tr [pSelectableRow]="employee">
+                            <td>{{employee.Code}}</td>
+                            <td>{{employee.EmployeeName}}</td>
+                            <td>{{employee.PersonalPhone}}</td>
+                            <td>{{employee.PersonalEmail}}</td>
+                            <td>{{employee.PresentAddressNote}}</td>
+                            <td *ngIf="employee.IsActive===true">{{"Active"}}</td>
+                            <td *ngIf="employee.IsActive===false">{{"InActive"}}</td>
+                        </tr>
                     </ng-template>
-                  </p-table>
-                </p-fieldset>
+                </p-table>
+            </div>
+        </div>
 
-              </div>
-            </p-tabPanel>
-            <p-tabPanel class="geoTab " header="Address" >
-              <p-fieldset legend="Present Address" [collapsed]="collapsed" (onBeforeToggle)="toggleAddress()" [toggleable]="true">
-                <div class="row">
-                  <div class="p-fluid grid col-12 flex flex-wrap card-container">
-
-                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
-                      <div class="col-4 mt-2 text-right">
-                        <label for="" class=" d-md-inline-flex" pTooltip="Country" tooltipPosition="top">Country<span class="req">*:</span> </label>
-                      </div>
-                      <div class="col-8 p-fluid">
-                        <span class="p-float-label">
-                          <p-dropdown [options]="drpdwnPresentCountryList" [(ngModel)]="selectedPresentCountry" formControlName="present_country_id" placeholder="Select Country"
-                                      optionLabel="country_name" optionValue="country_id" (onChange)="onSelectByPresentCountryId($event.value)" [showClear]="true" [filter]="true" filterBy="country_name">
-                          </p-dropdown>
-                        </span>
-                      </div>
-                      <div class="col-4 mt-2 text-right">
-                        <label for="" class=" d-md-inline-flex" pTooltip="District" tooltipPosition="top">District<span class="req">*:</span> </label>
-                      </div>
-                      <div class="col-8 p-fluid">
-                        <span class="p-float-label">
-                          <p-dropdown [options]="drpdwnPresentDistrictList" [(ngModel)]="selectedPresentDistrict" formControlName="present_district_id" placeholder="Select District"
-                                      optionLabel="district_name" optionValue="district_id" [showClear]="true">
-                          </p-dropdown>
-                        </span>
-                      </div>
-                      <div class="col-4 mt-2 text-right">
-                        <label for="" class=" d-md-inline-flex" pTooltip="PS/Area" tooltipPosition="top">PS/Area<span class="req">*:</span> </label>
-                      </div>
-                      <div class="col-8 p-fluid">
-                        <span class="p-float-label">
-                          <input id="float-input p-fluid" type="text" formControlName="present_ps_area" placeholder="PS/Area" pInputText required>
-                        </span>
-                      </div>
-                      <div class="col-4 mt-2 text-right">
-                        <label for="" class=" d-md-inline-flex" pTooltip="Block" tooltipPosition="top">Block :</label>
-                      </div>
-                      <div class="col-8 p-fluid">
-                        <span class="p-float-label">
-                          <input id="float-input p-fluid" type="text" formControlName="present_block" placeholder="Block" pInputText required>
-                        </span>
-                      </div>
-                      <div class="col-4 mt-2 text-right">
-                        <label for="" class=" d-md-inline-flex" pTooltip="House No" tooltipPosition="top">House No :</label>
-                      </div>
-                      <div class="col-8 p-fluid">
-                        <span class="p-float-label">
-                          <input id="float-input p-fluid" type="text" formControlName="present_house_no" placeholder="House No" pInputText required>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
-                      <div class="col-4 mt-2 text-right">
-                        <label for="" class=" d-md-inline-flex" pTooltip="State/Division" tooltipPosition="top">State/Division<span class="req">*:</span> </label>
-                      </div>
-                      <div class="col-8 p-fluid">
-                        <span class="p-float-label">
-                          <p-dropdown [options]="drpdwnPresentDivisionList" [(ngModel)]="selectedPresentDivision" formControlName="present_division_id" placeholder="Select State/Division"
-                                      optionLabel="division_name" optionValue="division_id" (onChange)="onSelectByPresentDivisionId($event.value)" [showClear]="true">
-                          </p-dropdown>
-                        </span>
-                      </div>
-                      <div class="col-4 mt-2 text-right">
-                        <label for="" class=" d-md-inline-flex" pTooltip="City/Town" tooltipPosition="top">City/Town<span class="req">*:</span> </label>
-                      </div>
-                      <div class="col-8 p-fluid">
-                        <span class="p-float-label">
-                          <input id="float-input p-fluid" type="text" formControlName="present_city" placeholder="City/Town" pInputText required>
-                        </span>
-                      </div>
-                      <div class="col-4 mt-2 text-right">
-                        <label for="" class=" d-md-inline-flex" pTooltip="Post Code" tooltipPosition="top">Post Code : </label>
-                      </div>
-                      <div class="col-8 p-fluid">
-                        <span class="p-float-label">
-                          <input id="float-input p-fluid" type="text" formControlName="present_post_code" placeholder="Post Code" pInputText required>
-                        </span>
-                      </div>
-                      <div class="col-4 mt-2 text-right">
-                        <label for="" class=" d-md-inline-flex" pTooltip="Road No" tooltipPosition="top">Road No :</label>
-                      </div>
-                      <div class="col-8 p-fluid">
-                        <span class="p-float-label">
-                          <input id="float-input p-fluid" type="text" formControlName="present_road_no" placeholder="Road No" pInputText required>
-                        </span>
-                      </div>
-                      <div class="col-4 mt-2 text-right">
-                        <label for="" class=" d-md-inline-flex" pTooltip="Flat No" tooltipPosition="top">Flat No : </label>
-                      </div>
-                      <div class="col-8 p-fluid">
-                        <span class="p-float-label">
-                          <input id="float-input p-fluid" type="text" formControlName="present_flat_no" placeholder="Flat No" pInputText required>
-                        </span>
-                      </div>
-
-                    </div>
-                    <div class="p-fluid grid col-12 flex justify-content-start flex-wrap card-container">
-                      <div class="col-2 mt-2 text-right">
-                        <label for="" class=" d-md-inline-flex" pTooltip="Address" tooltipPosition="top">Address<span class="req">*:</span> </label>
-                      </div>
-                      <div class="col-10 p-fluid">
-                        <span class="p-float-label">
-                          <textarea rows="2" id="float-input p-fluid" formControlName="present_address_note" class="inputfield w-full" cols="50" pInputTextarea></textarea>
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </p-fieldset>
-              <p-fieldset legend="Permanent Address" collapsed="true" [toggleable]="true">
-                <div class="row">
-                  <div class="p-fluid grid col-12 flex flex-wrap card-container">
-                    <div class="p-fluid grid col-12 flex justify-content-start flex-wrap card-container">
-                      <p-checkbox [(ngModel)]="checked" binary="true" label="Same As Present Address" (onChange)="sameAddress($event)" inputId="binary"></p-checkbox>
-
-                    </div>
-                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
-                      <div class="col-4 mt-2 text-right">
-                        <label for="" class=" d-md-inline-flex" pTooltip="Country" tooltipPosition="top">Country :</label>
-                      </div>
-                      <div class="col-8 p-fluid">
-                        <span class="p-float-label">
-                          <p-dropdown [options]="drpdwnPermanentCountryList" [(ngModel)]="selectedPermanentCountry" formControlName="permanent_country_id" placeholder="Select Country"
-                                      optionLabel="country_name" optionValue="country_id" (onChange)="onSelectByPermanentCountryId($event.value)" [showClear]="true" [filter]="true" filterBy="country_name">
-                          </p-dropdown>
-                        </span>
-                      </div>
-                      <div class="col-4 mt-2 text-right">
-                        <label for="" class=" d-md-inline-flex" pTooltip="District" tooltipPosition="top">District :</label>
-                      </div>
-                      <div class="col-8 p-fluid">
-                        <span class="p-float-label">
-                          <p-dropdown [options]="drpdwnPermanentDistrictList" [(ngModel)]="selectedPermanentDistrict" formControlName="permanent_district_id" placeholder="Select District"
-                                      optionLabel="district_name" optionValue="district_id" [showClear]="true">
-                          </p-dropdown>
-                        </span>
-                      </div>
-                      <div class="col-4 mt-2 text-right">
-                        <label for="" class=" d-md-inline-flex" pTooltip="PS/Area" tooltipPosition="top">PS/Area :</label>
-                      </div>
-                      <div class="col-8 p-fluid">
-                        <span class="p-float-label">
-                          <input id="float-input p-fluid" type="text" formControlName="permanent_ps_area" placeholder="PS/Area" pInputText required>
-                        </span>
-                      </div>
-                      <div class="col-4 mt-2 text-right">
-                        <label for="" class=" d-md-inline-flex" pTooltip="Block" tooltipPosition="top">Block :</label>
-                      </div>
-                      <div class="col-8 p-fluid">
-                        <span class="p-float-label">
-                          <input id="float-input p-fluid" type="text" formControlName="permanent_block" placeholder="Block" pInputText required>
-                        </span>
-                      </div>
-                      <div class="col-4 mt-2 text-right">
-                        <label for="" class=" d-md-inline-flex" pTooltip="House No" tooltipPosition="top">House No :</label>
-                      </div>
-                      <div class="col-8 p-fluid">
-                        <span class="p-float-label">
-                          <input id="float-input p-fluid" type="text" formControlName="permanent_house_no" placeholder="House No" pInputText required>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
-                      <div class="col-4 mt-2 text-right">
-                        <label for="" class=" d-md-inline-flex" pTooltip="State/Division" tooltipPosition="top">State/Division :</label>
-                      </div>
-                      <div class="col-8 p-fluid">
-                        <span class="p-float-label">
-                          <p-dropdown [options]="drpdwnPermanentDivisionList" [(ngModel)]="selectedPermanentDivision" formControlName="permanent_division_id" placeholder="Select State/Division"
-                                      optionLabel="division_name" optionValue="division_id" (onChange)="onSelectByPermanentDivisionId($event.value)" [showClear]="true">
-                          </p-dropdown>
-                        </span>
-                      </div>
-                      <div class="col-4 mt-2 text-right">
-                        <label for="" class=" d-md-inline-flex" pTooltip="City/Town" tooltipPosition="top">City/Town :</label>
-                      </div>
-                      <div class="col-8 p-fluid">
-                        <span class="p-float-label">
-                          <input id="float-input p-fluid" type="text" formControlName="permanent_city" placeholder="City/Town" pInputText required>
-                        </span>
-                      </div>
-                      <div class="col-4 mt-2 text-right">
-                        <label for="" class=" d-md-inline-flex" pTooltip="Post Code" tooltipPosition="top">Post Code : </label>
-                      </div>
-                      <div class="col-8 p-fluid">
-                        <span class="p-float-label">
-                          <input id="float-input p-fluid" type="text" formControlName="permanent_post_code" placeholder="Post Code" pInputText required>
-                        </span>
-                      </div>
-                      <div class="col-4 mt-2 text-right">
-                        <label for="" class=" d-md-inline-flex" pTooltip="Road No" tooltipPosition="top">Road No :</label>
-                      </div>
-                      <div class="col-8 p-fluid">
-                        <span class="p-float-label">
-                          <input id="float-input p-fluid" type="text" formControlName="permanent_road_no" placeholder="Road No" pInputText required>
-                        </span>
-                      </div>
-                      <div class="col-4 mt-2 text-right">
-                        <label for="" class=" d-md-inline-flex" pTooltip="Flat No" tooltipPosition="top">Flat No : </label>
-                      </div>
-                      <div class="col-8 p-fluid">
-                        <span class="p-float-label">
-                          <input id="float-input p-fluid" type="text" formControlName="permanent_flat_no" placeholder="Flat No" pInputText required>
-                        </span>
-                      </div>
-
-                    </div>
-                    <div class="p-fluid grid col-12 flex justify-content-start flex-wrap card-container">
-                      <div class="col-2 mt-2 text-right">
-                        <label for="" class=" d-md-inline-flex" pTooltip="Address" tooltipPosition="top">Address :</label>
-                      </div>
-                      <div class="col-10 p-fluid">
-                        <span class="p-float-label">
-                          <textarea rows="2" id="float-input p-fluid" formControlName="permanent_address_note" class="inputfield w-full" cols="50" pInputTextarea></textarea>
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </p-fieldset>
-              <ng-template pTemplate="footer">
-                <button type="submit" class="pi risBtn risAll" (click)="selected=true"><span class="pi pi-step-backward"></span> Previous </button>
-                <button type="submit" class="pi pi-save risBtn risSave" (click)="SaveEmployee()"> Save</button>
-                <!--<button class="pi pi-times risBtn risClose" (click)="displayBasic=false"> Previous</button>-->
-              </ng-template>
-            </p-tabPanel>
-          </p-tabView>
-          <!--********** end card body ********************-->
-        </form>
-      </div>
     </div>
-  </div>
 </div>
