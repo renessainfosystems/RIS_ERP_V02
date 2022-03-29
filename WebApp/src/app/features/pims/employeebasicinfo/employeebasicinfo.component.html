@@ -156,9 +156,10 @@
                                         </div>
                                         <div class="field col-12 md:col-6">
                                             <label for="" class=" d-md-inline-flex" pTooltip="Personal Email" tooltipPosition="top">Personal Email <span class="req">*:</span> </label>
-                                            <input id="float-input p-fluid" type="text" formControlName="personal_email" [ngClass]="{ 'is-invalid': submitted && f.personal_email.errors }" placeholder="Personal Email" pInputText>
+                                            <input id="float-input p-fluid" type="email" formControlName="personal_email" [ngClass]="{ 'is-invalid': submitted && f.personal_email.errors }" placeholder="Personal Email" pInputText>
                                             <div *ngIf="submitted && f.personal_email.errors" class="invalid-feedback">
-                                                <small *ngIf="f.personal_email.errors.required" class="p-error">Personal Email is required</small>
+                                                <small *ngIf="f.personal_email.errors.required" class="p-error">Personal Email is Required</small>
+                                                <small *ngIf="f.personal_email.errors.email" class="p-error">Personal Email must be valid email address</small>
                                             </div>
                                         </div>
                                         <div class="field col-12 md:col-6">
