@@ -533,9 +533,7 @@ export class DealerinfoComponent implements OnInit {
             this.dealerinfoForm.controls['flat_no'].setValue(data.FlatNo);
             this.dealerinfoForm.controls['address_note'].setValue(data.AddressNote);
             this.dealerinfoForm.controls['logo_path'].setValue(data.LogoPath);
-            this.photourllink = data.LogoPath;
-            this.loadAllDealerContactinfos();
-            this.loadAllDealerLocationinfos();
+            this.photourllink = data.LogoPath;            
 
         });
         this.toggleGridDisplay();
@@ -1302,7 +1300,7 @@ export class DealerinfoComponent implements OnInit {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
         let dealerLocationinfoId = this.rowData.DealerLocationInfoId;
-        this.dealerinfoService.deleteDealerContactInfo(dealerLocationinfoId).subscribe(data => {
+        this.dealerinfoService.deleteDealerLocationInfo(dealerLocationinfoId).subscribe(data => {
             if (data.MessageType == 1) {
                 this.dealerlocationinfoList.splice(this.dealerlocationinfoList.findIndex(item => item.DealerLocationInfoId === data.dealerLocationinfoId), 1);
             }
