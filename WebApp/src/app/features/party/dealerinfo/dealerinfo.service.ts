@@ -172,7 +172,7 @@ export class DealerInfoService {
     }
     deleteDealerLocationInfo(dealer_location_info_id: number): Observable<any> {
 
-        return this.http.post(this.ipconfig.base_IP + 'DealerLocationInfo/Delete?dealer_contact_info_id=' + dealer_location_info_id, httpOptions);
+        return this.http.post(this.ipconfig.base_IP + 'DealerLocationInfo/Delete?dealer_location_info_id=' + dealer_location_info_id, httpOptions);
 
     }
     getAllLocationInfoByDealerId(dealer_info_id: Number): Observable<any[]> {
