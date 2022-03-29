@@ -121,7 +121,6 @@ export class DealerinfoComponent implements OnInit {
 
     displayBasic: boolean = false;
     showBasicDialog() {
-        //this.resetForm();
         this.ngOnInit();
         this.toggleGridDisplay();
     }
@@ -144,7 +143,6 @@ export class DealerinfoComponent implements OnInit {
 
     // Contact Start
     showBasicDialogContactNew() {
-        //this.dealercontactForm.reset();
         this.ngOnInit();
         this.toggleGridDisplay();
         this.dealerContactIndex();
@@ -154,14 +152,12 @@ export class DealerinfoComponent implements OnInit {
     }
 
     showBasicDialogContactGrid() {
-        //this.dealercontactForm.reset();
         this.toggleGridDisplayContact();
         this.toggleGridDisplay();
         this.dealerContactIndex();
        
     }
     showBasicDialogContactEdit() {
-        //this.dealercontactForm.reset();
         this.toggleFormDisplayContact();
         this.toggleGridDisplay();
         this.dealerContactIndex();
@@ -188,7 +184,6 @@ export class DealerinfoComponent implements OnInit {
 
     // Location Start
     showBasicDialogLocationNew() {
-        //this.dealerlocationForm.reset();
         this.ngOnInit();
         this.toggleGridDisplay();
         this.dealerLocationIndex();
@@ -198,14 +193,12 @@ export class DealerinfoComponent implements OnInit {
     }
 
     showBasicDialogLocationGrid() {
-        //this.dealerlocationForm.reset();
         this.toggleGridDisplayLocation();
         this.toggleGridDisplay();
         this.dealerLocationIndex();
 
     }
     showBasicDialogLocationEdit() {
-        //this.dealerlocationForm.reset();
         this.toggleFormDisplayLocation();
         this.toggleGridDisplay();
         this.dealerLocationIndex();
@@ -248,49 +241,8 @@ export class DealerinfoComponent implements OnInit {
 
     }
 
-    clearDealerInfoForm() {
-        this.dealerinfoForm = this.formbulider.group({
-            dealer_info_id: [''],
-            dealer_info_code: [''],
-            dealer_info_name: [''],
-            dealer_info_short_name: [''],
-            dealer_info_display_name: [''],
-            trade_license: [''],
-            year_established: [''],
-            TIN: [''],
-            BIN: [''],
-            business_type_enum_id: [''],
-            industry_sub_sector_id: [''],
-            organazation_type_enum_id: [''],
-            registry_authority_id: [''],
-            regulator_id: [''],
-            security_type_enum_id: [''],
-            prefered_method_enum_id: [''],
-            mobile: [''],
-            phone: [''],
-            email: [''],
-            web_url: [''],
-            maximum_credit: [''],
-            internal_credit_rating: [''],
-            allowable_credit: [''],
-            credit_days: [''],
-            logo_path: [''],
-            city: [''],
-            post_code: [''],
-            block: [''],
-            road_no: [''],
-            house_no: [''],
-            flat_no: [''],
-            address_note: [''],
-            ImageUpload: new FormControl('')
-        });
-
-
-    }
     ngOnInit(): void {
         this.dealerinfoService.getAllDealerInfo().subscribe(data => this.dealerinfoList = data);
-        //this.dealerinfoService.getAllDealerContactInfo().subscribe(data => this.dealercontactinfoList = data);        
-        //this.dealerinfoService.getAllDealerLocationInfo().subscribe(data => this.dealerlocationinfoList = data);
 
         this.dealerinfoForm = this.formbulider.group({
             dealer_info_code: [''],
@@ -430,18 +382,14 @@ export class DealerinfoComponent implements OnInit {
 
     onRowSelect(event) {
         debugger;
-        // this.toggle();
         this.rowSelected = true;
         this.rowData = event.data;
 
     }
     onRowUnselect(event) {
-        // this.toggle();
         this.rowSelected = false;
         this.rowData = null;
-
     }
-
 
     toggle() {
         if (this.collapsedempInfo) {
@@ -460,7 +408,6 @@ export class DealerinfoComponent implements OnInit {
         else {
             this.collapsed = true;
         }
-
     }
 
     toggleContactAddress() {
@@ -470,7 +417,6 @@ export class DealerinfoComponent implements OnInit {
         else {
             this.collapsed = true;
         }
-
     }
 
     btnNew() {
@@ -574,9 +520,7 @@ export class DealerinfoComponent implements OnInit {
             if (data != null) {
                 this.isDealerinfoEdit = true;
             }
-
             this.loadAllDealerLocationinfos();
-
         });
         this.showBasicDialogLocationEdit();
         this.index = 5;
@@ -683,27 +627,11 @@ export class DealerinfoComponent implements OnInit {
             return;
         }
        
-
         let formData = new FormData();
         for (const key of Object.keys(this.dealerinfoForm.value)) {
             const value = this.dealerinfoForm.value[key];
             if ((value == "") || (value == null) || (value == undefined)) {
-                //formData.append("dealer_info_display_name", '');
-                //formData.append("TIN", '');
-                //formData.append("BIN", '');
-                //formData.append("mobile", '');
-                //formData.append("phone", '');
-                //formData.append("email", '');
-                //formData.append("web_url", '');
-                //formData.append("city", '');
-                //formData.append("post_code", '');
-                //formData.append("block", '');
-                //formData.append("road_no", '');
-                //formData.append("house_no", '');
-                //formData.append("flat_no", '');
-                //formData.append("address_note", '');
-                //formData.append("logo_path", '');
-                //return null;
+                
             }
             if (key == "year_established") {
                 let date = new Date(value).toISOString();
@@ -742,7 +670,6 @@ export class DealerinfoComponent implements OnInit {
                     if (result.MessageType == 1) {
                         this.dealerinfoList.unshift(result.Data);
                         this.selecteddealerinfo = result.Data;
-                        //this.nodeSelected = true;
                         this.rowData = result.Data;
                         this.toggleFormDisplay();
                         this.dealerIndex();
@@ -920,7 +847,6 @@ export class DealerinfoComponent implements OnInit {
     }
 
     resetForm() {
-        //this.dealerinfoForm.reset();
         this.isDealerinfoEdit = false;
         this.loadAllDealerinfos();
         this.dealerinfodataSource = [];
@@ -935,7 +861,6 @@ export class DealerinfoComponent implements OnInit {
             }
         }
     }
-
 
     // Contact Info Start
 
@@ -973,7 +898,6 @@ export class DealerinfoComponent implements OnInit {
             this.dealercontactForm.controls['present_flat_no'].setValue('');
         }
     }
-
 
     get g(): { [key: string]: AbstractControl } {
         return this.dealercontactForm.controls;
@@ -1156,7 +1080,6 @@ export class DealerinfoComponent implements OnInit {
             reader.onload = (event: any) => {
                 this.photourllink = event.target.result;
             }
-            //alert(this.photourllink)
             if (event.target.files.length > 0) {
                 const file = event.target.files[0];
                 this.dealerContactinfoImage.nativeElement.innerText = file.name;
@@ -1246,7 +1169,6 @@ export class DealerinfoComponent implements OnInit {
                     if (result.MessageType == 1) {
                         this.dealerlocationinfoList.unshift(result.Data);
                         this.selecteddealerlocationinfo = result.Data;
-                        //this.nodeSelected = true;
                         this.rowData = result.Data;
                         this.dealerLocationIndex();
                         this.submittedLocation = false;
