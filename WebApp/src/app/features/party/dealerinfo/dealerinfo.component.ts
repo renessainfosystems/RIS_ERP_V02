@@ -308,10 +308,10 @@ export class DealerinfoComponent implements OnInit {
             emergency_contact: [null],
             blood_group_enum_id: 0,
             image_path: [null],
-            permanent_country_id: [0, [Validators.required]],
-            permanent_division_id: [0, [Validators.required]],
-            permanent_district_id: [0, [Validators.required]],
-            permanent_thana_id: [0, [Validators.required]],
+            permanent_country_id: ['', [Validators.required]],
+            permanent_division_id: ['', [Validators.required]],
+            permanent_district_id: ['', [Validators.required]],
+            permanent_thana_id: ['', [Validators.required]],
             permanent_zone_id: [0],
             permanent_city: [null],
             permanent_post_code: [null],
@@ -319,10 +319,10 @@ export class DealerinfoComponent implements OnInit {
             permanent_road_no: [null],
             permanent_house_no: [null],
             permanent_flat_no: [null],
-            present_country_id: [0, [Validators.required]],
-            present_division_id: [0, [Validators.required]],
-            present_district_id: [0, [Validators.required]],
-            present_thana_id: [0, [Validators.required]],
+            present_country_id: ['', [Validators.required]],
+            present_division_id: ['', [Validators.required]],
+            present_district_id: ['', [Validators.required]],
+            present_thana_id: ['', [Validators.required]],
             present_zone_id: [0],
             present_city: [null],
             present_post_code: [null],
@@ -1007,7 +1007,6 @@ export class DealerinfoComponent implements OnInit {
             }
 
             this.dealercontactForm.controls['dealer_info_id'].setValue(data.DealerInfoId);
-            //this.dealercontactForm.controls['dealer_info_name'].setValue(data.DealerInfoName);
             this.dealercontactForm.controls['dealer_contact_info_code'].setValue(data.DealerContactInfoCode);
             this.dealercontactForm.controls['person_name'].setValue(data.PersonName);
             this.dealercontactForm.controls['person_designation'].setValue(data.PersonDesignation);

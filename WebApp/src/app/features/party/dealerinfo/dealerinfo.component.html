@@ -413,7 +413,7 @@
                                         </div>
                                     </form>
                                     <div class="flex justify-content-end pr-2">
-                                        <button pButton pRipple type="button" (click)="openPrevContact()" label="Previous" class="risBtn  mr-2 mb-2" icon="pi pi-step-backward"></button>
+                                        <button pButton pRipple type="button" (click)="openPrev()" label="Previous" class="risBtn  mr-2 mb-2" icon="pi pi-step-backward"></button>
                                         <button pButton pRipple type="button" (click)="onContactBasic()" label="Next" class="risBtn mr-2 mb-2" icon="pi pi-step-forward"></button>
                                         <button pButton pRipple type="button" (click)="toggleFormCloseContact()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
                                     </div>
@@ -421,7 +421,7 @@
                                 <p-tabPanel header="Address Info">
                                     <form action="" [formGroup]="dealercontactForm">
                                         <div class="col-12">
-                                            <h6>Parmanent Address</h6>
+                                            <h6>Parmanent Address:</h6>
                                             <div class="p-fluid p-formgrid grid">
                                                 <div class="field col-12 md:col-6">
                                                     <label pTooltip="Country" tooltipPosition="top">Country<span class="req">*</span></label>
@@ -492,7 +492,7 @@
                                             </div>
                                         </div>
                                         <div class="col-12">
-                                            <h6>Present Address</h6>
+                                            <h6>Present Address :</h6>
                                             <div class="p-fluid grid col-12 flex justify-content-start flex-wrap card-container">
                                                 <p-checkbox  binary="true" label="Same As Present Address" (onChange)="sameAddress($event)" inputId="binary"></p-checkbox>
 
