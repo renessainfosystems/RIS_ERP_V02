@@ -122,6 +122,7 @@ export class DealerinfoComponent implements OnInit {
     displayBasic: boolean = false;
     showBasicDialog() {
         //this.resetForm();
+        this.ngOnInit();
         this.toggleGridDisplay();
     }
 
@@ -144,6 +145,7 @@ export class DealerinfoComponent implements OnInit {
     // Contact Start
     showBasicDialogContactNew() {
         //this.dealercontactForm.reset();
+        this.ngOnInit();
         this.toggleGridDisplay();
         this.dealerContactIndex();
         this.gridDisplayContact = true;
@@ -187,6 +189,7 @@ export class DealerinfoComponent implements OnInit {
     // Location Start
     showBasicDialogLocationNew() {
         //this.dealerlocationForm.reset();
+        this.ngOnInit();
         this.toggleGridDisplay();
         this.dealerLocationIndex();
         this.gridDisplayLocation = true;
@@ -290,14 +293,14 @@ export class DealerinfoComponent implements OnInit {
         //this.dealerinfoService.getAllDealerLocationInfo().subscribe(data => this.dealerlocationinfoList = data);
 
         this.dealerinfoForm = this.formbulider.group({
-            dealer_info_code: [null],
+            dealer_info_code: [''],
             dealer_info_name: ['', [Validators.required]],
             dealer_info_short_name: ['', [Validators.required]],
-            dealer_info_display_name: [null],
+            dealer_info_display_name: [''],
             trade_license: ['', [Validators.required]],
             year_established: [null],
-            TIN: [null],
-            BIN: [null],
+            TIN: [''],
+            BIN: [''],
             domicile_enum_id: ['', [Validators.required]],
             business_type_enum_id: [0],
             industry_sector_id: ['', [Validators.required]],
@@ -314,93 +317,93 @@ export class DealerinfoComponent implements OnInit {
             allowable_credit: [0],
             credit_days: [0],
             mobile: ['', [Validators.required]],
-            phone: [null],
+            phone: [''],
             email: ['', [Validators.email, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
-            web_url: [null],
-            logo_path: [null],
+            web_url: [''],
+            logo_path: [''],
             continent_enum_id: ['', [Validators.required]],
             country_id: ['', [Validators.required]],
             division_id: ['', [Validators.required]],
             district_id: ['', [Validators.required]],
             thana_id: ['', [Validators.required]],
             zone_id: [0],
-            city: [null],
-            post_code: [null],
-            block: [null],
-            road_no: [null],
-            house_no: [null],
-            flat_no: [null],
-            address_note: [null],
+            city: [''],
+            post_code: [''],
+            block: [''],
+            road_no: [''],
+            house_no: [''],
+            flat_no: [''],
+            address_note: [''],
             ImageUpload: new FormControl(''),
 
         });
 
         this.dealercontactForm = this.formbulider.group({
-            dealer_contact_info_code: [null],
-            dealer_info_id: [null],
+            dealer_contact_info_code: [''],
+            dealer_info_id: [''],
             person_name: ['', [Validators.required]],
             person_designation: ['', [Validators.required]],
-            father_name: ['test'],
-            mother_name: [null],
+            father_name: [''],
+            mother_name: [''],
             date_of_birth: [null],
             religion_enum_id: [0],
-            nationality: [null],
-            national_id_no: [null],
-            birth_certificate_no: [null],
-            passport_no: [null],
+            nationality: [''],
+            national_id_no: [''],
+            birth_certificate_no: [''],
+            passport_no: [''],
             mobile: ['', [Validators.required]],
-            phone: [null],
+            phone: [''],
             email: ['', [Validators.email, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
-            emergency_contact: [null],
+            emergency_contact: [''],
             blood_group_enum_id: 0,
-            image_path: [null],
+            image_path: [''],
             permanent_country_id: ['', [Validators.required]],
             permanent_division_id: ['', [Validators.required]],
             permanent_district_id: ['', [Validators.required]],
             permanent_thana_id: ['', [Validators.required]],
             permanent_zone_id: [0],
-            permanent_city: [null],
-            permanent_post_code: [null],
-            permanent_block: [null],
-            permanent_road_no: [null],
-            permanent_house_no: [null],
-            permanent_flat_no: [null],
+            permanent_city: [''],
+            permanent_post_code: [''],
+            permanent_block: [''],
+            permanent_road_no: [''],
+            permanent_house_no: [''],
+            permanent_flat_no: [''],
             present_country_id: ['', [Validators.required]],
             present_division_id: ['', [Validators.required]],
             present_district_id: ['', [Validators.required]],
             present_thana_id: ['', [Validators.required]],
             present_zone_id: [0],
-            present_city: [null],
-            present_post_code: [null],
-            present_block: [null],
-            present_road_no: [null],
-            present_house_no: [null],
-            present_flat_no: [null],
+            present_city: [''],
+            present_post_code: [''],
+            present_block: [''],
+            present_road_no: [''],
+            present_house_no: [''],
+            present_flat_no: [''],
             ImageUpload: new FormControl(''),
 
         });
 
         this.dealerlocationForm = this.formbulider.group({
-            dealer_location_info_code: [null],
-            dealer_info_id: [null],
+            dealer_location_info_code: [''],
+            dealer_info_id: [''],
             dealer_location_info_name: ['', [Validators.required]],
             dealer_location_info_short_name: ['', [Validators.required]],
-            trade_license: [null],
+            trade_license: [''],
             trade_license_date: [null],
             mobile: ['', [Validators.required]],
-            phone: [null],
+            phone: [''],
             email: ['', [Validators.email, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
-            emergency_contact: [null],
+            emergency_contact: [''],
             country_id: ['', [Validators.required]],
             division_id: ['', [Validators.required]],
             district_id: ['', [Validators.required]],
             thana_id: ['', [Validators.required]],
-            city: [null],
-            post_code: [null],
-            block: [null],
-            road_no: [null],
-            house_no: [null],
-            flat_no: [null],
+            city: [''],
+            post_code: [''],
+            block: [''],
+            road_no: [''],
+            house_no: [''],
+            flat_no: [''],
             address_note: ['', [Validators.required]]
 
         });
@@ -739,7 +742,7 @@ export class DealerinfoComponent implements OnInit {
                     if (result.MessageType == 1) {
                         this.dealerinfoList.unshift(result.Data);
                         this.selecteddealerinfo = result.Data;
-                        this.nodeSelected = true;
+                        //this.nodeSelected = true;
                         this.rowData = result.Data;
                         this.toggleFormDisplay();
                         this.dealerIndex();
@@ -1032,7 +1035,8 @@ export class DealerinfoComponent implements OnInit {
                     this.selecteddealerinfo = result.Data;
                     this.rowData = result.Data;
                     this.onRowUnselect(event);
-                    this.dealerContactIndex();                    
+                    this.dealerContactIndex();
+                    this.submittedContact = false;
                 }
 
             });
@@ -1051,6 +1055,7 @@ export class DealerinfoComponent implements OnInit {
                         this.rowData = result.Data;
                         this.onRowUnselect(event);
                         this.dealerContactIndex();
+                        this.submittedContact = false;
                     }
                 }
             );
@@ -1227,6 +1232,7 @@ export class DealerinfoComponent implements OnInit {
                     this.selecteddealerlocationinfo = result.Data;
                     this.rowData = result.Data;
                     this.dealerLocationIndex();
+                    this.submittedLocation = false;
                 }
             });
             this.gridDisplayLocation = false;
@@ -1240,9 +1246,10 @@ export class DealerinfoComponent implements OnInit {
                     if (result.MessageType == 1) {
                         this.dealerlocationinfoList.unshift(result.Data);
                         this.selecteddealerlocationinfo = result.Data;
-                        this.nodeSelected = true;
+                        //this.nodeSelected = true;
                         this.rowData = result.Data;
                         this.dealerLocationIndex();
+                        this.submittedLocation = false;
                     }
                 }
             );
