@@ -486,7 +486,7 @@ export class RetailerinfoComponent implements OnInit {
 
         });
         this.showBasicDialogContactEdit();
-        this.index = 4;
+        this.index = 3;
     }
 
     loadRetailerinfoLocationGrid() {
@@ -504,7 +504,7 @@ export class RetailerinfoComponent implements OnInit {
             this.loadAllRetailerLocationinfos();
         });
         this.showBasicDialogLocationEdit();
-        this.index = 5;
+        this.index = 4;
     }
 
     deleteRetailerinfo() {
