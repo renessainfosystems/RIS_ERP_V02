@@ -1248,6 +1248,4 @@ export class RetailerinfoComponent implements OnInit {
     openPrevLocation() {
         this.indexLocation = (this.indexLocation === 0) ? 1 : this.indexLocation - 1;
     }
-
-
 }

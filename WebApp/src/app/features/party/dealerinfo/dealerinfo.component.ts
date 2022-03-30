@@ -549,7 +549,7 @@ export class DealerinfoComponent implements OnInit {
     onGeneral(): void {
         this.submitted = true;
         const data = this.dealerinfoForm.value;
-        if ((data.dealer_info_name == "") || (data.dealer_info_name == null) || (data.dealer_info_name == null)) {
+        if ((data.dealer_info_name == "") || (data.dealer_info_name == null) || (data.dealer_info_name == undefined)) {
             return;
         }
         else if ((data.dealer_info_short_name == "") || (data.dealer_info_short_name == null) || (data.dealer_info_short_name == undefined)) {
