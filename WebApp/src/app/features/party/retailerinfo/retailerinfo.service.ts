@@ -38,7 +38,7 @@ export class RetailerInfoService {
         return this.http.get<any[]>(this.ipconfig.base_IP + 'RetailerInfo/GetAllRetailerInfo', httpOptions);
 
     }
-    getRetailerInfoById(retailer_info_id: Number): Observable<any> {
+    getRetailerInfoById(retailer_info_id: number): Observable<any> {
         return this.http.get(this.ipconfig.base_IP + 'RetailerInfo/GetRetailerInfoById?retailer_info_id=' + retailer_info_id, httpOptions);
     }
 
@@ -144,14 +144,14 @@ export class RetailerInfoService {
         return this.http.post(this.ipconfig.base_IP + 'RetailerContactInfo/Delete?retailer_contact_info_id=' + retailer_contact_info_id, httpOptions);
 
     }
-    getContactInfoByRetailerId(retailer_info_id: Number): Observable<any[]> {
-
-        return this.http.get<any[]>(this.ipconfig.base_IP + 'RetailerContactInfo/GetContactInfoByRetailerId?retailer_info_id=' + retailer_info_id, httpOptions);
-
-    }
     getAllRetailerContactInfo(): Observable<any[]> {
 
         return this.http.get<any[]>(this.ipconfig.base_IP + 'RetailerContactInfo/GetAllRetailerContactInfo', httpOptions);
+
+    }
+    getAllContactInfoByRetailerId(retailer_info_id: Number): Observable<any[]> {
+
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'RetailerContactInfo/GetContactInfoByRetailerId?retailer_info_id=' + retailer_info_id, httpOptions);
 
     }
     getRetailerContactInfoById(retailer_contact_info_id: Number): Observable<any> {
@@ -172,11 +172,10 @@ export class RetailerInfoService {
     }
     deleteRetailerLocationInfo(retailer_location_info_id: number): Observable<any> {
 
-        return this.http.post(this.ipconfig.base_IP + 'RetailerLocationInfo/Delete?retailer_contact_info_id=' + retailer_location_info_id, httpOptions);
+        return this.http.post(this.ipconfig.base_IP + 'RetailerLocationInfo/Delete?retailer_location_info_id=' + retailer_location_info_id, httpOptions);
 
     }
-
-    getLocationInfoByRetailerId(retailer_info_id: Number): Observable<any[]> {
+    getAllLocationInfoByRetailerId(retailer_info_id: Number): Observable<any[]> {
 
         return this.http.get<any[]>(this.ipconfig.base_IP + 'RetailerLocationInfo/GetLocationInfoByRetailerId?retailer_info_id=' + retailer_info_id, httpOptions);
 

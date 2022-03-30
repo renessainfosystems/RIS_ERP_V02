@@ -1,5 +1,5 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { AbstractControl, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { NavigationEnd } from '@angular/router';
 import { NotificationService } from '../../../service/CommonMessage/notification.service';
 import { RetailerInfoService } from './retailerinfo.service';
@@ -17,9 +17,11 @@ export class RetailerinfoComponent implements OnInit {
         static: true
     }) retailerContactinfoImage;
 
+    submitted = false;
+    submittedContact = false;
+    submittedLocation = false;
     retailerinfoForm: any;//RetailerFormName  
     retailerinfoList: any[];//List Retailerinfo
-    allDealerInfo: any[];//List Retailerinfo
     retailerinfodataSource: any[];//single retailerinfo
     selectedretailerinfo: any;// Selected Retailerinfo  
     isRetailerinfoEdit: boolean = false;
@@ -36,6 +38,8 @@ export class RetailerinfoComponent implements OnInit {
     selectedretailerlocationinfo: any;// Selected Retailerinfo 
 
     //declare dropdown List Property
+    allDealerInfo: any[]
+
     selectedDomicile: any;
     allDomicile: any[];
 
@@ -96,6 +100,7 @@ export class RetailerinfoComponent implements OnInit {
     rows = 10;
     //end dropdown List prperty
     rowData: any;
+    dataSaved = false;
     // for delete data modal
     display: boolean = false;
     rowSelected: boolean = false;
@@ -105,6 +110,8 @@ export class RetailerinfoComponent implements OnInit {
     collapsed = false;
     checked: boolean = false;
     index: number = 0;
+    indexContact: number = 0;
+    indexLocation: number = 0;
     showDialog() {
         if (this.rowData == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
@@ -113,9 +120,114 @@ export class RetailerinfoComponent implements OnInit {
             this.display = true;
     }
 
+    displayBasic: boolean = false;
+    showBasicDialog() {
+        this.ngOnInit();
+        this.toggleGridDisplay();
+    }
+
+    //start grid and form show hide ********************
+    gridDisplay = false;
+    formDisplay = true;
+    toggleFormDisplay() {
+        this.gridDisplay = false;
+        this.formDisplay = true;
+    }
+    toggleGridDisplay() {
+        this.gridDisplay = true;
+        this.formDisplay = false;
+    }
+    toggleFormClose() {
+        this.toggleFormDisplay();
+        this.retailerIndex();
+    }
+
+    // Contact Start
+    showBasicDialogContactNew() {
+        this.ngOnInit();
+        this.toggleGridDisplay();
+        this.retailerContactIndex();
+        this.gridDisplayContact = true;
+        this.formDisplayContact = false;
+
+    }
+
+    showBasicDialogContactGrid() {
+        this.toggleGridDisplayContact();
+        this.toggleGridDisplay();
+        this.retailerContactIndex();
+
+    }
+    showBasicDialogContactEdit() {
+        this.toggleFormDisplayContact();
+        this.toggleGridDisplay();
+        this.retailerContactIndex();
+
+    }
+
+    gridDisplayContact = false;
+    formDisplayContact = true;
+
+    toggleFormDisplayContact() {
+        this.gridDisplayContact = false;
+        this.formDisplayContact = true;
+        this.retailerContactIndex();
+    }
+
+    toggleGridDisplayContact() {
+        this.gridDisplayContact = false;
+        this.formDisplayContact = true;
+    }
+    toggleFormCloseContact() {
+        this.toggleFormDisplayContact();
+        this.retailerContactIndex();
+    }
+
+    // Location Start
+    showBasicDialogLocationNew() {
+        this.ngOnInit();
+        this.toggleGridDisplay();
+        this.retailerLocationIndex();
+        this.gridDisplayLocation = true;
+        this.formDisplayLocation = false;
+
+    }
+
+    showBasicDialogLocationGrid() {
+        this.toggleGridDisplayLocation();
+        this.toggleGridDisplay();
+        this.retailerLocationIndex();
+
+    }
+    showBasicDialogLocationEdit() {
+        this.toggleFormDisplayLocation();
+        this.toggleGridDisplay();
+        this.retailerLocationIndex();
+
+    }
+
+    gridDisplayLocation = false;
+    formDisplayLocation = true;
+
+    toggleFormDisplayLocation() {
+        this.gridDisplayLocation = false;
+        this.formDisplayLocation = true;
+        this.retailerContactIndex();
+    }
+
+    toggleGridDisplayLocation() {
+        this.gridDisplayLocation = false;
+        this.formDisplayLocation = true;
+    }
+    toggleFormCloseLocation() {
+        this.toggleFormDisplayLocation();
+        this.retailerLocationIndex();
+    }
+
+
     // for photo and signature upload
 
-    photourllink: string = "assets/images/user-photo1.png";
+    photourllink: string = "assets/images/defaultimg.jpeg";
     selectFile(event) {
         if (event.target.files) {
             var reader = new FileReader()
@@ -130,144 +242,117 @@ export class RetailerinfoComponent implements OnInit {
 
     }
 
-    clear() {
-        this.retailerinfoForm = this.formbulider.group({
-            code: [''],
-            retailerinfo_name: [''],
-            ImageUpload: new FormControl(''),
-            SignatureUpload: new FormControl('')
-        });
-
-
-    }
     ngOnInit(): void {
         this.retailerinfoService.getAllRetailerInfo().subscribe(data => this.retailerinfoList = data);
-        //this.retailerinfoService.getAllRetailerContactInfo().subscribe(data => this.retailercontactinfoList = data);
-        //this.retailerinfoService.getAllRetailerLocationInfo().subscribe(data => this.retailerlocationinfoList = data);
 
         this.retailerinfoForm = this.formbulider.group({
             dealer_info_id: ['', [Validators.required]],
-            retailer_info_code: ['', [Validators.required]],
+            retailer_info_code: [''],
+            retailer_info_name: ['', [Validators.required]],
             retailer_info_short_name: ['', [Validators.required]],
-            retailer_info_name: ['', [Validators.required]],            
-            trade_license: null,
-            trade_license_date: null,
-            TIN: '',
-            BIN: '',
+            trade_license: [''],
+            trade_license_date: [null],
+            TIN: [''],
+            BIN: [''],
             domicile_enum_id: ['', [Validators.required]],
-            domicile_enum_name: ['', [Validators.required]],
-            business_type_enum_id: '',
-            business_type_enum_name: '',
+            business_type_enum_id: [0],
             industry_sector_id: ['', [Validators.required]],
-            industry_sub_sector_id: '',
+            industry_sub_sector_id: [0],
             ownership_type_id: ['', [Validators.required]],
-            organization_type_enum_id: '',
-            organization_type_enum_name: '',
-            registry_authority_id: '',
-            regulator_id: '',
             currency_id: ['', [Validators.required]],
-            security_type_enum_id: '',
-            security_type_enum_name: '',
-            prefered_method_enum_id: '',
-            prefered_method_enum_name: '',
-            internal_credit_rating: [0],
-            maximum_credit: [0],
-            allowable_credit: [0],
-            credit_days: [0],
-            mobile: '',
-            phone: '',
-            email: '',
-            web_url: '',
-            logo_path: '',
-            continent_enum_id: ['', [Validators.required]],
-            continent_enum_name: ['', [Validators.required]],
+            mobile: ['', [Validators.required, Validators.pattern("^((\\+91-?)|0)?[0-9]{11}$")]],
+            phone: ['', [Validators.pattern("^((\\+91-?)|0)?[0-9]{11}$")]],
+            email: ['', [Validators.email, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
+            web_url: [''],
+            image_path: [''],
             country_id: ['', [Validators.required]],
             division_id: ['', [Validators.required]],
             district_id: ['', [Validators.required]],
             thana_id: ['', [Validators.required]],
-            zone_id: '',
-            ps_area: '',
-            post_code: '',
-            block: '',
-            road_no: '',
-            house_no: '',
-            flat_no: '',
-            address_note: '',
+            zone_id: [0],
+            city: [''],
+            post_code: [''],
+            block: [''],
+            road_no: [''],
+            house_no: [''],
+            flat_no: [''],
+            address_note: [''],
             ImageUpload: new FormControl(''),
 
         });
 
         this.retailercontactForm = this.formbulider.group({
-            retailer_contact_info_code: ['', [Validators.required]],
-            retailer_info_id: ['', [Validators.required]],
+            retailer_contact_info_code: [''],
+            retailer_info_id: [''],
             person_name: ['', [Validators.required]],
             person_designation: ['', [Validators.required]],
-            father_name: '',
-            mother_name: '',
-            date_of_birth: '',
-            religion_enum_id: '',
-            nationality: '',
-            national_id_no: '',
-            birth_certificate_no: '',
-            passport_no: '',
-            mobile: '',
-            phone: '',
-            email: '',
-            emergency_contact: '',
-            blood_group_enum_id: '',
-            image_path: '',
+            father_name: [''],
+            mother_name: [''],
+            date_of_birth: [null],
+            religion_enum_id: [0],
+            nationality: [''],
+            national_id_no: [''],
+            birth_certificate_no: [''],
+            passport_no: [''],
+            mobile: ['', [Validators.required, Validators.pattern("^((\\+91-?)|0)?[0-9]{11}$")]],
+            phone: ['', [Validators.pattern("^((\\+91-?)|0)?[0-9]{11}$")]],
+            email: ['', [Validators.email, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
+            emergency_contact: ['', [Validators.pattern("^((\\+91-?)|0)?[0-9]{11}$")]],
+            blood_group_enum_id: 0,
+            image_path: [''],
             permanent_country_id: ['', [Validators.required]],
             permanent_division_id: ['', [Validators.required]],
             permanent_district_id: ['', [Validators.required]],
             permanent_thana_id: ['', [Validators.required]],
-            permanent_zone_id: '',
-            permanent_ps_area: '',
-            permanent_post_code: '',
-            permanent_block: '',
-            permanent_road_no: '',
-            permanent_house_no: '',
-            permanent_flat_no: '',
+            permanent_zone_id: [0],
+            permanent_city: [''],
+            permanent_post_code: [''],
+            permanent_block: [''],
+            permanent_road_no: [''],
+            permanent_house_no: [''],
+            permanent_flat_no: [''],
             present_country_id: ['', [Validators.required]],
             present_division_id: ['', [Validators.required]],
             present_district_id: ['', [Validators.required]],
             present_thana_id: ['', [Validators.required]],
-            present_zone_id: '',
-            present_ps_area: '',
-            present_post_code: '',
-            present_block: '',
-            present_road_no: '',
-            present_house_no: '',
-            present_flat_no: '',
+            present_zone_id: [0],
+            present_city: [''],
+            present_post_code: [''],
+            present_block: [''],
+            present_road_no: [''],
+            present_house_no: [''],
+            present_flat_no: [''],
             ImageUpload: new FormControl(''),
 
         });
 
         this.retailerlocationForm = this.formbulider.group({
-            retailer_location_info_code: ['', [Validators.required]],
-            retailer_info_id: ['', [Validators.required]],
+            retailer_location_info_code: [''],
+            retailer_info_id: [''],
             retailer_location_info_name: ['', [Validators.required]],
             retailer_location_info_short_name: ['', [Validators.required]],
-            trade_license: '',
-            trade_license_date: null,
-            mobile: '',
-            phone: '',
-            email: '',
-            emergency_contact: '',
+            trade_license: [''],
+            trade_license_date: [null],
+            mobile: ['', [Validators.required, Validators.pattern("^((\\+91-?)|0)?[0-9]{11}$")]],
+            phone: ['', [Validators.pattern("^((\\+91-?)|0)?[0-9]{11}$")]],
+            email: ['', [Validators.email, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
+            emergency_contact: ['', [Validators.pattern("^((\\+91-?)|0)?[0-9]{11}$")]],
             country_id: ['', [Validators.required]],
             division_id: ['', [Validators.required]],
             district_id: ['', [Validators.required]],
             thana_id: ['', [Validators.required]],
-            ps_area: '',
-            post_code: '',
-            block: '',
-            road_no: '',
-            house_no: '',
-            flat_no: '',
-            address_note: '',
+            city: [''],
+            post_code: [''],
+            block: [''],
+            road_no: [''],
+            house_no: [''],
+            flat_no: [''],
+            address_note: ['', [Validators.required]]
 
         });
 
         //Load Dropdown
+        this.loadAllDealerInfoCboList();
         this.loadAllDomicileEnum();
         this.loadAllContinentEnum();
         this.loadAllCountryCboList();
@@ -285,27 +370,18 @@ export class RetailerinfoComponent implements OnInit {
         this.loadAllGenderEnum();
         this.loadAllReligionEnum();
         this.loadAllBloodGroupEnum();
-        this.loadAllDealerInfoCboList();
-    }
-
-    selectRow(retailerinfo) {
-        this.rowData = retailerinfo;
     }
 
     onRowSelect(event) {
         debugger;
-        // this.toggle();
-        this.nodeSelected = true;
+        this.rowSelected = true;
         this.rowData = event.data;
 
     }
     onRowUnselect(event) {
-        // this.toggle();
-        this.nodeSelected = false;
+        this.rowSelected = false;
         this.rowData = null;
-
     }
-
 
     toggle() {
         if (this.collapsedempInfo) {
@@ -324,7 +400,6 @@ export class RetailerinfoComponent implements OnInit {
         else {
             this.collapsed = true;
         }
-
     }
 
     toggleContactAddress() {
@@ -334,7 +409,6 @@ export class RetailerinfoComponent implements OnInit {
         else {
             this.collapsed = true;
         }
-
     }
 
     btnNew() {
@@ -354,19 +428,16 @@ export class RetailerinfoComponent implements OnInit {
             if (data != null) {
                 this.isRetailerinfoEdit = true;
             }
-
             this.retailerinfoForm.controls['dealer_info_id'].setValue(data.DealerInfoId);
             this.retailerinfoForm.controls['retailer_info_code'].setValue(data.RetailerInfoCode);
             this.retailerinfoForm.controls['retailer_info_short_name'].setValue(data.RetailerInfoShortName);
-            this.retailerinfoForm.controls['retailer_info_name'].setValue(data.RetailerInfoName);            
+            this.retailerinfoForm.controls['retailer_info_name'].setValue(data.RetailerInfoName);
             this.retailerinfoForm.controls['trade_license'].setValue(data.TradeLicense);
             this.retailerinfoForm.controls['trade_license_date'].setValue(new Date(data.TradeLicenseDate));
             this.retailerinfoForm.controls['TIN'].setValue(data.TIN);
             this.retailerinfoForm.controls['BIN'].setValue(data.BIN);
             this.retailerinfoForm.controls['domicile_enum_id'].setValue(data.DomicileEnumId);
-            this.retailerinfoForm.controls['domicile_enum_name'].setValue(data.DomicileEnumName);
             this.retailerinfoForm.controls['business_type_enum_id'].setValue(data.BusinessTypeEnumId);
-            this.retailerinfoForm.controls['business_type_enum_name'].setValue(data.BusinessTypeEnumName);
             this.retailerinfoForm.controls['industry_sector_id'].setValue(data.IndustrySectorId);
             this.onSelectBySectorId(data.IndustrySectorId);
             this.retailerinfoForm.controls['industry_sub_sector_id'].setValue(data.IndustrySubSectorId);
@@ -384,20 +455,56 @@ export class RetailerinfoComponent implements OnInit {
             this.onSelectByDistrictId(data.DistrictId);
             this.retailerinfoForm.controls['thana_id'].setValue(data.ThanaId);
             this.retailerinfoForm.controls['zone_id'].setValue(data.ZoneId);
-            this.retailerinfoForm.controls['ps_area'].setValue(data.PSArea);
+            this.retailerinfoForm.controls['city'].setValue(data.City);
             this.retailerinfoForm.controls['post_code'].setValue(data.PostCode);
             this.retailerinfoForm.controls['block'].setValue(data.Block);
             this.retailerinfoForm.controls['road_no'].setValue(data.RoadNo);
             this.retailerinfoForm.controls['house_no'].setValue(data.HouseNo);
             this.retailerinfoForm.controls['flat_no'].setValue(data.FlatNo);
             this.retailerinfoForm.controls['address_note'].setValue(data.AddressNote);
-            //this.retailerinfoForm.controls['image_path'].setValue(data.ImagePath);
-            //this.photourllink = data.ImagePath;
-            this.loadAllRetailerContactinfos();
-            this.loadAllRetailerLocationinfos();
+            this.retailerinfoForm.controls['image_path'].setValue(data.ImagePath);
+            this.photourllink = data.ImagePath;
 
         });
-        this.toggle();
+        this.toggleGridDisplay();
+    }
+
+    loadRetailerinfoContactGrid() {
+
+        debugger;
+        if (this.rowData == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+
+        let retailerinfoId = this.rowData.RetailerInfoId;
+        this.retailerinfoService.getRetailerInfoById(retailerinfoId).subscribe(data => {
+            if (data != null) {
+                this.isRetailerinfoEdit = true;
+            }
+
+            this.loadAllRetailerContactinfos();
+
+        });
+        this.showBasicDialogContactEdit();
+        this.index = 4;
+    }
+
+    loadRetailerinfoLocationGrid() {
+
+        debugger;
+        if (this.rowData == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+
+        let retailerinfoId = this.rowData.RetailerInfoId;
+        this.retailerinfoService.getRetailerInfoById(retailerinfoId).subscribe(data => {
+            if (data != null) {
+                this.isRetailerinfoEdit = true;
+            }
+            this.loadAllRetailerLocationinfos();
+        });
+        this.showBasicDialogLocationEdit();
+        this.index = 5;
     }
 
     deleteRetailerinfo() {
@@ -406,58 +513,77 @@ export class RetailerinfoComponent implements OnInit {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
 
-        let retailerinfoId = this.rowData.retailerinfo_id;
-        this.retailerinfoService.getRetailerInfoById(retailerinfoId).subscribe(data => {
-
-            this.loadAllRetailerinfos();
+        let retailerinfoId = this.rowData.RetailerInfoId;
+        this.retailerinfoService.deleteRetailerInfo(retailerinfoId).subscribe(data => {
+            if (data.MessageType == 1) {
+                this.retailerinfoList.splice(this.retailerinfoList.findIndex(item => item.RetailerInfoId === data.retailerinfoId), 1);
+            }
             this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
         });
         this.display = false;
     }
 
-    SaveRetailerinfo() {
-        const data = this.retailerinfoForm.value;
-        if (!(data.retailer_info_code)) {
-            return this.notifyService.ShowNotification(2, "Please enter retailer code")
-        }
-        if (!(data.retailer_info_short_name)) {
-            return this.notifyService.ShowNotification(2, "Please enter retailer short name")
-        }
-        if (!(data.retailer_info_name)) {
-            return this.notifyService.ShowNotification(2, "Please enter retailer name")
-        }
+    get f(): { [key: string]: AbstractControl } {
+        return this.retailerinfoForm.controls;
+    }
 
-        if (!(data.domicile_enum_id)) {
-            return this.notifyService.ShowNotification(2, "Please select domicile")
+    onGeneral(): void {
+        this.submitted = true;
+        const data = this.retailerinfoForm.value;
+        if ((data.retailer_info_name == "") || (data.retailer_info_name == null) || (data.retailer_info_name == undefined)) {
+            return;
         }
-        if (!(data.industry_sector_id)) {
-            return this.notifyService.ShowNotification(2, "Please select industry sector")
+        else if ((data.retailer_info_short_name == "") || (data.retailer_info_short_name == null) || (data.retailer_info_short_name == undefined)) {
+            return;
         }
-        if (!(data.ownership_type_id)) {
-            return this.notifyService.ShowNotification(2, "Please select ownership type")
+        else if ((data.domicile_enum_id == "") || (data.domicile_enum_id == null) || (data.domicile_enum_id == undefined)) {
+            return;
+        }        
+        else if ((data.mobile == "") || (data.mobile == null) || (data.mobile == undefined)) {
+            return;
         }
-        if (!(data.currency_id)) {
-            return this.notifyService.ShowNotification(2, "Please select currency")
+        else {
+            this.openNext();
         }
-        if (!(data.country_id)) {
-            return this.notifyService.ShowNotification(2, "Please select country")
+        if (this.retailerinfoForm.invalid) {
+            return;
         }
-        if (!(data.division_id)) {
-            return this.notifyService.ShowNotification(2, "Please select division")
+    }
+
+    onBusiness(): void {
+        this.submitted = true;
+        const data = this.retailerinfoForm.value;
+        if ((data.ownership_type_id == "") || (data.ownership_type_id == null) || (data.ownership_type_id == undefined)) {
+            return;
         }
-        if (!(data.district_id)) {
-            return this.notifyService.ShowNotification(2, "Please select district")
+        else if ((data.industry_sector_id == "") || (data.industry_sector_id == null) || (data.industry_sector_id == undefined)) {
+            return;
         }
-        if (!(data.thana_id)) {
-            return this.notifyService.ShowNotification(2, "Please select thana")
+        else if ((data.currency_id == "") || (data.currency_id == null) || (data.currency_id == undefined)) {
+            return;
         }
-        if (!(data.address_note)) {
-            return this.notifyService.ShowNotification(2, "Please enter address note")
+        else {
+            this.openNext();
+        }
+        if (this.retailerinfoForm.invalid) {
+            return;
+        }
+    }
+
+    SaveRetailerinfo() {
+        this.submitted = true;
+        const data = this.retailerinfoForm.value;
+
+        if (this.retailerinfoForm.invalid) {
+            return;
         }
 
         let formData = new FormData();
         for (const key of Object.keys(this.retailerinfoForm.value)) {
             const value = this.retailerinfoForm.value[key];
+            if ((value == "") || (value == null) || (value == undefined)) {
+
+            }
             if (key == "trade_license_date") {
                 let date = new Date(value).toISOString();
                 formData.append("trade_license_date", date);
@@ -473,18 +599,17 @@ export class RetailerinfoComponent implements OnInit {
             data.retailerinfoId = this.rowData.RetailerInfoId;
             formData.append("retailer_info_id", this.rowData.RetailerInfoId);
             this.retailerinfoService.updateRetailerInfo(formData).subscribe(result => {
-
                 this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
-
                 if (result.MessageType == 1) {
                     this.retailerinfoList.splice(this.retailerinfoList.findIndex(item => item.RetailerInfoId === data.retailerinfoId), 1);
                     this.retailerinfoList.unshift(result.Data);
                     this.selectedretailerinfo = result.Data;
                     this.rowData = result.Data;
-                    this.collapsedempInfo = true;
-                    this.collapsed = true;
-                    this.collapsedempDetails = false;
+                    this.onRowUnselect(event);
                     this.retailerIndex();
+                    this.retailerinfoForm.reset();
+                    this.toggleFormDisplay();
+                    this.submitted = false;
                 }
             });
         }
@@ -496,12 +621,11 @@ export class RetailerinfoComponent implements OnInit {
                     if (result.MessageType == 1) {
                         this.retailerinfoList.unshift(result.Data);
                         this.selectedretailerinfo = result.Data;
-                        this.nodeSelected = true;
                         this.rowData = result.Data;
-                        this.collapsedempInfo = true;
-                        this.collapsed = true;
-                        this.collapsedempDetails = false;
+                        this.toggleFormDisplay();
                         this.retailerIndex();
+                        this.retailerinfoForm.reset();
+                        this.submitted = false;
                     }
                 }
             );
@@ -510,6 +634,12 @@ export class RetailerinfoComponent implements OnInit {
     }
 
     // All Dropdown Load here
+    loadAllDealerInfoCboList() {
+        this.retailerinfoService.getDealerInfoCboList().subscribe(data => {
+            this.allDealerInfo = data;
+        });
+    }
+
     loadAllDomicileEnum() {
         this.retailerinfoService.getAllDomicile().subscribe(data => {
             this.allDomicile = data;
@@ -652,13 +782,7 @@ export class RetailerinfoComponent implements OnInit {
         });
     }
 
-    // All Retailer List
-    loadAllDealerInfoCboList() {
-        this.retailerinfoService.getDealerInfoCboList().subscribe(data => {
-            this.allDealerInfo = data;
-        });
-    }
-
+    // All Retailer List 
     loadAllRetailerinfos() {
         this.retailerinfoService.getAllRetailerInfo().subscribe(data => {
             this.retailerinfoList = data;
@@ -667,40 +791,30 @@ export class RetailerinfoComponent implements OnInit {
 
     loadAllRetailerContactinfos() {
         let retailerinfoId = this.rowData.RetailerInfoId;
-        this.retailerinfoService.getContactInfoByRetailerId(retailerinfoId).subscribe(data => {
+        this.retailerinfoService.getAllContactInfoByRetailerId(retailerinfoId).subscribe(data => {
             this.retailercontactinfoList = data;
         });
     }
 
     loadAllRetailerLocationinfos() {
         let retailerinfoId = this.rowData.RetailerInfoId;
-        this.retailerinfoService.getLocationInfoByRetailerId(retailerinfoId).subscribe(data => {
+        this.retailerinfoService.getAllLocationInfoByRetailerId(retailerinfoId).subscribe(data => {
             this.retailerlocationinfoList = data;
         });
     }
 
     resetForm() {
-        this.retailerinfoForm.reset();
         this.isRetailerinfoEdit = false;
         this.loadAllRetailerinfos();
         this.retailerinfodataSource = [];
     }
 
     onSelectImage(event) {
-
         if (event.target.files) {
             var reader = new FileReader()
             reader.readAsDataURL(event.target.files[0])
             reader.onload = (event: any) => {
-                this.photourllink = event.target.result;
-            }
-            //alert(this.photourllink)
-            if (event.target.files.length > 0) {
-                const file = event.target.files[0];
-                this.retailerinfoImage.nativeElement.innerText = file.name;
-                this.retailerinfoForm.patchValue({
-                    ImageUpload: file
-                });
+                this.photourllink = event.target.result
             }
         }
     }
@@ -715,18 +829,17 @@ export class RetailerinfoComponent implements OnInit {
             this.retailercontactForm.controls['present_country_id'].setValue(data.permanent_country_id);
             this.onSelectByCountryId(data.permanent_country_id);
             this.retailercontactForm.controls['present_division_id'].setValue(data.permanent_division_id);
-            this.onSelectByDivisionId(data.present_division_id);
+            this.onSelectByDivisionId(data.permanent_division_id);
             this.retailercontactForm.controls['present_district_id'].setValue(data.permanent_district_id);
             this.onSelectByDistrictId(data.permanent_district_id);
             this.retailercontactForm.controls['present_thana_id'].setValue(data.permanent_thana_id);
             this.retailercontactForm.controls['present_zone_id'].setValue(data.permanent_zone_id);
-            this.retailercontactForm.controls['present_ps_area'].setValue(data.permanent_ps_area);
+            this.retailercontactForm.controls['present_city'].setValue(data.permanent_city);
             this.retailercontactForm.controls['present_post_code'].setValue(data.permanent_post_code);
             this.retailercontactForm.controls['present_block'].setValue(data.permanent_block);
             this.retailercontactForm.controls['present_house_no'].setValue(data.permanent_house_no);
             this.retailercontactForm.controls['present_road_no'].setValue(data.permanent_road_no);
             this.retailercontactForm.controls['present_flat_no'].setValue(data.permanent_flat_no);
-
         }
         else {
             this.retailercontactForm.controls['present_country_id'].setValue('');
@@ -734,7 +847,7 @@ export class RetailerinfoComponent implements OnInit {
             this.retailercontactForm.controls['present_division_id'].setValue('');
             this.retailercontactForm.controls['present_thana_id'].setValue('');
             this.retailercontactForm.controls['present_zone_id'].setValue('');
-            this.retailercontactForm.controls['present_ps_area'].setValue('');
+            this.retailercontactForm.controls['present_city'].setValue('');
             this.retailercontactForm.controls['present_post_code'].setValue('');
             this.retailercontactForm.controls['present_block'].setValue('');
             this.retailercontactForm.controls['present_house_no'].setValue('');
@@ -743,55 +856,43 @@ export class RetailerinfoComponent implements OnInit {
         }
     }
 
+    get g(): { [key: string]: AbstractControl } {
+        return this.retailercontactForm.controls;
+    }
+
+    onContactBasic(): void {
+        this.submittedContact = true;
+        const data = this.retailercontactForm.value;
+        if ((data.person_name == "") || (data.person_name == null) || (data.person_name == undefined)) {
+            return;
+        }
+        else if ((data.person_designation == "") || (data.person_designation == null) || (data.person_designation == undefined)) {
+            return;
+        }
+        else if ((data.mobile == "") || (data.mobile == null) || (data.mobile == undefined)) {
+            return;
+        }
+        else {
+            this.openNextContact();
+        }
+        if (this.retailercontactForm.invalid) {
+            return;
+        }
+    }
 
     SaveRetailerContactInfo() {
+        this.submittedContact = true;
         const data = this.retailercontactForm.value;
-        if (!(data.retailer_info_id)) {
-            return this.notifyService.ShowNotification(2, "Please enter retailer name")
+        if (this.retailercontactForm.invalid) {
+            return;
         }
-        if (!(data.retailer_contact_info_code)) {
-            return this.notifyService.ShowNotification(2, "Please enter retailer contact info code")
-        }
-        if (!(data.person_name)) {
-            return this.notifyService.ShowNotification(2, "Please enter contact person name")
-        }
-        if (!(data.person_designation)) {
-            return this.notifyService.ShowNotification(2, "Please enter contact person designation")
-        }
-        if (!(data.date_of_birth)) {
-            return this.notifyService.ShowNotification(2, "Please enter contact person designation")
-        }
-        if (!(data.mobile)) {
-            return this.notifyService.ShowNotification(2, "Please enter mobile number")
-        }
-        if (!(data.permanent_country_id)) {
-            return this.notifyService.ShowNotification(2, "Please enter permanent country")
-        }
-        if (!(data.permanent_division_id)) {
-            return this.notifyService.ShowNotification(2, "Please enter permanent division")
-        }
-        if (!(data.permanent_district_id)) {
-            return this.notifyService.ShowNotification(2, "Please enter permanent district")
-        }
-        if (!(data.permanent_thana_id)) {
-            return this.notifyService.ShowNotification(2, "Please enter permanent thana")
-        }
-        if (!(data.present_country_id)) {
-            return this.notifyService.ShowNotification(2, "Please enter present country")
-        }
-        if (!(data.present_division_id)) {
-            return this.notifyService.ShowNotification(2, "Please enter present division")
-        }
-        if (!(data.present_district_id)) {
-            return this.notifyService.ShowNotification(2, "Please enter present district")
-        }
-        if (!(data.present_thana_id)) {
-            return this.notifyService.ShowNotification(2, "Please enter present thana")
-        }
-
         let formData = new FormData();
         for (const key of Object.keys(this.retailercontactForm.value)) {
             const value = this.retailercontactForm.value[key];
+            if (key == "retailer_info_id") {
+                let retailerinfoId = this.rowData.RetailerInfoId;
+                formData.append("retailer_info_id", retailerinfoId);
+            }
             if (key == "date_of_birth") {
                 let date = new Date(value).toISOString();
                 formData.append("date_of_birth", date);
@@ -808,42 +909,45 @@ export class RetailerinfoComponent implements OnInit {
             this.retailerinfoService.updateRetailerContactInfo(formData).subscribe(result => {
 
                 this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
+
                 if (result.MessageType == 1) {
                     this.retailercontactinfoList.splice(this.retailercontactinfoList.findIndex(item => item.RetailerContactInfoId === data.retailerContactinfoId), 1);
                     this.retailercontactinfoList.unshift(result.Data);
-                    this.selectedretailercontactinfo = result.Data;
+                    this.selectedretailerinfo = result.Data;
                     this.rowData = result.Data;
-                    this.collapsedempInfo = true;
-                    this.collapsed = true;
-                    this.collapsedempDetails = false;
+                    this.onRowUnselect(event);
                     this.retailerContactIndex();
+                    this.submittedContact = false;
                 }
+
             });
+            this.gridDisplayContact = false;
+            this.formDisplayContact = true;
         }
         else {
-
+            formData.append("retailer_info_id", this.rowData.RetailerInfoId);
             this.retailerinfoService.createRetailerContactInfo(formData).subscribe(
                 result => {
                     this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
+
                     if (result.MessageType == 1) {
                         this.retailercontactinfoList.unshift(result.Data);
                         this.selectedretailercontactinfo = result.Data;
-                        this.nodeSelected = true;
                         this.rowData = result.Data;
-                        this.collapsedempInfo = true;
-                        this.collapsed = true;
-                        this.collapsedempDetails = false;
+                        this.onRowUnselect(event);
                         this.retailerContactIndex();
+                        this.submittedContact = false;
                     }
                 }
             );
+            this.gridDisplayContact = false;
+            this.formDisplayContact = true;
         }
 
     }
 
     loadRetailerContactinfoToEdit() {
 
-        debugger;
         if (this.rowData == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
@@ -880,7 +984,7 @@ export class RetailerinfoComponent implements OnInit {
             this.onSelectByDistrictId(data.PermanentDistrictId);
             this.retailercontactForm.controls['permanent_thana_id'].setValue(data.PermanentThanaId);
             this.retailercontactForm.controls['permanent_zone_id'].setValue(data.PermanentZoneId);
-            this.retailercontactForm.controls['permanent_ps_area'].setValue(data.PermanentPsArea);
+            this.retailercontactForm.controls['permanent_city'].setValue(data.PermanentCity);
             this.retailercontactForm.controls['permanent_post_code'].setValue(data.PermanentPostCode);
             this.retailercontactForm.controls['permanent_block'].setValue(data.PermanentBlock);
             this.retailercontactForm.controls['permanent_road_no'].setValue(data.PermanentRoadNo);
@@ -896,17 +1000,33 @@ export class RetailerinfoComponent implements OnInit {
             this.onSelectByDistrictId(data.PresentDistrictId);
             this.retailercontactForm.controls['present_thana_id'].setValue(data.PresentThanaId);
             this.retailercontactForm.controls['present_zone_id'].setValue(data.PresentZoneId);
-            this.retailercontactForm.controls['present_ps_area'].setValue(data.PresentPsArea);
+            this.retailercontactForm.controls['present_city'].setValue(data.PresentCity);
             this.retailercontactForm.controls['present_post_code'].setValue(data.PresentPostCode);
             this.retailercontactForm.controls['present_block'].setValue(data.PresentBlock);
             this.retailercontactForm.controls['present_road_no'].setValue(data.PresentRoadNo);
             this.retailercontactForm.controls['present_house_no'].setValue(data.PresentHouseNo);
             this.retailercontactForm.controls['present_flat_no'].setValue(data.PresentFlatNo);
             this.retailercontactForm.controls['image_path'].setValue(data.ImagePath);
-            this.photourllink = data.ImagePath;
+            //this.photourllink = data.ImagePath;
 
         });
-        this.toggle();
+        this.gridDisplayContact = true;
+        this.formDisplayContact = false;
+    }
+
+    deleteRetailerContactinfo() {
+        this.showDialog();
+        if (this.rowData == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+        let retailerContactinfoId = this.rowData.RetailerContactInfoId;
+        this.retailerinfoService.deleteRetailerContactInfo(retailerContactinfoId).subscribe(data => {
+            if (data.MessageType == 1) {
+                this.retailercontactinfoList.splice(this.retailercontactinfoList.findIndex(item => item.RetailerContactInfoId === data.retailerContactinfoId), 1);
+            }
+            this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
+        });
+        this.display = false;
     }
 
     onSelectContactImage(event) {
@@ -917,7 +1037,6 @@ export class RetailerinfoComponent implements OnInit {
             reader.onload = (event: any) => {
                 this.photourllink = event.target.result;
             }
-            //alert(this.photourllink)
             if (event.target.files.length > 0) {
                 const file = event.target.files[0];
                 this.retailerContactinfoImage.nativeElement.innerText = file.name;
@@ -932,42 +1051,44 @@ export class RetailerinfoComponent implements OnInit {
     // Start Retailer Location Info --------****--------
 
 
-    SaveRetailerLocationInfo() {
-        const data = this.retailerlocationForm.value;
-        if (!(data.retailer_info_id)) {
-            return this.notifyService.ShowNotification(2, "Please enter retailer name")
-        }
-        if (!(data.retailer_location_info_code)) {
-            return this.notifyService.ShowNotification(2, "Please enter retailer location info code")
-        }
-        if (!(data.retailer_location_info_short_name)) {
-            return this.notifyService.ShowNotification(2, "Please enter retailer location short name")
-        }
-        if (!(data.retailer_location_info_name)) {
-            return this.notifyService.ShowNotification(2, "Please enter retailer location name")
-        }
-        if (!(data.mobile)) {
-            return this.notifyService.ShowNotification(2, "Please enter retailer location mobile number")
-        }
-        if (!(data.country_id)) {
-            return this.notifyService.ShowNotification(2, "Please enter country")
-        }
-        if (!(data.division_id)) {
-            return this.notifyService.ShowNotification(2, "Please enter division")
-        }
-        if (!(data.district_id)) {
-            return this.notifyService.ShowNotification(2, "Please enter district")
-        }
-        if (!(data.thana_id)) {
-            return this.notifyService.ShowNotification(2, "Please enter thana")
-        }
-        if (!(data.address_note)) {
-            return this.notifyService.ShowNotification(2, "Please enter retailer location address note")
-        }
+    get h(): { [key: string]: AbstractControl } {
+        return this.retailerlocationForm.controls;
+    }
 
+    onLocationBasic(): void {
+        this.submittedLocation = true;
+        const data = this.retailerlocationForm.value;
+        if ((data.retailer_location_info_name == "") || (data.retailer_location_info_name == null) || (data.retailer_location_info_name == undefined)) {
+            return;
+        }
+        else if ((data.retailer_location_info_short_name == "") || (data.retailer_location_info_short_name == null) || (data.retailer_location_info_short_name == undefined)) {
+            return;
+        }
+        else if ((data.mobile == "") || (data.mobile == null) || (data.mobile == undefined)) {
+            return;
+        }
+        else {
+            this.openNextLocation();
+        }
+        if (this.retailerlocationForm.invalid) {
+            return;
+        }
+    }
+
+    SaveRetailerLocationInfo() {
+        this.submittedLocation = true;
+        const data = this.retailerlocationForm.value;
+
+        if (this.retailerlocationForm.invalid) {
+            return;
+        }
         let formData = new FormData();
         for (const key of Object.keys(this.retailerlocationForm.value)) {
             const value = this.retailerlocationForm.value[key];
+            if (key == "retailer_info_id") {
+                let retailerinfoId = this.rowData.RetailerInfoId;
+                formData.append("retailer_info_id", retailerinfoId);
+            }
             if (key == "trade_license_date") {
                 let date = new Date(value).toISOString();
                 formData.append("trade_license_date", date);
@@ -984,35 +1105,35 @@ export class RetailerinfoComponent implements OnInit {
             this.retailerinfoService.updateRetailerLocationInfo(formData).subscribe(result => {
 
                 this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
+
                 if (result.MessageType == 1) {
                     this.retailerlocationinfoList.splice(this.retailerlocationinfoList.findIndex(item => item.RetailerLocationInfoId === data.retailerLocationinfoId), 1);
                     this.retailerlocationinfoList.unshift(result.Data);
                     this.selectedretailerlocationinfo = result.Data;
                     this.rowData = result.Data;
-                    this.collapsedempInfo = true;
-                    this.collapsed = true;
-                    this.collapsedempDetails = false;
                     this.retailerLocationIndex();
+                    this.submittedLocation = false;
                 }
             });
+            this.gridDisplayLocation = false;
+            this.formDisplayLocation = true;
         }
         else {
-
+            formData.append("retailer_info_id", this.rowData.RetailerInfoId);
             this.retailerinfoService.createRetailerLocationInfo(formData).subscribe(
                 result => {
                     this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
                     if (result.MessageType == 1) {
                         this.retailerlocationinfoList.unshift(result.Data);
                         this.selectedretailerlocationinfo = result.Data;
-                        this.nodeSelected = true;
                         this.rowData = result.Data;
-                        this.collapsedempInfo = true;
-                        this.collapsed = true;
-                        this.collapsedempDetails = false;
                         this.retailerLocationIndex();
+                        this.submittedLocation = false;
                     }
                 }
             );
+            this.gridDisplayLocation = false;
+            this.formDisplayLocation = true;
         }
 
     }
@@ -1046,7 +1167,7 @@ export class RetailerinfoComponent implements OnInit {
             this.retailerlocationForm.controls['district_id'].setValue(data.DistrictId);
             this.onSelectByDistrictId(data.DistrictId);
             this.retailerlocationForm.controls['thana_id'].setValue(data.ThanaId);
-            this.retailerlocationForm.controls['ps_area'].setValue(data.PSArea);
+            this.retailerlocationForm.controls['city'].setValue(data.City);
             this.retailerlocationForm.controls['post_code'].setValue(data.PostCode);
             this.retailerlocationForm.controls['block'].setValue(data.Block);
             this.retailerlocationForm.controls['road_no'].setValue(data.RoadNo);
@@ -1055,33 +1176,78 @@ export class RetailerinfoComponent implements OnInit {
             this.retailerlocationForm.controls['address_note'].setValue(data.AddressNote);
 
         });
-        this.toggle();
+        this.gridDisplayLocation = true;
+        this.formDisplayLocation = false;
     }
+
+    deleteRetailerLocationinfo() {
+        this.showDialog();
+        if (this.rowData == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+        let retailerLocationinfoId = this.rowData.RetailerLocationInfoId;
+        this.retailerinfoService.deleteRetailerLocationInfo(retailerLocationinfoId).subscribe(data => {
+            if (data.MessageType == 1) {
+                this.retailerlocationinfoList.splice(this.retailerlocationinfoList.findIndex(item => item.RetailerLocationInfoId === data.retailerLocationinfoId), 1);
+            }
+            this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
+        });
+        this.display = false;
+    }
+
 
     retailerIndex() {
         this.index = 0;
     }
-
-    retailerContactIndex() {
-        this.index = 2;
-    }
-
-
-    retailerLocationIndex() {
-        this.index = 3;
-    }
-
 
     function(e) {
         this.index = e.index;
     }
 
     openNext() {
-        this.index = (this.index === 3) ? 0 : this.index + 1;
+        this.index = (this.index === 4) ? 0 : this.index + 1;
     }
 
     openPrev() {
-        this.index = (this.index === 0) ? 3 : this.index - 1;
+        this.index = (this.index === 0) ? 4 : this.index - 1;
     }
+
+
+    // Contact Infomation Start
+    retailerContactIndex() {
+        this.index = 3;
+        this.indexContact = 0;
+    }
+
+    functionContact(e) {
+        this.indexContact = e.indexContact;
+    }
+
+    openNextContact() {
+        this.indexContact = (this.indexContact === 1) ? 0 : this.indexContact + 1;
+    }
+
+    openPrevContact() {
+        this.indexContact = (this.indexContact === 0) ? 1 : this.indexContact - 1;
+    }
+
+    // Location Infomation Start
+    retailerLocationIndex() {
+        this.index = 4;
+        this.indexLocation = 0;
+    }
+
+    functionLocation(e) {
+        this.indexLocation = e.indexLocation;
+    }
+
+    openNextLocation() {
+        this.indexLocation = (this.indexLocation === 1) ? 0 : this.indexLocation + 1;
+    }
+
+    openPrevLocation() {
+        this.indexLocation = (this.indexLocation === 0) ? 1 : this.indexLocation - 1;
+    }
+
 
 }
