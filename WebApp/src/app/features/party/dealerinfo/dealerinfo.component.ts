@@ -653,10 +653,10 @@ export class DealerinfoComponent implements OnInit {
                     this.dealerinfoList.splice(this.dealerinfoList.findIndex(item => item.DealerInfoId === data.dealerinfoId), 1);
                     this.dealerinfoList.unshift(result.Data);
                     this.selecteddealerinfo = result.Data;
-                    this.rowData = result.Data;
+                    this.rowData = null;
                     this.onRowUnselect(event);
                     this.dealerIndex();
-                    this.dealerinfoForm.reset();
+                    this.isDealerinfoEdit = false;
                     this.toggleFormDisplay();
                     this.submitted = false;                   
                 }                
@@ -673,7 +673,7 @@ export class DealerinfoComponent implements OnInit {
                         this.rowData = result.Data;
                         this.toggleFormDisplay();
                         this.dealerIndex();
-                        this.dealerinfoForm.reset();
+                        this.isDealerinfoEdit = false;
                         this.submitted = false;                        
                     }
                 }
@@ -960,6 +960,7 @@ export class DealerinfoComponent implements OnInit {
                     this.rowData = result.Data;
                     this.onRowUnselect(event);
                     this.dealerContactIndex();
+                    this.isDealerContactinfoEdit = false;
                     this.submittedContact = false;
                 }
 
@@ -979,6 +980,7 @@ export class DealerinfoComponent implements OnInit {
                         this.rowData = result.Data;
                         this.onRowUnselect(event);
                         this.dealerContactIndex();
+                        this.isDealerContactinfoEdit = false;
                         this.submittedContact = false;
                     }
                 }
@@ -1155,6 +1157,7 @@ export class DealerinfoComponent implements OnInit {
                     this.selecteddealerlocationinfo = result.Data;
                     this.rowData = result.Data;
                     this.dealerLocationIndex();
+                    this.isDealerLocationinfoEdit = false;
                     this.submittedLocation = false;
                 }
             });
@@ -1171,6 +1174,7 @@ export class DealerinfoComponent implements OnInit {
                         this.selecteddealerlocationinfo = result.Data;
                         this.rowData = result.Data;
                         this.dealerLocationIndex();
+                        this.isDealerLocationinfoEdit = false;
                         this.submittedLocation = false;
                     }
                 }

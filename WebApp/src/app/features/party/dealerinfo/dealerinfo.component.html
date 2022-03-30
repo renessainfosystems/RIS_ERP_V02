@@ -875,7 +875,7 @@
                                 Dealer Name
                                 <p-columnFilter type="text" field="DealerinfoName" display="menu"></p-columnFilter>
                             </th>
-                            <th pSortableColumn="PersonalPhone">Phone</th>
+                            <th pSortableColumn="PersonalPhone">Mobile</th>
                             <th pSortableColumn="PersonalEmail">Email</th>
                             <th pSortableColumn="PresentAddressNote">Address</th>
                             <th>Status</th>
@@ -885,7 +885,7 @@
                         <tr [pSelectableRow]="dealerinfo">
                             <td>{{dealerinfo.DealerInfoCode}}</td>
                             <td>{{dealerinfo.DealerInfoName}}</td>
-                            <td>{{dealerinfo.Phone}}</td>
+                            <td>{{dealerinfo.Mobile}}</td>
                             <td>{{dealerinfo.Email}}</td>
                             <td>{{dealerinfo.AddressNote}}</td>
                             <td *ngIf="dealerinfo.IsActive===true">{{"Active"}}</td>

@@ -185,7 +185,8 @@ export class RetailerinfoComponent implements OnInit {
 
     // Location Start
     showBasicDialogLocationNew() {
-        this.ngOnInit();
+        this.ngOnInit(            
+        );
         this.toggleGridDisplay();
         this.retailerLocationIndex();
         this.gridDisplayLocation = true;
@@ -326,7 +327,7 @@ export class RetailerinfoComponent implements OnInit {
 
         });
 
-        this.retailerlocationForm = this.formbulider.group({
+        this.retailerlocationForm = this.formbulider.group({            
             retailer_location_info_code: [''],
             retailer_info_id: [''],
             retailer_location_info_name: ['', [Validators.required]],
@@ -606,9 +607,9 @@ export class RetailerinfoComponent implements OnInit {
                     this.selectedretailerinfo = result.Data;
                     this.rowData = result.Data;
                     this.onRowUnselect(event);
-                    this.retailerIndex();
-                    this.retailerinfoForm.reset();
                     this.toggleFormDisplay();
+                    this.retailerIndex();
+                    this.isRetailerinfoEdit=false;
                     this.submitted = false;
                 }
             });
@@ -624,7 +625,7 @@ export class RetailerinfoComponent implements OnInit {
                         this.rowData = result.Data;
                         this.toggleFormDisplay();
                         this.retailerIndex();
-                        this.retailerinfoForm.reset();
+                        this.isRetailerinfoEdit = false;
                         this.submitted = false;
                     }
                 }
@@ -917,6 +918,7 @@ export class RetailerinfoComponent implements OnInit {
                     this.rowData = result.Data;
                     this.onRowUnselect(event);
                     this.retailerContactIndex();
+                    this.isRetailerContactinfoEdit = false;
                     this.submittedContact = false;
                 }
 
@@ -936,6 +938,7 @@ export class RetailerinfoComponent implements OnInit {
                         this.rowData = result.Data;
                         this.onRowUnselect(event);
                         this.retailerContactIndex();
+                        this.isRetailerContactinfoEdit = false;
                         this.submittedContact = false;
                     }
                 }
@@ -1111,7 +1114,9 @@ export class RetailerinfoComponent implements OnInit {
                     this.retailerlocationinfoList.unshift(result.Data);
                     this.selectedretailerlocationinfo = result.Data;
                     this.rowData = result.Data;
+                    this.onRowUnselect(event);
                     this.retailerLocationIndex();
+                    this.isRetailerLocationinfoEdit = false;
                     this.submittedLocation = false;
                 }
             });
@@ -1128,6 +1133,7 @@ export class RetailerinfoComponent implements OnInit {
                         this.selectedretailerlocationinfo = result.Data;
                         this.rowData = result.Data;
                         this.retailerLocationIndex();
+                        this.isRetailerLocationinfoEdit = false;
                         this.submittedLocation = false;
                     }
                 }
