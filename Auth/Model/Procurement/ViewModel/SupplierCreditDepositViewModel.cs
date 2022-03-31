@@ -13,7 +13,7 @@ namespace Auth.Model.Procurement.ViewModel
         public int currency_id { get; set; }
         public int credit_days { get; set; }
         public decimal credit_limit { get; set; }
-        public bool is_payment_monthly { get; set; }
+        public int payment_frequency_id { get; set; }
 
         public static SupplierCreditDepositViewModel ConvertToSupplierCreditDepositViewModel(dynamic supplierCreditDeposit)
         {
@@ -22,7 +22,7 @@ namespace Auth.Model.Procurement.ViewModel
             model.currency_id = supplierCreditDeposit.currency_id ?? 0;
             model.credit_days = supplierCreditDeposit.credit_days ?? 0;
             model.credit_limit = supplierCreditDeposit.credit_limit ?? 0;
-            model.is_payment_monthly = supplierCreditDeposit.is_payment_monthly ?? false;
+            model.payment_frequency_id = supplierCreditDeposit.payment_frequency_id ?? 0;
 
 
 

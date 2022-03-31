@@ -18,9 +18,7 @@ export class DealerinfoComponent implements OnInit {
         static: true
     }) dealerContactinfoImage;
 
-    submitted = false;
-    submittedContact = false;
-    submittedLocation = false;
+    submitted = false; 
     dealerinfoForm: any;//DealerFormName  
     dealerinfoList: any[];//List Dealerinfo
     dealerinfodataSource: any[];//single dealerinfo
@@ -28,15 +26,23 @@ export class DealerinfoComponent implements OnInit {
     isDealerinfoEdit: boolean = false;
     nodeSelected: boolean = false;
 
+    submittedContact = false;
     dealercontactForm: any;//Dealer Contact Form
     isDealerContactinfoEdit: boolean = false;
     dealercontactinfoList: any[];//List Dealer Contact info
     selecteddealercontactinfo: any;// Selected Dealerinfo
 
+    submittedLocation = false;
     dealerlocationForm: any;//Dealer Contact Form
     isDealerLocationinfoEdit: boolean = false;
     dealerlocationinfoList: any[];//List Dealer Contact info
     selecteddealerlocationinfo: any;// Selected Dealerinfo 
+
+    submittedDocument = false;
+    dealerdocumentForm: any;//Dealer Contact Form
+    isDealerDocumentinfoEdit: boolean = false;
+    dealerdocumentinfoList: any[];//List Dealer Contact info
+    selecteddealerdocumentinfo: any;// Selected Dealerinfo 
 
     //declare dropdown List Property
     selectedDomicile: any;
@@ -94,6 +100,7 @@ export class DealerinfoComponent implements OnInit {
     allGender: any[];
     allReligion: any[];
     allBloodGroup: any[];
+    allDocument: any[];
 
     first = 0;
     rows = 10;
@@ -142,31 +149,29 @@ export class DealerinfoComponent implements OnInit {
     }
 
     // Contact Start
+
+    gridDisplayContact = false;
+    formDisplayContact = true;
+
     showBasicDialogContactNew() {
         this.ngOnInit();
         this.toggleGridDisplay();
         this.dealerContactIndex();
         this.gridDisplayContact = true;
-        this.formDisplayContact = false;
-       
+        this.formDisplayContact = false;       
     }
 
     showBasicDialogContactGrid() {
         this.toggleGridDisplayContact();
         this.toggleGridDisplay();
-        this.dealerContactIndex();
-       
+        this.dealerContactIndex();       
     }
     showBasicDialogContactEdit() {
         this.toggleFormDisplayContact();
         this.toggleGridDisplay();
         this.dealerContactIndex();
-
     }
     
-    gridDisplayContact = false;
-    formDisplayContact = true;
-
     toggleFormDisplayContact() {
         this.gridDisplayContact = false;
         this.formDisplayContact = true;
@@ -183,30 +188,28 @@ export class DealerinfoComponent implements OnInit {
     }
 
     // Location Start
+
+    gridDisplayLocation = false;
+    formDisplayLocation = true;
+
     showBasicDialogLocationNew() {
         this.ngOnInit();
         this.toggleGridDisplay();
         this.dealerLocationIndex();
         this.gridDisplayLocation = true;
         this.formDisplayLocation = false;
-
     }
 
     showBasicDialogLocationGrid() {
         this.toggleGridDisplayLocation();
         this.toggleGridDisplay();
         this.dealerLocationIndex();
-
     }
     showBasicDialogLocationEdit() {
         this.toggleFormDisplayLocation();
         this.toggleGridDisplay();
         this.dealerLocationIndex();
-
     }
-
-    gridDisplayLocation = false;
-    formDisplayLocation = true;
 
     toggleFormDisplayLocation() {
         this.gridDisplayLocation = false;
@@ -221,6 +224,45 @@ export class DealerinfoComponent implements OnInit {
     toggleFormCloseLocation() {
         this.toggleFormDisplayLocation();
         this.dealerLocationIndex();
+    }
+
+
+    // Document Start
+    gridDisplayDocument = false;
+    formDisplayDocument = true;
+
+    showBasicDialogDocumentNew() {
+        this.ngOnInit();
+        this.toggleGridDisplay();
+        this.dealerDocumentIndex();
+        this.gridDisplayDocument = true;
+        this.formDisplayDocument = false;
+    }
+
+    showBasicDialogDocumentGrid() {
+        this.toggleGridDisplayDocument();
+        this.toggleGridDisplay();
+        this.dealerDocumentIndex();
+    }
+    showBasicDialogDocumentEdit() {
+        this.toggleFormDisplayDocument();
+        this.toggleGridDisplay();
+        this.dealerDocumentIndex();
+    }   
+
+    toggleFormDisplayDocument() {
+        this.gridDisplayDocument = false;
+        this.formDisplayDocument = true;
+        this.dealerContactIndex();
+    }
+
+    toggleGridDisplayDocument() {
+        this.gridDisplayDocument = false;
+        this.formDisplayDocument = true;
+    }
+    toggleFormCloseDocument() {
+        this.toggleFormDisplayDocument();
+        this.dealerDocumentIndex();
     }
 
 
@@ -286,8 +328,7 @@ export class DealerinfoComponent implements OnInit {
             house_no: [''],
             flat_no: [''],
             address_note: [''],
-            ImageUpload: new FormControl(''),
-
+            ImageUpload: new FormControl('')
         });
 
         this.dealercontactForm = this.formbulider.group({
@@ -331,8 +372,7 @@ export class DealerinfoComponent implements OnInit {
             present_road_no: [''],
             present_house_no: [''],
             present_flat_no: [''],
-            ImageUpload: new FormControl(''),
-
+            ImageUpload: new FormControl('')
         });
 
         this.dealerlocationForm = this.formbulider.group({
@@ -357,7 +397,15 @@ export class DealerinfoComponent implements OnInit {
             house_no: [''],
             flat_no: [''],
             address_note: ['', [Validators.required]]
+        });
 
+        this.dealerdocumentForm = this.formbulider.group({
+            dealer_info_id: [''],
+            document_type_id: ['', [Validators.required]],            
+            document_number: ['', [Validators.required]],
+            issue_date: [null, [Validators.required]],
+            expiry_date: [null, [Validators.required]],
+            image_file: ['', [Validators.required]]
         });
 
         //Load Dropdown
@@ -377,7 +425,8 @@ export class DealerinfoComponent implements OnInit {
         this.loadAllDealerInfoCboList();
         this.loadAllGenderEnum();
         this.loadAllReligionEnum();
-        this.loadAllBloodGroupEnum();        
+        this.loadAllBloodGroupEnum();
+        this.loadAllDocumentCboList();
     }
 
     onRowSelect(event) {
@@ -524,7 +573,24 @@ export class DealerinfoComponent implements OnInit {
         });
         this.showBasicDialogLocationEdit();
         this.index = 5;
-    }      
+    }
+    loadDealerinfoDocumentGrid() {
+
+        debugger;
+        if (this.rowData == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+
+        let dealerinfoId = this.rowData.DealerInfoId;
+        this.dealerinfoService.getDealerInfoById(dealerinfoId).subscribe(data => {
+            if (data != null) {
+                this.isDealerinfoEdit = true;
+            }
+            this.loadAllDealerDocumentinfos();
+        });
+        this.showBasicDialogLocationEdit();
+        this.index = 6;
+    }
 
     deleteDealerinfo() {
         this.showDialog();
@@ -843,6 +909,19 @@ export class DealerinfoComponent implements OnInit {
         let dealerinfoId = this.rowData.DealerInfoId;
         this.dealerinfoService.getAllLocationInfoByDealerId(dealerinfoId).subscribe(data => {
             this.dealerlocationinfoList = data;
+        });
+    }
+
+    loadAllDealerDocumentinfos() {
+        let dealerinfoId = this.rowData.DealerInfoId;
+        this.dealerinfoService.getAllDocumentInfoByDealerId(dealerinfoId).subscribe(data => {
+            this.dealerdocumentinfoList = data;
+        });
+    }
+
+    loadAllDocumentCboList() {
+        this.dealerinfoService.getAllDocumentCboList().subscribe(data => {
+            this.allDocument = data;
         });
     }
 
@@ -1242,6 +1321,123 @@ export class DealerinfoComponent implements OnInit {
         this.display = false;
     }
 
+
+    // Start Dealer Document Info
+
+    get d(): { [key: string]: AbstractControl } {
+        return this.dealerdocumentForm.controls;
+    }
+
+    SaveDealerDocumentInfo() {
+        this.submittedDocument = true;
+        const data = this.dealerdocumentForm.value;
+
+        if (this.dealerdocumentForm.invalid) {
+            return;
+        }
+        let formData = new FormData();
+        for (const key of Object.keys(this.dealerdocumentForm.value)) {
+            const value = this.dealerdocumentForm.value[key];
+            if (key == "dealer_info_id") {
+                let dealerinfoId = this.rowData.DealerInfoId;
+                formData.append("dealer_info_id", dealerinfoId);
+            }
+            if (key == "issue_date") {
+                let date = new Date(value).toISOString();
+                formData.append("issue_date", date);
+            }
+            if (key == "expiry_date") {
+                let date = new Date(value).toISOString();
+                formData.append("expiry_date", date);
+            }
+            else {
+                formData.append(key, value);
+            }
+        }
+
+        if (this.isDealerDocumentinfoEdit) {
+
+            data.dealerDocumentinfoId = this.rowData.DealerDocumentInfoId;
+            formData.append("dealer_document_info_id", this.rowData.DealerDocumentInfoId);
+            this.dealerinfoService.updateDealerDocumentInfo(formData).subscribe(result => {
+
+                this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
+
+                if (result.MessageType == 1) {
+                    this.dealerdocumentinfoList.splice(this.dealerdocumentinfoList.findIndex(item => item.DealerDocumentInfoId === data.dealerDocumentinfoId), 1);
+                    this.dealerdocumentinfoList.unshift(result.Data);
+                    this.selecteddealerdocumentinfo = result.Data;
+                    this.rowData = result.Data;
+                    this.dealerDocumentIndex();
+                    this.isDealerDocumentinfoEdit = false;
+                    this.submittedDocument = false;
+                }
+            });
+            this.gridDisplayDocument = false;
+            this.formDisplayDocument = true;
+        }
+        else {
+            formData.append("dealer_info_id", this.rowData.DealerInfoId);
+            this.dealerinfoService.createDealerDocumentInfo(formData).subscribe(
+                result => {
+                    this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
+                    if (result.MessageType == 1) {
+                        this.dealerdocumentinfoList.unshift(result.Data);
+                        this.selecteddealerdocumentinfo = result.Data;
+                        this.rowData = result.Data;
+                        this.dealerDocumentIndex();
+                        this.isDealerDocumentinfoEdit = false;
+                        this.submittedDocument = false;
+                    }
+                }
+            );
+            this.gridDisplayDocument = false;
+            this.formDisplayDocument = true;
+        }
+
+    }
+
+    loadDealerDocumentinfoToEdit() {
+
+        debugger;
+        if (this.rowData == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+
+        let dealerDocumentinfoId = this.rowData.DealerDocumentInfoId;
+        this.dealerinfoService.getDealerDocumentInfoById(dealerDocumentinfoId).subscribe(data => {
+            if (data != null) {
+                this.isDealerDocumentinfoEdit = true;
+            }
+            this.dealerdocumentForm.controls['dealer_info_id'].setValue(data.DealerInfoId);
+            this.dealerdocumentForm.controls['document_type_id'].setValue(data.DocumentTypeId);
+            this.dealerdocumentForm.controls['document_number'].setValue(data.DocumentNumber);
+            this.dealerdocumentForm.controls['issue_date'].setValue(new Date(data.IssueDate));
+            this.dealerdocumentForm.controls['expiry_date'].setValue(new Date(data.ExpiryDate));
+            this.dealerdocumentForm.controls['status'].setValue(data.Status);
+            this.dealerdocumentForm.controls['remarks'].setValue(data.Remarks);
+            this.dealerdocumentForm.controls['image_file'].setValue(data.ImageFile);
+
+        });
+        this.gridDisplayDocument = true;
+        this.formDisplayDocument = false;
+    }
+
+    deleteDealerDocumentinfo() {
+        this.showDialog();
+        if (this.rowData == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+        let dealerDocumentinfoId = this.rowData.DealerDocumentInfoId;
+        this.dealerinfoService.deleteDealerDocumentInfo(dealerDocumentinfoId).subscribe(data => {
+            if (data.MessageType == 1) {
+                this.dealerdocumentinfoList.splice(this.dealerdocumentinfoList.findIndex(item => item.DealerDocumentInfoId === data.dealerDocumentinfoId), 1);
+            }
+            this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
+        });
+        this.display = false;
+    }
+
     
     dealerIndex() {
         this.index = 0;
@@ -1296,5 +1492,23 @@ export class DealerinfoComponent implements OnInit {
         this.indexLocation = (this.indexLocation === 0) ? 1 : this.indexLocation - 1;
     }
 
+
+    // Document Infomation Start
+    dealerDocumentIndex() {
+        this.index = 5;
+        this.indexLocation = 0;
+    }
+
+    functionDocument(e) {
+        this.indexLocation = e.indexLocation;
+    }
+
+    openNextDocument() {
+        this.indexLocation = (this.indexLocation === 1) ? 0 : this.indexLocation + 1;
+    }
+
+    openPrevDocument() {
+        this.indexLocation = (this.indexLocation === 0) ? 1 : this.indexLocation - 1;
+    }
 
 }

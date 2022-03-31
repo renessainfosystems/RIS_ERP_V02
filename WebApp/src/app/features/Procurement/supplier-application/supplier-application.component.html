@@ -1166,10 +1166,15 @@
                                             </div>
                                         </div>
 
-                                        <div class="field form-group col-12 md:col-6">
-                                            <label pTooltip="Payment Frequency" tooltipPosition="top">Payment Frequency<span class="req">*</span> </label>
-                                            <p-checkbox formControlName="is_payment_monthly" binary="true" inputId="binary"></p-checkbox>
-                                            <label for="ny">Is payment Monthly</label>
+                                        <div class="field col-12 md:col-6">
+                                            <label pTooltip="Payment Frequency" tooltipPosition="top">Payment Frequency<span class="req">*</span></label>
+                                            <p-dropdown [options]="allPaymentFrequency" formControlName="payment_frequency_id"
+                                                        [ngClass]="{ 'is-invalid': submittedFinancial && i.payment_frequency_id.errors }" placeholder="---Select---"
+                                                        optionLabel="payment_frequency_name" optionValue="payment_frequency_id" [showClear]="true" [filter]="true" filterBy="payment_frequency_name"></p-dropdown>
+
+                                            <div *ngIf="submittedFinancial && i.payment_frequency_id.errors" class="invalid-feedback">
+                                                <small *ngIf="i.payment_frequency_id.errors.required" class="p-error">Payment Frequency is required</small>
+                                            </div>
                                         </div>
 
                                         <!--[(ngModel)]="checked"-->
@@ -1179,7 +1184,7 @@
                                             <label pTooltip="Security Deposit" tooltipPosition="top">Security Deposit<span class="req">*</span></label>
                                             <p-dropdown [options]="allSecurityType" formControlName="security_deposit_id"
                                                         [ngClass]="{ 'is-invalid': submittedFinancialSecurity && i.security_deposit_id.errors }" placeholder="---Select---"
-                                                        optionLabel="security_deposit_name" optionValue="security_deposit_id" [showClear]="true" [filter]="true" filterBy="security_deposit_name"></p-dropdown>
+                                                        optionLabel="security_deposit_name" [showClear]="true" [filter]="true" filterBy="security_deposit_name"></p-dropdown>
 
                                             <div *ngIf="submittedFinancialSecurity && i.security_deposit_id.errors" class="invalid-feedback">
                                                 <small *ngIf="i.security_deposit_id.errors.required" class="p-error">Security Deposit is required</small>
@@ -1209,16 +1214,16 @@
                                         </div>
 
                                         <div class="field col-12 md:col-6">
-                                            <label pTooltip="Attach File" tooltipPosition="top">Attach File<span class="req"></span></label>
+                                            <label pTooltip="Attach File" tooltipPosition="top"><span class="req"></span></label>
                                             <div class="grid">
-                                                <div class=" col-12 md:col-5">
+                                                <!--<div class=" col-12 md:col-5">
                                                     <input type="file" id="file" (change)="handleSecurityFileInput($event.target.files)">
-                                                </div>
-                                                <div class=" col-12 md:col-3">
+                                                </div>-->
+                                                <div class=" col-12 md:col-4">
                                                     <button class=" pi pi-plus risBtn risAdd " label="Add" (click)="addSecurityDepositToTable(selectedSecurityDepositTable)">Add</button>
                                                 </div>
                                                 <div class=" col-12 md:col-4 float-right">
-                                                    <button pButton pRipple type="button" (click)="onFormSubmit()" label="Save as Draft" class="risBtn risSave mr-2 mb-2" icon="pi pi-check"></button>
+                                                    <button pButton pRipple type="button" (click)="onSecurityDepositFormSubmit()" label="Save as Draft" class="risBtn risSave mr-2 mb-2" icon="pi pi-check"></button>
                                                 </div>
                                             </div>
                                         </div>

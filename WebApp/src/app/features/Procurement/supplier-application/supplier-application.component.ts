@@ -74,20 +74,8 @@ export class SupplierApplicationComponent implements OnInit {
     fileToUploadNID: File | null = null;
     fileToUploadSecurity: File | null = null;
     fileurllink: null;
-    //photourllink: string = "assets/images/user-photo1.png";
-
-    //selectFile(event) {
-    //  if (event.target.files) {
-    //    var reader = new FileReader()
-    //    reader.readAsDataURL(event.target.files[0])
-    //    reader.onload = (event: any) => {
-    //      this.photourllink = event.target.result
-    //    }
-    //  }
-    //}
 
     // for photo and signature upload
-
     photourllink: string = "assets/images/defaultimg.jpeg";
     selectFile(event) {
         if (event.target.files) {
@@ -282,6 +270,9 @@ export class SupplierApplicationComponent implements OnInit {
     selectedCurrency: any;
     allCurrency: any[];
 
+    selectedPaymentFrequency: any;
+    allPaymentFrequency: any[];
+
     selectedSecurityType: any;
     allSecurityType: any[];
 
@@ -332,8 +323,9 @@ export class SupplierApplicationComponent implements OnInit {
     }
 
     showBasicDialog() {
-        this.resetForm();
+        this.ngOnInit();
         this.toggleGridDisplay();
+
     }
 
     showSubmitDialog() {
@@ -366,9 +358,6 @@ export class SupplierApplicationComponent implements OnInit {
 
     }
 
-
-
-    selectedPaymentFrequency: boolean = false;
 
     ngOnInit(): void {
         //Basic
@@ -512,8 +501,8 @@ export class SupplierApplicationComponent implements OnInit {
             passport_no: [''],
             birth_id: [''],
             driving_license_no: [''],
-   
-   
+
+
         });
         this.loadAllContactTypeCboList();
         this.LoadAllDesignationCboList();
@@ -537,15 +526,16 @@ export class SupplierApplicationComponent implements OnInit {
             currency_id: ['', [Validators.required]],
             credit_days: ['', [Validators.required]],
             credit_limit: ['', [Validators.required]],
-            is_payment_monthly: false,
+            payment_frequency_id: ['', [Validators.required]],
             security_deposit_id: ['', [Validators.required]],
             security_amount: ['', [Validators.required]],
             expiry_date: ['', [Validators.required]],
-            security_document_path: [null],
-            FileUpload: new FormControl('', [Validators.required]),
+            //security_document_path: [null],
+            //FileUpload: new FormControl('', [Validators.required]),
         });
         this.LoadAllCurrencyCboList();
         this.LoadAllSecurityTypeCboList();
+        this.LoadAllPaymentFrequencyCboList();
 
         this.mobileBankingApplicationForm = this.formbulider.group({
 
@@ -671,7 +661,6 @@ export class SupplierApplicationComponent implements OnInit {
     onSelectByCountryIdLocation(countryId: Number) {
         if (countryId != null) {
             this.SupplierApplicationService.getAllDivisionCboListByCountryId(countryId).subscribe(data => {
-                debugger
                 this.allDivisionLocation = data;
             });
         }
@@ -743,7 +732,6 @@ export class SupplierApplicationComponent implements OnInit {
 
 
     onSelectByAssociationId() {
-        debugger
         let associationObj = this.associationsApplicationForm.get('association_id')?.value;
         let associationId = associationObj.association_id;
         //if (associationId != null) {
@@ -892,6 +880,13 @@ export class SupplierApplicationComponent implements OnInit {
             this.allSecurityType = data;
         });
     }
+
+    LoadAllPaymentFrequencyCboList() {
+        this.SupplierApplicationService.getAllPaymentFrequencyCboList().subscribe(data => {
+            this.allPaymentFrequency = data;
+        });
+    }
+
 
     LoadAllMfsCboList() {
         this.SupplierApplicationService.getAllMfsCboList().subscribe(data => {
@@ -1095,7 +1090,7 @@ export class SupplierApplicationComponent implements OnInit {
                 this.financialApplicationForm.controls['currency_id'].setValue(data.currency_id);
                 this.financialApplicationForm.controls['credit_days'].setValue(data.credit_days);
                 this.financialApplicationForm.controls['credit_limit'].setValue(data.credit_limit);
-                this.financialApplicationForm.controls['is_payment_monthly'].setValue(data.is_payment_monthly);
+                this.financialApplicationForm.controls['payment_frequency_id'].setValue(data.payment_frequency_id);
             }
         });
 
@@ -1148,7 +1143,7 @@ export class SupplierApplicationComponent implements OnInit {
     }
 
 
-    
+
 
     onFormSubmit(): void {
 
@@ -1184,10 +1179,15 @@ export class SupplierApplicationComponent implements OnInit {
             data.supplierId = this.rowData.SupplierId;
             formData.append("supplier_id", this.rowData.SupplierId);
             this.SupplierApplicationService.updateSupplierApplication(formData).subscribe(result => {
+                debugger
                 this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
                 if (result.MessageType == 1) {
-                    this.loadAllSupplierinfos();
+                    this.supplierinfoList.splice(this.supplierinfoList.findIndex(item => item.SupplierId === data.SupplierId), 1);
+                    this.supplierinfoList.unshift(result.Data[0]);
+                    this.selectedsupplierinfo = result.Data[0];
                     this.rowData = result.Data[0];
+                    this.submitted = false;
+
                 }
             });
         }
@@ -1195,8 +1195,10 @@ export class SupplierApplicationComponent implements OnInit {
             this.SupplierApplicationService.createSupplierApplication(formData).subscribe(result => {
                 this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
                 if (result.MessageType == 1) {
-                    this.loadAllSupplierinfos();
+                    this.supplierinfoList.unshift(result.Data[0]);
+                    this.selectedsupplierinfo = result.Data[0];
                     this.rowData = result.Data[0];
+                    this.submitted = false;
                 }
             }
             );
@@ -1267,7 +1269,6 @@ export class SupplierApplicationComponent implements OnInit {
         }
 
         else {
-            let supplierId = this.rowData.SupplierId;
 
             let IndustrySectorObj = this.businessApplicationForm.get('industry_sector_id')?.value;
             let IndustrySectorId = IndustrySectorObj.industry_sector_id;
@@ -1284,6 +1285,7 @@ export class SupplierApplicationComponent implements OnInit {
                 if (this.subSectorDataSources.includes(this.businessApplicationForm.get('industry_sub_sector_id')?.value)) {
                     return this.toastr.warning("Please select Sub Sector")
                 }
+                let supplierId = this.rowData.SupplierId;
                 const sectorSubSectorobj = { supplier_id: supplierId, industry_sector_id: IndustrySectorId, industry_sector_name: IndustrySectorName, industry_sub_sector_id: industrySubSectorId, industry_sub_sector_name: industrySubSectorName }
                 this.subSectorDataSources.push(sectorSubSectorobj);
             }
@@ -1362,7 +1364,6 @@ export class SupplierApplicationComponent implements OnInit {
     }
 
     onAssociationFormSubmit() {
-        debugger
         if (this.rowData == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
@@ -1809,7 +1810,6 @@ export class SupplierApplicationComponent implements OnInit {
 
     onContactLocationFormSubmit() {
 
-        debugger
         if (this.rowData == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
@@ -1881,100 +1881,82 @@ export class SupplierApplicationComponent implements OnInit {
 
     addSecurityDepositToTable(a) {
 
-        if (this.rowData == null) {
-            return this.notifyService.ShowNotification(3, 'Please select row');
-        }
-
-        let supplierId = this.rowData.SupplierId;
-
-        const data = this.financialApplicationForm.value;
-
-        if (!(data.security_deposit_id)) {
-            return this.notifyService.ShowNotification(2, "Please select Security Deposit")
-        }
-        if (!(data.security_amount)) {
-            return this.notifyService.ShowNotification(2, "Please input Security Amount")
-        }
-        if (!(data.expiry_date)) {
-            return this.notifyService.ShowNotification(2, "Please select expiry Date")
-        }
+        this.submittedFinancialSecurity = true;
+        const securityDepositData = this.financialApplicationForm.value;
 
 
-        if (this.rowData == null) {
-            return this.notifyService.ShowNotification(3, 'Please select row');
-        }
-
-        //for validation message -----------
-        this.submittedLocation = true;
-        const locationData = this.financialApplicationForm.value;
-        if (this.locationApplicationForm.invalid) {
+        if ((securityDepositData.security_deposit_id == "") || (securityDepositData.security_deposit_id == null) || (securityDepositData.security_deposit_id == undefined)) {
             return;
         }
-        //end validation messate -----------
+        if ((securityDepositData.security_amount == "") || (securityDepositData.security_amount == null) || (securityDepositData.security_amount == undefined)) {
+            return;
+        }
+        if ((securityDepositData.expiry_date == "") || (securityDepositData.expiry_date == null) || (securityDepositData.expiry_date == undefined)) {
+            return;
+        }
+
 
         this.dataSaved = false;
-
-
-        let location_type_id = this.locationApplicationForm.get('location_type_id')?.value.location_type_id;
-        let location_type_name = this.locationApplicationForm.get('location_type_id')?.value.location_type_name;
-        if (this.dataExistLocation(location_type_name)) {
-            return this.notifyService.ShowNotification(2, "Selected location name already added")
+        let security_deposit_id = this.financialApplicationForm.get('security_deposit_id')?.value.security_deposit_id;
+        let security_deposit_name = this.financialApplicationForm.get('security_deposit_id')?.value.security_deposit_name;
+        if (this.dataExistSecurityDeposit(security_deposit_name)) {
+            return this.notifyService.ShowNotification(2, "Selected Security Deposit already added")
         }
 
         else {
 
+            let supplierId = this.rowData.SupplierId;
             let securityDepositObj = this.financialApplicationForm.get('security_deposit_id')?.value;
             let security_deposit_id = securityDepositObj.security_deposit_id;
             let security_deposit_name = securityDepositObj.security_deposit_name;
-
             let security_amount = this.financialApplicationForm.get('security_amount')?.value;
             let expiry_date = this.financialApplicationForm.get('expiry_date')?.value;
 
-            /*   let security_document_path = this.financialApplicationForm.get('SecurityFileUpload')?.value;*/
+            const securityDepositSessionobj = {
+                supplier_id: supplierId,
+                security_deposit_id: security_deposit_id,
+                security_deposit_name: security_deposit_name,
+                security_amount: security_amount,
+                expiry_date_str: this.formatDate(expiry_date),
+                expiry_date: (expiry_date),
 
-
-            if (this.dataExistSecurityDeposit(security_deposit_id)) {
-                return this.notifyService.ShowNotification(2, "Selected Security Deposit already added")
             }
+            this.SecurityDepositDataSources.push(securityDepositSessionobj);
 
-            else {
-                const securityDepositSessionobj = {
-                    supplier_id: supplierId,
-                    security_deposit_id: security_deposit_id,
-                    security_deposit_name: security_deposit_name,
-                    security_amount: security_amount,
-                    expiry_date_str: this.formatDate(expiry_date),
-                    expiry_date: (expiry_date),
-                    /*   security_document_path: security_document_path,*/
-
-                }
-                this.SecurityDepositDataSources.push(securityDepositSessionobj);
-            }
 
         }
     }
 
-
     onSecurityDepositFormSubmit() {
 
-        let supplierId = this.rowData.SupplierId;
+
+        if (this.rowData == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+
         const financialInfoData = this.financialApplicationForm.value;
 
-        if (!(financialInfoData.currency_id)) {
-            return this.notifyService.ShowNotification(2, "Please select Currency")
+        //for validation message -----------
+        this.submittedFinancial = true;
+        if ((financialInfoData.currency_id == "") || (financialInfoData.currency_id == null) || (financialInfoData.currency_id == undefined)) {
+            return;
         }
-        if (!(financialInfoData.credit_days)) {
-            return this.notifyService.ShowNotification(2, "Please input Credit Days")
+        if ((financialInfoData.credit_days == "") || (financialInfoData.credit_days == null) || (financialInfoData.credit_days == undefined)) {
+            return;
         }
-        if (!(financialInfoData.credit_limit)) {
-            return this.notifyService.ShowNotification(2, "Please select Credit Limit")
+        if ((financialInfoData.credit_limit == "") || (financialInfoData.credit_limit == null) || (financialInfoData.credit_limit == undefined)) {
+            return;
         }
-
-        if ((this.SecurityDepositDataSources.length == 0)) {
-            return this.notifyService.ShowNotification(2, "Please add at least one  Security Type")
+        if ((financialInfoData.payment_frequency_id == "") || (financialInfoData.payment_frequency_id == null) || (financialInfoData.payment_frequency_id == undefined)) {
+            return;
         }
+        else if (this.SecurityDepositDataSources.length == 0) {
+            return this.notifyService.ShowNotification(2, "Please add at least security first")
+        }
+        //end validation messate -----------
 
         else {
+            let supplierId = this.rowData.SupplierId;
             financialInfoData.securityDepositSession = this.SecurityDepositDataSources;
             financialInfoData.supplier_id = supplierId;
             this.SupplierApplicationService.updateSupplierCreditDepositApplication(financialInfoData).subscribe(data => {
@@ -1984,48 +1966,22 @@ export class SupplierApplicationComponent implements OnInit {
 
     }
 
-    dataExistSecurityDeposit(security_deposit_id) {
+    dataExistSecurityDeposit(security_deposit_name) {
         return this.SecurityDepositDataSources.some(function (el) {
-            return el.security_deposit_id === security_deposit_id;
+            return el.security_deposit_name === security_deposit_name;
         });
     }
 
-    //removeSecurityDeposit(a, row) {
-    //    this.SecurityDepositDataSources = this.SecurityDepositDataSources.slice(0, a).concat(this.SecurityDepositDataSources.slice(a + 1));
-    //}
+    removeSecurityDeposit(a, row) {
+        this.SecurityDepositDataSources = this.SecurityDepositDataSources.slice(0, a).concat(this.SecurityDepositDataSources.slice(a + 1));
+    }
+
 
 
     ///// Mobile
 
 
     onMobileBankingFormSubmit() {
-
-        //if (this.rowData == null) {
-        //    return this.notifyService.ShowNotification(3, 'Please select row');
-        //}
-
-        //let supplierId = this.rowData.SupplierId;
-
-        //const mobileBankingData = this.mobileBankingApplicationForm.value;
-
-        //if (!(mobileBankingData.mfs_id)) {
-        //    return this.notifyService.ShowNotification(2, "Please select MFS Name")
-        //}
-        //if (!(mobileBankingData.account_number)) {
-        //    return this.notifyService.ShowNotification(2, "Please input Account Number")
-        //}
-        //if (!(mobileBankingData.mfs_type_id)) {
-        //    return this.notifyService.ShowNotification(2, "Please select MFS Type")
-        //}
-
-        //let mfsObj = this.mobileBankingApplicationForm.get('mfs_id')?.value;
-        //let mfs_id = mfsObj.mfs_id;
-
-
-        //if (this.dataExistMFS(mfs_id)) {
-        //    return this.notifyService.ShowNotification(2, "Selected MFS already added")
-        //}
-
 
         if (this.rowData == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
@@ -2067,7 +2023,6 @@ export class SupplierApplicationComponent implements OnInit {
         });
     }
 
-
     deleteMFS(a, row) {
         let supplier_mobile_bank_id = row.supplier_mobile_bank_id;
         if (this.loadSupplierinfoToEdit) {
@@ -2088,37 +2043,6 @@ export class SupplierApplicationComponent implements OnInit {
     //// Banking
 
     onBankingFormSubmit() {
-
-        //if (this.rowData == null) {
-        //    return this.notifyService.ShowNotification(3, 'Please select row');
-        //}
-
-        //let supplierId = this.rowData.SupplierId;
-
-        //const bankingData = this.bankingApplicationForm.value;
-
-        //if (!(bankingData.bank_type_id)) {
-        //    return this.notifyService.ShowNotification(2, "Please select Bank Type")
-        //}
-        //if (!(bankingData.bank_id)) {
-        //    return this.notifyService.ShowNotification(2, "Please select Bank Name")
-        //}
-        //if (!(bankingData.bank_branch_id)) {
-        //    return this.notifyService.ShowNotification(2, "Please select Bank Branch")
-        //}
-        //if (!(bankingData.account_name)) {
-        //    return this.notifyService.ShowNotification(2, "Please input Account Name")
-        //}
-        //if (!(bankingData.account_number)) {
-        //    return this.notifyService.ShowNotification(2, "Please input Account Number")
-        //}
-        //let account_number = this.bankingApplicationForm.get('account_number')?.value;
-
-
-        //if (this.dataExistBankAccount(account_number)) {
-        //    return this.notifyService.ShowNotification(2, "Selected Bank Account already added")
-        //}
-
 
         if (this.rowData == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
@@ -2176,10 +2100,6 @@ export class SupplierApplicationComponent implements OnInit {
     }
 
 
-    //deleteContact() {
-    //    this.showDialog();
-    //}
-
     // File Upload
 
     onSelectImage(event) {
@@ -2212,6 +2132,8 @@ export class SupplierApplicationComponent implements OnInit {
         this.fileToUploadSecurity = files.item(0);
     }
 
+    // Tab index Manintain
+
     dealerIndex() {
         this.index = 0;
     }
@@ -2229,13 +2151,13 @@ export class SupplierApplicationComponent implements OnInit {
     }
 
     resetForm() {
-        //this.associationForm.reset();
-        //this.isAssociationEdit = false;
-        //this.formInit();
+        this.supplierApplicationForm.reset();
+        this.isSupplierinfoEdit = false;
+        this.supplierinfoList = [];
     }
 
     clear() {
-        /*    this.resetForm();*/
+            this.resetForm();
     }
 
 
