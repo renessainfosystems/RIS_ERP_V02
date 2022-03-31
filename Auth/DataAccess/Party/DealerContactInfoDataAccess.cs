@@ -181,8 +181,10 @@ namespace Auth.DataAccess.Party
                 _dbConnection.Open();
             try
             {
-                var sql = @"SELECT * FROM [Party].[Dealer_Contact_Info] DCI WHERE DCI.dealer_contact_info_id =" + dealer_contact_info_id + "";
-                dynamic data = await _dbConnection.QuerySingleOrDefaultAsync<dynamic>(sql);
+                var sql = @"SELECT * FROM [Party].[Dealer_Contact_Info] DCI WHERE DCI.dealer_contact_info_id =@dealer_contact_info_id";
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@dealer_contact_info_id", dealer_contact_info_id);
+                dynamic data = await _dbConnection.QuerySingleOrDefaultAsync<dynamic>(sql, parameters);
                 if (data != null)
                 {
                     result = DealerContactInfoViewModel.ConvertToModel(data);

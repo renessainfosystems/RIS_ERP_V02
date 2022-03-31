@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 /// </summary>
 namespace Auth.DataAccess.Party
 {
-    public class DealerLocationInfoDataAccess
+    public class DealerDocumentInfoDataAccess
     {
         private readonly IDbConnection _dbConnection;
 
@@ -25,14 +25,14 @@ namespace Auth.DataAccess.Party
 
         protected readonly ApplicationDBContext _context;
 
-        public DealerLocationInfoDataAccess(ApplicationDBContext context, IDbConnection dbConnection)
+        public DealerDocumentInfoDataAccess(ApplicationDBContext context, IDbConnection dbConnection)
         {
             _dbConnection = dbConnection;
             _context = context;
         }
 
         //Parameter Binding
-        public DynamicParameters DealerLocationInfoParameterBinding(DealerLocationInfo dealerLocationInfo, int operationType)
+        public DynamicParameters DealerDocumentInfoParameterBinding(DealerDocumentInfo dealerDocumentInfo, int operationType)
         {
             var currentUserInfoId = _httpContextAccessor.HttpContext.Items["User_Info_Id"];
 
@@ -40,62 +40,50 @@ namespace Auth.DataAccess.Party
 
             if (operationType == (int)GlobalEnumList.DBOperation.Create || operationType == (int)GlobalEnumList.DBOperation.Update)
             {
-                parameters.Add("@param_dealer_location_info_id", dealerLocationInfo.dealer_location_info_id, DbType.Int32);
-                parameters.Add("@param_dealer_info_id", dealerLocationInfo.dealer_info_id, DbType.Int32);
-                parameters.Add("@param_dealer_location_info_code", dealerLocationInfo.dealer_location_info_code, DbType.String);
-                parameters.Add("@param_dealer_location_info_name", dealerLocationInfo.dealer_location_info_name, DbType.String);
-                parameters.Add("@param_dealer_location_info_short_name", dealerLocationInfo.dealer_location_info_short_name, DbType.String);
-                parameters.Add("@param_trade_license", dealerLocationInfo.trade_license, DbType.String);
-                parameters.Add("@param_trade_license_date", dealerLocationInfo.trade_license_date, DbType.Date);
-                parameters.Add("@param_mobile", dealerLocationInfo.mobile, DbType.String);
-                parameters.Add("@param_phone", dealerLocationInfo.phone, DbType.String);
-                parameters.Add("@param_email", dealerLocationInfo.email, DbType.String);
-                parameters.Add("@param_emergency_contact", dealerLocationInfo.emergency_contact, DbType.String);
-                parameters.Add("@param_country_id", dealerLocationInfo.country_id, DbType.Int32);
-                parameters.Add("@param_division_id", dealerLocationInfo.division_id, DbType.Int32);
-                parameters.Add("@param_district_id", dealerLocationInfo.district_id, DbType.Int32);
-                parameters.Add("@param_thana_id", dealerLocationInfo.thana_id, DbType.Int32);
-                parameters.Add("@param_city", dealerLocationInfo.city, DbType.String);
-                parameters.Add("@param_post_code", dealerLocationInfo.post_code, DbType.String);
-                parameters.Add("@param_block", dealerLocationInfo.block, DbType.String);
-                parameters.Add("@param_road_no", dealerLocationInfo.road_no, DbType.String);
-                parameters.Add("@param_house_no", dealerLocationInfo.house_no, DbType.String);
-                parameters.Add("@param_flat_no", dealerLocationInfo.flat_no, DbType.String);
-                parameters.Add("@param_address_note", dealerLocationInfo.address_note, DbType.String);
-                parameters.Add("@param_is_active", true, DbType.Boolean);
+                parameters.Add("@param_dealer_document_info_id", dealerDocumentInfo.dealer_document_info_id, DbType.Int32);
+                parameters.Add("@param_dealer_info_id", dealerDocumentInfo.dealer_info_id, DbType.Int32);
+                parameters.Add("@param_document_type_id", dealerDocumentInfo.document_type_id, DbType.Int32);
+                parameters.Add("@param_document_number", dealerDocumentInfo.document_number, DbType.String);
+                parameters.Add("@param_issue_date", dealerDocumentInfo.issue_date, DbType.Date);
+                parameters.Add("@param_expiry_date", dealerDocumentInfo.expiry_date, DbType.Date);
+                parameters.Add("@param_image_file", dealerDocumentInfo.image_file, DbType.String);
+                parameters.Add("@param_is_verified", true, DbType.Boolean);
+                parameters.Add("@param_is_complete", true, DbType.Boolean);
+                parameters.Add("@param_status", dealerDocumentInfo.status, DbType.String);
+                parameters.Add("@remarks", dealerDocumentInfo.remarks, DbType.String);
                 parameters.Add("@param_created_datetime", DateTime.Now, DbType.DateTime);
                 parameters.Add("@param_created_user_info_id", currentUserInfoId ?? 0, DbType.Int64);
                 parameters.Add("@param_DBOperation", operationType == (int)GlobalEnumList.DBOperation.Create ? GlobalEnumList.DBOperation.Create : GlobalEnumList.DBOperation.Update);
             }
             else if (operationType == (int)GlobalEnumList.DBOperation.Delete)
             {
-                parameters.Add("@param_dealer_location_info_id", dealerLocationInfo.dealer_location_info_id, DbType.Int64);
+                parameters.Add("@param_dealer_document_info_id", dealerDocumentInfo.dealer_document_info_id, DbType.Int64);
                 parameters.Add("@param_DBOperation", GlobalEnumList.DBOperation.Delete);
             }
             return parameters;
         }
 
-        public async Task<dynamic> IUD_DealerLocationInfo(DealerLocationInfo dealerLocationInfo, int dbOperation)
+        public async Task<dynamic> IUD_DealerDocumentInfo(DealerDocumentInfo dealerDocumentInfo, int dbOperation)
         {
             var message = new CommonMessage();
             var result = (dynamic)null;
-            var parameters = DealerLocationInfoParameterBinding(dealerLocationInfo, dbOperation);
+            var parameters = DealerDocumentInfoParameterBinding(dealerDocumentInfo, dbOperation);
 
             if (_dbConnection.State == ConnectionState.Closed)
                 _dbConnection.Open();
 
             try
             {
-                dynamic data = await _dbConnection.QueryFirstOrDefaultAsync("[Party].[SP_Dealer_Location_Info_IUD]", parameters, commandType: CommandType.StoredProcedure);
+                dynamic data = await _dbConnection.QueryFirstOrDefaultAsync("[Party].[SP_Dealer_Document_Info_IUD]", parameters, commandType: CommandType.StoredProcedure);
 
                 if (dbOperation == (int)GlobalEnumList.DBOperation.Create)
                 {
-                    result = DealerLocationInfoViewModel.ConvertToModel(data);
+                    result = DealerDocumentInfoViewModel.ConvertToModel(data);
                     return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage, result);
                 }
                 if (dbOperation == (int)GlobalEnumList.DBOperation.Update)
                 {
-                    result = DealerLocationInfoViewModel.ConvertToModel(data);
+                    result = DealerDocumentInfoViewModel.ConvertToModel(data);
                     return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonUpdateMessage, result);
                 }
 
@@ -106,7 +94,7 @@ namespace Auth.DataAccess.Party
 
                 if (data.Count > 0)
                 {
-                    result = DealerLocationInfoViewModel.ConvertToModel(data);
+                    result = DealerDocumentInfoViewModel.ConvertToModel(data);
                     message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage, result);
                 }
                 else
@@ -126,7 +114,7 @@ namespace Auth.DataAccess.Party
             return (message);
         }
 
-        public async Task<dynamic> GetAllDealerLocationInfo()
+        public async Task<dynamic> GetAllDealerDocumentInfo()
         {
             var message = new CommonMessage();
             var result = (dynamic)null;
@@ -136,12 +124,12 @@ namespace Auth.DataAccess.Party
 
             try
             {
-                string sql = @"SELECT * FROM [Party].[Dealer_Location_Info]";
+                string sql = @"SELECT * FROM [Party].[Dealer_Document_Info]";
                 dynamic data = await _dbConnection.QueryAsync<dynamic>(sql);
                 if (data != null)
                 {
                     List<dynamic> dataList = data;
-                    result = (from dr in dataList select DealerLocationInfoViewModel.ConvertToModel(dr)).ToList();
+                    result = (from dr in dataList select DealerDocumentInfoViewModel.ConvertToModel(dr)).ToList();
                 }
 
             }
@@ -156,20 +144,21 @@ namespace Auth.DataAccess.Party
             return (result);
         }
 
-        public async Task<dynamic> GetDealerLocationInfoById(int dealer_location_info_id)
+        public async Task<dynamic> GetDealerDocumentInfoById(int dealer_document_info_id)
         {
             var result = (dynamic)null;
             if (_dbConnection.State == ConnectionState.Closed)
                 _dbConnection.Open();
             try
             {
-                var sql = @"SELECT * FROM [Party].[Dealer_Location_Info] DCI WHERE DCI.dealer_location_info_id =@dealer_location_info_id";
+                var sql = @"SELECT * FROM [Party].[Dealer_Document_Info] DCI WHERE DCI.dealer_document_info_id =@dealer_document_info_id";
+
                 DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@dealer_location_info_id", dealer_location_info_id);
+                parameters.Add("@dealer_document_info_id", dealer_document_info_id);
                 dynamic data = await _dbConnection.QuerySingleOrDefaultAsync<dynamic>(sql, parameters);
                 if (data != null)
                 {
-                    result = DealerLocationInfoViewModel.ConvertToModel(data);
+                    result = DealerDocumentInfoViewModel.ConvertToModel(data);
                 }
             }
             catch (Exception ex)
@@ -183,21 +172,21 @@ namespace Auth.DataAccess.Party
             return result;
         }
 
-        public async Task<dynamic> GetLocationInfoByDealerId(int dealer_info_id)
+        public async Task<dynamic> GetDocumentInfoByDealerId(int dealer_info_id)
         {
             var result = (dynamic)null;
             if (_dbConnection.State == ConnectionState.Closed)
                 _dbConnection.Open();
             try
             {
-                var sql = @"SELECT * FROM [Party].[Dealer_Location_Info] DCI WHERE DCI.dealer_info_id =@dealer_info_id";
+                var sql = @"SELECT * FROM [Party].[Dealer_Document_Info] DCI WHERE DCI.dealer_info_id =@dealer_info_id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@dealer_info_id", dealer_info_id);
                 dynamic data = await _dbConnection.QueryAsync<dynamic>(sql, parameters);
                 if (data != null)
                 {
                     List<dynamic> dataList = data;
-                    result = (from dr in dataList select DealerLocationInfoViewModel.ConvertToModel(dr)).ToList();
+                    result = (from dr in dataList select DealerDocumentInfoViewModel.ConvertToModel(dr)).ToList();
                 }
             }
             catch (Exception ex)

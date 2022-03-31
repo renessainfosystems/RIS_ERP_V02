@@ -166,8 +166,10 @@ namespace Auth.DataAccess.Party
 
             try
             {
-                string sql = @"SELECT * FROM [Party].[Dealer_Info] DI WHERE DI.company_id =" + company_id + "";
-                dynamic data = await _dbConnection.QueryAsync<dynamic>(sql);
+                string sql = @"SELECT * FROM [Party].[Dealer_Info] DI WHERE DI.company_id =@company_id";
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@company_id", company_id);
+                dynamic data = await _dbConnection.QueryAsync<dynamic>(sql, parameters);
                 if (data != null)
                 {
                     List<dynamic> dataList = data;

@@ -163,8 +163,10 @@ namespace Auth.DataAccess.Party
                 _dbConnection.Open();
             try
             {
-                var sql = @"SELECT * FROM [Party].[Retailer_Location_Info] DCI WHERE DCI.retailer_location_info_id =" + retailer_location_info_id + "";
-                dynamic data = await _dbConnection.QuerySingleOrDefaultAsync<dynamic>(sql);
+                var sql = @"SELECT * FROM [Party].[Retailer_Location_Info] DCI WHERE DCI.retailer_location_info_id =@retailer_location_info_id";
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@retailer_location_info_id", retailer_location_info_id);
+                dynamic data = await _dbConnection.QuerySingleOrDefaultAsync<dynamic>(sql, parameters);
                 if (data != null)
                 {
                     result = RetailerLocationInfoViewModel.ConvertToModel(data);
