@@ -41,32 +41,15 @@
                                 </div>
                             </div>
 
-                            <div class="field form-group col-12 md:col-6">
-                                <label pTooltip="Abbreviation" tooltipPosition="top">Abbreviation<span class="req">*</span> </label>
-                                <input id="lastname2" type="text" class="from-control" formControlName="abbreviation"
-                                       [ngClass]="{ 'is-invalid': submitted && f.abbreviation.errors }"
-                                       placeholder="" pInputText required />
 
-                                <div *ngIf="submitted && f.association_name.errors" class="invalid-feedback">
-                                    <small *ngIf="f.abbreviation.errors.required" class="p-error">Association Name is required</small>
-
-                                </div>
-                            </div>
-
-                            <div class="p-fluid grid col-12">
-                                <div class="col-4 mt-2 text-right">
-                                    <label for="" class=" d-none d-md-inline-flex">Abbreviation:</label>
-                                </div>
-                                <div class="col-8 p-fluid">
-                                    <span class="p-float-label">
-                                        <input id="float-input p-fluid" formControlName="abbreviation" type="text" placeholder="Abbreviation" pInputText autocomplete="off">
-                                    </span>
-                                </div>
+                            <div class="field col-12 md:col-6">
+                                <label>abbreviation </label>
+                                <input id="lastname2" type="text" formControlName="abbreviation" placeholder="" pInputText />
                             </div>
 
                             <div class="field col-12 md:col-6">
                                 <label>Remarks </label>
-                                <input id="lastname2" type="text" formControlName="remarks" placeholder="remarks" pInputText />
+                                <input id="lastname2" type="text" formControlName="remarks" placeholder="" pInputText />
                             </div>
                         </div>
                     </div>
