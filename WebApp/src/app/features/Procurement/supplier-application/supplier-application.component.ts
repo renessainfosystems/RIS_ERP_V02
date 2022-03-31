@@ -36,6 +36,19 @@ export class SupplierApplicationComponent implements OnInit {
 
 
 
+    submittedBasic = false;
+    submittedBusiness = false;
+    submittedBusinessSector = false;
+    submittedAssociation = false;
+    submittedLegalDocument = false;
+    submittedLocation = false;
+    submittedWarehouse = false;
+    submittedContact = false;
+    submittedContactLocation = false;
+    submittedFinancial = false;
+    submittedFinancialSecurity = false;
+    submittedMobileBanking = false;
+    submittedBanking = false;
     submitted = false;
 
     //start grid and form show hide ********************
@@ -55,30 +68,38 @@ export class SupplierApplicationComponent implements OnInit {
     //end grid and form show hide ********************
 
 
+
+    // for photo and signature upload
     fileToUploadLegalForm: File | null = null;
     fileToUploadNID: File | null = null;
     fileToUploadSecurity: File | null = null;
-   
+    fileurllink: null;
+    //photourllink: string = "assets/images/user-photo1.png";
+
+    //selectFile(event) {
+    //  if (event.target.files) {
+    //    var reader = new FileReader()
+    //    reader.readAsDataURL(event.target.files[0])
+    //    reader.onload = (event: any) => {
+    //      this.photourllink = event.target.result
+    //    }
+    //  }
+    //}
 
     // for photo and signature upload
-    fileurllink: null;
-    photourllink: string = "assets/images/user-photo1.png";
 
+    photourllink: string = "assets/images/defaultimg.jpeg";
     selectFile(event) {
-      if (event.target.files) {
-        var reader = new FileReader()
-        reader.readAsDataURL(event.target.files[0])
-        reader.onload = (event: any) => {
-          this.photourllink = event.target.result
+        if (event.target.files) {
+            var reader = new FileReader()
+            reader.readAsDataURL(event.target.files[0])
+            reader.onload = (event: any) => {
+                this.photourllink = event.target.result
+            }
         }
-      }
     }
 
     /*  supplier_id: any = 1;*/
-
-    showBasicEdit = true;
-
-    index: number = 0;
 
 
     selectedSubSectorTable: SupplierApplication;
@@ -88,7 +109,7 @@ export class SupplierApplicationComponent implements OnInit {
     selectedSecurityDepositTable: SupplierApplication;
     selectedMobileBankingTable: SupplierApplication;
     selectedBankingTable: SupplierApplication;
- 
+
 
     subSectorDataSources: any[] = [];
     associationDataSources: any[] = [];
@@ -100,13 +121,21 @@ export class SupplierApplicationComponent implements OnInit {
     SecurityDepositDataSources: any[] = [];
     mobileBankingDataSources: any[] = [];
     bankingDataSources: any[] = [];
- 
+
 
     supplierinfoList: any[];//List Supplierinfo
     selectedsupplierinfo: any;// Selected Dealerinfo
     isSupplierinfoEdit: boolean = false;
+    showBasicEdit = true;
+    index: number = 0;
+    rowSelected: boolean = false;
+    selected = true;
+    collapsedempInfo = true;
+    collapsedempDetails = false;
+    collapsed = false;
+    checked: boolean = false;
 
- /*   selectedDocumentInfo: any;// Selected DocumentInfoinfo*/
+
 
     bank_swift_code: any;
     uploadedFiles: any[] = [];
@@ -157,7 +186,7 @@ export class SupplierApplicationComponent implements OnInit {
 
     selectedZone: any;
     allZone: any[];
-    
+
 
     //Business Info
 
@@ -240,7 +269,7 @@ export class SupplierApplicationComponent implements OnInit {
     selectedWarehouse: any;
     allWarehouse: any[];
 
-   // Contact Location
+    // Contact Location
     selectedContactLocation: any;
     allContactLocation: any[];
 
@@ -271,7 +300,7 @@ export class SupplierApplicationComponent implements OnInit {
     selectedBankBranch: any;
     allBankBranch: any[];
 
-    // Products
+
 
 
     first = 0;
@@ -288,16 +317,8 @@ export class SupplierApplicationComponent implements OnInit {
     collapsedMobileBankingInfo = true;
     collapsedBankingInfo = false;
 
-    //end dropdown List prperty
-    // for delete data modal
-    rowSelected: boolean = false;
-    selected = true;
-    collapsedempInfo = true;
-    collapsedempDetails = false;
-    collapsed = false;
-    checked: boolean = false;
 
-    // for delete data modaldisplay
+    // for Insert and update data modal
     display: boolean = false;
     displaySubmit: boolean = false;
     displayBasic: boolean = false;
@@ -311,12 +332,32 @@ export class SupplierApplicationComponent implements OnInit {
     }
 
     showBasicDialog() {
-       /* this.resetForm();*/
+        this.resetForm();
         this.toggleGridDisplay();
     }
 
     showSubmitDialog() {
         this.displaySubmit = true;
+    }
+
+
+    onRowSelect(event) {
+        this.nodeSelected = true;
+        this.rowData = event.data;
+
+        let confirmStatus = this.rowData.IsConfirm;
+        let feedbackStatus = this.rowData.FeedbackStatus;
+
+        if (confirmStatus == true && feedbackStatus == '1') {
+            this.showBasicEdit = false;
+        }
+        else {
+            this.showBasicEdit = true;
+        }
+    }
+    onRowUnselect(event) {
+        this.nodeSelected = false;
+        this.rowData = null;
     }
 
 
@@ -332,33 +373,33 @@ export class SupplierApplicationComponent implements OnInit {
     ngOnInit(): void {
         //Basic
         this.supplierApplicationForm = this.formbulider.group({
-            supplier_code: [null, [Validators.required]],
-            legal_name: [null, [Validators.required]],
-            short_name: [null, [Validators.required]],
-            year_established: [null],
+            supplier_code: [''],
+            legal_name: ['', [Validators.required]],
+            short_name: ['', [Validators.required]],
+            year_established: ['', [Validators.required]],
 
-            domicile_enum_id: [null],
-            registry_authority_id: [null],
-            regulator_id: [null],
-            ownership_type_id: [null],
+            domicile_enum_id: ['', [Validators.required]],
+            registry_authority_id: ['', [Validators.required]],
+            regulator_id: ['', [Validators.required]],
+            ownership_type_id: ['', [Validators.required]],
 
-            name_in_local_language: [null],
-            address_in_local_language: [null],
-            ImageUpload: new FormControl('', [Validators.required]),
-            country_id: [null, [Validators.required]],
-            division_id: [null, [Validators.required]],
-            district_id: [null, [Validators.required]],
-            city: [null],
-            ps_area: [null],
-            post_code: [null],
-            block: [null],
-            road_no: [null],
-            house_no: [null],
-            flat_no: [null],
-            email: [null],
-            mobile_no: [null],
-            phone_no: [null],
-            pabx: [null],
+            name_in_local_language: [''],
+            address_in_local_language: [''],
+            ImageUpload: new FormControl(''),
+            country_id: ['', [Validators.required]],
+            division_id: ['', [Validators.required]],
+            district_id: ['', [Validators.required]],
+            city: [''],
+            ps_area: [''],
+            post_code: [''],
+            block: [''],
+            road_no: [''],
+            house_no: [''],
+            flat_no: [''],
+            email: ['', [Validators.email, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
+            mobile_no: ['', [Validators.required]],
+            phone_no: [''],
+            pabx: [''],
 
         });
 
@@ -373,14 +414,14 @@ export class SupplierApplicationComponent implements OnInit {
 
         //Business
         this.businessApplicationForm = this.formbulider.group({
-            business_activities_enum_id: [null],
-            industry_sector_id: [null],
-            industry_sub_sector_id: [null],
-            management_staff_no: [null],
-            nonmanagement_staff_no: [null],
-            permanent_worker_no: [null],
-            casual_worker_no: [null],
-            ecommerce_platforms_id: [null],
+            business_activities_enum_id: ['', [Validators.required]],
+            industry_sector_id: ['', [Validators.required]],
+            industry_sub_sector_id: ['', [Validators.required]],
+            management_staff_no: [''],
+            nonmanagement_staff_no: [''],
+            permanent_worker_no: [''],
+            casual_worker_no: [''],
+            ecommerce_platforms_id: [''],
         });
         this.loadAllBusinessActivitiesEnum();
         this.loadAllSectorCboList();
@@ -389,13 +430,13 @@ export class SupplierApplicationComponent implements OnInit {
 
         //Association
         this.associationsApplicationForm = this.formbulider.group({
-            association_id: [null],
-            abbreviation: [null],
-            country_id_association: [null],
-            organization_type_id_enum: [null],
-            membership_type_enum_id: [null],
-            association_number: [null],
-            start_date: [null],
+            association_id: ['', [Validators.required]],
+            abbreviation: [''],
+            country_id_association: [''],
+            organization_type_id_enum: [''],
+            membership_type_enum_id: ['', [Validators.required]],
+            association_number: ['', [Validators.required]],
+            start_date: ['', [Validators.required]],
         });
         this.loadAllAssociationCboList();
         this.loadAllOrganizationTypeEnum();
@@ -406,43 +447,43 @@ export class SupplierApplicationComponent implements OnInit {
 
         //LegalDocument
         this.legalDocumentApplicationForm = this.formbulider.group({
-            document_type_id: [null],
-            document_number: [null],
-            issue_date: [null],
-            expiry_date: [null],
-            expired_notified_days: [null],
+            document_type_id: ['', [Validators.required]],
+            document_number: ['', [Validators.required]],
+            issue_date: ['', [Validators.required]],
+            expiry_date: ['', [Validators.required]],
             file_path: [null],
             FileUpload: new FormControl('', [Validators.required]),
         });
         this.loadAllDocumentCboList();
 
 
+
         ////Location
         this.locationApplicationForm = this.formbulider.group({
-            location_type_id: [null],
-            supplier_location_name: [null],
-            country_id: [null],
-            division_id: [null, [Validators.required]],
-            district_id: [null, [Validators.required]],
-            city: [null],
-            ps_area: [null],
-            post_code: [null],
-            block: [null],
-            road_no: [null],
-            house_no: [null],
-            flat_no: [null],
-            email: [null],
-            mobile_no: [null],
-            phone_no: [null],
-            pabx: [null],
+            location_type_id: ['', [Validators.required]],
+            supplier_location_name: ['', [Validators.required]],
+            country_id_location: ['', [Validators.required]],
+            division_id_location: ['', [Validators.required]],
+            district_id_location: ['', [Validators.required]],
+            city: [''],
+            ps_area: [''],
+            post_code: [''],
+            block: [''],
+            road_no: [''],
+            house_no: [''],
+            flat_no: [''],
+            email: ['', [Validators.email, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
+            mobile_no: ['', [Validators.required]],
+            phone_no: [''],
+            pabx: [''],
         });
         this.loadAllLocationTypeCboList();
 
         ////Warehouse
         this.warehouseApplicationForm = this.formbulider.group({
-            supplier_location_id: [null],
-            supplier_warehouse_name: [null],
-            add_note: [null],
+            supplier_location_id: ['', [Validators.required]],
+            supplier_warehouse_name: ['', [Validators.required]],
+            add_note: [''],
         });
 
 
@@ -450,27 +491,29 @@ export class SupplierApplicationComponent implements OnInit {
         this.contactApplicationForm = this.formbulider.group({
             contact_type_id: ['', [Validators.required]],
             first_name: ['', [Validators.required]],
-            middle_name: '',
-            sur_name: ['', [Validators.required]],
+            middle_name: [''],
+            sur_name: [''],
             designation_id: ['', [Validators.required]],
             email: ['', [Validators.required]],
-            mobile: ['', [Validators.required]],
-            phone: '',
-            whatsapp: '',
-            facebook: '',
-            linkedin: '',
-            date_of_birth: '',
-            date_of_marriage: '',
-            nid_number: ['', [Validators.required]],
-            passport_no: '',
-            birth_id: '',
-            driving_license_no: '',
-            gender_enum_id: ['', [Validators.required]],
-            religion_enum_id: ['', [Validators.required]],
-            blood_group_enum_id: '',
-            marital_status_enum_id: ['', [Validators.required]],
+            mobile_no: ['', [Validators.required]],
+            phone_no: [''],
+            whatsapp: [''],
+            facebook: [''],
+            linkedin: [''],
             nationality_id: ['', [Validators.required]],
+            religion_enum_id: [''],
+            date_of_birth: [''],
+            gender_enum_id: ['', [Validators.required]],
+            marital_status_enum_id: [''],
+            date_of_marriage: [''],
+            nid_number: ['', [Validators.required]],
             FileUpload: new FormControl('', [Validators.required]),
+            blood_group_enum_id: [''],
+            passport_no: [''],
+            birth_id: [''],
+            driving_license_no: [''],
+   
+   
         });
         this.loadAllContactTypeCboList();
         this.LoadAllDesignationCboList();
@@ -482,22 +525,22 @@ export class SupplierApplicationComponent implements OnInit {
 
 
         this.ContactLocationApplicationForm = this.formbulider.group({
-            supplier_location_id: [null],
-            supplier_contact_id: [null],
-            add_note: [null],
+            supplier_location_id: ['', [Validators.required]],
+            supplier_contact_id: ['', [Validators.required]],
+            add_note: [''],
         });
 
 
         ////Financial Info
 
         this.financialApplicationForm = this.formbulider.group({
-            currency_id: [null, [Validators.required]],
+            currency_id: ['', [Validators.required]],
             credit_days: ['', [Validators.required]],
             credit_limit: ['', [Validators.required]],
             is_payment_monthly: false,
-            security_deposit_id: [null, [Validators.required]],
-            security_amount: null,
-            expiry_date: null,
+            security_deposit_id: ['', [Validators.required]],
+            security_amount: ['', [Validators.required]],
+            expiry_date: ['', [Validators.required]],
             security_document_path: [null],
             FileUpload: new FormControl('', [Validators.required]),
         });
@@ -506,70 +549,28 @@ export class SupplierApplicationComponent implements OnInit {
 
         this.mobileBankingApplicationForm = this.formbulider.group({
 
-            mfs_id: [null, [Validators.required]],
+            mfs_id: ['', [Validators.required]],
             account_number: ['', [Validators.required]],
-            mfs_type_id: [null, [Validators.required]],
+            mfs_type_id: ['', [Validators.required]],
 
         });
         this.LoadAllMfsCboList();
         this.LoadAllMfsTypeCboList();
 
         this.bankingApplicationForm = this.formbulider.group({
-            bank_type_id: [null, [Validators.required]],
-            bank_id: [null, [Validators.required]],
+            bank_type_id: ['', [Validators.required]],
+            bank_id: ['', [Validators.required]],
             bank_branch_id: ['', [Validators.required]],
             account_name: ['', [Validators.required]],
             account_number: ['', [Validators.required]],
-            bank_branch_routing: null,
-            bank_swift_code: null,
-            iban: null,
+            bank_branch_routing: [''],
+            bank_swift_code: [''],
+            iban: [''],
         });
         this.LoadAllBankTypeCboList();
         this.bankingApplicationForm.controls['bank_branch_routing'].disable();
         this.bankingApplicationForm.controls['bank_swift_code'].disable();
 
-
-    }
-
-    next() {
-        this.first = this.first + this.rows;
-    }
-
-    prev() {
-        this.first = this.first - this.rows;
-    }
-
-    reset() {
-        this.first = 0;
-    }
-
-    isLastPage(): boolean {
-        return this.supplierApplications ? this.first === (this.supplierApplications.length - this.rows) : true;
-    }
-
-    isFirstPage(): boolean {
-        return this.supplierApplications ? this.first === 0 : true;
-    }
-
-    onRowSelect(event) {
-        this.nodeSelected = true;
-        this.rowData = event.data;
-
-        let confirmStatus = this.rowData.IsConfirm;
-        let feedbackStatus = this.rowData.FeedbackStatus;
-
-        if (confirmStatus == true && feedbackStatus == '1') {
-            this.showBasicEdit = false;
-        }
-        else {
-            this.showBasicEdit = true;
-        }
-
-    }
-    onRowUnselect(event) {
-
-        this.nodeSelected = false;
-        this.rowData = null;
 
     }
 
@@ -618,62 +619,12 @@ export class SupplierApplicationComponent implements OnInit {
     }
 
 
-
-
-    // Basic dd Load
-
     // All Supplier List 
     loadAllSupplierinfos() {
         this.SupplierApplicationService.getAllSupplierInfo().subscribe(data => {
-            debugger
             this.supplierinfoList = data;
         });
     }
-
-    //supplierId() {
-    //  this.SupplierApplicationService.getSupplierId().subscribe(data => {
-    //    this.massage = null;
-    //    this.dataSaved = false;
-    //    this.supplierApplicationForm.controls['supplier_code'].setValue(data.SupplierCode);
-    //    this.supplier_id = data.SupplierId;
-    //  });
-    //}
-
-    //loadSupplierBasicInfo() {
-    //  this.SupplierApplicationService.getSupplierBasicInfo(this.supplier_id).subscribe(data => {
-    //    this.massage = null;
-    //    this.dataSaved = false;
-    //    this.supplierApplicationForm.controls['legal_name'].setValue(data.LegalName);
-    //    this.supplierApplicationForm.controls['short_name'].setValue(data.ShortName);
-    //    this.supplierApplicationForm.controls['year_established'].setValue(new Date(data.YearEstablished));
-    //    this.supplierApplicationForm.controls['domicile_enum_id'].setValue(data.DomicileEnumId);
-    //    this.supplierApplicationForm.controls['registry_authority_id'].setValue(data.RegistryAuthorityId);
-    //    this.supplierApplicationForm.controls['regulator_id'].setValue(data.RegulatorId);
-    //    this.supplierApplicationForm.controls['ownership_type_id'].setValue(data.OwnershipTypeId);
-    //    this.supplierApplicationForm.controls['name_in_local_language'].setValue(data.NameInLocalLanguage);
-    //    this.supplierApplicationForm.controls['address_in_local_language'].setValue(data.AddressInLocalLanguage);
-    //    this.supplierApplicationForm.controls['country_id'].setValue(data.CountryId);
-    //    this.onSelectByCountryId(data.CountryId);
-    //    this.supplierApplicationForm.controls['division_id'].setValue(data.DivisionId);
-    //    this.onSelectByDivisionId(data.DivisionId);
-    //    this.supplierApplicationForm.controls['district_id'].setValue(data.DistrictId);
-    //    this.supplierApplicationForm.controls['city'].setValue(data.City);
-    //    this.supplierApplicationForm.controls['ps_area'].setValue(data.PsArea);
-    //    this.supplierApplicationForm.controls['post_code'].setValue(data.PostCode);
-    //    this.supplierApplicationForm.controls['block'].setValue(data.Block);
-    //    this.supplierApplicationForm.controls['road_no'].setValue(data.RoadNo);
-    //    this.supplierApplicationForm.controls['house_no'].setValue(data.HouseNo);
-    //    this.supplierApplicationForm.controls['flat_no'].setValue(data.FlatNo);
-    //    this.supplierApplicationForm.controls['email'].setValue(data.Email);
-    //    this.supplierApplicationForm.controls['mobile_no'].setValue(data.MobileNo);
-    //    this.supplierApplicationForm.controls['phone_no'].setValue(data.PhoneNo);
-    //    this.supplierApplicationForm.controls['pabx'].setValue(data.Pabx);
-
-    //    //this.supplier_id = data.SupplierId;
-    //    //this.supplierApplicationForm.controls['supplier_id'].setValue(data.SupplierId);
-    //  });
-    //}
-
 
     loadAllDomicileEnum() {
         this.SupplierApplicationService.getAllDomicileEnum().subscribe(data => {
@@ -736,7 +687,6 @@ export class SupplierApplicationComponent implements OnInit {
         }
         else
             this.allDistrict = null;
-
     }
 
 
@@ -765,12 +715,10 @@ export class SupplierApplicationComponent implements OnInit {
         });
     }
 
-    onSelectBySectorId(IndustrySectorId: Number) {
-        //debugger
-        //let IndustrysectorObj = this.businessApplicationForm.get('industry_sector_id')?.value;
-        //let IndustrySectorId = IndustrysectorObj.industry_sector_id;
+    onSelectBySectorId() {
+        let IndustrysectorObj = this.businessApplicationForm.get('industry_sector_id')?.value;
+        let IndustrySectorId = IndustrysectorObj.industry_sector_id;
         if (IndustrySectorId != null) {
-            debugger
             this.SupplierApplicationService.getAllIndustrySubSectorCboList(IndustrySectorId).subscribe(data => {
                 this.allSubSector = data;
             });
@@ -785,37 +733,6 @@ export class SupplierApplicationComponent implements OnInit {
         });
     }
 
-    //loadAllSupplierBusiness() {
-    //  let supplierId = this.supplier_id;
-    //  this.SupplierApplicationService.getAllSupplierBusiness(supplierId).subscribe(data => {
-    //    this.massage = null;
-    //    this.dataSaved = false;
-    //    this.businessApplicationForm.controls['business_activities_enum_id'].setValue(data.BusinessActivityEnumId);
-    //    this.businessApplicationForm.controls['management_staff_no'].setValue(data.ManagementStaffNo);
-    //    this.businessApplicationForm.controls['nonmanagement_staff_no'].setValue(data.NonmanagementStaffNo);
-    //    this.businessApplicationForm.controls['permanent_worker_no'].setValue(data.PermanentWorkerNo);
-    //    this.businessApplicationForm.controls['casual_worker_no'].setValue(data.CasualWorkerNo);
-
-    //  });
-    //}
-
-    //loadAllSupplierBusinessSubSector() {
-    //  let supplierId = this.supplier_id;
-    //  this.SupplierApplicationService.getAllSupplierBusinessSubSector(supplierId).subscribe(data => {
-    //    this.massage = null;
-    //    this.dataSaved = false;
-    //    this.subSectorDataSources = data;
-    //  });
-    //}
-
-    //loadAllSupplierBusinessEcommerce() {
-    //  let supplierId = this.supplier_id;
-    //  this.SupplierApplicationService.getAllSupplierBusinessEcommerce(supplierId).subscribe(data => {
-    //    this.massage = null;
-    //    this.dataSaved = false;
-    //  });
-    //}
-
     //Association dd load
 
     loadAllAssociationCboList() {
@@ -825,19 +742,22 @@ export class SupplierApplicationComponent implements OnInit {
     }
 
 
-    onSelectByAssociationId(associationId: Number) {
+    onSelectByAssociationId() {
+        debugger
+        let associationObj = this.associationsApplicationForm.get('association_id')?.value;
+        let associationId = associationObj.association_id;
         //if (associationId != null) {
-            this.SupplierApplicationService.getAllDataByAssociationId(associationId).subscribe(data => {
-                this.associationsApplicationForm.controls['organization_type_id_enum'].setValue(data.organization_type_id_enum);
-                this.associationsApplicationForm.controls['abbreviation'].setValue(data.abbreviation);
-                let countryAssociationId = data.country_id;
-                if (countryAssociationId != null) {
-                    this.SupplierApplicationService.GetByCountryId(countryAssociationId).subscribe(data => {
-                        this.associationsApplicationForm.controls['country_id_association'].setValue(data.country_id);
-                    });
-                }
-            });
-        }
+        this.SupplierApplicationService.getAllDataByAssociationId(associationId).subscribe(data => {
+            this.associationsApplicationForm.controls['organization_type_id_enum'].setValue(data.organization_type_id_enum);
+            this.associationsApplicationForm.controls['abbreviation'].setValue(data.abbreviation);
+            let countryAssociationId = data.country_id;
+            if (countryAssociationId != null) {
+                this.SupplierApplicationService.GetByCountryId(countryAssociationId).subscribe(data => {
+                    this.associationsApplicationForm.controls['country_id_association'].setValue(data.country_id);
+                });
+            }
+        });
+    }
 
 
     loadAllOrganizationTypeEnum() {
@@ -880,6 +800,17 @@ export class SupplierApplicationComponent implements OnInit {
             this.allLocationType = data;
         });
     }
+
+    loadAllSupplierLocation() {
+        let supplierId = this.rowData.SupplierId;
+        this.SupplierApplicationService.getAllSupplierLocation(supplierId).subscribe(data => {
+            this.locationDataSources = data;
+            this.allLocation = data;
+            this.allContactLocation = data;
+        });
+    }
+
+
 
     ////Warehouse dd load
     loadAllSupplierWarehouse() {
@@ -1121,8 +1052,8 @@ export class SupplierApplicationComponent implements OnInit {
                 this.isSupplierinfoEdit = true;
             }
             this.locationDataSources = data;
-            //this.allLocation = data;
-            //this.allContactLocation = data;
+            this.allLocation = data;
+            this.allContactLocation = data;
 
         });
 
@@ -1174,56 +1105,65 @@ export class SupplierApplicationComponent implements OnInit {
     }
 
     //for validation messate -----------
-    get f(): { [key: string]: AbstractControl } {
+    get a(): { [key: string]: AbstractControl } {
         return this.supplierApplicationForm.controls;
     }
 
-    onFormSubmit() {
+    get b(): { [key: string]: AbstractControl } {
+        return this.businessApplicationForm.controls;
+    }
 
+    get c(): { [key: string]: AbstractControl } {
+        return this.associationsApplicationForm.controls;
+    }
+
+    get d(): { [key: string]: AbstractControl } {
+        return this.legalDocumentApplicationForm.controls;
+    }
+
+    get e(): { [key: string]: AbstractControl } {
+        return this.locationApplicationForm.controls;
+    }
+
+    get f(): { [key: string]: AbstractControl } {
+        return this.warehouseApplicationForm.controls;
+    }
+
+    get g(): { [key: string]: AbstractControl } {
+        return this.contactApplicationForm.controls;
+    }
+
+    get h(): { [key: string]: AbstractControl } {
+        return this.ContactLocationApplicationForm.controls;
+    }
+
+    get i(): { [key: string]: AbstractControl } {
+        return this.financialApplicationForm.controls;
+    }
+
+    get j(): { [key: string]: AbstractControl } {
+        return this.mobileBankingApplicationForm.controls;
+    }
+
+    get k(): { [key: string]: AbstractControl } {
+        return this.bankingApplicationForm.controls;
+    }
+
+
+    
+
+    onFormSubmit(): void {
+
+        //for validation message -----------
+        this.submittedBasic = true;
         const data = this.supplierApplicationForm.value;
+        if (this.supplierApplicationForm.invalid) {
+            return;
+        }
+        //end validation messate -----------
 
-        if (!(data.legal_name)) {
-            return this.notifyService.ShowNotification(2, "Please input Legal Name")
-        }
-        if (!(data.short_name)) {
-            return this.notifyService.ShowNotification(2, "Please input Short Name")
-        }
-        if (!(data.year_established)) {
-            return this.notifyService.ShowNotification(2, "Please select Established Date")
-        }
-        if (!(data.domicile_enum_id)) {
-            return this.notifyService.ShowNotification(2, "Please select Domicile")
-        }
-        if (!(data.registry_authority_id)) {
-            return this.notifyService.ShowNotification(2, "Please select Registry Authority")
-        }
-        if (!(data.regulator_id)) {
-            return this.notifyService.ShowNotification(2, "Please select Regulator")
-        }
-        if (!(data.ownership_type_id)) {
-            return this.notifyService.ShowNotification(2, "Please select Ownership")
-        }
-        if (!(data.country_id)) {
-            return this.notifyService.ShowNotification(2, "Please select Country")
-        }
-        if (!(data.division_id)) {
-            return this.notifyService.ShowNotification(2, "Please select Divisiion")
-        }
-
-        if (!(data.district_id)) {
-            return this.notifyService.ShowNotification(2, "Please select District")
-        }
-        if (!(data.email)) {
-            return this.notifyService.ShowNotification(2, "Please input Email")
-        }
-        if (!(data.mobile_no)) {
-            return this.notifyService.ShowNotification(2, "Please input Mobile Number")
-        }
-
+        this.dataSaved = false;
         let formData = new FormData();
-
-        // let dd = new Date(this.supplierApplicationForm.value.year_established).toUTCString();
-
         for (const key of Object.keys(this.supplierApplicationForm.value)) {
             const value = this.supplierApplicationForm.value[key];
             if (key == "year_established") {
@@ -1241,8 +1181,6 @@ export class SupplierApplicationComponent implements OnInit {
         formData.append("division_id", this.supplierApplicationForm.value.divisionObj);
         formData.append("district_id", this.supplierApplicationForm.value.districtObj);
 
-        debugger
-
         if (this.rowData != null) {
 
             data.supplierId = this.rowData.SupplierId;
@@ -1251,21 +1189,18 @@ export class SupplierApplicationComponent implements OnInit {
                 this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
                 if (result.MessageType == 1) {
                     this.loadAllSupplierinfos();
-                    this.rowData = result.data;
                     this.rowData = result.Data[0];
                 }
             });
         }
         else {
-            this.SupplierApplicationService.createSupplierApplication(formData).subscribe(
-                result => {
-                    this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
-                    if (result.MessageType == 1) {
-                        this.loadAllSupplierinfos();
-                        this.rowData = result.data;
-                        this.rowData = result.Data[0];
-                    }
+            this.SupplierApplicationService.createSupplierApplication(formData).subscribe(result => {
+                this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
+                if (result.MessageType == 1) {
+                    this.loadAllSupplierinfos();
+                    this.rowData = result.Data[0];
                 }
+            }
             );
         }
     }
@@ -1321,28 +1256,39 @@ export class SupplierApplicationComponent implements OnInit {
     addSubSectorToTable(a) {
 
         if (this.rowData == null) {
-            return this.notifyService.ShowNotification(3, 'Please select row');
+            return this.notifyService.ShowNotification(3, 'Please save Basic Info first');
         }
 
-        let supplierId = this.rowData.SupplierId;
-
-        let IndustrySectorObj = this.businessApplicationForm.get('industry_sector_id')?.value;
-        let IndustrySectorId = IndustrySectorObj.industry_sector_id;
-        let IndustrySectorName = IndustrySectorObj.industry_sector_name;
-
-        let IndustrySubSectorObj = this.businessApplicationForm.get('industry_sub_sector_id')?.value;
-        let industrySubSectorId = IndustrySubSectorObj.industry_sub_sector_id;
-        let industrySubSectorName = IndustrySubSectorObj.industry_sub_sector_name;
-        if (this.dataSubSectorExist(industrySubSectorId)) {
-            return this.notifyService.ShowNotification(2, "Selected Sub Sector already added")
+        this.submittedBusinessSector = true;
+        const data = this.businessApplicationForm.value;
+        if ((data.industry_sector_id == "") || (data.industry_sector_id == null) || (data.industry_sector_id == undefined)) {
+            return;
+        }
+        else if ((data.industry_sub_sector_id == "") || (data.industry_sub_sector_id == null) || (data.industry_sub_sector_id == undefined)) {
+            return;
         }
 
         else {
-            if (this.subSectorDataSources.includes(this.businessApplicationForm.get('industry_sub_sector_id')?.value)) {
-                return this.toastr.warning("Please select Sub Sector")
+            let supplierId = this.rowData.SupplierId;
+
+            let IndustrySectorObj = this.businessApplicationForm.get('industry_sector_id')?.value;
+            let IndustrySectorId = IndustrySectorObj.industry_sector_id;
+            let IndustrySectorName = IndustrySectorObj.industry_sector_name;
+
+            let IndustrySubSectorObj = this.businessApplicationForm.get('industry_sub_sector_id')?.value;
+            let industrySubSectorId = IndustrySubSectorObj.industry_sub_sector_id;
+            let industrySubSectorName = IndustrySubSectorObj.industry_sub_sector_name;
+            if (this.dataSubSectorExist(industrySubSectorId)) {
+                return this.notifyService.ShowNotification(2, "Selected Sub Sector already added")
             }
-            const sectorSubSectorobj = { supplier_id: supplierId, industry_sector_id: IndustrySectorId, industry_sector_name: IndustrySectorName, industry_sub_sector_id: industrySubSectorId, industry_sub_sector_name: industrySubSectorName }
-            this.subSectorDataSources.push(sectorSubSectorobj);
+
+            else {
+                if (this.subSectorDataSources.includes(this.businessApplicationForm.get('industry_sub_sector_id')?.value)) {
+                    return this.toastr.warning("Please select Sub Sector")
+                }
+                const sectorSubSectorobj = { supplier_id: supplierId, industry_sector_id: IndustrySectorId, industry_sector_name: IndustrySectorName, industry_sub_sector_id: industrySubSectorId, industry_sub_sector_name: industrySubSectorName }
+                this.subSectorDataSources.push(sectorSubSectorobj);
+            }
         }
     }
 
@@ -1363,7 +1309,7 @@ export class SupplierApplicationComponent implements OnInit {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
 
-        //let supplierId = this.rowData.SupplierId;
+        /*let supplierId = this.rowData.SupplierId;*/
 
         if (category.checked) {
             let supplierId = this.rowData.SupplierId;
@@ -1381,17 +1327,17 @@ export class SupplierApplicationComponent implements OnInit {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
 
-        let supplierId = this.rowData.SupplierId;
-
+        this.submittedBusiness = true;
         const businessData = this.businessApplicationForm.value;
-        if (!(businessData.business_activities_enum_id)) {
-            return this.notifyService.ShowNotification(2, "Please select Business Activities")
+        if ((businessData.business_activities_enum_id == "") || (businessData.business_activities_enum_id == null) || (businessData.business_activities_enum_id == undefined)) {
+            return;
         }
-        if ((this.subSectorDataSources.length == 0)) {
-            return this.notifyService.ShowNotification(2, "Please add at least one  subsector")
+        else if (this.subSectorDataSources.length == 0) {
+            return this.notifyService.ShowNotification(2, "Please add at least one subsector")
         }
 
         else {
+            let supplierId = this.rowData.SupplierId;
             businessData.subSectorSession = this.subSectorDataSources;
             businessData.ecommerceSession = this.checkedIDs;
             businessData.supplier_id = supplierId;
@@ -1400,8 +1346,6 @@ export class SupplierApplicationComponent implements OnInit {
                 this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage);
             });
         }
-
-        /* this.index = (this.index === 1) ? this.index = 2 : this.index;*/
     }
 
     openBusinessNext() {
@@ -1420,37 +1364,29 @@ export class SupplierApplicationComponent implements OnInit {
     }
 
     onAssociationFormSubmit() {
-
+        debugger
         if (this.rowData == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
-
-        let supplierId = this.rowData.SupplierId;
-
-        const data = this.associationsApplicationForm.value;
-
-        if (!(data.association_id)) {
-            return this.notifyService.ShowNotification(2, "Please select Association Name")
+        //for validation message -----------
+        this.submittedAssociation = true;
+        const associationData = this.associationsApplicationForm.value;
+        if (this.associationsApplicationForm.invalid) {
+            return;
         }
-        if (!(data.membership_type_enum_id)) {
-            return this.notifyService.ShowNotification(2, "Please select Membership Type")
-        }
-        if (!(data.association_number)) {
-            return this.notifyService.ShowNotification(2, "Please input Association Number")
-        }
-        if (!(data.start_date)) {
-            return this.notifyService.ShowNotification(2, "Please select Start Date")
-        }
+        //end validation messate -----------
 
-        let association_name = data.association_name;
+        this.dataSaved = false;
+        let association_id = this.associationsApplicationForm.get('association_id')?.value.association_id;
+        let association_name = this.associationsApplicationForm.get('association_id')?.value.association_name;
         if (this.dataExistAssociation(association_name)) {
             return this.notifyService.ShowNotification(2, "Selected Association already added")
         }
 
         else {
-            const associationData = this.associationsApplicationForm.value;
+            let supplierId = this.rowData.SupplierId;
             associationData.membership_type_enum_id = associationData.membership_type_enum_id;
-            associationData.association_id = associationData.association_id;
+            associationData.association_id = association_id;
             associationData.supplier_id = supplierId;
             this.SupplierApplicationService.updateAssociationData(associationData).subscribe(data => {
                 this.dataSaved = true;
@@ -1484,31 +1420,23 @@ export class SupplierApplicationComponent implements OnInit {
     }
 
 
-    onLegalDocumentFormSubmit() {
+    //// Location submit
 
+    onLegalDocumentFormSubmit() {
         if (this.rowData == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
 
+        //for validation message -----------
+        this.submittedLegalDocument = true;
+        if (this.legalDocumentApplicationForm.invalid) {
+            return;
+        }
+        //end validation messate -----------
+
+        this.dataSaved = false;
+
         let supplierId = this.rowData.SupplierId;
-
-        const data = this.legalDocumentApplicationForm.value;
-
-        if (!(data.document_type_id)) {
-            return this.notifyService.ShowNotification(2, "Please select Document Type")
-        }
-        if (!(data.document_number)) {
-            return this.notifyService.ShowNotification(2, "Please input Document Name")
-        }
-        if (!(data.issue_date)) {
-            return this.notifyService.ShowNotification(2, "Please select Issue Date")
-        }
-        if (!(data.expiry_date)) {
-            return this.notifyService.ShowNotification(2, "Please select Expiry Date")
-        }
-        if (this.fileToUploadLegalForm == null) {
-            return this.notifyService.ShowNotification(2, "Please Choose Upload File")
-        }
 
         let document_type_id = this.legalDocumentApplicationForm.get('document_type_id')?.value.document_type_id;
         let document_type_name = this.legalDocumentApplicationForm.get('document_type_id')?.value.document_type_name;
@@ -1636,91 +1564,55 @@ export class SupplierApplicationComponent implements OnInit {
     }
 
 
-
-    //removeDocument(a, row) {
-    //    this.documentDataSources = this.documentDataSources.slice(0, a).concat(this.documentDataSources.slice(a + 1));
-    //}
-
     //// Location submit
-
 
     onLocationFormSubmit() {
 
         if (this.rowData == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
-        /*    let supplierId = this.rowData.SupplierId;*/
 
+        //for validation message -----------
+        this.submittedLocation = true;
         const locationData = this.locationApplicationForm.value;
+        if (this.locationApplicationForm.invalid) {
+            return;
+        }
+        //end validation messate -----------
 
-        if (!(locationData.location_type_id)) {
-            return this.notifyService.ShowNotification(2, "Please select Location Type")
+        this.dataSaved = false;
+
+
+        let location_type_id = this.locationApplicationForm.get('location_type_id')?.value.location_type_id;
+        let location_type_name = this.locationApplicationForm.get('location_type_id')?.value.location_type_name;
+        if (this.dataExistLocation(location_type_name)) {
+            return this.notifyService.ShowNotification(2, "Selected location name already added")
         }
-        if (!(locationData.supplier_location_name)) {
-            return this.notifyService.ShowNotification(2, "Please input Location Name")
-        }
-        if (!(locationData.country_id)) {
-            return this.notifyService.ShowNotification(2, "Please select Country")
-        }
-        if (!(locationData.division_id_location)) {
-            return this.notifyService.ShowNotification(2, "Please select Division")
-        }
-        if (!(locationData.district_id_location)) {
-            return this.notifyService.ShowNotification(2, "Please select District")
-        }
-        if (!(locationData.city)) {
-            return this.notifyService.ShowNotification(2, "Please input City")
-        }
-        if (!(locationData.ps_area)) {
-            return this.notifyService.ShowNotification(2, "Please input PS Area")
-        }
-        if (!(locationData.block)) {
-            return this.notifyService.ShowNotification(2, "Please input Block")
-        }
-        if (!(locationData.road_no)) {
-            return this.notifyService.ShowNotification(2, "Please input Road No")
-        }
-        if (!(locationData.house_no)) {
-            return this.notifyService.ShowNotification(2, "Please input House No")
-        }
-        if (!(locationData.flat_no)) {
-            return this.notifyService.ShowNotification(2, "Please input Flat No")
-        }
-        if (!(locationData.email)) {
-            return this.notifyService.ShowNotification(2, "Please input Email")
-        }
-        if (!(locationData.mobile_no)) {
-            return this.notifyService.ShowNotification(2, "Please input Mobile No")
-        }
+
 
         else {
 
 
-            let location_type_id = locationData.location_type_id;
-            if (this.dataExistLocation(location_type_id)) {
-                return this.notifyService.ShowNotification(2, "Selected location name already added")
-            }
+            locationData.supplier_id = this.rowData.SupplierId;
+            locationData.country_id = locationData.country_id_location;
+            locationData.division_id = locationData.division_id_location;
+            locationData.district_id = locationData.district_id_location;
+            locationData.location_type_id = location_type_id;
 
-            else {
-                locationData.supplier_id = this.rowData.SupplierId;
-                locationData.country_id = locationData.country_id;
-                locationData.division_id = locationData.division_id_location;
-                locationData.district_id = locationData.district_id_location;
+            this.SupplierApplicationService.updateLocationData(locationData).subscribe(data => {
+                this.dataSaved = true
+                this.loadAllSupplierLocation();
+                this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage);
+                this.resetForm();
+            });
 
-                this.SupplierApplicationService.updateLocationData(locationData).subscribe(data => {
-                    this.dataSaved = true;
-                  /*  this.loadAllSupplierLocation();*/
-                    this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage);
-                    this.resetForm();
-                });
-            }
         }
 
     }
 
-    dataExistLocation(location_type_id) {
+    dataExistLocation(location_type_name) {
         return this.locationDataSources.some(function (el) {
-            return el.location_type_id === location_type_id;
+            return el.location_type_name === location_type_name;
         });
     }
 
@@ -1748,15 +1640,16 @@ export class SupplierApplicationComponent implements OnInit {
         if (this.rowData == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
-        let supplierId = this.rowData.SupplierId;
 
+        //for validation message -----------
+        this.submittedWarehouse = true;
         const warehouseData = this.warehouseApplicationForm.value;
-        if (!(warehouseData.supplier_location_id)) {
-            return this.notifyService.ShowNotification(2, "Please select Location")
+        if (this.warehouseApplicationForm.invalid) {
+            return;
         }
-        if (!(warehouseData.supplier_warehouse_name)) {
-            return this.notifyService.ShowNotification(2, "Please input Warehouse Name")
-        }
+        //end validation messate -----------
+
+        this.dataSaved = false;
 
         let supplier_warehouse_name = warehouseData.supplier_warehouse_name;
         if (this.dataExistWarehouse(supplier_warehouse_name)) {
@@ -1764,6 +1657,7 @@ export class SupplierApplicationComponent implements OnInit {
         }
         else {
 
+            let supplierId = this.rowData.SupplierId;
             let locationObj = this.warehouseApplicationForm.get('supplier_location_id')?.value;
             let supplier_location_id = locationObj.supplier_location_id;
             let supplier_location_type_name = locationObj.supplier_location_type_name;
@@ -1819,104 +1713,82 @@ export class SupplierApplicationComponent implements OnInit {
 
     onContactFormSubmit() {
 
-
         if (this.rowData == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
+
+        //for validation message -----------
+        this.submittedContact = true;
+        if (this.contactApplicationForm.invalid) {
+            return;
+        }
+        //end validation messate -----------
+
+        this.dataSaved = false;
+
         let supplierId = this.rowData.SupplierId;
 
-        const data = this.contactApplicationForm.value;
-
-        if (!(data.contact_type_id)) {
-            return this.notifyService.ShowNotification(2, "Please select Contact Type")
-        }
-        if (!(data.first_name)) {
-            return this.notifyService.ShowNotification(2, "Please input First Name")
-        }
-        if (!(data.sur_name)) {
-            return this.notifyService.ShowNotification(2, "Please input Sur Name")
-        }
-        if (!(data.designation_id)) {
-            return this.notifyService.ShowNotification(2, "Please select Designation")
-        }
-        if (!(data.email)) {
-            return this.notifyService.ShowNotification(2, "Please input Email Address")
-        }
-        if (!(data.mobile)) {
-            return this.notifyService.ShowNotification(2, "Please input Mobile No")
+        let contact_type_id = this.contactApplicationForm.get('contact_type_id')?.value.contact_type_id;
+        let contact_type_name = this.contactApplicationForm.get('contact_type_id')?.value.contact_type_name;
+        if (this.dataExistContact(contact_type_name)) {
+            return this.notifyService.ShowNotification(2, "Selected Contact Type already added")
         }
 
-        if (!(data.nationality_id)) {
-            return this.notifyService.ShowNotification(2, "Please select Nationality")
-        }
+        else {
+            let formData = new FormData();
+            for (const key of Object.keys(this.contactApplicationForm.value)) {
+                const value = this.contactApplicationForm.value[key];
+                if (key == "date_of_birth") {
+                    let date = new Date(value).toISOString();
+                    formData.append("date_of_birth", date);
+                }
+                else if (key == "date_of_marriage") {
+                    let date = new Date(value).toISOString();
+                    formData.append("date_of_marriage", date);
+                }
+                else if (key == "contact_type_id") {
 
-        if (!(data.religion_enum_id)) {
-            return this.notifyService.ShowNotification(2, "Please select Religion")
-        }
+                    formData.append("contact_type_id", contact_type_id);
+                }
+                else {
+                    formData.append(key, value);
+                    formData.append("supplier_id", supplierId);
+                    formData.append("FileUpload", this.fileToUploadNID);
+                }
+            } formData.append("designation_id", this.contactApplicationForm.value.designation_id);
+            formData.append("nationality_id", this.contactApplicationForm.value.nationality_id);
+            formData.append("religion_enum_id", this.contactApplicationForm.value.religion_enum_id);
+            formData.append("gender_enum_id", this.contactApplicationForm.value.gender_enum_id);
+            formData.append("marital_status_enum_id", this.contactApplicationForm.value.marital_status_enum_id);
+            formData.append("blood_group_enum_id", this.contactApplicationForm.value.blood_group_enum_id);
 
-        if (!(data.gender_enum_id)) {
-            return this.notifyService.ShowNotification(2, "Please select Gender")
-        }
 
-        if (!(data.marital_status_enum_id)) {
-            return this.notifyService.ShowNotification(2, "Please select Marital Status")
-        }
-        if (!(data.nid_number)) {
-            return this.notifyService.ShowNotification(2, "Please enter National Id")
-        }
+            var arr = [];
+            var object = {};
+            formData.forEach(function (value, key) {
+                arr[key] = value;
+                //fd.append(key, value);
+            });
 
-        let formData = new FormData();
+            var json = JSON.stringify(arr);
+            console.log(object)
 
-        for (const key of Object.keys(this.contactApplicationForm.value)) {
-            const value = this.contactApplicationForm.value[key];
-            if (key == "date_of_birth") {
-                let date = new Date(value).toISOString();
-                formData.append("date_of_birth", date);
-            }
-            else if (key == "date_of_marriage") {
-                let date = new Date(value).toISOString();
-                formData.append("date_of_marriage", date);
+            if (this.contactDataSources.length = 0) {
+                return this.notifyService.ShowNotification(2, "Please add at least one Contact")
             }
             else {
-                formData.append(key, value);
-                formData.append("supplier_id", supplierId);
-                formData.append("FileUpload", this.fileToUploadNID);
+                this.SupplierApplicationService.updateContactData((formData)).subscribe(data => {
+                    this.loadAllSupplierContact();
+                    this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage);
+                });
             }
-        } formData.append("contact_type_id", this.contactApplicationForm.value.contact_type_id);
-        formData.append("designation_id", this.contactApplicationForm.value.designation_id);
-        formData.append("nationality_id", this.contactApplicationForm.value.nationality_id);
-        formData.append("religion_enum_id", this.contactApplicationForm.value.religion_enum_id);
-        formData.append("gender_enum_id", this.contactApplicationForm.value.gender_enum_id);
-        formData.append("marital_status_enum_id", this.contactApplicationForm.value.marital_status_enum_id);
-        formData.append("blood_group_enum_id", this.contactApplicationForm.value.blood_group_enum_id);
-
-
-
-        var arr = [];
-        var object = {};
-        formData.forEach(function (value, key) {
-            arr[key] = value;
-            //fd.append(key, value);
-        });
-
-        var json = JSON.stringify(arr);
-        console.log(object)
-
-        if (this.contactDataSources.length = 0) {
-            return this.notifyService.ShowNotification(2, "Please add at least one Contact")
         }
-        else {
-            //formData.append("supplier_id", this.supplierApplicationIdUpdate);
-            this.SupplierApplicationService.updateContactData((formData)).subscribe(data => {
-                this.loadAllSupplierContact();
-                this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage);
-            });
-        }
+
     }
 
-    dataExistContact(contact_type_id) {
+    dataExistContact(contact_type_name) {
         return this.contactDataSources.some(function (el) {
-            return el.contact_type_id === contact_type_id;
+            return el.contact_type_name === contact_type_name;
         });
     }
 
@@ -1939,6 +1811,7 @@ export class SupplierApplicationComponent implements OnInit {
 
     onContactLocationFormSubmit() {
 
+        debugger
         if (this.rowData == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
@@ -1946,21 +1819,23 @@ export class SupplierApplicationComponent implements OnInit {
 
         const contactLocationData = this.ContactLocationApplicationForm.value;
 
-        if (!(contactLocationData.supplier_location_id)) {
-            return this.notifyService.ShowNotification(2, "Please select Location")
+        //for validation message -----------
+        this.submittedContactLocation = true;
+        if (this.ContactLocationApplicationForm.invalid) {
+            return;
         }
-        if (!(contactLocationData.supplier_contact_id)) {
-            return this.notifyService.ShowNotification(2, "Please select Contact Person")
-        }
+        //end validation messate -----------
+
+        this.dataSaved = false;
 
         let supplier_contact_id = contactLocationData.supplier_contact_id;
         if (this.dataExistContactLocation(supplier_contact_id)) {
-            return this.notifyService.ShowNotification(2, "Selected Person name already added")
+            return this.notifyService.ShowNotification(2, "Selected Contact Type already added")
         }
 
         else {
 
-    
+
             let supplier_location_id = contactLocationData.supplier_location_id;
             let supplier_contact_id = contactLocationData.supplier_contact_id;
             let add_note = this.ContactLocationApplicationForm.get('add_note')?.value;
@@ -2024,6 +1899,28 @@ export class SupplierApplicationComponent implements OnInit {
         }
         if (!(data.expiry_date)) {
             return this.notifyService.ShowNotification(2, "Please select expiry Date")
+        }
+
+
+        if (this.rowData == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+
+        //for validation message -----------
+        this.submittedLocation = true;
+        const locationData = this.financialApplicationForm.value;
+        if (this.locationApplicationForm.invalid) {
+            return;
+        }
+        //end validation messate -----------
+
+        this.dataSaved = false;
+
+
+        let location_type_id = this.locationApplicationForm.get('location_type_id')?.value.location_type_id;
+        let location_type_name = this.locationApplicationForm.get('location_type_id')?.value.location_type_name;
+        if (this.dataExistLocation(location_type_name)) {
+            return this.notifyService.ShowNotification(2, "Selected location name already added")
         }
 
         else {
@@ -2105,30 +2002,53 @@ export class SupplierApplicationComponent implements OnInit {
 
     onMobileBankingFormSubmit() {
 
+        //if (this.rowData == null) {
+        //    return this.notifyService.ShowNotification(3, 'Please select row');
+        //}
+
+        //let supplierId = this.rowData.SupplierId;
+
+        //const mobileBankingData = this.mobileBankingApplicationForm.value;
+
+        //if (!(mobileBankingData.mfs_id)) {
+        //    return this.notifyService.ShowNotification(2, "Please select MFS Name")
+        //}
+        //if (!(mobileBankingData.account_number)) {
+        //    return this.notifyService.ShowNotification(2, "Please input Account Number")
+        //}
+        //if (!(mobileBankingData.mfs_type_id)) {
+        //    return this.notifyService.ShowNotification(2, "Please select MFS Type")
+        //}
+
+        //let mfsObj = this.mobileBankingApplicationForm.get('mfs_id')?.value;
+        //let mfs_id = mfsObj.mfs_id;
+
+
+        //if (this.dataExistMFS(mfs_id)) {
+        //    return this.notifyService.ShowNotification(2, "Selected MFS already added")
+        //}
+
+
         if (this.rowData == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
-
         let supplierId = this.rowData.SupplierId;
 
+        //for validation message -----------
+        this.submittedMobileBanking = true;
         const mobileBankingData = this.mobileBankingApplicationForm.value;
-
-        if (!(mobileBankingData.mfs_id)) {
-            return this.notifyService.ShowNotification(2, "Please select MFS Name")
+        if (this.mobileBankingApplicationForm.invalid) {
+            return;
         }
-        if (!(mobileBankingData.account_number)) {
-            return this.notifyService.ShowNotification(2, "Please input Account Number")
-        }
-        if (!(mobileBankingData.mfs_type_id)) {
-            return this.notifyService.ShowNotification(2, "Please select MFS Type")
-        }
+        //end validation messate -----------
 
-        let mfsObj = this.mobileBankingApplicationForm.get('mfs_id')?.value;
-        let mfs_id = mfsObj.mfs_id;
+        this.dataSaved = false;
 
 
-        if (this.dataExistMFS(mfs_id)) {
-            return this.notifyService.ShowNotification(2, "Selected MFS already added")
+        let mfs_id = this.mobileBankingApplicationForm.get('mfs_id')?.value.mfs_id;
+        let mfs_name = this.mobileBankingApplicationForm.get('mfs_id')?.value.mfs_name;
+        if (this.dataExistMFS(mfs_name)) {
+            return this.notifyService.ShowNotification(2, "Selected MFS name already added")
         }
 
         else {
@@ -2143,9 +2063,9 @@ export class SupplierApplicationComponent implements OnInit {
 
     }
 
-    dataExistMFS(mfs_id) {
+    dataExistMFS(mfs_name) {
         return this.mobileBankingDataSources.some(function (el) {
-            return el.mfs_id === mfs_id;
+            return el.mfs_name === mfs_name;
         });
     }
 
@@ -2171,34 +2091,57 @@ export class SupplierApplicationComponent implements OnInit {
 
     onBankingFormSubmit() {
 
+        //if (this.rowData == null) {
+        //    return this.notifyService.ShowNotification(3, 'Please select row');
+        //}
+
+        //let supplierId = this.rowData.SupplierId;
+
+        //const bankingData = this.bankingApplicationForm.value;
+
+        //if (!(bankingData.bank_type_id)) {
+        //    return this.notifyService.ShowNotification(2, "Please select Bank Type")
+        //}
+        //if (!(bankingData.bank_id)) {
+        //    return this.notifyService.ShowNotification(2, "Please select Bank Name")
+        //}
+        //if (!(bankingData.bank_branch_id)) {
+        //    return this.notifyService.ShowNotification(2, "Please select Bank Branch")
+        //}
+        //if (!(bankingData.account_name)) {
+        //    return this.notifyService.ShowNotification(2, "Please input Account Name")
+        //}
+        //if (!(bankingData.account_number)) {
+        //    return this.notifyService.ShowNotification(2, "Please input Account Number")
+        //}
+        //let account_number = this.bankingApplicationForm.get('account_number')?.value;
+
+
+        //if (this.dataExistBankAccount(account_number)) {
+        //    return this.notifyService.ShowNotification(2, "Selected Bank Account already added")
+        //}
+
+
         if (this.rowData == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
-
         let supplierId = this.rowData.SupplierId;
 
+        //for validation message -----------
+        this.submittedBanking = true;
         const bankingData = this.bankingApplicationForm.value;
+        if (this.bankingApplicationForm.invalid) {
+            return;
+        }
+        //end validation messate -----------
 
-        if (!(bankingData.bank_type_id)) {
-            return this.notifyService.ShowNotification(2, "Please select Bank Type")
-        }
-        if (!(bankingData.bank_id)) {
-            return this.notifyService.ShowNotification(2, "Please select Bank Name")
-        }
-        if (!(bankingData.bank_branch_id)) {
-            return this.notifyService.ShowNotification(2, "Please select Bank Branch")
-        }
-        if (!(bankingData.account_name)) {
-            return this.notifyService.ShowNotification(2, "Please input Account Name")
-        }
-        if (!(bankingData.account_number)) {
-            return this.notifyService.ShowNotification(2, "Please input Account Number")
-        }
-        let account_number = this.bankingApplicationForm.get('account_number')?.value;
+        this.dataSaved = false;
 
 
-        if (this.dataExistBankAccount(account_number)) {
-            return this.notifyService.ShowNotification(2, "Selected Bank Account already added")
+        let bank_id = this.mobileBankingApplicationForm.get('bank_id')?.value.bank_id;
+        let bank_name = this.mobileBankingApplicationForm.get('bank_id')?.value.bank_name;
+        if (this.dataExistBankAccount(bank_name)) {
+            return this.notifyService.ShowNotification(2, "Selected Bank name already added")
         }
 
         else {
@@ -2212,9 +2155,9 @@ export class SupplierApplicationComponent implements OnInit {
         }
     }
 
-    dataExistBankAccount(account_number) {
+    dataExistBankAccount(bank_name) {
         return this.bankingDataSources.some(function (el) {
-            return el.account_number === account_number;
+            return el.bank_name === bank_name;
         });
     }
 
@@ -2239,25 +2182,25 @@ export class SupplierApplicationComponent implements OnInit {
     //    this.showDialog();
     //}
 
+    // File Upload
 
-    //onSelectImage(event) {
-    //    if (event.target.files) {
-    //        var reader = new FileReader()
-    //        reader.readAsDataURL(event.target.files[0])
-    //        reader.onload = (event: any) => {
-    //            this.photourllink = event.target.result
-    //        }
-    //        alert(this.photourllink)
-    //        if (event.target.files.length > 0) {
-    //            const file = event.target.files[0];
-    //            this.supplierImage.nativeElement.innerText = file.name;
-    //            this.supplierApplicationForm.patchValue({
-    //                ImageUpload: file,
-    //            });
-    //        }
-    //    }
-    //}
-
+    onSelectImage(event) {
+        if (event.target.files) {
+            var reader = new FileReader()
+            reader.readAsDataURL(event.target.files[0])
+            reader.onload = (event: any) => {
+                this.photourllink = event.target.result
+            }
+            alert(this.photourllink)
+            if (event.target.files.length > 0) {
+                const file = event.target.files[0];
+                this.supplierImage.nativeElement.innerText = file.name;
+                this.supplierApplicationForm.patchValue({
+                    ImageUpload: file,
+                });
+            }
+        }
+    }
 
     handleLegalFormFileInput(files: FileList) {
         this.fileToUploadLegalForm = files.item(0);
@@ -2269,6 +2212,10 @@ export class SupplierApplicationComponent implements OnInit {
 
     handleSecurityFileInput(files: FileList) {
         this.fileToUploadSecurity = files.item(0);
+    }
+
+    dealerIndex() {
+        this.index = 0;
     }
 
     function(e) {
@@ -2290,7 +2237,7 @@ export class SupplierApplicationComponent implements OnInit {
     }
 
     clear() {
-    /*    this.resetForm();*/
+        /*    this.resetForm();*/
     }
 
 

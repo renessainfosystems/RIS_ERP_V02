@@ -29,8 +29,8 @@ namespace Auth.Model.Procurement.Model
         public int contact_type_id { get; set; }
         public int designation_id { get; set; }
         public string email { get; set; }
-        public string mobile { get; set; }
-        public string phone { get; set; }
+        public string mobile_no { get; set; }
+        public string phone_no { get; set; }
 
         public string whatsapp { get; set; }
 

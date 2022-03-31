@@ -298,8 +298,8 @@ namespace DataAccess.Procurement
                 parameters.Add("@sur_name", supplierContact.sur_name, DbType.String);
                 parameters.Add("@designation_id", supplierContact.designation_id, DbType.Int32);
                 parameters.Add("@email", supplierContact.email, DbType.String);
-                parameters.Add("@mobile", supplierContact.mobile, DbType.String);
-                parameters.Add("@phone", supplierContact.phone, DbType.String);
+                parameters.Add("@mobile_no", supplierContact.mobile_no, DbType.String);
+                parameters.Add("@phone_no", supplierContact.phone_no, DbType.String);
                 parameters.Add("@whatsapp", supplierContact.whatsapp, DbType.String);
                 parameters.Add("@facebook", supplierContact.facebook, DbType.String);
                 parameters.Add("@linkedin", supplierContact.linkedin, DbType.String);
