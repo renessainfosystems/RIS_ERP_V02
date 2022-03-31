@@ -163,8 +163,10 @@ namespace Auth.DataAccess.Party
                 _dbConnection.Open();
             try
             {
-                var sql = @"SELECT * FROM [Party].[Dealer_Location_Info] DCI WHERE DCI.dealer_location_info_id =" + dealer_location_info_id + "";
-                dynamic data = await _dbConnection.QuerySingleOrDefaultAsync<dynamic>(sql);
+                var sql = @"SELECT * FROM [Party].[Dealer_Location_Info] DCI WHERE DCI.dealer_location_info_id =@dealer_location_info_id";
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@dealer_location_info_id", dealer_location_info_id);
+                dynamic data = await _dbConnection.QuerySingleOrDefaultAsync<dynamic>(sql, parameters);
                 if (data != null)
                 {
                     result = DealerLocationInfoViewModel.ConvertToModel(data);
@@ -188,8 +190,10 @@ namespace Auth.DataAccess.Party
                 _dbConnection.Open();
             try
             {
-                var sql = @"SELECT * FROM [Party].[Dealer_Location_Info] DCI WHERE DCI.dealer_info_id =" + dealer_info_id + "";
-                dynamic data = await _dbConnection.QueryAsync<dynamic>(sql);
+                var sql = @"SELECT * FROM [Party].[Dealer_Location_Info] DCI WHERE DCI.dealer_info_id =@dealer_info_id";
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@dealer_info_id", dealer_info_id);
+                dynamic data = await _dbConnection.QueryAsync<dynamic>(sql, parameters);
                 if (data != null)
                 {
                     List<dynamic> dataList = data;
