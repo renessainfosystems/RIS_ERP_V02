@@ -22,7 +22,7 @@ namespace Auth.Model.Procurement.Model
         public int currency_id { get; set; }
         public int credit_days { get; set; }
         public decimal credit_limit { get; set; }
-        public bool is_payment_monthly { get; set; }
+        public int payment_frequency_id { get; set; }
 
 
         public List<SecurityDepositSession> securityDepositSession { get; set; }

@@ -92,7 +92,6 @@ namespace Auth.Model.Procurement.ViewModel
 
 
 
-
             //model.BusinessActivityId = SupplierApplication.business_activity_id ?? "";
             //model.ManagementStaffNo = SupplierApplication.management_staff_no ?? "";
             //model.NonmanagementStaffNo = SupplierApplication.nonmanagement_staff_no ?? "";

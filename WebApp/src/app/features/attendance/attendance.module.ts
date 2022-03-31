@@ -16,6 +16,7 @@ import { LateEarlyPolicyComponent } from './late-early-policy/late-early-policy.
 import { PrimeNGModule } from '../../root/primengreference.module';
 import { LeavePolicyComponent } from './leave-policy/leave-policy.component';
 import { RosterPolicyComponent } from './roster-policy/roster-policy.component';
+import { AttendancePolicyComponent } from './attendance-policy/attendance-policy.component';
 
 
 
@@ -33,6 +34,7 @@ import { RosterPolicyComponent } from './roster-policy/roster-policy.component';
     LateEarlyPolicyComponent,
     LeavePolicyComponent,
     RosterPolicyComponent,
+    AttendancePolicyComponent,
     
   ],
   imports: [
