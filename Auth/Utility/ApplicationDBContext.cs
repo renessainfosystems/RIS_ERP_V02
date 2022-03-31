@@ -77,6 +77,8 @@ namespace DataAccess
         public DbSet<DepartmentType> DepartmentTypes { get; set; }
         public DbSet<EmployeeCategoryType> EmployeeCategoryTypes { get; set; }
 
+        public DbSet<PaymentFrequency> PaymentFrequencys { get; set; }
+
         #endregion
 
 

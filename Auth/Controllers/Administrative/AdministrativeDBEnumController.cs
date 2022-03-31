@@ -40,6 +40,12 @@ namespace Auth.Controllers.Administrative
         }
 
         [HttpGet]
+        public dynamic PaymentFrequencyCboList()
+        {
+            return _administrativeDBEnumRepository.PaymentFrequencyCboList();
+        }
+
+        [HttpGet]
         public dynamic DepartmentTypeCboList()
         {
             return _administrativeDBEnumRepository.DepartmentTypeCboList();

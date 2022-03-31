@@ -16,15 +16,18 @@ namespace Auth.Repository.Administrative
         private readonly IEntityDataAccess<MfsType> _entityDataAccessMfsType;
         private readonly IEntityDataAccess<BankType> _entityDataAccessBankType;
         private readonly IEntityDataAccess<DepartmentType> _entityDataAccessDepartmentType;
+        private readonly IEntityDataAccess<PaymentFrequency> _entityDataAccessPaymentFrequency;
         public AdministrativeDBEnumRepository(
             IEntityDataAccess<MfsType> entityDataAccessMfsType
             ,IEntityDataAccess<BankType> entityDataAccessBankType
-             ,IEntityDataAccess<DepartmentType> entityDataAccessDepartmentType
+            ,IEntityDataAccess<DepartmentType> entityDataAccessDepartmentType
+            ,IEntityDataAccess<PaymentFrequency> entityDataAccessPaymentFrequency
             )
         {
             _entityDataAccessMfsType = entityDataAccessMfsType;
             _entityDataAccessBankType = entityDataAccessBankType;
             _entityDataAccessDepartmentType = entityDataAccessDepartmentType;
+            _entityDataAccessPaymentFrequency = entityDataAccessPaymentFrequency;
 
         }
 
@@ -48,6 +51,20 @@ namespace Auth.Repository.Administrative
             {
                 var result = from r in _entityDataAccessBankType.GetAll().OrderBy(r => r.bank_type_id)
                              select new { bank_type_id = r.bank_type_id, bank_type_name = r.bank_type_name };
+                return result;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public IEnumerable<object> PaymentFrequencyCboList()
+        {
+            try
+            {
+                var result = from r in _entityDataAccessPaymentFrequency.GetAll().OrderBy(r => r.payment_frequency_id)
+                             select new { payment_frequency_id = r.payment_frequency_id, payment_frequency_name = r.payment_frequency_name };
                 return result;
             }
             catch

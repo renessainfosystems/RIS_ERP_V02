@@ -5,8 +5,8 @@ namespace Auth.Repository.Administrative
     public interface IAdministrativeDBEnumRepository
     {
         IEnumerable<object> MFSTypeCboList();
-
         IEnumerable<object> BankTypeCboList();
+        IEnumerable<object> PaymentFrequencyCboList();
         IEnumerable<object> DepartmentTypeCboList();
         IEnumerable<object> DepartmentTypeCboListByFunctionality(string type);
     }
