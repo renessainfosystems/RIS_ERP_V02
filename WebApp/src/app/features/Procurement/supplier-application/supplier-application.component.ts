@@ -376,7 +376,7 @@ export class SupplierApplicationComponent implements OnInit {
             supplier_code: [''],
             legal_name: ['', [Validators.required]],
             short_name: ['', [Validators.required]],
-            year_established: ['', [Validators.required]],
+            year_established: [null],
 
             domicile_enum_id: ['', [Validators.required]],
             registry_authority_id: ['', [Validators.required]],
@@ -397,8 +397,8 @@ export class SupplierApplicationComponent implements OnInit {
             house_no: [''],
             flat_no: [''],
             email: ['', [Validators.email, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
-            mobile_no: ['', [Validators.required]],
-            phone_no: [''],
+            mobile_no: ['', [Validators.required, Validators.pattern("^((\\+91-?)|0)?[0-9]{11}$")]],
+            phone_no: ['', [Validators.pattern("^((\\+91-?)|0)?[0-9]{11}$")]],
             pabx: [''],
 
         });
@@ -473,8 +473,8 @@ export class SupplierApplicationComponent implements OnInit {
             house_no: [''],
             flat_no: [''],
             email: ['', [Validators.email, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
-            mobile_no: ['', [Validators.required]],
-            phone_no: [''],
+            mobile_no: ['', [Validators.required, Validators.pattern("^((\\+91-?)|0)?[0-9]{11}$")]],
+            phone_no: ['', [Validators.pattern("^((\\+91-?)|0)?[0-9]{11}$")]],
             pabx: [''],
         });
         this.loadAllLocationTypeCboList();
@@ -494,21 +494,21 @@ export class SupplierApplicationComponent implements OnInit {
             middle_name: [''],
             sur_name: [''],
             designation_id: ['', [Validators.required]],
-            email: ['', [Validators.required]],
-            mobile_no: ['', [Validators.required]],
-            phone_no: [''],
-            whatsapp: [''],
+            email: ['', [Validators.email, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
+            mobile_no: ['', [Validators.required, Validators.pattern("^((\\+91-?)|0)?[0-9]{11}$")]],
+            phone_no: ['', [Validators.pattern("^((\\+91-?)|0)?[0-9]{11}$")]],
+            whatsapp: ['', [Validators.pattern("^((\\+91-?)|0)?[0-9]{11}$")]],
             facebook: [''],
             linkedin: [''],
             nationality_id: ['', [Validators.required]],
-            religion_enum_id: [''],
-            date_of_birth: [''],
+            religion_enum_id: [0],
+            date_of_birth: [null],
             gender_enum_id: ['', [Validators.required]],
-            marital_status_enum_id: [''],
-            date_of_marriage: [''],
+            marital_status_enum_id: [0],
+            date_of_marriage: [null],
             nid_number: ['', [Validators.required]],
             FileUpload: new FormControl('', [Validators.required]),
-            blood_group_enum_id: [''],
+            blood_group_enum_id: [0],
             passport_no: [''],
             birth_id: [''],
             driving_license_no: [''],
@@ -550,7 +550,7 @@ export class SupplierApplicationComponent implements OnInit {
         this.mobileBankingApplicationForm = this.formbulider.group({
 
             mfs_id: ['', [Validators.required]],
-            account_number: ['', [Validators.required]],
+            account_number: ['', [Validators.required, Validators.pattern("^((\\+91-?)|0)?[0-9]{11}$")]],
             mfs_type_id: ['', [Validators.required]],
 
         });
@@ -959,8 +959,6 @@ export class SupplierApplicationComponent implements OnInit {
         });
 
     }
-
-
 
     //resetForm() {
     //    this.supplierApplicationForm.reset();

@@ -840,10 +840,18 @@
                                             <input type="text" formControlName="middle_name" placeholder="" pInputText />
                                         </div>
 
-                                        <div class="field col-12 md:col-6">
-                                            <label pTooltip="City/Town" tooltipPosition="top">Sur Name </label>
-                                            <input type="text" formControlName="sur_name" placeholder="" pInputText />
+                                        <div class="field form-group col-12 md:col-6">
+                                            <label pTooltip="Sur Name" tooltipPosition="top">Sur Name<span class="req">*</span> </label>
+                                            <input type="text" class="from-control" formControlName="sur_name"
+                                                   [ngClass]="{ 'is-invalid': submittedContact && g.sur_name.errors }"
+                                                   placeholder="" pInputText required />
+
+                                            <div *ngIf="submittedContact && g.sur_name.errors" class="invalid-feedback">
+                                                <small *ngIf="g.sur_name.errors.required" class="p-error">Sur Name is required</small>
+
+                                            </div>
                                         </div>
+
 
                                         <div class="field col-12 md:col-6">
                                             <label pTooltip="Designation" tooltipPosition="top">Designation<span class="req">*</span></label>
@@ -950,7 +958,7 @@
                                         </div>
 
                                         <div class="field col-12 md:col-6">
-                                          
+
                                             <div class="grid">
                                                 <div class=" col-12 md:col-6">
                                                     <label pTooltip="National ID" tooltipPosition="top">National ID<span class="req">*</span></label>
@@ -982,6 +990,7 @@
                                                 <div class=" col-12 md:col-8">
                                                     <p-dropdown [options]="allBloodGroupList" formControlName="blood_group_enum_id" placeholder="---Select---"
                                                                 optionLabel="blood_group_enum_name" optionValue="blood_group_enum_id" [showClear]="true" [filter]="true" filterBy="blood_group_enum_name"></p-dropdown>
+
                                                 </div>
                                                 <div class=" col-12 md:col-4">
                                                     <button class="pi pi-plus risBtn risAdd" (click)="onContactFormSubmit()"> Add</button>
@@ -999,9 +1008,7 @@
                                                         <th>Designation</th>
                                                         <th>Nationality</th>
                                                         <th>DOB</th>
-                                                        <th>Religion</th>
                                                         <th>Gender</th>
-                                                        <th>Marital Status</th>
                                                         <th>Action</th>
                                                     </tr>
                                                 </ng-template>
@@ -1014,9 +1021,7 @@
                                                         <td>{{contact.designation_name}}</td>
                                                         <td>{{contact.country_name}}</td>
                                                         <td>{{contact.date_of_birth_str}}</td>
-                                                        <td>{{contact.religion_enum_name}}</td>
                                                         <td>{{contact.gender_enum_name}}</td>
-                                                        <td>{{contact.marital_status_enum_name}}</td>
                                                         <td> <button class="pi pi-times-circle risBtn risDelete" (click)="DeleteContactInfo(rowIndex,contact)"> </button></td>
 
                                                     </tr>
@@ -1203,17 +1208,17 @@
                                             </div>
                                         </div>
 
-                                        <div class="field col-12 md:col-6 float-right">
+                                        <div class="field col-12 md:col-6">
                                             <label pTooltip="Attach File" tooltipPosition="top">Attach File<span class="req"></span></label>
                                             <div class="grid">
                                                 <div class=" col-12 md:col-5">
                                                     <input type="file" id="file" (change)="handleSecurityFileInput($event.target.files)">
                                                 </div>
-                                                <div class=" col-12 md:col-1">
+                                                <div class=" col-12 md:col-3">
                                                     <button class=" pi pi-plus risBtn risAdd " label="Add" (click)="addSecurityDepositToTable(selectedSecurityDepositTable)">Add</button>
                                                 </div>
-                                                <div class=" col-12 md:col-4">
-                                                    <button pButton pRipple type="button" (click)="onSecurityDepositFormSubmit()" label="Save as Draft" class="risBtn risSave mr-2 mb-2" icon="pi pi-check"></button>
+                                                <div class=" col-12 md:col-4 float-right">
+                                                    <button pButton pRipple type="button" (click)="onFormSubmit()" label="Save as Draft" class="risBtn risSave mr-2 mb-2" icon="pi pi-check"></button>
                                                 </div>
                                             </div>
                                         </div>

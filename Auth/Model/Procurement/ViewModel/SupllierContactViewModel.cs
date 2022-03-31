@@ -41,9 +41,9 @@ namespace Auth.Model.Procurement.ViewModel
             model.date_of_birth = SupplierContact.date_of_birth ?? "";
             model.date_of_birth_str = SupplierContact.date_of_birth_str ?? "";
             model.designation_name = SupplierContact.designation_name;
-            model.religion_enum_name = EnumContactDisplay.GetDisplayName((EnumEmployeeReligion)SupplierContact.religion_enum_id);
+           // model.religion_enum_name = EnumContactDisplay.GetDisplayName((EnumEmployeeReligion)SupplierContact.religion_enum_id>0);
             model.gender_enum_name = EnumContactDisplay.GetDisplayName((EnumEmployeeGender)SupplierContact.gender_enum_id);
-            model.marital_status_enum_name = EnumContactDisplay.GetDisplayName((EnumMaritalStatus)SupplierContact.marital_status_enum_id);
+           // model.marital_status_enum_name = EnumContactDisplay.GetDisplayName((EnumMaritalStatus)SupplierContact.marital_status_enum_id);
             return model;
 
         }
