@@ -78,11 +78,16 @@
                                         <input type="text" formControlName="mobile" [ngClass]="{ 'is-invalid': submitted && f.mobile.errors }" placeholder="" pInputText />
                                         <div *ngIf="submitted && f.mobile.errors" class="invalid-feedback">
                                             <small *ngIf="f.mobile.errors.required" class="p-error">Mobile number is required</small>
+                                            <small *ngIf="f.mobile.errors.pattern" class="p-error">Mobile number must be 11 digit</small>
                                         </div>
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label pTooltip="Phone" tooltipPosition="top">Phone </label>
-                                        <input type="text" formControlName="phone" placeholder="" pInputText />
+                                        <input type="text" formControlName="phone" [ngClass]="{ 'is-invalid': submitted && f.phone.errors }" placeholder="" pInputText />
+
+                                        <div *ngIf="submitted && f.phone.errors" class="invalid-feedback">
+                                            <small *ngIf="f.phone.errors.pattern" class="p-error">Phone number must be 11 digit</small>
+                                        </div>
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label pTooltip="Email" tooltipPosition="top">Email </label>
@@ -390,23 +395,31 @@
 
                                                     <div *ngIf="submittedContact && g.mobile.errors" class="invalid-feedback">
                                                         <small *ngIf="g.mobile.errors.required" class="p-error">Mobile number is required</small>
+                                                        <small *ngIf="g.mobile.errors.pattern" class="p-error">Mobile number must be 11 digit</small>
                                                     </div>
                                                 </div>
                                                 <div class="field col-12 md:col-6">
                                                     <label pTooltip="Phone" tooltipPosition="top">Phone </label>
-                                                    <input type="text" formControlName="phone" placeholder="" pInputText />
-                                                </div>
+                                                    <input type="text" formControlName="phone" [ngClass]="{ 'is-invalid': submittedContact && g.phone.errors }" placeholder="" pInputText />
+
+                                                    <div *ngIf="submittedContact && g.phone.errors" class="invalid-feedback">
+                                                        <small *ngIf="g.phone.errors.pattern" class="p-error">Phone number must be 11 digit</small>
+                                                    </div>
+                                                </div>                                                
                                                 <div class="field col-12 md:col-6">
                                                     <label pTooltip="Email" tooltipPosition="top">Email </label>
                                                     <input type="email" formControlName="email" [ngClass]="{ 'is-invalid': submittedContact && g.email.errors }" placeholder="" pInputText />
                                                     <div *ngIf="submittedContact && g.email.errors" class="invalid-feedback">
                                                         <small *ngIf="g.email.errors.email" class="p-error">Email must be a valid email address</small>
                                                     </div>
-
                                                 </div>
                                                 <div class="field col-12 md:col-6">
                                                     <label pTooltip="Emergency Contact" tooltipPosition="top">Emergency Contact </label>
-                                                    <input type="text" formControlName="emergency_contact" placeholder="" pInputText />
+                                                    <input type="text" formControlName="emergency_contact" [ngClass]="{ 'is-invalid': submittedContact && g.emergency_contact.errors }" placeholder="" pInputText />
+
+                                                    <div *ngIf="submittedContact && g.emergency_contact.errors" class="invalid-feedback">
+                                                        <small *ngIf="g.emergency_contact.errors.pattern" class="p-error">Emergency contact number must be 11 digit</small>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -578,6 +591,8 @@
                             <button pButton pRipple type="button" (click)="showBasicDialogContactNew()" label="New" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
                             <button pButton pRipple type="button" (click)="loadDealerContactinfoToEdit()" label="Edit" icon="pi pi-pencil" class="risBtn risEdit mr-2 mb-2"></button>
                             <button pButton pRipple type="button" (click)="showDialog()" label="Delete" icon="pi pi-trash" class="risBtn risDelete mr-2 mb-2"></button>
+                            <button pButton pRipple type="button" (click)="toggleFormClose()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
+
                             <p-dialog header="Delete Record" [(visible)]="display" [style]="{width: '35vw'}">
                                 <p>Do you want to delete this record?</p>
                                 <ng-template pTemplate="footer">
@@ -656,17 +671,22 @@
 
                                                     <div *ngIf="submittedLocation && h.mobile.errors" class="invalid-feedback">
                                                         <small *ngIf="h.mobile.errors.required" class="p-error">Mobile number is required</small>
+                                                        <small *ngIf="h.mobile.errors.pattern" class="p-error">Mobile number must be 11 digit</small>
+                                                    </div>
+                                                </div>                                             
+                                                <div class="field col-12 md:col-6">
+                                                    <label pTooltip="Phone" tooltipPosition="top">Phone </label>
+                                                    <input type="text" formControlName="phone" [ngClass]="{ 'is-invalid': submittedLocation && h.phone.errors }" placeholder="" pInputText />
+
+                                                    <div *ngIf="submittedLocation && h.phone.errors" class="invalid-feedback">
+                                                        <small *ngIf="h.phone.errors.pattern" class="p-error">Phone number must be 11 digit</small>
                                                     </div>
                                                 </div>
                                                 <div class="field col-12 md:col-6">
-                                                    <label pTooltip="Phone" tooltipPosition="top">Phone </label>
-                                                    <input type="text" formControlName="phone" placeholder="" pInputText />
-                                                </div>
-                                                <div class="field col-12 md:col-6">
                                                     <label pTooltip="Email" tooltipPosition="top">Email </label>
-                                                    <input type="email" formControlName="email" [ngClass]="{ 'is-invalid': submittedLocation && g.email.errors }" placeholder="" pInputText />
-                                                    <div *ngIf="submittedLocation && g.email.errors" class="invalid-feedback">
-                                                        <small *ngIf="g.email.errors.email" class="p-error">Email must be a valid email address</small>
+                                                    <input type="email" formControlName="email" [ngClass]="{ 'is-invalid': submittedLocation && h.email.errors }" placeholder="" pInputText />
+                                                    <div *ngIf="submittedLocation && h.email.errors" class="invalid-feedback">
+                                                        <small *ngIf="h.email.errors.email" class="p-error">Email must be a valid email address</small>
                                                     </div>
 
                                                 </div>
@@ -681,7 +701,10 @@
                                                 </div>
                                                 <div class="field col-12 md:col-12">
                                                     <label pTooltip="Emergency Contact" tooltipPosition="top">Emergency Contact </label>
-                                                    <input type="text" formControlName="emergency_contact" placeholder="" pInputText />
+                                                    <input type="text" formControlName="emergency_contact" [ngClass]="{ 'is-invalid': submittedLocation && h.emergency_contact.errors }" placeholder="" pInputText />
+                                                    <div *ngIf="submittedLocation && h.emergency_contact.errors" class="invalid-feedback">
+                                                        <small *ngIf="h.emergency_contact.errors.pattern" class="p-error">Emergency contact number must be 11 digit</small>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -779,6 +802,8 @@
                             <button pButton pRipple type="button" (click)="showBasicDialogLocationNew()" label="New" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
                             <button pButton pRipple type="button" (click)="loadDealerLocationinfoToEdit()" label="Edit" icon="pi pi-pencil" class="risBtn risEdit mr-2 mb-2"></button>
                             <button pButton pRipple type="button" (click)="showDialog()" label="Delete" icon="pi pi-trash" class="risBtn risDelete mr-2 mb-2"></button>
+                            <button pButton pRipple type="button" (click)="toggleFormClose()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
+
                             <p-dialog header="Delete Record" [(visible)]="display" [style]="{width: '35vw'}">
                                 <p>Do you want to delete this record?</p>
                                 <ng-template pTemplate="footer">
@@ -803,7 +828,7 @@
                                         </th>
                                         <th pSortableColumn="PersonalPhone">Mobile</th>
                                         <th pSortableColumn="PersonalEmail">Email</th>
-                                        <th pSortableColumn="PresentAddressNote">Emergency Location</th>
+                                        <th pSortableColumn="PresentAddressNote">Emergency Contact</th>
                                     </tr>
                                 </ng-template>
 
@@ -854,7 +879,7 @@
                                 Dealer Name
                                 <p-columnFilter type="text" field="DealerinfoName" display="menu"></p-columnFilter>
                             </th>
-                            <th pSortableColumn="PersonalPhone">Phone</th>
+                            <th pSortableColumn="PersonalPhone">Mobile</th>
                             <th pSortableColumn="PersonalEmail">Email</th>
                             <th pSortableColumn="PresentAddressNote">Address</th>
                             <th>Status</th>
@@ -862,9 +887,10 @@
                     </ng-template>
                     <ng-template pTemplate="body" let-dealerinfo let-rowData let-columns="columns">
                         <tr [pSelectableRow]="dealerinfo">
+                            <td hidden>{{dealerinfo.DealerInfoId}}</td>
                             <td>{{dealerinfo.DealerInfoCode}}</td>
                             <td>{{dealerinfo.DealerInfoName}}</td>
-                            <td>{{dealerinfo.Phone}}</td>
+                            <td>{{dealerinfo.Mobile}}</td>
                             <td>{{dealerinfo.Email}}</td>
                             <td>{{dealerinfo.AddressNote}}</td>
                             <td *ngIf="dealerinfo.IsActive===true">{{"Active"}}</td>
