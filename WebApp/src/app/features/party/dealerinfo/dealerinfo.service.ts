@@ -188,4 +188,43 @@ export class DealerInfoService {
     getDealerLocationInfoById(dealer_location_info_id: Number): Observable<any> {
         return this.http.get(this.ipconfig.base_IP + 'DealerLocationInfo/GetDealerLocationInfoById?dealer_location_info_id=' + dealer_location_info_id, httpOptions);
     }
+
+    // End Dealer Location Info ------***------
+
+
+    // Start Dealer Document Info  ------***------
+    createDealerDocumentInfo(dealerDocumentInfo: FormData): Observable<any> {
+
+        return this.http.post<any>(this.ipconfig.base_IP + 'DealerDocumentInfo/Create', dealerDocumentInfo, httpOptionsForFileUpload);
+
+    }
+    updateDealerDocumentInfo(dealerDocumentInfo: FormData): Observable<any> {
+
+        return this.http.post<any>(this.ipconfig.base_IP + 'DealerDocumentInfo/Update', dealerDocumentInfo, httpOptionsForFileUpload);
+
+    }
+    deleteDealerDocumentInfo(dealer_document_info_id: number): Observable<any> {
+
+        return this.http.post(this.ipconfig.base_IP + 'DealerDocumentInfo/Delete?dealer_document_info_id=' + dealer_document_info_id, httpOptions);
+
+    }
+    getAllDocumentInfoByDealerId(dealer_info_id: Number): Observable<any[]> {
+
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'DealerDocumentInfo/GetDocumentInfoByDealerId?dealer_info_id=' + dealer_info_id, httpOptions);
+
+    }
+    getAllDealerDocumentInfo(): Observable<any[]> {
+
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'DealerDocumentInfo/GetAllDealerDocumentInfo', httpOptions);
+
+    }
+    getDealerDocumentInfoById(dealer_document_info_id: Number): Observable<any> {
+        return this.http.get(this.ipconfig.base_IP + 'DealerDocumentInfo/GetDealerDocumentInfoById?dealer_document_info_id=' + dealer_document_info_id, httpOptions);
+    }
+
+    getAllDocumentCboList(): Observable<any[]> {
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'DocumentType/DocumentTypeCboList', httpOptions);
+    }
+
+    // End Dealer Document Info ------***------
 }
