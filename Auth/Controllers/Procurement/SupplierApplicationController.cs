@@ -77,9 +77,13 @@ namespace Auth.Controllers.Procurement
             {
                 supplierApplication.supplier_logo = GetSupplierLogoPath(supplierApplication.ImageUpload);
             }
-            return await _supplierApplicationRepository.IUDSupplierApplication(supplierApplication, (int)GlobalEnumList.DBOperation.Create);
+            var result = await _supplierApplicationRepository.IUDSupplierApplication(supplierApplication, (int)GlobalEnumList.DBOperation.Create);
+            return result;
         }
-        
+
+
+
+
         [HttpPost]
         public async Task<dynamic> Update([FromForm] SupplierApplication supplierApplication)
         {

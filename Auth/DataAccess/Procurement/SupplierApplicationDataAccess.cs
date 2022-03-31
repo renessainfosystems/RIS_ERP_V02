@@ -1,4 +1,17 @@
-﻿using Auth.Model.Procurement.Model;
+﻿//using Auth.Model.Procurement.Model;
+//using Auth.Model.Procurement.ViewModel;
+//using Auth.Utility.Procurement;
+//using Auth.Utility.Procurement.Enum;
+//using Dapper;
+//using Microsoft.AspNetCore.Http;
+//using Microsoft.Extensions.Configuration;
+//using System;
+//using System.Collections.Generic;
+//using System.Data;
+//using System.Linq;
+//using System.Threading.Tasks;
+
+using Auth.Model.Procurement.Model;
 using Auth.Model.Procurement.ViewModel;
 using Auth.Utility;
 using Dapper;
@@ -12,18 +25,6 @@ using System.Threading.Tasks;
 using Auth.Utility.Procurement.Enum;
 using static Auth.Utility.CommonMessage;
 
-//using Auth.Model.Party.Model;
-//using Auth.Model.Party.ViewModel;
-//using Auth.Utility;
-//using Auth.Utility.Party.Enum;
-//using Dapper;
-//using DataAccess;
-//using Microsoft.AspNetCore.Http;
-//using System;
-//using System.Collections.Generic;
-//using System.Data;
-//using System.Linq;
-//using System.Threading.Tasks;
 
 
 namespace DataAccess.Procurement
@@ -413,7 +414,7 @@ namespace DataAccess.Procurement
                 parameters.Add("@currency_id", supplierCreditDeposit.currency_id, DbType.Int32);
                 parameters.Add("@credit_days", supplierCreditDeposit.credit_days, DbType.Int32);
                 parameters.Add("@credit_limit", supplierCreditDeposit.credit_limit, DbType.Decimal);
-                parameters.Add("@is_payment_monthly", supplierCreditDeposit.is_payment_monthly, DbType.Boolean);
+                parameters.Add("@payment_frequency_id", supplierCreditDeposit.payment_frequency_id, DbType.Int32);
 
                 parameters.Add("@DBOperation", operationType == (int)GlobalEnumList.DBOperation.Create ? GlobalEnumList.DBOperation.Create : GlobalEnumList.DBOperation.Update);
             }
@@ -491,36 +492,69 @@ namespace DataAccess.Procurement
             {
                 try
                 {
-                    if (dbOperation == 3)
+                    //if (dbOperation == 3)
+                    //{
+                    //    dynamic data = await _dbConnection.ExecuteAsync("[Procurement].[SP_SupplierApplication_IUD]", parameters, commandType: CommandType.StoredProcedure, transaction: tran);
+                    //    message = CommonMessage.SetWarningMessage(CommonDeleteMessage);
+
+                    //}
+
+                    //else if (dbOperation == 2)
+                    //{
+                    //    dynamic data = await _dbConnection.ExecuteAsync("[Procurement].[SP_SupplierApplication_IUD]", parameters, commandType: CommandType.StoredProcedure, transaction: tran);
+                    //    message = CommonMessage.SetSuccessMessage(CommonUpdateMessage);
+
+                    //}
+
+                    //else if (dbOperation == 5)
+                    //{
+                    //    dynamic data = await _dbConnection.ExecuteAsync("[Procurement].[SP_SupplierApplication_IUD]", parameters, commandType: CommandType.StoredProcedure, transaction: tran);
+                    //    message = CommonMessage.SetSuccessMessage(CommonSubmitMessage);
+
+                    //}
+
+                    //else
+                    //{
+                    //    dynamic data = await _dbConnection.QueryAsync<dynamic>("[Procurement].[SP_SupplierApplication_IUD]", parameters, commandType: CommandType.StoredProcedure, transaction: tran);
+
+                    //    if (data != null)
+                    //    {
+                    //        List<dynamic> dataList = data;
+                    //        result = (from dr in dataList select SupplierApplicationViewModel.ConvertToSupplierApplicationAllModel(dr)).ToList();
+                    //        message = CommonMessage.SetSuccessMessage(CommonSaveMessage, result);
+                    //    }
+                    //}
+
+
+                    dynamic data = await _dbConnection.QueryAsync<dynamic>("[Procurement].[SP_SupplierApplication_IUD]", parameters, commandType: CommandType.StoredProcedure, transaction: tran);
+
+                    if (data != null)
                     {
-                        dynamic data = await _dbConnection.ExecuteAsync("[Procurement].[SP_SupplierApplication_IUD]", parameters, commandType: CommandType.StoredProcedure, transaction: tran);
-                        message = CommonMessage.SetWarningMessage(CommonDeleteMessage);
+                        List<dynamic> dataList = data;
 
-                    }
+                        result = (from dr in dataList select SupplierApplicationViewModel.ConvertToSupplierApplicationAllModel(dr)).ToList();
 
-                    else if (dbOperation == 2)
-                    {
-                        dynamic data = await _dbConnection.ExecuteAsync("[Procurement].[SP_SupplierApplication_IUD]", parameters, commandType: CommandType.StoredProcedure, transaction: tran);
-                        message = CommonMessage.SetSuccessMessage(CommonUpdateMessage);
 
-                    }
-
-                    else if (dbOperation == 5)
-                    {
-                        dynamic data = await _dbConnection.ExecuteAsync("[Procurement].[SP_SupplierApplication_IUD]", parameters, commandType: CommandType.StoredProcedure, transaction: tran);
-                        message = CommonMessage.SetSuccessMessage(CommonSubmitMessage);
-
-                    }
-
-                    else
-                    {
-                        dynamic data = await _dbConnection.QueryAsync<dynamic>("[Procurement].[SP_SupplierApplication_IUD]", parameters, commandType: CommandType.StoredProcedure, transaction: tran);
-
-                        if (data != null)
+                        if (result != null && dbOperation == (int)GlobalEnumList.DBOperation.Approve)
                         {
-                            List<dynamic> dataList = data;
-                            result = (from dr in dataList select SupplierApplicationViewModel.ConvertToSupplierApplicationAllModel(dr)).ToList();
-                            message = CommonMessage.SetSuccessMessage(CommonSaveMessage, result);
+                            return message = CommonMessage.SetSuccessMessage("Policy Approved", result);
+                        }
+
+                        if (result != null && dbOperation == (int)GlobalEnumList.DBOperation.Create)
+                        {
+                            message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage, result);
+                        }
+                        else if (result != null && dbOperation == (int)GlobalEnumList.DBOperation.Update)
+                        {
+                            message = CommonMessage.SetSuccessMessage(CommonMessage.CommonUpdateMessage, result);
+                        }
+                        else if (result != null && dbOperation == (int)GlobalEnumList.DBOperation.Delete)
+                        {
+                            message = CommonMessage.SetWarningMessage(CommonMessage.CommonDeleteMessage, result);
+                        }
+                        else
+                        {
+                            message = CommonMessage.SetErrorMessage(CommonMessage.CommonErrorMessage);
                         }
                     }
 
@@ -542,56 +576,6 @@ namespace DataAccess.Procurement
             }
 
             return (message);
-
-
-            //var message = new CommonMessage();
-
-            //var parameters = SupplierApplicationParameterBinding(supplierApplication, dbOperation);
-
-            //if (_dbConnection.State == ConnectionState.Closed)
-            //    _dbConnection.Open();
-
-
-            //try
-            //{
-
-            //  //  dynamic data = await _dbConnection.QueryAsync("[PIMS].[SP_PIMS_Employee_IUD]", parameters, commandType: CommandType.StoredProcedure);
-            //    dynamic data = await _dbConnection.QueryAsync<dynamic>("[Procurement].[SP_SupplierApplication_IUD]", parameters, commandType: CommandType.StoredProcedure);
-
-
-
-            //    if (dbOperation == (int)GlobalEnumList.DBOperation.Delete)
-            //    {
-            //        return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonDeleteMessage);
-            //    }
-
-            //    else if (dbOperation == (int)GlobalEnumList.DBOperation.Update)
-            //    {
-            //        message = CommonMessage.SetSuccessMessage(CommonMessage.CommonUpdateMessage);
-            //    }
-
-            //    if (data.Count > 0)
-            //    {
-            //        message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage, data);
-            //    }
-            //    else
-            //    {
-            //        message = CommonMessage.SetErrorMessage(CommonMessage.CommonErrorMessage);
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    message = CommonMessage.SetErrorMessage(ex.Message);
-
-
-            //}
-            //finally
-            //{
-            //    //DB connection dispose with db connection close
-            //    _dbConnection.Dispose();
-            //}
-
-            //return (message);
         }
 
         public async Task<dynamic> GetSupplierByIdAsync()
@@ -640,7 +624,6 @@ namespace DataAccess.Procurement
                 parameters.Add("@supplier_id", supplier_id);
 
                 dynamic data = await _dbConnection.QuerySingleOrDefaultAsync<dynamic>(sql, parameters);
-                //  dynamic data = await _dbConnection.QueryAsync<dynamic>(sql);
                 if (data != null)
                 {
 
@@ -893,7 +876,7 @@ namespace DataAccess.Procurement
 
             try
             {
-                var sql = "select SEP.ecommerce_platforms_id,EP.ecommerce_paltforms_name from " +
+                var sql = "select SEP.ecommerce_platforms_id,EP.ecommerce_paltforms_name, SEP.supplier_id from " +
                             " [Procurement].[Supplier_Ecommerce_Platforms] SEP " +
                             " left join[Administrative].[Ecommerce_Platforms] EP on SEP.ecommerce_platforms_id = EP.ecommerce_paltforms_id " +
                             " where SEP.supplier_id =  @supplier_id";
@@ -1707,18 +1690,14 @@ namespace DataAccess.Procurement
 
             try
             {
-                var sql = "SELECT SCH.*,C.currency_name " +
-                            " FROM[Procurement].[Supplier_Credit_History] SCH " +
-                            " left join[Administrative].[Currency] C on SCH.currency_id = C.currency_id " +
-                            " where SCH.is_active ='1' and SCH.supplier_id=@supplier_id";
+                var sql = @"SELECT SCH.*,C.currency_name ,PF.payment_frequency_name FROM[Procurement].[Supplier_Credit_History] SCH 
+                            left join[Administrative].[Currency] C on SCH.currency_id = C.currency_id 
+                            left join[DBEnum].[Payment_Frequency] PF on PF.payment_frequency_id = SCH.payment_frequency_id 
+                            where SCH.is_active ='1' and SCH.supplier_id=@supplier_id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@supplier_id", supplier_id);
 
                 result = await _dbConnection.QuerySingleOrDefaultAsync<dynamic>(sql, parameters);
-
-
-
-
 
             }
             catch (Exception ex)

@@ -39,11 +39,6 @@ namespace Auth.Service
             return await _supplierApplicationdataAccess.GetAllConfirmSupplierInfo();
         }
 
-        //public async Task<dynamic> GetSupplierBasicInfoBySupplierId(int supplier_id)
-        //{
-        //    return await _supplierApplicationdataAccess.GetSupplierBasicInfoBySupplierIdAsync(supplier_id);
-        //}
-
         public async Task<dynamic> IUDSupplierApplication(SupplierApplication supplierApplication, int dbOperation)
         {
             
