@@ -282,6 +282,11 @@ export class SupplierApplicationService {
         return this.http.get<any[]>(this.ipconfig.base_IP + 'SecurityDeposit/SecurityDepositCboList', httpOptions);
     }
 
+    getAllPaymentFrequencyCboList(): Observable<any[]> {
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'AdministrativeDBEnum/PaymentFrequencyCboList', httpOptions);
+    }
+ 
+
     getAllMfsCboList(): Observable<any[]> {
         return this.http.get<any[]>(this.ipconfig.base_IP + 'Mfs/MfsCboList', httpOptions);
     }
