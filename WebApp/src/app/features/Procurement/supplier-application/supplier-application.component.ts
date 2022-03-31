@@ -1239,14 +1239,16 @@ export class SupplierApplicationComponent implements OnInit {
         }
         else {
             this.SupplierApplicationService.SubmitSupplierInfoData(supplierId).subscribe(data => {
+                debugger
                 this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage);
                 this.displaySubmit = false;
                 this.loadAllSupplierinfos();
                 this.resetForm();
-                this.index = (this.index === 3) ? 0 : this.index + 1;
-                this.index = 0;
-                //this.collapsedBasicInfo = true;
-                //this.collapsedBasicDetails = false;
+                //this.index = (this.index === 3) ? 0 : this.index + 1;
+                //this.index = 0;
+
+
+                this.toggleFormDisplay();
             });
         }
 

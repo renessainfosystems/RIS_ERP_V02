@@ -535,12 +535,12 @@ namespace DataAccess.Procurement
                         result = (from dr in dataList select SupplierApplicationViewModel.ConvertToSupplierApplicationAllModel(dr)).ToList();
 
 
-                        if (result != null && dbOperation == (int)GlobalEnumList.DBOperation.Approve)
+                        if (result != null && dbOperation == (int)GlobalEnumList.DBOperation.Submit)
                         {
-                            return message = CommonMessage.SetSuccessMessage("Policy Approved", result);
+                            message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSubmitMessage, result);
                         }
 
-                        if (result != null && dbOperation == (int)GlobalEnumList.DBOperation.Create)
+                        else if (result != null && dbOperation == (int)GlobalEnumList.DBOperation.Create)
                         {
                             message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage, result);
                         }
