@@ -107,5 +107,23 @@ namespace Auth.Controllers.Attendance
                });
             return Ok(oEnumUserTypes);
         }
+
+
+        [HttpGet]
+        public IActionResult EnumWeekDays()
+        {
+            var oEnumUserTypes = Enum.GetValues(typeof(Enumweeks_day))
+               .Cast<Enumweeks_day>()
+               .Select(con => new weeks_day
+               {
+                   week_day_id = (con.ToString()),
+                   // show display name
+                   week_day = con.GetType()
+                            .GetMember(con.ToString())
+                            .First().GetCustomAttribute<DisplayAttribute>().GetName()
+
+               }); 
+            return Ok(oEnumUserTypes);
+        }
     }
 }
