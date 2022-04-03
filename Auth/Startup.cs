@@ -252,6 +252,9 @@ namespace Auth
             services.AddScoped<ILeavePolicyRepository, LeavePolicyRepository>();
             services.AddScoped<AttendancePolicyDataAccess, AttendancePolicyDataAccess>();
             services.AddScoped<IAttendancePolicyRepository, AttendancePolicyRepository>();
+            services.AddScoped<IDBEnumRepository, DBEnumRepository>();
+            services.AddScoped<DBEnumDataAcess, DBEnumDataAcess>();
+
             #endregion
 
             #region Employee

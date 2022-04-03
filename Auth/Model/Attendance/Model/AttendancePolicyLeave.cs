@@ -10,5 +10,6 @@ namespace Auth.Model.Attendance.Model
         public int attendance_policy_leave_id { get; set; }
         public int attendance_policy_id { get; set; }
         public int leave_policy_id { get; set; }
+        public string leave_policy_name { get; set; }
     }
 }

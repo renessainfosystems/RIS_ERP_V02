@@ -174,7 +174,7 @@ namespace Auth.DataAccess.Attendance
 
             return parameters;
         }
-        public async Task<dynamic> IUD_RosterPolicy(AttendancePolicy attendancePolicy, int dbOperation)
+        public async Task<dynamic> IUD_AttendancePolicy(AttendancePolicy attendancePolicy, int dbOperation)
         {
             var message = new CommonMessage();
 
@@ -187,7 +187,7 @@ namespace Auth.DataAccess.Attendance
             try
             {
 
-                dynamic data = await _dbConnection.QueryAsync("[Attendance].[Roster_Policy_IUD]", parameters, commandType: CommandType.StoredProcedure);
+                dynamic data = await _dbConnection.QueryAsync("[Attendance].[SP_AttendancePolicy_IUD]", parameters, commandType: CommandType.StoredProcedure);
 
                 if (dbOperation == (int)DBOperation.Create && attendancePolicy.attendance_Policy_Benefits != null)
                 {
@@ -197,7 +197,7 @@ namespace Auth.DataAccess.Attendance
                         {
                             item.attendance_policy_id = data[0].attendance_policy_id;
                             var slabParameters = AttendancePolicyBenefitParameterBinding(item, dbOperation);
-                            dynamic slabData = _dbConnection.QueryFirstOrDefaultAsync("[Attendance].[SP_Roster_Policy_Details_IUD]", slabParameters, commandType: CommandType.StoredProcedure);
+                            dynamic slabData = _dbConnection.QueryFirstOrDefaultAsync("[Attendance].[SP_Attendance_Policy_Benefit_IUD]", slabParameters, commandType: CommandType.StoredProcedure);
 
                         }
                     }
@@ -210,7 +210,7 @@ namespace Auth.DataAccess.Attendance
                         {
                             item.attendance_policy_id = data[0].attendance_policy_id;
                             var slabParameters = AttendancePolicyDayoffParameterBinding(item, dbOperation);
-                            dynamic slabData = _dbConnection.QueryFirstOrDefaultAsync("[Attendance].[SP_Roster_Policy_Details_IUD]", slabParameters, commandType: CommandType.StoredProcedure);
+                            dynamic slabData = _dbConnection.QueryFirstOrDefaultAsync("[Attendance].[SP_Attendance_Policy_Dayoff_IUD]", slabParameters, commandType: CommandType.StoredProcedure);
 
                         }
                     }
@@ -223,7 +223,7 @@ namespace Auth.DataAccess.Attendance
                         {
                             item.attendance_policy_id = data[0].attendance_policy_id;
                             var slabParameters = AttendancePolicyShiftParameterBinding(item, dbOperation);
-                            dynamic slabData = _dbConnection.QueryFirstOrDefaultAsync("[Attendance].[SP_Roster_Policy_Details_IUD]", slabParameters, commandType: CommandType.StoredProcedure);
+                            dynamic slabData = _dbConnection.QueryFirstOrDefaultAsync("[Attendance].[SP_Attendance_Policy_Shift_IUD]", slabParameters, commandType: CommandType.StoredProcedure);
 
                         }
                     }
@@ -236,7 +236,7 @@ namespace Auth.DataAccess.Attendance
                         {
                             item.attendance_policy_id = data[0].attendance_policy_id;
                             var slabParameters = AttendancePolicyLeaveParameterBinding(item, dbOperation);
-                            dynamic slabData = _dbConnection.QueryFirstOrDefaultAsync("[Attendance].[SP_Roster_Policy_Details_IUD]", slabParameters, commandType: CommandType.StoredProcedure);
+                            dynamic slabData = _dbConnection.QueryFirstOrDefaultAsync("[Attendance].[SP_Attendance_Policy_Leave_IUD]", slabParameters, commandType: CommandType.StoredProcedure);
 
                         }
                     }
@@ -296,7 +296,7 @@ namespace Auth.DataAccess.Attendance
             try
             {
 
-                dynamic data = await _dbConnection.QueryAsync("[Attendance].[SP_Roster_Policy_Details_IUD]", parameters, commandType: CommandType.StoredProcedure);
+                dynamic data = await _dbConnection.QueryAsync("[Attendance].[SP_Attendance_Policy_Benefit_IUD]", parameters, commandType: CommandType.StoredProcedure);
 
 
                 if (dbOperation == (int)GlobalEnumList.DBOperation.Delete)
@@ -341,7 +341,7 @@ namespace Auth.DataAccess.Attendance
             try
             {
 
-                dynamic data = await _dbConnection.QueryAsync("[Attendance].[SP_Roster_Policy_Details_IUD]", parameters, commandType: CommandType.StoredProcedure);
+                dynamic data = await _dbConnection.QueryAsync("[Attendance].[SP_Attendance_Policy_Shift_IUD]", parameters, commandType: CommandType.StoredProcedure);
 
 
                 if (dbOperation == (int)GlobalEnumList.DBOperation.Delete)
@@ -385,7 +385,7 @@ namespace Auth.DataAccess.Attendance
             try
             {
 
-                dynamic data = await _dbConnection.QueryAsync("[Attendance].[SP_Roster_Policy_Details_IUD]", parameters, commandType: CommandType.StoredProcedure);
+                dynamic data = await _dbConnection.QueryAsync("[Attendance].[SP_Attendance_Policy_Leave_IUD]", parameters, commandType: CommandType.StoredProcedure);
 
 
                 if (dbOperation == (int)GlobalEnumList.DBOperation.Delete)
@@ -430,7 +430,7 @@ namespace Auth.DataAccess.Attendance
             try
             {
 
-                dynamic data = await _dbConnection.QueryAsync("[Attendance].[SP_Roster_Policy_Details_IUD]", parameters, commandType: CommandType.StoredProcedure);
+                dynamic data = await _dbConnection.QueryAsync("[Attendance].[SP_Attendance_Policy_Dayoff_IUD]", parameters, commandType: CommandType.StoredProcedure);
 
 
                 if (dbOperation == (int)GlobalEnumList.DBOperation.Delete)
@@ -501,7 +501,7 @@ namespace Auth.DataAccess.Attendance
             var message = new CommonMessage();
 
             var result = (dynamic)null;
-
+            
             if (_dbConnection.State == ConnectionState.Closed)
                 _dbConnection.Open();
 
@@ -509,22 +509,47 @@ namespace Auth.DataAccess.Attendance
             try
             {
 
-                DynamicParameters parameters = new DynamicParameters();
-                var sql = @"select * from Customers where CustomerId = @id
-            select * from Orders where CustomerId = @id
-            select * from Returns where CustomerId = @id";
 
-                using (var multi = _dbConnection.QueryMultiple(sql, new { parameters }))
+                var sql = "SELECT * FROM Attendance.Attendance_Policy WHERE attendance_policy_id= @attendance_policy_id " +
+      "SELECT r.attendance_policy_benefit_id,r.attendance_policy_id,r.abp_id,s.abp_name FROM Attendance.Attendance_Policy_Benefit r " +
+      "Inner join Attendance.Attendance_Benefit_Policy s on s.abp_id = r.abp_id " +
+      "WHERE attendance_policy_id =@attendance_policy_id " +
+
+
+      "SELECT r.attendance_policy_dayoff_id,r.attendance_policy_id,r.dayoff_type_id,r.week_day + '[' + d.dayoff_type_name + ']' week_day FROM Attendance.Attendance_Policy_Dayoff r " +
+      "Inner join DBEnum.Dayoff_Type d on d.dayoff_type_id = r.dayoff_type_id " +
+     " WHERE attendance_policy_id = @attendance_policy_id " +
+
+     " SELECT r.attendance_policy_leave_id,r.attendance_policy_id,r.leave_policy_id,l.leave_policy_name FROM Attendance.Attendance_Policy_Leave r " +
+     " Inner join leave.Leave_Policy l on l.leave_policy_id = r.leave_policy_id " +
+     " WHERE attendance_policy_id = @attendance_policy_id " +
+
+
+     " SELECT r.attendance_policy_shift_id,r.attendance_policy_shift_id,r.shift_id,s.shift_name FROM Attendance.Attendance_Policy_Shift r "+
+     " INNER JOIN Attendance.Shift_Info s on s.shift_id = r.shift_id WHERE attendance_policy_id = @attendance_policy_id ";
+           
+             DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@attendance_policy_id", attendance_policy_id);
+                using (var multi = await _dbConnection.QueryMultipleAsync(sql, parameters))
                 {
-                    var customer = multi.Read<dynamic>().Single();
-                    var orders = multi.Read<dynamic>().ToList();
-                    var returns = multi.Read<dynamic>().ToList();
+                    result = multi.Read<AttendancePolicy>().Single();
+                    var benefitPolicy = multi.Read<AttendancePolicyBenefit>().ToList();
+                    var shiftPolicy = multi.Read<AttendancePolicyShift>().ToList();
+                    var leavePolicy = multi.Read<AttendancePolicyLeave>().ToList();
+                    var dayoffPolicy = multi.Read<AttendancePolicyDayoff>().ToList();
 
+                    result.attendance_Policy_Shifts=shiftPolicy;
+                    result.attendance_Policy_Benefits = benefitPolicy;
+                    result.attendance_Policy_Leaves = leavePolicy;
+                    result.attendance_Policy_Dayoffs = dayoffPolicy;
+      
+                    
                 }
 
-                parameters.Add("@attendance_policy_id", attendance_policy_id);
+             
 
-                result = await _dbConnection.QuerySingleOrDefaultAsync<AttendancePolicy>(sql, parameters);
+
+
 
             }
             catch (Exception ex)
@@ -542,5 +567,32 @@ namespace Auth.DataAccess.Attendance
         }
 
 
+        public async Task<dynamic> GetAttendancePolicyCode()
+        {
+            var result = (dynamic)null;
+            if (_dbConnection.State == ConnectionState.Closed)
+                _dbConnection.Open();
+            var company_corporate_id = _httpContextAccessor.HttpContext.Items["company_corporate_id"];
+            try
+            {
+                var sql = "SELECT ((SELECT company_corporate_short_name FROM Administrative.Company_Corporate " +
+                    "WHERE company_corporate_id = @company_corporate_id)+'-' + '1000' + '' + (SELECT Convert(nvarchar, ISNULL(MAX(ISNULL([attendance_policy_id], 0)), 0) + 1) FROM Attendance.Attendance_Policy)) as code";
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@company_corporate_id", company_corporate_id);
+
+                result = await _dbConnection.QueryFirstOrDefaultAsync<dynamic>(sql, parameters);
+
+            }
+            catch (Exception ex)
+            {
+                throw ex.InnerException;
+            }
+            finally
+            {
+                _dbConnection.Close();
+            }
+
+            return result;
+        }
     }
 }
