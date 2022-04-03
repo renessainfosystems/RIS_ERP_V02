@@ -227,7 +227,7 @@ where od.organogram_detail_id=@Organogram_Detail_id order by od.organogram_detai
 
             return result;
         }
-        public async Task<dynamic> GetAllActiveOrganogram(int Organogram_id)
+        public async Task<dynamic> GetAllActiveOrganogramDetail(int Organogram_id)
         {
             var message = new CommonMessage();
 
