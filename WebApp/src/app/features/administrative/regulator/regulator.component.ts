@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { Observable } from 'rxjs';
+import { ConfirmationService } from 'primeng/api';
 import { SelectionModel } from '@angular/cdk/collections';
 import { RegulatorService } from './regulator.service';
 import { ToastrService } from 'ngx-toastr';
@@ -75,7 +76,7 @@ export class RegulatorComponent implements OnInit {
     }
 
 
-    constructor(private formbulider: FormBuilder, private RegulatorService: RegulatorService, private toastr: ToastrService, private notifyService: NotificationService) {
+    constructor(private formbulider: FormBuilder, private confirmationService: ConfirmationService, private RegulatorService: RegulatorService, private toastr: ToastrService, private notifyService: NotificationService) {
 
     }
 
@@ -178,6 +179,27 @@ export class RegulatorComponent implements OnInit {
         }
     }
 
+    deleteModal(event: Event) {
+        if (this.rowData == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+        if (this.rowData.approvedBy) {
+            return this.notifyService.ShowNotification(3, "This policy already approved");
+        }
+        this.confirmationService.confirm({
+            key: 'delete',
+            target: event.target,
+            message: 'Are you sure that you want to delete?',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                this.deleteRegulatorInfo();
+            },
+            reject: () => {
+
+            }
+        });
+    }
+
     deleteRegulatorInfo() {
         if (this.rowData == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
@@ -191,6 +213,7 @@ export class RegulatorComponent implements OnInit {
 
         });
         this.display = false;
+        this.rowData = null;
     }
 
     resetForm() {

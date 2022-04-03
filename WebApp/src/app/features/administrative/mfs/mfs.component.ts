@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { Observable } from 'rxjs';
+import { ConfirmationService } from 'primeng/api';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MfsService } from './mfs.service';
 import { ToastrService } from 'ngx-toastr';
@@ -72,7 +73,7 @@ export class MfsComponent implements OnInit {
         this.rowData = null;
     }
 
-    constructor(private formbulider: FormBuilder, private MfsService: MfsService, private toastr: ToastrService, private notifyService: NotificationService) {
+    constructor(private formbulider: FormBuilder, private confirmationService: ConfirmationService, private MfsService: MfsService, private toastr: ToastrService, private notifyService: NotificationService) {
 
     }
 
@@ -169,6 +170,27 @@ export class MfsComponent implements OnInit {
         }
     }
 
+    deleteModal(event: Event) {
+        if (this.rowData == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+        if (this.rowData.approvedBy) {
+            return this.notifyService.ShowNotification(3, "This policy already approved");
+        }
+        this.confirmationService.confirm({
+            key: 'delete',
+            target: event.target,
+            message: 'Are you sure that you want to delete?',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                this.deleteMfsInfo();
+            },
+            reject: () => {
+
+            }
+        });
+    }
+
     deleteMfsInfo() {
         if (this.rowData == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
@@ -182,7 +204,7 @@ export class MfsComponent implements OnInit {
             this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
         });
         this.display = false;
-        this.resetForm();
+        this.rowData = null;
     }
 
     resetForm() {
