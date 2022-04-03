@@ -106,5 +106,34 @@ namespace Auth.Utility.Attendance.Enum
             public string benefit_work_on_name_enum { get; set; }
         }
         #endregion
+
+
+        #region ENUM: EnumLeaveType
+        public enum Enumweeks_day
+        {
+            [Display(Name = "Monday")]
+            Monday,
+            [Display(Name = "Tuesday")]
+            Tuesday,
+            [Display(Name = "Wednesday")]
+            Wednesday,
+            [Display(Name = "Thursday")]
+            Thursday,
+            [Display(Name = "Friday")]
+            Friday,
+            [Display(Name = "Saturday")]
+            Saturday,
+            [Display(Name = "Sunday")]
+            Sunday,
+            
+
+        }
+        public class weeks_day
+        {
+            public string week_day_id { get; set; }
+            public string week_day { get; set; }
+        }
+        #endregion
+
     }
 }

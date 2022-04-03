@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Auth.Repository.Attendance;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -11,5 +12,30 @@ namespace Auth.Controllers.Attendance
     [ApiController]
     public class DBEnumController : ControllerBase
     {
+        //Intialize
+        #region Constructor
+        private IDBEnumRepository _dBEnumRepository;
+        public DBEnumController(IDBEnumRepository dBEnumRepository)
+        {
+            _dBEnumRepository = dBEnumRepository;
+        }
+        #endregion
+
+        [HttpGet]
+        public async Task<dynamic> GetDayOffTypeForDP()
+        {
+
+            return await _dBEnumRepository.GetDayOffTypeForDP();
+
+        }
+        [HttpGet]
+        public async Task<dynamic> GetDayOffAlternativeForDP()
+        {
+
+            return await _dBEnumRepository.GetDayOffAlternativeForDP();
+
+        }
+
+        
     }
 }

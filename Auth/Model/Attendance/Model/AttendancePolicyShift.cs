@@ -10,10 +10,7 @@ namespace Auth.Model.Attendance.Model
         public int attendance_policy_shift_id { get; set; }
         public int attendance_policy_id { get; set; }
         public int shift_id { get; set; }
+       public string shift_name { get; set; }
 
-        public static implicit operator List<object>(AttendancePolicyShift v)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
