@@ -100,7 +100,7 @@ namespace Auth.Repository.Administrative
                              select new { id = r.ecommerce_paltforms_id, name = r.ecommerce_paltforms_name };
                 return result;
             }
-            catch
+            catch(Exception ex)
             {
                 return null;
             }
