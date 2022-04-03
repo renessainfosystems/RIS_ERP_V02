@@ -926,7 +926,8 @@
 
                                     <tr [pSelectableRow]="dealerdocumentinfo">
                                         <td hidden>{{dealerdocumentinfo.DealerInfoId}}</td>
-                                        <td>{{dealerdocumentinfo.DocumentTypeId}}</td>
+                                        <td hidden>{{dealerdocumentinfo.DealerDocumentInfoId}}</td>
+                                        <td>{{dealerdocumentinfo.DocumentTypeName}}</td>
                                         <td>{{dealerdocumentinfo.DocumentNumber}}</td>
                                         <td>{{dealerdocumentinfo.IssueDate | date: 'dd/MMM/yyyy'}}</td>
                                         <td>{{dealerdocumentinfo.ExpiryDate | date: 'dd/MMM/yyyy'}}</td>
