@@ -14,6 +14,7 @@ namespace Auth.Model.Administrative.Model
         [Key]
         public int organogram_detail_id { get; set; }
         public int organogram_id { get; set; }
+        public string code { get; set; }
         public int position_id { get; set; }        
         public int? min_no_of_manpower { get; set; }
         public int? max_no_of_manpower { get; set; }
@@ -27,7 +28,7 @@ namespace Auth.Model.Administrative.Model
         //public DateTime created_datetime { get; set; }
         //public DateTime updated_datetime { get; set; }
         public bool is_gross { get; set; }
-        public bool? salary_head_id { get; set; }
+        public int? salary_head_id { get; set; }
         public bool? is_active { get; set; }
         public int days_of_confirmation { get; set; }       
         public long created_user_id { get; set; }
