@@ -30,15 +30,24 @@ namespace Auth.Controllers.Party
         [HttpPost]
        
         public async Task<dynamic> Create([FromForm] DealerDocumentInfo dealerDocumentInfo)
-        {         
+        {
+            if (dealerDocumentInfo.FileUpload != null)
+            {
+                dealerDocumentInfo.image_file = GetImagePath(dealerDocumentInfo.FileUpload);
+            }
+            
             return await _dealerDocumentInfoRepository.IUD_DealerDocumentInfo(dealerDocumentInfo, (int)GlobalEnumList.DBOperation.Create);
         }
      
 
         [HttpPost]
         public async Task<dynamic> Update([FromForm] DealerDocumentInfo dealerDocumentInfo)
-        {            
-           return await _dealerDocumentInfoRepository.IUD_DealerDocumentInfo(dealerDocumentInfo, (int)GlobalEnumList.DBOperation.Update);
+        {
+            if (dealerDocumentInfo.FileUpload != null)
+            {
+                dealerDocumentInfo.image_file = GetImagePath(dealerDocumentInfo.FileUpload);
+            }
+            return await _dealerDocumentInfoRepository.IUD_DealerDocumentInfo(dealerDocumentInfo, (int)GlobalEnumList.DBOperation.Update);
         }
    
         [HttpPost]
@@ -68,12 +77,17 @@ namespace Auth.Controllers.Party
             return await _dealerDocumentInfoRepository.GetDealerDocumentInfoById(dealer_document_info_id);
         }
       
-        
+       
         private string GetImagePath(IFormFile image)
         {
+            //var folderName = Path.Combine("assets", "images", "employeeimage");
             var folderName = Path.Combine("UploadedResource", "DealerImage");
             var directoryName = Directory.GetCurrentDirectory();
-            var pathToSave = directoryName+"\\"+ folderName;
+
+            //var pathToSave1 = Path.Combine(Directory.GetCurrentDirectory().Trim(), folderName);
+
+            //var pathToSave = directoryName.Replace("\\Auth", "\\WebApp\\src\\assets\\images\\employeeimage");
+            var pathToSave = directoryName.Replace("\\Auth", "\\Auth\\UploadedResource\\DealerImage");
             if (image.Length > 0)
             {
                 var fileName = ContentDispositionHeaderValue.Parse(image.ContentDisposition).FileName.Trim('"');
@@ -87,12 +101,14 @@ namespace Auth.Controllers.Party
                 {
                     image.CopyTo(stream);
                 }
+
                 return dbPath = dbPath.Replace(@"\", @"/");
             }
+
             return "";
 
         }
-        
+
         private void deleteImage(string imagepath)
         {
             try
@@ -109,6 +125,8 @@ namespace Auth.Controllers.Party
             {
                 throw;
             }
-        }        
+        }
+
+        
     }
 }

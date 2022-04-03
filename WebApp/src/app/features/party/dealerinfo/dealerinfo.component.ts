@@ -18,6 +18,10 @@ export class DealerinfoComponent implements OnInit {
         static: true
     }) dealerContactinfoImage;
 
+    @ViewChild('dealerDocumentImageFile', {
+        static: true
+    }) dealerDocumentImageFile;
+
     submitted = false; 
     dealerinfoForm: any;//DealerFormName  
     dealerinfoList: any[];//List Dealerinfo
@@ -106,9 +110,10 @@ export class DealerinfoComponent implements OnInit {
     rows = 10;
     //end dropdown List prperty
     rowData: any;
+    rowDataDocument: any;
     dataSaved = false;
     // for delete data modal
-    display: boolean = false;
+    
     rowSelected: boolean = false;
     selected = true;
     collapsedempInfo = true;
@@ -118,12 +123,22 @@ export class DealerinfoComponent implements OnInit {
     index: number = 0;
     indexContact: number = 0;
     indexLocation: number = 0;
+    display: boolean = false;
     showDialog() {
         if (this.rowData == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
         else
             this.display = true;
+    }
+
+    displayDocument: boolean = false;
+    showDialogDocument() {
+        if (this.rowDataDocument == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+        else
+            this.displayDocument = true;
     }
 
     displayBasic: boolean = false;
@@ -268,6 +283,8 @@ export class DealerinfoComponent implements OnInit {
 
     // for photo and signature upload
 
+    fileToUploadDocumentForm: File | null = null;
+
     photourllink: string = "assets/images/defaultimg.jpeg";
     selectFile(event) {
         if (event.target.files) {
@@ -401,11 +418,12 @@ export class DealerinfoComponent implements OnInit {
 
         this.dealerdocumentForm = this.formbulider.group({
             dealer_info_id: [''],
-            document_type_id: ['', [Validators.required]],            
+            document_type_id: ['', [Validators.required]],
             document_number: ['', [Validators.required]],
             issue_date: [null, [Validators.required]],
             expiry_date: [null, [Validators.required]],
-            image_file: ['', [Validators.required]]
+            //image_file: ['', [Validators.required]]
+            FileUpload: new FormControl(''),
         });
 
         //Load Dropdown
@@ -439,6 +457,19 @@ export class DealerinfoComponent implements OnInit {
         this.rowSelected = false;
         this.rowData = null;
     }
+
+    onRowSelectDocument(event) {
+        debugger;
+        this.rowSelected = true;
+        this.rowDataDocument = event.data;
+
+    }
+    onRowUnselectDocument(event) {
+        this.rowSelected = false;
+        this.rowDataDocument = null;
+    }
+
+    
 
     toggle() {
         if (this.collapsedempInfo) {
@@ -931,15 +962,7 @@ export class DealerinfoComponent implements OnInit {
         this.dealerinfodataSource = [];
     }
 
-    onSelectImage(event) {
-        if (event.target.files) {
-            var reader = new FileReader()
-            reader.readAsDataURL(event.target.files[0])
-            reader.onload = (event: any) => {
-                this.photourllink = event.target.result
-            }
-        }
-    }
+    
 
     // Contact Info Start
 
@@ -1352,13 +1375,15 @@ export class DealerinfoComponent implements OnInit {
             }
             else {
                 formData.append(key, value);
+                formData.append("dealer_info_id", this.rowData.DealerInfoId);
+                formData.append("FileUpload", this.fileToUploadDocumentForm);
             }
         }
 
         if (this.isDealerDocumentinfoEdit) {
 
-            data.dealerDocumentinfoId = this.rowData.DealerDocumentInfoId;
-            formData.append("dealer_document_info_id", this.rowData.DealerDocumentInfoId);
+            data.dealerDocumentinfoId = this.rowDataDocument.DealerDocumentInfoId;
+            formData.append("dealer_document_info_id", this.rowDataDocument.DealerDocumentInfoId);
             this.dealerinfoService.updateDealerDocumentInfo(formData).subscribe(result => {
 
                 this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
@@ -1367,24 +1392,27 @@ export class DealerinfoComponent implements OnInit {
                     this.dealerdocumentinfoList.splice(this.dealerdocumentinfoList.findIndex(item => item.DealerDocumentInfoId === data.dealerDocumentinfoId), 1);
                     this.dealerdocumentinfoList.unshift(result.Data);
                     this.selecteddealerdocumentinfo = result.Data;
-                    this.rowData = result.Data;
+                    this.rowDataDocument = result.Data;
+                    this.onRowUnselectDocument(event);
                     this.dealerDocumentIndex();
                     this.isDealerDocumentinfoEdit = false;
                     this.submittedDocument = false;
+                    this.dealerdocumentForm.reset();
                 }
             });
             this.gridDisplayDocument = false;
             this.formDisplayDocument = true;
         }
         else {
-            formData.append("dealer_info_id", this.rowData.DealerInfoId);
+            
             this.dealerinfoService.createDealerDocumentInfo(formData).subscribe(
                 result => {
                     this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
                     if (result.MessageType == 1) {
                         this.dealerdocumentinfoList.unshift(result.Data);
                         this.selecteddealerdocumentinfo = result.Data;
-                        this.rowData = result.Data;
+                        this.rowDataDocument = result.Data;
+                        this.onRowUnselectDocument(event);
                         this.dealerDocumentIndex();
                         this.isDealerDocumentinfoEdit = false;
                         this.submittedDocument = false;
@@ -1400,11 +1428,11 @@ export class DealerinfoComponent implements OnInit {
     loadDealerDocumentinfoToEdit() {
 
         debugger;
-        if (this.rowData == null) {
+        if (this.rowDataDocument == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
 
-        let dealerDocumentinfoId = this.rowData.DealerDocumentInfoId;
+        let dealerDocumentinfoId = this.rowDataDocument.DealerDocumentInfoId;
         this.dealerinfoService.getDealerDocumentInfoById(dealerDocumentinfoId).subscribe(data => {
             if (data != null) {
                 this.isDealerDocumentinfoEdit = true;
@@ -1424,18 +1452,42 @@ export class DealerinfoComponent implements OnInit {
     }
 
     deleteDealerDocumentinfo() {
-        this.showDialog();
-        if (this.rowData == null) {
+        this.showDialogDocument();
+        if (this.rowDataDocument == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
-        let dealerDocumentinfoId = this.rowData.DealerDocumentInfoId;
+        
+        this.rowSelected = true;
+        let dealerDocumentinfoId = this.rowDataDocument.DealerDocumentInfoId;
         this.dealerinfoService.deleteDealerDocumentInfo(dealerDocumentinfoId).subscribe(data => {
             if (data.MessageType == 1) {
                 this.dealerdocumentinfoList.splice(this.dealerdocumentinfoList.findIndex(item => item.DealerDocumentInfoId === data.dealerDocumentinfoId), 1);
             }
             this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
         });
-        this.display = false;
+        this.displayDocument = false;
+    }
+
+    onSelectImage(event) {
+        if (event.target.files) {
+            var reader = new FileReader()
+            reader.readAsDataURL(event.target.files[0])
+            reader.onload = (event: any) => {
+                this.photourllink = event.target.result
+            }
+            alert(this.photourllink)
+            if (event.target.files.length > 0) {
+                const file = event.target.files[0];
+                this.dealerDocumentImageFile.nativeElement.innerText = file.name;
+                this.dealerdocumentForm.patchValue({
+                    FileUpload: file,
+                });
+            }
+        }
+    }
+
+    documnetFormFileInput(files: FileList) {
+        this.fileToUploadDocumentForm = files.item(0);
     }
 
     
@@ -1448,11 +1500,11 @@ export class DealerinfoComponent implements OnInit {
     }
 
     openNext() {
-        this.index = (this.index === 5) ? 0 : this.index + 1;
+        this.index = (this.index === 6) ? 0 : this.index + 1;
     }
 
     openPrev() {
-        this.index = (this.index === 0) ? 5 : this.index - 1;
+        this.index = (this.index === 0) ? 6 : this.index - 1;
     }
 
 
@@ -1495,7 +1547,7 @@ export class DealerinfoComponent implements OnInit {
 
     // Document Infomation Start
     dealerDocumentIndex() {
-        this.index = 5;
+        this.index = 6;
         this.indexLocation = 0;
     }
 

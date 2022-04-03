@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -26,5 +27,6 @@ namespace Auth.Model.Party.Model
         public DateTime created_datetime { get; set; }
         public DateTime db_server_date_time { get; set; }
         public long created_user_info_id { get; set; }
+        public IFormFile FileUpload { get; set; }
     }
 }
