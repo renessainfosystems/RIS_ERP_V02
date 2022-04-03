@@ -222,6 +222,7 @@ export class LeaveheadComponent implements OnInit {
             this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
         });
         this.display = false;
+        this.rowData = null;
     }
 
     deleteModal(event: Event) {
