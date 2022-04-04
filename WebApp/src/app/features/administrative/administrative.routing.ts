@@ -29,6 +29,7 @@ import { AssociationComponent } from '../administrative/association/association.
 import { EcommercePlatformComponent } from '../administrative/ecommerce-platform/ecommerce-platform.component';
 import { RegistryAuthorityComponent } from '../administrative/registry-authority/registry-authority.component';
 import { RegulatorComponent } from '../administrative/regulator/regulator.component';
+import { OrganogramComponent } from './organogram/organogram.component';
 
 
 export const AdministrativeRoutes: Routes = [
@@ -153,6 +154,10 @@ export const AdministrativeRoutes: Routes = [
   {
     path: 'regulator',
     component: RegulatorComponent,
-  },
+    },
+    {
+        path: 'organogram',
+        component: OrganogramComponent,
+    },
   
 ];
