@@ -12,5 +12,6 @@ namespace Auth.Model.Attendance.Model
         public string week_day { get; set; }
         public byte dayoff_type_id { get; set; }
         public byte dayoff_alternative_id { get; set; }
+
     }
 }

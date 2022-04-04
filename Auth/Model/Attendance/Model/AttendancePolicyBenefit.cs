@@ -10,5 +10,6 @@ namespace Auth.Model.Attendance.Model
         public int attendance_policy_benefit_id { get; set; }
         public int attendance_policy_id { get; set; }
         public int abp_id { get; set; }
+        public string abp_name { get; set; }
     }
 }

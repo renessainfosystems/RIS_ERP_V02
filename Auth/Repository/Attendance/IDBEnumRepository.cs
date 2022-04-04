@@ -7,5 +7,7 @@ namespace Auth.Repository.Attendance
 {
     public interface IDBEnumRepository
     {
+        Task<dynamic> GetDayOffTypeForDP();
+        Task<dynamic> GetDayOffAlternativeForDP();
     }
 }

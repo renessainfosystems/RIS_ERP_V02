@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { NavigationEnd } from '@angular/router';
+import { ConfirmationService } from 'primeng/api';
 import { NotificationService } from '../../../service/CommonMessage/notification.service';
 import DealerInfo from './dealerinfo.model';
 import { DealerInfoService } from './dealerinfo.service';
@@ -17,6 +18,10 @@ export class DealerinfoComponent implements OnInit {
     @ViewChild('dealerContactinfoImage', {
         static: true
     }) dealerContactinfoImage;
+
+    @ViewChild('dealerDocumentImageFile', {
+        static: true
+    }) dealerDocumentImageFile;
 
     submitted = false; 
     dealerinfoForm: any;//DealerFormName  
@@ -106,9 +111,12 @@ export class DealerinfoComponent implements OnInit {
     rows = 10;
     //end dropdown List prperty
     rowData: any;
+    rowDataContact: any;
+    rowDataLocation: any;
+    rowDataDocument: any;
     dataSaved = false;
     // for delete data modal
-    display: boolean = false;
+    
     rowSelected: boolean = false;
     selected = true;
     collapsedempInfo = true;
@@ -118,12 +126,22 @@ export class DealerinfoComponent implements OnInit {
     index: number = 0;
     indexContact: number = 0;
     indexLocation: number = 0;
+    display: boolean = false;
     showDialog() {
         if (this.rowData == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
         else
             this.display = true;
+    }
+
+    displayDocument: boolean = false;
+    showDialogDocument() {
+        if (this.rowDataDocument == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+        else
+            this.displayDocument = true;
     }
 
     displayBasic: boolean = false;
@@ -268,6 +286,8 @@ export class DealerinfoComponent implements OnInit {
 
     // for photo and signature upload
 
+    fileToUploadDocumentForm: File | null = null;
+
     photourllink: string = "assets/images/defaultimg.jpeg";
     selectFile(event) {
         if (event.target.files) {
@@ -279,7 +299,7 @@ export class DealerinfoComponent implements OnInit {
         }
     }
 
-    constructor(private formbulider: FormBuilder, private notifyService: NotificationService, private dealerinfoService: DealerInfoService) {
+    constructor(private formbulider: FormBuilder, private confirmationService: ConfirmationService, private notifyService: NotificationService, private dealerinfoService: DealerInfoService) {
 
     }
 
@@ -401,11 +421,12 @@ export class DealerinfoComponent implements OnInit {
 
         this.dealerdocumentForm = this.formbulider.group({
             dealer_info_id: [''],
-            document_type_id: ['', [Validators.required]],            
+            document_type_id: ['', [Validators.required]],
             document_number: ['', [Validators.required]],
             issue_date: [null, [Validators.required]],
             expiry_date: [null, [Validators.required]],
-            image_file: ['', [Validators.required]]
+            //image_file: ['', [Validators.required]]
+            FileUpload: new FormControl(''),
         });
 
         //Load Dropdown
@@ -439,6 +460,41 @@ export class DealerinfoComponent implements OnInit {
         this.rowSelected = false;
         this.rowData = null;
     }
+
+    onRowSelectContact(event) {
+        debugger;
+        this.rowSelected = true;
+        this.rowDataContact = event.data;
+
+    }
+    onRowUnselectContact(event) {
+        this.rowSelected = false;
+        this.rowDataContact = null;
+    }
+
+    onRowSelectLocation(event) {
+        debugger;
+        this.rowSelected = true;
+        this.rowDataLocation = event.data;
+
+    }
+    onRowUnselectLocation(event) {
+        this.rowSelected = false;
+        this.rowDataLocation = null;
+    }
+
+    onRowSelectDocument(event) {
+        debugger;
+        this.rowSelected = true;
+        this.rowDataDocument = event.data;
+
+    }
+    onRowUnselectDocument(event) {
+        this.rowSelected = false;
+        this.rowDataDocument = null;
+    }
+
+    
 
     toggle() {
         if (this.collapsedempInfo) {
@@ -608,6 +664,25 @@ export class DealerinfoComponent implements OnInit {
         this.display = false;
     }
 
+    deleteDealer(event: Event) {
+        if (this.rowData == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+
+        this.confirmationService.confirm({
+            key: 'delete',
+            target: event.target,
+            message: 'Are you sure that you want to delete?',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                this.deleteDealerinfo();
+            },
+            reject: () => {
+
+            }
+        });
+    }
+
     get f(): { [key: string]: AbstractControl } {
         return this.dealerinfoForm.controls;
     }
@@ -720,7 +795,6 @@ export class DealerinfoComponent implements OnInit {
                     this.dealerinfoList.unshift(result.Data);
                     this.selecteddealerinfo = result.Data;
                     this.rowData = null;
-                    this.onRowUnselect(event);
                     this.dealerIndex();
                     this.isDealerinfoEdit = false;
                     this.toggleFormDisplay();
@@ -931,15 +1005,7 @@ export class DealerinfoComponent implements OnInit {
         this.dealerinfodataSource = [];
     }
 
-    onSelectImage(event) {
-        if (event.target.files) {
-            var reader = new FileReader()
-            reader.readAsDataURL(event.target.files[0])
-            reader.onload = (event: any) => {
-                this.photourllink = event.target.result
-            }
-        }
-    }
+    
 
     // Contact Info Start
 
@@ -1012,7 +1078,7 @@ export class DealerinfoComponent implements OnInit {
         for (const key of Object.keys(this.dealercontactForm.value)) {
             const value = this.dealercontactForm.value[key];
             if (key == "dealer_info_id") {
-                let dealerinfoId = this.rowData.DealerInfoId;
+                let dealerinfoId = this.rowDataContact.DealerInfoId;
                 formData.append("dealer_info_id", dealerinfoId);
             }
             if (key == "date_of_birth") {
@@ -1026,8 +1092,8 @@ export class DealerinfoComponent implements OnInit {
 
         if (this.isDealerContactinfoEdit) {
            
-            data.dealerContactinfoId = this.rowData.DealerContactInfoId;
-            formData.append("dealer_contact_info_id", this.rowData.DealerContactInfoId);
+            data.dealerContactinfoId = this.rowDataContact.DealerContactInfoId;
+            formData.append("dealer_contact_info_id", this.rowDataContact.DealerContactInfoId);
             this.dealerinfoService.updateDealerContactInfo(formData).subscribe(result => {
 
                 this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
@@ -1036,8 +1102,7 @@ export class DealerinfoComponent implements OnInit {
                     this.dealercontactinfoList.splice(this.dealercontactinfoList.findIndex(item => item.DealerContactInfoId === data.dealerContactinfoId), 1);
                     this.dealercontactinfoList.unshift(result.Data);
                     this.selecteddealerinfo = result.Data;
-                    this.rowData = result.Data;
-                    this.onRowUnselect(event);
+                    this.rowDataContact = result.Data;
                     this.dealerContactIndex();
                     this.isDealerContactinfoEdit = false;
                     this.submittedContact = false;
@@ -1048,7 +1113,7 @@ export class DealerinfoComponent implements OnInit {
             this.formDisplayContact = true;
         }
         else {
-            formData.append("dealer_info_id", this.rowData.DealerInfoId);
+            formData.append("dealer_info_id", this.rowDataContact.DealerInfoId);
             this.dealerinfoService.createDealerContactInfo(formData).subscribe(
                 result => {
                     this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
@@ -1056,8 +1121,7 @@ export class DealerinfoComponent implements OnInit {
                     if (result.MessageType == 1) {
                         this.dealercontactinfoList.unshift(result.Data);
                         this.selecteddealercontactinfo = result.Data;
-                        this.rowData = result.Data;
-                        this.onRowUnselect(event);
+                        this.rowDataContact = result.Data;
                         this.dealerContactIndex();
                         this.isDealerContactinfoEdit = false;
                         this.submittedContact = false;
@@ -1072,11 +1136,11 @@ export class DealerinfoComponent implements OnInit {
 
     loadDealerContactinfoToEdit() {
 
-        if (this.rowData == null) {
+        if (this.rowDataContact == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
 
-        let dealerContactinfoId = this.rowData.DealerContactInfoId;
+        let dealerContactinfoId = this.rowDataContact.DealerContactInfoId;
         this.dealerinfoService.getDealerContactInfoById(dealerContactinfoId).subscribe(data => {
             if (data != null) {
                 this.isDealerContactinfoEdit = true;
@@ -1140,10 +1204,10 @@ export class DealerinfoComponent implements OnInit {
 
     deleteDealerContactinfo() {
         this.showDialog();
-        if (this.rowData == null) {
+        if (this.rowDataContact == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
-        let dealerContactinfoId = this.rowData.DealerContactInfoId;
+        let dealerContactinfoId = this.rowDataContact.DealerContactInfoId;
         this.dealerinfoService.deleteDealerContactInfo(dealerContactinfoId).subscribe(data => {
             if (data.MessageType == 1) {
                 this.dealercontactinfoList.splice(this.dealercontactinfoList.findIndex(item => item.DealerContactInfoId === data.dealerContactinfoId), 1);
@@ -1151,6 +1215,25 @@ export class DealerinfoComponent implements OnInit {
             this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
         });
         this.display = false;
+    }
+
+    deleteContact(event: Event) {
+        if (this.rowDataContact == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+
+        this.confirmationService.confirm({
+            key: 'delete',
+            target: event.target,
+            message: 'Are you sure that you want to delete?',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                this.deleteDealerContactinfo();
+            },
+            reject: () => {
+
+            }
+        });
     }
 
     onSelectContactImage(event) {
@@ -1210,7 +1293,7 @@ export class DealerinfoComponent implements OnInit {
         for (const key of Object.keys(this.dealerlocationForm.value)) {
             const value = this.dealerlocationForm.value[key];
             if (key == "dealer_info_id") {
-                let dealerinfoId = this.rowData.DealerInfoId;
+                let dealerinfoId = this.rowDataLocation.DealerInfoId;
                 formData.append("dealer_info_id", dealerinfoId);
             }
             if (key == "trade_license_date") {
@@ -1224,8 +1307,8 @@ export class DealerinfoComponent implements OnInit {
 
         if (this.isDealerLocationinfoEdit) {
 
-            data.dealerLocationinfoId = this.rowData.DealerLocationInfoId;
-            formData.append("dealer_location_info_id", this.rowData.DealerLocationInfoId);
+            data.dealerLocationinfoId = this.rowDataLocation.DealerLocationInfoId;
+            formData.append("dealer_location_info_id", this.rowDataLocation.DealerLocationInfoId);
             this.dealerinfoService.updateDealerLocationInfo(formData).subscribe(result => {
 
                 this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
@@ -1234,7 +1317,7 @@ export class DealerinfoComponent implements OnInit {
                     this.dealerlocationinfoList.splice(this.dealerlocationinfoList.findIndex(item => item.DealerLocationInfoId === data.dealerLocationinfoId), 1);
                     this.dealerlocationinfoList.unshift(result.Data);
                     this.selecteddealerlocationinfo = result.Data;
-                    this.rowData = result.Data;
+                    this.rowDataLocation = result.Data;
                     this.dealerLocationIndex();
                     this.isDealerLocationinfoEdit = false;
                     this.submittedLocation = false;
@@ -1244,14 +1327,14 @@ export class DealerinfoComponent implements OnInit {
             this.formDisplayLocation = true;
         }
         else {
-            formData.append("dealer_info_id", this.rowData.DealerInfoId);
+            formData.append("dealer_info_id", this.rowDataLocation.DealerInfoId);
             this.dealerinfoService.createDealerLocationInfo(formData).subscribe(
                 result => {
                     this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
                     if (result.MessageType == 1) {
                         this.dealerlocationinfoList.unshift(result.Data);
                         this.selecteddealerlocationinfo = result.Data;
-                        this.rowData = result.Data;
+                        this.rowDataLocation = result.Data;
                         this.dealerLocationIndex();
                         this.isDealerLocationinfoEdit = false;
                         this.submittedLocation = false;
@@ -1267,11 +1350,11 @@ export class DealerinfoComponent implements OnInit {
     loadDealerLocationinfoToEdit() {
 
         debugger;
-        if (this.rowData == null) {
+        if (this.rowDataLocation == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
 
-        let dealerLocationinfoId = this.rowData.DealerLocationInfoId;
+        let dealerLocationinfoId = this.rowDataLocation.DealerLocationInfoId;
         this.dealerinfoService.getDealerLocationInfoById(dealerLocationinfoId).subscribe(data => {
             if (data != null) {
                 this.isDealerLocationinfoEdit = true;
@@ -1308,10 +1391,10 @@ export class DealerinfoComponent implements OnInit {
 
     deleteDealerLocationinfo() {
         this.showDialog();
-        if (this.rowData == null) {
+        if (this.rowDataLocation == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
-        let dealerLocationinfoId = this.rowData.DealerLocationInfoId;
+        let dealerLocationinfoId = this.rowDataLocation.DealerLocationInfoId;
         this.dealerinfoService.deleteDealerLocationInfo(dealerLocationinfoId).subscribe(data => {
             if (data.MessageType == 1) {
                 this.dealerlocationinfoList.splice(this.dealerlocationinfoList.findIndex(item => item.DealerLocationInfoId === data.dealerLocationinfoId), 1);
@@ -1319,6 +1402,25 @@ export class DealerinfoComponent implements OnInit {
             this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
         });
         this.display = false;
+    }
+
+    deleteLocation(event: Event) {
+        if (this.rowDataLocation == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+
+        this.confirmationService.confirm({
+            key: 'delete',
+            target: event.target,
+            message: 'Are you sure that you want to delete?',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                this.deleteDealerLocationinfo();
+            },
+            reject: () => {
+
+            }
+        });
     }
 
 
@@ -1339,7 +1441,7 @@ export class DealerinfoComponent implements OnInit {
         for (const key of Object.keys(this.dealerdocumentForm.value)) {
             const value = this.dealerdocumentForm.value[key];
             if (key == "dealer_info_id") {
-                let dealerinfoId = this.rowData.DealerInfoId;
+                let dealerinfoId = this.rowDataDocument.DealerInfoId;
                 formData.append("dealer_info_id", dealerinfoId);
             }
             if (key == "issue_date") {
@@ -1352,13 +1454,15 @@ export class DealerinfoComponent implements OnInit {
             }
             else {
                 formData.append(key, value);
+                formData.append("dealer_info_id", this.rowDataDocument.DealerInfoId);
+                formData.append("FileUpload", this.fileToUploadDocumentForm);
             }
         }
 
         if (this.isDealerDocumentinfoEdit) {
 
-            data.dealerDocumentinfoId = this.rowData.DealerDocumentInfoId;
-            formData.append("dealer_document_info_id", this.rowData.DealerDocumentInfoId);
+            data.dealerDocumentinfoId = this.rowDataDocument.DealerDocumentInfoId;
+            formData.append("dealer_document_info_id", this.rowDataDocument.DealerDocumentInfoId);
             this.dealerinfoService.updateDealerDocumentInfo(formData).subscribe(result => {
 
                 this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
@@ -1367,24 +1471,25 @@ export class DealerinfoComponent implements OnInit {
                     this.dealerdocumentinfoList.splice(this.dealerdocumentinfoList.findIndex(item => item.DealerDocumentInfoId === data.dealerDocumentinfoId), 1);
                     this.dealerdocumentinfoList.unshift(result.Data);
                     this.selecteddealerdocumentinfo = result.Data;
-                    this.rowData = result.Data;
+                    this.rowDataDocument = result.Data;
                     this.dealerDocumentIndex();
                     this.isDealerDocumentinfoEdit = false;
                     this.submittedDocument = false;
+                    this.dealerdocumentForm.reset();
                 }
             });
             this.gridDisplayDocument = false;
             this.formDisplayDocument = true;
         }
         else {
-            formData.append("dealer_info_id", this.rowData.DealerInfoId);
+            
             this.dealerinfoService.createDealerDocumentInfo(formData).subscribe(
                 result => {
                     this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
                     if (result.MessageType == 1) {
                         this.dealerdocumentinfoList.unshift(result.Data);
                         this.selecteddealerdocumentinfo = result.Data;
-                        this.rowData = result.Data;
+                        this.rowDataDocument = result.Data;
                         this.dealerDocumentIndex();
                         this.isDealerDocumentinfoEdit = false;
                         this.submittedDocument = false;
@@ -1400,11 +1505,11 @@ export class DealerinfoComponent implements OnInit {
     loadDealerDocumentinfoToEdit() {
 
         debugger;
-        if (this.rowData == null) {
+        if (this.rowDataDocument == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
 
-        let dealerDocumentinfoId = this.rowData.DealerDocumentInfoId;
+        let dealerDocumentinfoId = this.rowDataDocument.DealerDocumentInfoId;
         this.dealerinfoService.getDealerDocumentInfoById(dealerDocumentinfoId).subscribe(data => {
             if (data != null) {
                 this.isDealerDocumentinfoEdit = true;
@@ -1417,6 +1522,7 @@ export class DealerinfoComponent implements OnInit {
             this.dealerdocumentForm.controls['status'].setValue(data.Status);
             this.dealerdocumentForm.controls['remarks'].setValue(data.Remarks);
             this.dealerdocumentForm.controls['image_file'].setValue(data.ImageFile);
+            //this.photourllink = data.ImageFile;
 
         });
         this.gridDisplayDocument = true;
@@ -1424,18 +1530,61 @@ export class DealerinfoComponent implements OnInit {
     }
 
     deleteDealerDocumentinfo() {
-        this.showDialog();
-        if (this.rowData == null) {
+        this.showDialogDocument();
+        if (this.rowDataDocument == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
-        let dealerDocumentinfoId = this.rowData.DealerDocumentInfoId;
+        
+        this.rowSelected = true;
+        let dealerDocumentinfoId = this.rowDataDocument.DealerDocumentInfoId;
         this.dealerinfoService.deleteDealerDocumentInfo(dealerDocumentinfoId).subscribe(data => {
             if (data.MessageType == 1) {
                 this.dealerdocumentinfoList.splice(this.dealerdocumentinfoList.findIndex(item => item.DealerDocumentInfoId === data.dealerDocumentinfoId), 1);
             }
             this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
         });
-        this.display = false;
+        this.displayDocument = false;
+    }
+
+    deleteDocument(event: Event) {
+        if (this.rowDataDocument == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+        
+        this.confirmationService.confirm({
+            key: 'delete',
+            target: event.target,
+            message: 'Are you sure that you want to delete?',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                this.deleteDealerDocumentinfo();
+            },
+            reject: () => {
+
+            }
+        });
+    }
+
+    onSelectImage(event) {
+        if (event.target.files) {
+            var reader = new FileReader()
+            reader.readAsDataURL(event.target.files[0])
+            reader.onload = (event: any) => {
+                this.photourllink = event.target.result
+            }
+            alert(this.photourllink)
+            if (event.target.files.length > 0) {
+                const file = event.target.files[0];
+                this.dealerDocumentImageFile.nativeElement.innerText = file.name;
+                this.dealerdocumentForm.patchValue({
+                    FileUpload: file,
+                });
+            }
+        }
+    }
+
+    documnetFormFileInput(files: FileList) {
+        this.fileToUploadDocumentForm = files.item(0);
     }
 
     
@@ -1448,11 +1597,11 @@ export class DealerinfoComponent implements OnInit {
     }
 
     openNext() {
-        this.index = (this.index === 5) ? 0 : this.index + 1;
+        this.index = (this.index === 6) ? 0 : this.index + 1;
     }
 
     openPrev() {
-        this.index = (this.index === 0) ? 5 : this.index - 1;
+        this.index = (this.index === 0) ? 6 : this.index - 1;
     }
 
 
@@ -1495,7 +1644,7 @@ export class DealerinfoComponent implements OnInit {
 
     // Document Infomation Start
     dealerDocumentIndex() {
-        this.index = 5;
+        this.index = 6;
         this.indexLocation = 0;
     }
 

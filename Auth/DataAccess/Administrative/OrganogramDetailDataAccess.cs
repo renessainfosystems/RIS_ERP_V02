@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Auth.DataAccess.Administrative
 { 
-    public class OrganogramDataAccess
+    public class OrganogramDetailDataAccess
     {
         private readonly IDbConnection _dbConnection;
 
@@ -21,14 +21,14 @@ namespace Auth.DataAccess.Administrative
 
         protected readonly ApplicationDBContext _context;
 
-        public OrganogramDataAccess(ApplicationDBContext context, IDbConnection dbConnection)
+        public OrganogramDetailDataAccess(ApplicationDBContext context, IDbConnection dbConnection)
         {
             _dbConnection = dbConnection;
             _context = context;
         }
          
         //Parameter Binding
-        public DynamicParameters OrganogramParameterBinding(Organogram organogram, int operationType)
+        public DynamicParameters OrganogramDetailParameterBinding(OrganogramDetail organogram, int operationType)
         {
             var currentUserInfoId = _httpContextAccessor.HttpContext.Items["User_Info_Id"];
             var company_id = _httpContextAccessor.HttpContext.Items["company_id"];
@@ -39,43 +39,48 @@ namespace Auth.DataAccess.Administrative
 
             if (operationType == (int)GlobalEnumList.DBOperation.Create || operationType == (int)GlobalEnumList.DBOperation.Update)
             {
-                parameters.Add("@param_administrative_organogram_id", organogram.organogram_id, DbType.Int32);
-                parameters.Add("@param_administrative_organogram_code", organogram.organogram_code, DbType.String);
-                parameters.Add("@param_company_group_id", company_group_id ?? 0, DbType.Int32);
-                parameters.Add("@param_company_corporate_id", company_corporate_id ?? 0, DbType.Int32);
-                parameters.Add("@param_company_id", company_id ?? 0, DbType.Int32);
-                parameters.Add("@param_organogram_location_id", organogram.location_id, DbType.Int32);
-                parameters.Add("@param_organogram_department_id", organogram.department_id, DbType.Int32);
-                parameters.Add("@param_organogram_parrent_id", organogram.parent_id, DbType.Int32);
-                parameters.Add("@param_organogram_sorting_priority", organogram.sorting_priority, DbType.Int32);
-                parameters.Add("@param_organogram_is_active", organogram.is_active, DbType.Byte);
-                parameters.Add("@param_organogram_approve_user_id", organogram.approve_user_id, DbType.Byte);  
+                parameters.Add("@param_organogram_detail_id", organogram.organogram_detail_id, DbType.Int32);
+                parameters.Add("@param_organogram_id", organogram.organogram_id, DbType.Int32);
+                parameters.Add("@param_code", organogram.code, DbType.String);
+                parameters.Add("@param_position_id", organogram.position_id, DbType.Int32);
+                parameters.Add("@param_min_no_of_manpower", organogram.min_no_of_manpower ?? 0, DbType.Int32);
+                parameters.Add("@param_max_no_of_manpower", organogram.max_no_of_manpower ?? 0, DbType.Int32);
+                parameters.Add("@param_min_budget", organogram.min_budget ?? 0, DbType.Decimal);
+                parameters.Add("@param_max_budget", organogram.max_budget ?? 0, DbType.Decimal);
+                parameters.Add("@param_min_year_of_experience", organogram.min_year_of_experience ?? 0, DbType.Int32);
+                parameters.Add("@param_max_year_of_experience", organogram.max_year_of_experience ?? 0, DbType.Int32);               
+                parameters.Add("@param_is_open", organogram.is_open, DbType.Byte);
+                parameters.Add("@param_increment_percentage_yearly", organogram.increment_percentage_yearly, DbType.Decimal);
+                parameters.Add("@param_is_gross", organogram.is_gross, DbType.Byte);                 
+                parameters.Add("@param_salary_head_id", organogram.salary_head_id ?? 0, DbType.Int32);
+                parameters.Add("@param_is_active", organogram.is_active, DbType.Byte);
+                parameters.Add("@param_days_of_confirmation", organogram.days_of_confirmation, DbType.Int32);              
                 parameters.Add("@param_created_user_id", currentUserInfoId ?? 0, DbType.Int32);
                 parameters.Add("@param_DBOperation", operationType == (int)GlobalEnumList.DBOperation.Create ? GlobalEnumList.DBOperation.Create : GlobalEnumList.DBOperation.Update);
             }
             else if (operationType == (int)GlobalEnumList.DBOperation.Delete)
             {
-                parameters.Add("@param_administrative_organogram_id", organogram.organogram_id, DbType.Int32);
+                parameters.Add("@param_organogram_detail_id", organogram.organogram_detail_id, DbType.Int32);
                 parameters.Add("@param_DBOperation", GlobalEnumList.DBOperation.Delete);
             }
             else if (operationType == (int)GlobalEnumList.DBOperation.Approve)
             {
-                parameters.Add("@param_administrative_organogram_id", organogram.organogram_id, DbType.Int32);
+                parameters.Add("@param_organogram_detail_id", organogram.organogram_detail_id, DbType.Int32);
                 parameters.Add("@param_created_user_id", currentUserInfoId ?? 0, DbType.Int32);
                 parameters.Add("@param_DBOperation", GlobalEnumList.DBOperation.Approve);
             }
             return parameters;
         }
-        public async Task<dynamic> IUD_Organogram(Organogram Organogram, int dbOperation)
+        public async Task<dynamic> IUD_OrganogramDetail(OrganogramDetail Organogram, int dbOperation)
         {
             var message = new CommonMessage();
-            var parameters = OrganogramParameterBinding(Organogram, dbOperation);
+            var parameters = OrganogramDetailParameterBinding(Organogram, dbOperation);
 
             if (_dbConnection.State == ConnectionState.Closed)
                 _dbConnection.Open();
             try
             {
-                dynamic data = await _dbConnection.QueryAsync("[Administrative].[SP_Organogram_IUD]", parameters, commandType: CommandType.StoredProcedure);
+                dynamic data = await _dbConnection.QueryAsync("[Administrative].[SP_Organogram_Detail_IUD]", parameters, commandType: CommandType.StoredProcedure);
 
                 if (dbOperation == (int)GlobalEnumList.DBOperation.Delete)
                 {
@@ -83,7 +88,7 @@ namespace Auth.DataAccess.Administrative
                 }
                 if (dbOperation == (int)GlobalEnumList.DBOperation.Approve)
                 {
-                    return message = CommonMessage.SetSuccessMessage("Organogram Approved");
+                    return message = CommonMessage.SetSuccessMessage("Organogram Detail Approved");
                 }
                 if (data.Count > 0)
                 {
@@ -106,7 +111,7 @@ namespace Auth.DataAccess.Administrative
             return (message);
         }
 
-        public async Task<dynamic> OrganogramActivity(long Organogram_id)
+        public async Task<dynamic> OrganogramDetailActivity(long Organogram_id)
         {
             var message = new CommonMessage();
             var currentUserInfoId = _httpContextAccessor.HttpContext.Items["User_Info_Id"];
@@ -145,7 +150,7 @@ namespace Auth.DataAccess.Administrative
 
             return message;
         }
-        public async Task<dynamic> GetAllOrganogram()
+        public async Task<dynamic> GetAllOrganogramDetail(int organogramid)
         {
             var message = new CommonMessage();
             var company_group_id = _httpContextAccessor.HttpContext.Items["company_group_id"];
@@ -155,15 +160,21 @@ namespace Auth.DataAccess.Administrative
                 _dbConnection.Open();
             try
             {               
-                string sql = @"select c.company_name,location_code,location_name,(select d.department_name from Administrative.Department d where d.department_id=og.department_id)as department,og.department_id,og.location_id,c.company_id,og.organogram_id from Administrative.Location l left join Administrative.Company c on l.company_id=c.company_id
-left join Administrative.Organogram og on l.location_id=og.location_id where l.company_group_id=@company_group_id";
+                string sql = @"select od.code,p.position_name,convert(varchar,od.min_no_of_manpower)+' - ' +convert(varchar,od.max_no_of_manpower) manpower,
+convert(varchar,od.min_budget)+' - ' +convert(varchar,od.max_budget) budget,
+convert(varchar,od.increment_percentage_yearly)+' % of '+ case when od.is_gross=1 then ' Gross' else 'need Sal head' end as  Increment,
+case when od.is_open=1 then 'Open' else 'Deferred' end as Position,case when od.is_active=1 then 'Active' else 'Inactive' end Activity,
+convert(varchar,od.min_year_of_experience)+' - ' +convert(varchar,od.max_year_of_experience) Experience,od.organogram_id,od.position_id,od.organogram_detail_id
+from Administrative.Organogram_Detail od 
+left join Administrative.Position p on od.position_id=p.position_id 
+where od.organogram_id=@organogramid order by od.organogram_detail_id";
                 DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@company_group_id", company_group_id);
+                parameters.Add("@organogramid", organogramid);
                 dynamic data = await _dbConnection.QueryAsync<dynamic>(sql, parameters);
                 if (data != null)
                 {
                     List<dynamic> dataList = data;
-                    result = (from dr in dataList select OrganogramViewModel.ConvertToModel(dr)).ToList();                    
+                    result = (from dr in dataList select OrganogramDetailViewModel.ConvertToModel(dr)).ToList();                    
                 }
             }
             catch (Exception ex)
@@ -177,7 +188,7 @@ left join Administrative.Organogram og on l.location_id=og.location_id where l.c
             return (result);
         }
 
-        public async Task<dynamic> GetOrganogramById(long Organogram_id)
+        public async Task<dynamic> GetOrganogramDetailById(int Organogram_Detail_id)
         {
             var result = (dynamic)null;
             if (_dbConnection.State == ConnectionState.Closed)
@@ -185,18 +196,24 @@ left join Administrative.Organogram og on l.location_id=og.location_id where l.c
 
             try
             {
-                string sql = @"select c.company_name,location_code,location_name,(select d.department_name from Administrative.Department d where d.department_id=og.department_id)as department,og.department_id,og.location_id,c.company_id,og.organogram_id from Administrative.Location l left join Administrative.Company c on l.company_id=c.company_id
-left join Administrative.Organogram og on l.location_id=og.location_id  WHERE og.organogram_id=@Organogram_id";
+                string sql = @"select od.code,p.position_name,convert(varchar,od.min_no_of_manpower)+' - ' +convert(varchar,od.max_no_of_manpower) manpower,
+convert(varchar,od.min_budget)+' - ' +convert(varchar,od.max_budget) budget,
+convert(varchar,od.increment_percentage_yearly)+' % of '+ case when od.is_gross=1 then ' Gross' else 'need Sal head' end as  Increment,
+case when od.is_open=1 then 'Open' else 'Deferred' end as Position,case when od.is_active=1 then 'Active' else 'Inactive' end Activity,
+convert(varchar,od.min_year_of_experience)+' - ' +convert(varchar,od.max_year_of_experience) Experience,od.organogram_id,od.position_id,od.organogram_detail_id
+from Administrative.Organogram_Detail od 
+left join Administrative.Position p on od.position_id=p.position_id 
+where od.organogram_detail_id=@Organogram_Detail_id order by od.organogram_detail_id";
               
                 DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@Organogram_id", Organogram_id);
+                parameters.Add("@Organogram_Detail_id", Organogram_Detail_id);
 
                 // result = await _dbConnection.QueryAsync<dynamic>(sql, parameters);
                 dynamic data = await _dbConnection.QuerySingleOrDefaultAsync<dynamic>(sql, parameters);
                 if (data != null)
                 {
 
-                    result = OrganogramViewModel.ConvertToModel(data);
+                    result = OrganogramDetailViewModel.ConvertToModel(data);
                 }
             }
             catch (Exception ex)
@@ -210,7 +227,7 @@ left join Administrative.Organogram og on l.location_id=og.location_id  WHERE og
 
             return result;
         }
-        public async Task<dynamic> GetAllActiveOrganogram()
+        public async Task<dynamic> GetAllActiveOrganogramDetail(int Organogram_id)
         {
             var message = new CommonMessage();
 
@@ -218,21 +235,27 @@ left join Administrative.Organogram og on l.location_id=og.location_id  WHERE og
 
             if (_dbConnection.State == ConnectionState.Closed)
                 _dbConnection.Open();
-            var company_group_id = _httpContextAccessor.HttpContext.Items["company_group_id"];
+            //var company_group_id = _httpContextAccessor.HttpContext.Items["company_group_id"];
 
             try
             {
-                var sql = @"select c.company_name,location_code,location_name,(select d.department_name from Administrative.Department d where d.department_id=og.department_id)as department,og.department_id,og.location_id,c.company_id,og.organogram_id from Administrative.Location l left join Administrative.Company c on l.company_id=c.company_id
-left join Administrative.Organogram og on l.location_id = og.location_id  WHERE l.company_group_id=@company_group_id and og.is_active =1 order by og.organogram_id";
+                var sql = @"select od.code,p.position_name,convert(varchar,od.min_no_of_manpower)+' - ' +convert(varchar,od.max_no_of_manpower) manpower,
+convert(varchar,od.min_budget)+' - ' +convert(varchar,od.max_budget) budget,
+convert(varchar,od.increment_percentage_yearly)+' % of '+ case when od.is_gross=1 then ' Gross' else 'need Sal head' end as  Increment,
+case when od.is_open=1 then 'Open' else 'Deferred' end as Position,case when od.is_active=1 then 'Active' else 'Inactive' end Activity,
+convert(varchar,od.min_year_of_experience)+' - ' +convert(varchar,od.max_year_of_experience) Experience,od.organogram_id,od.position_id,od.organogram_detail_id
+from Administrative.Organogram_Detail od 
+left join Administrative.Position p on od.position_id=p.position_id 
+where od.organogram_id=@organogramid and od.is_active=1 order by od.organogram_detail_id";
 
                 DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@company_group_id", company_group_id);
+                parameters.Add("@organogramid", Organogram_id);
 
                 dynamic data = await _dbConnection.QueryAsync<dynamic>(sql, parameters);
                 if (data != null)
                 {
                     List<dynamic> dataList = data;
-                    result = (from dr in dataList select OrganogramViewModel.ConvertToModel(dr)).ToList();
+                    result = (from dr in dataList select OrganogramDetailViewModel.ConvertToModel(dr)).ToList();
 
                     //  message = CommonMessage.SetSuccessMessage(CommonSaveMessage,result);
 

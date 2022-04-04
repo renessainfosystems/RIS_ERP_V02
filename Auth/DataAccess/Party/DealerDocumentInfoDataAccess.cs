@@ -50,7 +50,7 @@ namespace Auth.DataAccess.Party
                 parameters.Add("@param_is_verified", true, DbType.Boolean);
                 parameters.Add("@param_is_complete", true, DbType.Boolean);
                 parameters.Add("@param_status", dealerDocumentInfo.status, DbType.String);
-                parameters.Add("@remarks", dealerDocumentInfo.remarks, DbType.String);
+                parameters.Add("@param_remarks", dealerDocumentInfo.remarks, DbType.String);
                 parameters.Add("@param_created_datetime", DateTime.Now, DbType.DateTime);
                 parameters.Add("@param_created_user_info_id", currentUserInfoId ?? 0, DbType.Int64);
                 parameters.Add("@param_DBOperation", operationType == (int)GlobalEnumList.DBOperation.Create ? GlobalEnumList.DBOperation.Create : GlobalEnumList.DBOperation.Update);
@@ -179,7 +179,12 @@ namespace Auth.DataAccess.Party
                 _dbConnection.Open();
             try
             {
-                var sql = @"SELECT * FROM [Party].[Dealer_Document_Info] DCI WHERE DCI.dealer_info_id =@dealer_info_id";
+                var sql = @"SELECT  DT.document_type_id , DT.document_type_name ,DCI.dealer_document_info_id ,DCI.dealer_info_id ,
+                            DCI.document_number ,DCI.expiry_date ,DCI.issue_date ,DCI.image_file 
+                            FROM [Party].[Dealer_Document_Info] AS DCI
+                            LEFT JOIN [Administrative].Document_Type AS DT
+                            ON DT.document_type_id=DCI.document_type_id
+                            WHERE DCI.dealer_info_id =@dealer_info_id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@dealer_info_id", dealer_info_id);
                 dynamic data = await _dbConnection.QueryAsync<dynamic>(sql, parameters);

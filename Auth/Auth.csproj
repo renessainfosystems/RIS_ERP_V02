@@ -53,7 +53,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="UploadedResource\" />
+    <Folder Include="UploadedResource\DealerImage\" />
   </ItemGroup>
 
 

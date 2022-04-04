@@ -590,19 +590,12 @@
                         <div [hidden]="gridDisplayContact">
                             <button pButton pRipple type="button" (click)="showBasicDialogContactNew()" label="New" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
                             <button pButton pRipple type="button" (click)="loadDealerContactinfoToEdit()" label="Edit" icon="pi pi-pencil" class="risBtn risEdit mr-2 mb-2"></button>
-                            <button pButton pRipple type="button" (click)="showDialog()" label="Delete" icon="pi pi-trash" class="risBtn risDelete mr-2 mb-2"></button>
+                            <button pButton pRipple type="button" (click)="deleteContact($event)" label="Delete" icon="pi pi-trash" class="risBtn risDelete mr-2 mb-2"></button>
                             <button pButton pRipple type="button" (click)="toggleFormClose()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
-
-                            <p-dialog header="Delete Record" [(visible)]="display" [style]="{width: '35vw'}">
-                                <p>Do you want to delete this record?</p>
-                                <ng-template pTemplate="footer">
-                                    <button class="pi pi-times risBtn risClose" (click)="display=false"> No</button>
-                                    <button class="pi pi-check risBtn risSave" (click)="deleteDealerContactinfo()"> Yes</button>
-                                </ng-template>
-                            </p-dialog>
+                            <p-confirmPopup key="delete"></p-confirmPopup>
 
                             <p-table [value]="dealercontactinfoList" styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm" [paginator]="true" [rows]="10" selectionMode="single" [showCurrentPageReport]="true" responsiveLayout="scroll"
-                                     [(selection)]="selecteddealercontactinfo" dataKey="DealerContactInfoId" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
+                                     [(selection)]="selecteddealercontactinfo" dataKey="DealerContactInfoId" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelectContact($event)" (onRowUnselect)="onRowUnselectContact($event)">
                                 <ng-template pTemplate="header">
                                     <tr>
                                         <!--<th pSortableColumn="PersonalPhone">Id</th>-->
@@ -622,7 +615,7 @@
                                     </tr>
                                 </ng-template>
 
-                                <ng-template pTemplate="body" let-dealercontactinfo let-rowData let-columns="columns">
+                                <ng-template pTemplate="body" let-dealercontactinfo let-rowDataContact let-columns="columns">
 
                                     <tr [pSelectableRow]="dealercontactinfo">
                                         <td hidden>{{dealercontactinfo.DealerInfoId}}</td>
@@ -801,19 +794,12 @@
                         <div [hidden]="gridDisplayLocation">
                             <button pButton pRipple type="button" (click)="showBasicDialogLocationNew()" label="New" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
                             <button pButton pRipple type="button" (click)="loadDealerLocationinfoToEdit()" label="Edit" icon="pi pi-pencil" class="risBtn risEdit mr-2 mb-2"></button>
-                            <button pButton pRipple type="button" (click)="showDialog()" label="Delete" icon="pi pi-trash" class="risBtn risDelete mr-2 mb-2"></button>
+                            <button pButton pRipple type="button" (click)="deleteLocation($event)" label="Delete" icon="pi pi-trash" class="risBtn risDelete mr-2 mb-2"></button>
                             <button pButton pRipple type="button" (click)="toggleFormClose()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
-
-                            <p-dialog header="Delete Record" [(visible)]="display" [style]="{width: '35vw'}">
-                                <p>Do you want to delete this record?</p>
-                                <ng-template pTemplate="footer">
-                                    <button class="pi pi-times risBtn risClose" (click)="display=false"> No</button>
-                                    <button class="pi pi-check risBtn risSave" (click)="deleteDealerLocationinfo()"> Yes</button>
-                                </ng-template>
-                            </p-dialog>
+                            <p-confirmPopup key="delete"></p-confirmPopup>
 
                             <p-table [value]="dealerlocationinfoList" styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm" [paginator]="true" [rows]="10" selectionMode="single" [showCurrentPageReport]="true" responsiveLayout="scroll"
-                                     [(selection)]="selecteddealerlocationinfo" dataKey="DealerLocationInfoId" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
+                                     [(selection)]="selecteddealerlocationinfo" dataKey="DealerLocationInfoId" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelectLocation($event)" (onRowUnselect)="onRowUnselectLocation($event)">
                                 <ng-template pTemplate="header">
                                     <tr>
                                         <!--<th pSortableColumn="PersonalPhone">Id</th>-->
@@ -832,7 +818,7 @@
                                     </tr>
                                 </ng-template>
 
-                                <ng-template pTemplate="body" let-dealerlocationinfo let-rowData let-columns="columns">
+                                <ng-template pTemplate="body" let-dealerlocationinfo let-rowDataLocation let-columns="columns">
 
                                     <tr [pSelectableRow]="dealerlocationinfo">
                                         <td hidden>{{dealerlocationinfo.DealerInfoId}}</td>
@@ -849,62 +835,70 @@
                         </div>
                     </p-tabPanel>
                     <p-tabPanel header="Document Info">
-                       
-                            <form action="" [formGroup]="dealerdocumentForm">
-                                <div class="col-12">
-                                    <div class="p-fluid p-formgrid grid">
-                                        <div class="field col-12 md:col-3">
-                                            <label pTooltip="Document Type" tooltipPosition="top">Document Type</label>                                            
-                                            <p-dropdown [options]="allDocument" formControlName="document_type_id"
-                                                        [ngClass]="{ 'is-invalid': submittedDocument && d.document_type_id.errors }" placeholder="---Select---"
-                                                        optionLabel="document_type_name" [showClear]="true" [filter]="true" filterBy="document_type_name"></p-dropdown>
 
-                                            <div *ngIf="submittedDocument && d.document_type_id.errors" class="invalid-feedback">
-                                                <small *ngIf="d.document_type_id.errors.required" class="p-error">Document Type is required</small>
-                                            </div>
+                        <form action="" [formGroup]="dealerdocumentForm">
+                            <div class="col-12">
+                                <div class="p-fluid p-formgrid grid">
+                                    <div class="field col-12 md:col-3">
+                                        <label pTooltip="Document Type" tooltipPosition="top">Document Type</label>
+                                        <p-dropdown [options]="allDocument" formControlName="document_type_id" [ngClass]="{ 'is-invalid': submittedDocument && d.document_type_id.errors }" placeholder="---Select---"
+                                                    optionLabel="document_type_name" optionValue="document_type_id" [showClear]="true" [filter]="true" filterBy="document_type_name"></p-dropdown>
 
+                                        <div *ngIf="submittedDocument && d.document_type_id.errors" class="invalid-feedback">
+                                            <small *ngIf="d.document_type_id.errors.required" class="p-error">Document Type is required</small>
                                         </div>
-                                        <div class="field col-12 md:col-3">
-                                            <label pTooltip="Document Number" tooltipPosition="top">Document Number</label>
-                                            <input type="text" formControlName="document_number" [ngClass]="{ 'is-invalid': submittedDocument && d.document_number.errors }" placeholder="" pInputText />
-                                            <div *ngIf="submittedDocument && d.document_number.errors" class="invalid-feedback">
-                                                <small *ngIf="d.document_number.errors.required" class="p-error">Document Number is required</small>
-                                            </div>
-                                        </div>
-                                        <div class="field col-12 md:col-3">
-                                            <label pTooltip="Issue Date" tooltipPosition="top">Issue Date</label>
-                                            <p-calendar formControlName="issue_date" [ngClass]="{ 'is-invalid': submittedDocument && d.issue_date.errors }" placeholder="" [showIcon]="true" [showButtonBar]="true"></p-calendar>
-                                            <div *ngIf="submittedDocument && d.issue_date.errors" class="invalid-feedback">
-                                                <small *ngIf="d.issue_date.errors.required" class="p-error">Issue date is required</small>
-                                            </div>
-                                        </div>
-                                        <div class="field col-12 md:col-3">
-                                            <label pTooltip="Expiry Date" tooltipPosition="top">Expiry Date</label>
-                                            <p-calendar formControlName="expiry_date" [ngClass]="{ 'is-invalid': submittedDocument && d.expiry_date.errors }" placeholder="" [showIcon]="true" [showButtonBar]="true"></p-calendar>
-                                            <div *ngIf="submittedDocument && d.expiry_date.errors" class="invalid-feedback">
-                                                <small *ngIf="d.expiry_date.errors.required" class="p-error">Expiry date is required</small>
-                                            </div>
-                                        </div>
-                                        <div class="field col-12 md:col-3">
-                                            <input type="file" class="from-control" formControlName="image_file" [ngClass]="{ 'is-invalid': submittedDocument && d.image_file.errors }" placeholder="" pInputText required />
-                                            <div *ngIf="submittedDocument && d.image_file.errors" class="invalid-feedback">
-                                                <small *ngIf="d.image_file.errors.required" class="p-error">Uploaded file is required</small>
-                                            </div>
-                                        </div>
-                                        <div class="field col-12 md:col-1">
-                                            <button pButton pRipple type="button" (click)="SaveDealerDocumentInfo()" label="Add" class="risAdd risSave mr-2 mb-2" icon="pi pi-plus"></button>
+
+                                    </div>
+                                    <div class="field col-12 md:col-3">
+                                        <label pTooltip="Document Number" tooltipPosition="top">Document Number</label>
+                                        <input type="text" formControlName="document_number" [ngClass]="{ 'is-invalid': submittedDocument && d.document_number.errors }" placeholder="" pInputText />
+                                        <div *ngIf="submittedDocument && d.document_number.errors" class="invalid-feedback">
+                                            <small *ngIf="d.document_number.errors.required" class="p-error">Document Number is required</small>
                                         </div>
                                     </div>
+                                    <div class="field col-12 md:col-3">
+                                        <label pTooltip="Issue Date" tooltipPosition="top">Issue Date</label>
+                                        <p-calendar formControlName="issue_date" [ngClass]="{ 'is-invalid': submittedDocument && d.issue_date.errors }" placeholder="" [showIcon]="true" [showButtonBar]="true"></p-calendar>
+                                        <div *ngIf="submittedDocument && d.issue_date.errors" class="invalid-feedback">
+                                            <small *ngIf="d.issue_date.errors.required" class="p-error">Issue date is required</small>
+                                        </div>
+                                    </div>
+                                    <div class="field col-12 md:col-3">
+                                        <label pTooltip="Expiry Date" tooltipPosition="top">Expiry Date</label>
+                                        <p-calendar formControlName="expiry_date" [ngClass]="{ 'is-invalid': submittedDocument && d.expiry_date.errors }" placeholder="" [showIcon]="true" [showButtonBar]="true"></p-calendar>
+                                        <div *ngIf="submittedDocument && d.expiry_date.errors" class="invalid-feedback">
+                                            <small *ngIf="d.expiry_date.errors.required" class="p-error">Expiry date is required</small>
+                                        </div>
+                                    </div>
+                                    <div class="field col-12 md:col-3">
+                                        <input type="file" class="from-control" formControlName="FileUpload" (change)="documnetFormFileInput($event.target.files)"
+                                               [ngClass]="{ 'is-invalid': submittedDocument && d.FileUpload.errors }"
+                                               placeholder="" pInputText required />
+                                        <div *ngIf="submittedDocument && d.FileUpload.errors" class="invalid-feedback">
+                                            <small *ngIf="d.FileUpload.errors.required" class="p-error">Attach File is required</small>
+                                        </div>
+                                    </div>
+                                    <div class="field col-12 md:col-1">
+                                        <button pButton pRipple type="button" (click)="SaveDealerDocumentInfo()" label="Add" class=" risBtn risAdd mr-2 mb-2" icon="pi pi-plus"></button>
+                                    </div>
+                                    <div class="field col-12 md:col-1">
+                                        <button pButton pRipple type="button" (click)="loadDealerDocumentinfoToEdit()" label="Edit" class="risBtn risEdit mr-2 mb-2" icon="pi pi-pencil"></button>
+                                    </div>
+                                    <div class="field col-12 md:col-1">
+                                        <button pButton pRipple type="button" (click)="deleteDocument($event)" label="Delete" class="risBtn risDelete mr-2 mb-2" icon="pi pi-trash"></button>
+                                        <p-confirmPopup key="delete"></p-confirmPopup>
+                                    </div>
                                 </div>
-                            </form>
-                            <div class="flex justify-content-end pr-2">
-                                <button pButton pRipple type="button" (click)="openPrev()" label="Previous" class="risBtn  mr-2 mb-2" icon="pi pi-step-backward"></button>
-                                <button pButton pRipple type="button" (click)="toggleFormClose()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
                             </div>
-                       
+                        </form>
+                        <div class="flex justify-content-end pr-2">
+                            <button pButton pRipple type="button" (click)="openPrev()" label="Previous" class="risBtn  mr-2 mb-2" icon="pi pi-step-backward"></button>
+                            <button pButton pRipple type="button" (click)="toggleFormClose()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
+                        </div>
+
                         <div [hidden]="gridDisplayLocation">
-                            <p-table [value]="dealerdocumentinfoList" styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm"  selectionMode="single"
-                                     [(selection)]="selecteddealerdocumentinfo" dataKey="DealerDocumentInfoId"  (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
+                            <p-table [value]="dealerdocumentinfoList" styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm" selectionMode="single"
+                                     [(selection)]="selecteddealerdocumentinfo" dataKey="DealerDocumentInfoId" (onRowSelect)="onRowSelectDocument($event)" (onRowUnselect)="onRowUnselectDocument($event)">
                                 <ng-template pTemplate="header">
                                     <tr>
                                         <th>Document Type</th>
@@ -915,41 +909,35 @@
                                     </tr>
                                 </ng-template>
 
-                                <ng-template pTemplate="body" let-dealerdocumentinfo let-rowData let-columns="columns">
+                                <ng-template pTemplate="body" let-dealerdocumentinfo let-rowDataDocument let-columns="columns">
 
                                     <tr [pSelectableRow]="dealerdocumentinfo">
                                         <td hidden>{{dealerdocumentinfo.DealerInfoId}}</td>
-                                        <td>{{dealerdocumentinfo.DocumentTypeId}}</td>
+                                        <td hidden>{{dealerdocumentinfo.DealerDocumentInfoId}}</td>
+                                        <td>{{dealerdocumentinfo.DocumentTypeName}}</td>
                                         <td>{{dealerdocumentinfo.DocumentNumber}}</td>
-                                        <td>{{dealerdocumentinfo.IssueDate}}</td>
-                                        <td>{{dealerdocumentinfo.ExpiryDate}}</td>
+                                        <td>{{dealerdocumentinfo.IssueDate | date: 'dd/MMM/yyyy'}}</td>
+                                        <td>{{dealerdocumentinfo.ExpiryDate | date: 'dd/MMM/yyyy'}}</td>
                                         <td>{{dealerdocumentinfo.ImageFile}}</td>
                                     </tr>
                                 </ng-template>
-
                             </p-table>
                             <!--end grid display -------------->
                         </div>
                     </p-tabPanel>
+                    
                 </p-tabView>
             </div>
             <!--end form display------------->
             <div [hidden]="gridDisplay">
                 <button pButton pRipple type="button" (click)="showBasicDialog()" label="New" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
                 <button pButton pRipple type="button" (click)="loadDealerinfoToEdit()" label="Edit" icon="pi pi-pencil" class="risBtn risEdit mr-2 mb-2"></button>
-                <button pButton pRipple type="button" (click)="showDialog()" label="Delete" icon="pi pi-trash" class="risBtn risDelete mr-2 mb-2"></button>
+                <button pButton pRipple type="button" (click)="deleteDealer($event)" label="Delete" icon="pi pi-trash" class="risBtn risDelete mr-2 mb-2"></button>
                 <button pButton pRipple type="button" (click)="loadDealerinfoContactGrid()" label="Contact Info" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
                 <button pButton pRipple type="button" (click)="loadDealerinfoLocationGrid()" label="Location Info" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
                 <button pButton pRipple type="button" (click)="loadDealerinfoDocumentGrid()" label="Document Info" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
-
-                <p-dialog header="Delete Record" [(visible)]="display" [style]="{width: '35vw'}">
-                    <p>Do you want to delete this record?</p>
-                    <ng-template pTemplate="footer">
-                        <button class="pi pi-times risBtn risClose" (click)="display=false"> No</button>
-                        <button class="pi pi-check risBtn risSave" (click)="deleteDealerinfo()"> Yes</button>
-                    </ng-template>
-                </p-dialog>
-
+                <p-confirmPopup key="delete"></p-confirmPopup>
+                
                 <p-table [value]="dealerinfoList" styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm" [paginator]="true" [rows]="10" selectionMode="single" [showCurrentPageReport]="true" responsiveLayout="scroll"
                          [(selection)]="selecteddealerinfo" dataKey="DealerInfoId" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
                     <ng-template pTemplate="header">
