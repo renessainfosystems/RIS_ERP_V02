@@ -832,7 +832,7 @@ namespace DataAccess.Procurement
 
             try
             {
-                var sql = "select IST.industry_sector_id, IST.industry_sector_name, ISS.industry_sub_sector_id,ISS.industry_sub_sector_name " +
+                var sql = "select IST.industry_sector_id, IST.industry_sector_name, ISS.industry_sub_sector_id,ISS.industry_sub_sector_name,sss.supplier_id " +
                              " from[Procurement].[Supplier_Industry_Sub_Sector] SSS " +
                              " left join[Administrative].[Industry_Sub_Sector] ISS on SSS.industry_sub_sector_id = ISS.industry_sub_sector_id " +
                              " left join[Administrative].[Industry_Sector] IST on ISS.industry_sector_id = IST.industry_sector_id " +
