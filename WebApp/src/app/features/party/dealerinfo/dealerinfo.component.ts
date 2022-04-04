@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { NavigationEnd } from '@angular/router';
+import { ConfirmationService } from 'primeng/api';
 import { NotificationService } from '../../../service/CommonMessage/notification.service';
 import DealerInfo from './dealerinfo.model';
 import { DealerInfoService } from './dealerinfo.service';
@@ -296,7 +297,7 @@ export class DealerinfoComponent implements OnInit {
         }
     }
 
-    constructor(private formbulider: FormBuilder, private notifyService: NotificationService, private dealerinfoService: DealerInfoService) {
+    constructor(private formbulider: FormBuilder, private confirmationService: ConfirmationService, private notifyService: NotificationService, private dealerinfoService: DealerInfoService) {
 
     }
 
@@ -637,6 +638,25 @@ export class DealerinfoComponent implements OnInit {
             this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
         });
         this.display = false;
+    }
+
+    deleteDealer(event: Event) {
+        if (this.rowData == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+
+        this.confirmationService.confirm({
+            key: 'delete',
+            target: event.target,
+            message: 'Are you sure that you want to delete?',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                this.deleteDealerinfo();
+            },
+            reject: () => {
+
+            }
+        });
     }
 
     get f(): { [key: string]: AbstractControl } {
@@ -1176,6 +1196,25 @@ export class DealerinfoComponent implements OnInit {
         this.display = false;
     }
 
+    deleteContact(event: Event) {
+        if (this.rowData == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+
+        this.confirmationService.confirm({
+            key: 'delete',
+            target: event.target,
+            message: 'Are you sure that you want to delete?',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                this.deleteDealerContactinfo();
+            },
+            reject: () => {
+
+            }
+        });
+    }
+
     onSelectContactImage(event) {
 
         if (event.target.files) {
@@ -1344,6 +1383,25 @@ export class DealerinfoComponent implements OnInit {
         this.display = false;
     }
 
+    deleteLocation(event: Event) {
+        if (this.rowData == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+
+        this.confirmationService.confirm({
+            key: 'delete',
+            target: event.target,
+            message: 'Are you sure that you want to delete?',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                this.deleteDealerLocationinfo();
+            },
+            reject: () => {
+
+            }
+        });
+    }
+
 
     // Start Dealer Document Info
 
@@ -1445,6 +1503,7 @@ export class DealerinfoComponent implements OnInit {
             this.dealerdocumentForm.controls['status'].setValue(data.Status);
             this.dealerdocumentForm.controls['remarks'].setValue(data.Remarks);
             this.dealerdocumentForm.controls['image_file'].setValue(data.ImageFile);
+            //this.photourllink = data.ImageFile;
 
         });
         this.gridDisplayDocument = true;
@@ -1466,6 +1525,25 @@ export class DealerinfoComponent implements OnInit {
             this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
         });
         this.displayDocument = false;
+    }
+
+    deleteDocument(event: Event) {
+        if (this.rowDataDocument == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+        
+        this.confirmationService.confirm({
+            key: 'delete',
+            target: event.target,
+            message: 'Are you sure that you want to delete?',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                this.deleteDealerDocumentinfo();
+            },
+            reject: () => {
+
+            }
+        });
     }
 
     onSelectImage(event) {

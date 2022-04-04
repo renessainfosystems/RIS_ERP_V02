@@ -590,16 +590,9 @@
                         <div [hidden]="gridDisplayContact">
                             <button pButton pRipple type="button" (click)="showBasicDialogContactNew()" label="New" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
                             <button pButton pRipple type="button" (click)="loadDealerContactinfoToEdit()" label="Edit" icon="pi pi-pencil" class="risBtn risEdit mr-2 mb-2"></button>
-                            <button pButton pRipple type="button" (click)="showDialog()" label="Delete" icon="pi pi-trash" class="risBtn risDelete mr-2 mb-2"></button>
+                            <button pButton pRipple type="button" (click)="deleteContact($event)" label="Delete" icon="pi pi-trash" class="risBtn risDelete mr-2 mb-2"></button>
                             <button pButton pRipple type="button" (click)="toggleFormClose()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
-
-                            <p-dialog header="Delete Record" [(visible)]="display" [style]="{width: '35vw'}">
-                                <p>Do you want to delete this record?</p>
-                                <ng-template pTemplate="footer">
-                                    <button class="pi pi-times risBtn risClose" (click)="display=false"> No</button>
-                                    <button class="pi pi-check risBtn risSave" (click)="deleteDealerContactinfo()"> Yes</button>
-                                </ng-template>
-                            </p-dialog>
+                            <p-confirmPopup key="delete"></p-confirmPopup>
 
                             <p-table [value]="dealercontactinfoList" styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm" [paginator]="true" [rows]="10" selectionMode="single" [showCurrentPageReport]="true" responsiveLayout="scroll"
                                      [(selection)]="selecteddealercontactinfo" dataKey="DealerContactInfoId" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
@@ -801,16 +794,9 @@
                         <div [hidden]="gridDisplayLocation">
                             <button pButton pRipple type="button" (click)="showBasicDialogLocationNew()" label="New" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
                             <button pButton pRipple type="button" (click)="loadDealerLocationinfoToEdit()" label="Edit" icon="pi pi-pencil" class="risBtn risEdit mr-2 mb-2"></button>
-                            <button pButton pRipple type="button" (click)="showDialog()" label="Delete" icon="pi pi-trash" class="risBtn risDelete mr-2 mb-2"></button>
+                            <button pButton pRipple type="button" (click)="deleteLocation($event)" label="Delete" icon="pi pi-trash" class="risBtn risDelete mr-2 mb-2"></button>
                             <button pButton pRipple type="button" (click)="toggleFormClose()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
-
-                            <p-dialog header="Delete Record" [(visible)]="display" [style]="{width: '35vw'}">
-                                <p>Do you want to delete this record?</p>
-                                <ng-template pTemplate="footer">
-                                    <button class="pi pi-times risBtn risClose" (click)="display=false"> No</button>
-                                    <button class="pi pi-check risBtn risSave" (click)="deleteDealerLocationinfo()"> Yes</button>
-                                </ng-template>
-                            </p-dialog>
+                            <p-confirmPopup key="delete"></p-confirmPopup>
 
                             <p-table [value]="dealerlocationinfoList" styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm" [paginator]="true" [rows]="10" selectionMode="single" [showCurrentPageReport]="true" responsiveLayout="scroll"
                                      [(selection)]="selecteddealerlocationinfo" dataKey="DealerLocationInfoId" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
@@ -899,7 +885,8 @@
                                         <button pButton pRipple type="button" (click)="loadDealerDocumentinfoToEdit()" label="Edit" class="risEdit mr-2 mb-2" icon="pi pi-pencil"></button>
                                     </div>
                                     <div class="field col-12 md:col-1">
-                                        <button pButton pRipple type="button" (click)="showDialogDocument()" label="Del" class="risDelete mr-2 mb-2" icon="pi pi-trash"></button>
+                                        <button pButton pRipple type="button" (click)="deleteDocument($event)" label="Del" class="risDelete mr-2 mb-2" icon="pi pi-trash"></button>
+                                        <p-confirmPopup key="delete"></p-confirmPopup>
                                     </div>
                                 </div>
                             </div>
@@ -933,39 +920,24 @@
                                         <td>{{dealerdocumentinfo.ExpiryDate | date: 'dd/MMM/yyyy'}}</td>
                                         <td>{{dealerdocumentinfo.ImageFile}}</td>
                                     </tr>
-                                </ng-template>                                
+                                </ng-template>
                             </p-table>
                             <!--end grid display -------------->
                         </div>
                     </p-tabPanel>
-                    <p-dialog header="Delete Record" [(visible)]="displayDocument" [style]="{width: '30vw'}">
-                        <p>Do you want to delete this record?</p>
-                        <ng-template pTemplate="footer">
-                            <button class="pi pi-times risBtn risClose" (click)="displayDocument=false"> No</button>
-                            <button class="pi pi-check risBtn risSave" (click)="deleteDealerDocumentinfo()"> Yes</button>
-                        </ng-template>
-                    </p-dialog>
+                    
                 </p-tabView>
             </div>
             <!--end form display------------->
             <div [hidden]="gridDisplay">
                 <button pButton pRipple type="button" (click)="showBasicDialog()" label="New" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
                 <button pButton pRipple type="button" (click)="loadDealerinfoToEdit()" label="Edit" icon="pi pi-pencil" class="risBtn risEdit mr-2 mb-2"></button>
-                <button pButton pRipple type="button" (click)="showDialog()" label="Delete" icon="pi pi-trash" class="risBtn risDelete mr-2 mb-2"></button>
+                <button pButton pRipple type="button" (click)="deleteDealer($event)" label="Delete" icon="pi pi-trash" class="risBtn risDelete mr-2 mb-2"></button>
                 <button pButton pRipple type="button" (click)="loadDealerinfoContactGrid()" label="Contact Info" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
                 <button pButton pRipple type="button" (click)="loadDealerinfoLocationGrid()" label="Location Info" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
                 <button pButton pRipple type="button" (click)="loadDealerinfoDocumentGrid()" label="Document Info" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
-
-                <p-dialog header="Delete Record" [(visible)]="display" [style]="{width: '35vw'}">
-                    <p>Do you want to delete this record?</p>
-                    <ng-template pTemplate="footer">
-                        <button class="pi pi-times risBtn risClose" (click)="display=false"> No</button>
-                        <button class="pi pi-check risBtn risSave" (click)="deleteDealerinfo()"> Yes</button>
-                    </ng-template>
-                </p-dialog>
-
+                <p-confirmPopup key="delete"></p-confirmPopup>
                 
-
                 <p-table [value]="dealerinfoList" styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm" [paginator]="true" [rows]="10" selectionMode="single" [showCurrentPageReport]="true" responsiveLayout="scroll"
                          [(selection)]="selecteddealerinfo" dataKey="DealerInfoId" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
                     <ng-template pTemplate="header">
