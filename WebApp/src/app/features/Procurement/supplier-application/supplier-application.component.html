@@ -270,13 +270,11 @@
                                                 </tr>
                                             </ng-template>
                                             <ng-template pTemplate="body" let-rowIndex="rowIndex" let-subSector>
-
                                                 <tr>
                                                     <td>{{rowIndex+1}}</td>
                                                     <td>{{subSector.industry_sector_name}}</td>
                                                     <td>{{subSector.industry_sub_sector_name}}</td>
                                                     <td> <button class="pi pi-times-circle risBtn risDelete" (click)="removeSubSector(rowIndex,event)"> </button></td>
-
                                                 </tr>
                                             </ng-template>
                                         </p-table>

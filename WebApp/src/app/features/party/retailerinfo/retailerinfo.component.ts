@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { NavigationEnd } from '@angular/router';
+import { ConfirmationService } from 'primeng/api';
 import { NotificationService } from '../../../service/CommonMessage/notification.service';
 import { RetailerInfoService } from './retailerinfo.service';
 
@@ -100,6 +101,8 @@ export class RetailerinfoComponent implements OnInit {
     rows = 10;
     //end dropdown List prperty
     rowData: any;
+    rowDataContact: any;
+    rowDataLocation: any;
     dataSaved = false;
     // for delete data modal
     display: boolean = false;
@@ -239,7 +242,7 @@ export class RetailerinfoComponent implements OnInit {
         }
     }
 
-    constructor(private formbulider: FormBuilder, private notifyService: NotificationService, private retailerinfoService: RetailerInfoService) {
+    constructor(private formbulider: FormBuilder, private confirmationService: ConfirmationService, private notifyService: NotificationService, private retailerinfoService: RetailerInfoService) {
 
     }
 
@@ -384,6 +387,28 @@ export class RetailerinfoComponent implements OnInit {
         this.rowData = null;
     }
 
+    onRowSelectContact(event) {
+        debugger;
+        this.rowSelected = true;
+        this.rowDataContact = event.data;
+
+    }
+    onRowUnselectContact(event) {
+        this.rowSelected = false;
+        this.rowDataContact = null;
+    }
+
+    onRowSelectLocation(event) {
+        debugger;
+        this.rowSelected = true;
+        this.rowDataLocation = event.data;
+
+    }
+    onRowUnselectLocation(event) {
+        this.rowSelected = false;
+        this.rowDataLocation = null;
+    }
+
     toggle() {
         if (this.collapsedempInfo) {
             this.collapsedempDetails = true;
@@ -524,6 +549,25 @@ export class RetailerinfoComponent implements OnInit {
         this.display = false;
     }
 
+    deleteRetailer(event: Event) {
+        if (this.rowData == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+
+        this.confirmationService.confirm({
+            key: 'delete',
+            target: event.target,
+            message: 'Are you sure that you want to delete?',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                this.deleteRetailerinfo();
+            },
+            reject: () => {
+
+            }
+        });
+    }
+
     get f(): { [key: string]: AbstractControl } {
         return this.retailerinfoForm.controls;
     }
@@ -606,7 +650,6 @@ export class RetailerinfoComponent implements OnInit {
                     this.retailerinfoList.unshift(result.Data);
                     this.selectedretailerinfo = result.Data;
                     this.rowData = result.Data;
-                    this.onRowUnselect(event);
                     this.toggleFormDisplay();
                     this.retailerIndex();
                     this.isRetailerinfoEdit=false;
@@ -905,8 +948,8 @@ export class RetailerinfoComponent implements OnInit {
 
         if (this.isRetailerContactinfoEdit) {
 
-            data.retailerContactinfoId = this.rowData.RetailerContactInfoId;
-            formData.append("retailer_contact_info_id", this.rowData.RetailerContactInfoId);
+            data.retailerContactinfoId = this.rowDataContact.RetailerContactInfoId;
+            formData.append("retailer_contact_info_id", this.rowDataContact.RetailerContactInfoId);
             this.retailerinfoService.updateRetailerContactInfo(formData).subscribe(result => {
 
                 this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
@@ -915,8 +958,7 @@ export class RetailerinfoComponent implements OnInit {
                     this.retailercontactinfoList.splice(this.retailercontactinfoList.findIndex(item => item.RetailerContactInfoId === data.retailerContactinfoId), 1);
                     this.retailercontactinfoList.unshift(result.Data);
                     this.selectedretailerinfo = result.Data;
-                    this.rowData = result.Data;
-                    this.onRowUnselect(event);
+                    this.rowDataContact = result.Data;
                     this.retailerContactIndex();
                     this.isRetailerContactinfoEdit = false;
                     this.submittedContact = false;
@@ -935,8 +977,7 @@ export class RetailerinfoComponent implements OnInit {
                     if (result.MessageType == 1) {
                         this.retailercontactinfoList.unshift(result.Data);
                         this.selectedretailercontactinfo = result.Data;
-                        this.rowData = result.Data;
-                        this.onRowUnselect(event);
+                        this.rowDataContact = result.Data;
                         this.retailerContactIndex();
                         this.isRetailerContactinfoEdit = false;
                         this.submittedContact = false;
@@ -951,11 +992,11 @@ export class RetailerinfoComponent implements OnInit {
 
     loadRetailerContactinfoToEdit() {
 
-        if (this.rowData == null) {
+        if (this.rowDataContact == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
 
-        let retailerContactinfoId = this.rowData.RetailerContactInfoId;
+        let retailerContactinfoId = this.rowDataContact.RetailerContactInfoId;
         this.retailerinfoService.getRetailerContactInfoById(retailerContactinfoId).subscribe(data => {
             if (data != null) {
                 this.isRetailerContactinfoEdit = true;
@@ -1019,10 +1060,10 @@ export class RetailerinfoComponent implements OnInit {
 
     deleteRetailerContactinfo() {
         this.showDialog();
-        if (this.rowData == null) {
+        if (this.rowDataContact == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
-        let retailerContactinfoId = this.rowData.RetailerContactInfoId;
+        let retailerContactinfoId = this.rowDataContact.RetailerContactInfoId;
         this.retailerinfoService.deleteRetailerContactInfo(retailerContactinfoId).subscribe(data => {
             if (data.MessageType == 1) {
                 this.retailercontactinfoList.splice(this.retailercontactinfoList.findIndex(item => item.RetailerContactInfoId === data.retailerContactinfoId), 1);
@@ -1030,6 +1071,25 @@ export class RetailerinfoComponent implements OnInit {
             this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
         });
         this.display = false;
+    }
+
+    deleteContact(event: Event) {
+        if (this.rowDataContact == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+
+        this.confirmationService.confirm({
+            key: 'delete',
+            target: event.target,
+            message: 'Are you sure that you want to delete?',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                this.deleteRetailerContactinfo();
+            },
+            reject: () => {
+
+            }
+        });
     }
 
     onSelectContactImage(event) {
@@ -1103,8 +1163,8 @@ export class RetailerinfoComponent implements OnInit {
 
         if (this.isRetailerLocationinfoEdit) {
 
-            data.retailerLocationinfoId = this.rowData.RetailerLocationInfoId;
-            formData.append("retailer_location_info_id", this.rowData.RetailerLocationInfoId);
+            data.retailerLocationinfoId = this.rowDataLocation.RetailerLocationInfoId;
+            formData.append("retailer_location_info_id", this.rowDataLocation.RetailerLocationInfoId);
             this.retailerinfoService.updateRetailerLocationInfo(formData).subscribe(result => {
 
                 this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
@@ -1113,8 +1173,7 @@ export class RetailerinfoComponent implements OnInit {
                     this.retailerlocationinfoList.splice(this.retailerlocationinfoList.findIndex(item => item.RetailerLocationInfoId === data.retailerLocationinfoId), 1);
                     this.retailerlocationinfoList.unshift(result.Data);
                     this.selectedretailerlocationinfo = result.Data;
-                    this.rowData = result.Data;
-                    this.onRowUnselect(event);
+                    this.rowDataLocation = result.Data;
                     this.retailerLocationIndex();
                     this.isRetailerLocationinfoEdit = false;
                     this.submittedLocation = false;
@@ -1131,7 +1190,7 @@ export class RetailerinfoComponent implements OnInit {
                     if (result.MessageType == 1) {
                         this.retailerlocationinfoList.unshift(result.Data);
                         this.selectedretailerlocationinfo = result.Data;
-                        this.rowData = result.Data;
+                        this.rowDataLocation = result.Data;
                         this.retailerLocationIndex();
                         this.isRetailerLocationinfoEdit = false;
                         this.submittedLocation = false;
@@ -1147,11 +1206,11 @@ export class RetailerinfoComponent implements OnInit {
     loadRetailerLocationinfoToEdit() {
 
         debugger;
-        if (this.rowData == null) {
+        if (this.rowDataLocation == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
 
-        let retailerLocationinfoId = this.rowData.RetailerLocationInfoId;
+        let retailerLocationinfoId = this.rowDataLocation.RetailerLocationInfoId;
         this.retailerinfoService.getRetailerLocationInfoById(retailerLocationinfoId).subscribe(data => {
             if (data != null) {
                 this.isRetailerLocationinfoEdit = true;
@@ -1188,10 +1247,10 @@ export class RetailerinfoComponent implements OnInit {
 
     deleteRetailerLocationinfo() {
         this.showDialog();
-        if (this.rowData == null) {
+        if (this.rowDataLocation == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
-        let retailerLocationinfoId = this.rowData.RetailerLocationInfoId;
+        let retailerLocationinfoId = this.rowDataLocation.RetailerLocationInfoId;
         this.retailerinfoService.deleteRetailerLocationInfo(retailerLocationinfoId).subscribe(data => {
             if (data.MessageType == 1) {
                 this.retailerlocationinfoList.splice(this.retailerlocationinfoList.findIndex(item => item.RetailerLocationInfoId === data.retailerLocationinfoId), 1);
@@ -1201,6 +1260,24 @@ export class RetailerinfoComponent implements OnInit {
         this.display = false;
     }
 
+    deleteLocation(event: Event) {
+        if (this.rowDataLocation == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+
+        this.confirmationService.confirm({
+            key: 'delete',
+            target: event.target,
+            message: 'Are you sure that you want to delete?',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                this.deleteRetailerLocationinfo();
+            },
+            reject: () => {
+
+            }
+        });
+    }
 
     retailerIndex() {
         this.index = 0;
