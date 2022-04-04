@@ -15,7 +15,6 @@ using Auth.Repository.Party;
 using Auth.Repository.Payroll;
 using Auth.Repository.PIMS;
 using Auth.Repository.UserMenuPermisssion;
-using Auth.Repository.Administrative;
 using Auth.Service;
 using Auth.DataAccess.Administrative;
 using DataAccess;
