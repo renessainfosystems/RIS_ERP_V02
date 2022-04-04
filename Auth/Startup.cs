@@ -15,7 +15,9 @@ using Auth.Repository.Party;
 using Auth.Repository.Payroll;
 using Auth.Repository.PIMS;
 using Auth.Repository.UserMenuPermisssion;
+using Auth.Repository.Administrative;
 using Auth.Service;
+using Auth.DataAccess.Administrative;
 using DataAccess;
 using DataAccess.Procurement;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -217,6 +219,12 @@ namespace Auth
 
             services.AddScoped<SupplierApplicationDataAccess, SupplierApplicationDataAccess>();
             services.AddScoped<ISupplierApplicationRepository, SupplierApplicationRepository>();
+
+            services.AddScoped<OrganogramDataAccess, OrganogramDataAccess>();
+            services.AddScoped<IOrganogramRepository, OrganogramRepository>();
+            
+            services.AddScoped<OrganogramDetailDataAccess, OrganogramDetailDataAccess>();
+            services.AddScoped<IOrganogramDetailRepository, OrganogramDetailRepository>();
             #endregion
 
             #region Voucher Type
