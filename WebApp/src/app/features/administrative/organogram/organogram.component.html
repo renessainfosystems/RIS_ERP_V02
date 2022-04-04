@@ -1,1 +1,69 @@
-<p>organogram works!</p>
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <h5>Organogram List</h5>
+            <div [hidden]="formDisplay">
+                <form action="" [formGroup]="organogramForm">
+                </form>
+            </div>
+
+            <div [hidden]="gridDisplay">
+               
+                <button pButton pRipple type="button" (click)="showBasicDialog()" label="New" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>              
+                <button pButton pRipple type="button" (click)="loadOrganogramToEdit()" label="Edit" icon="pi pi-pencil" class="risBtn risEdit mr-2 mb-2"></button>               
+                <button pButton pRipple type="button" (click)="showDialog()" label="Delete" icon="pi pi-trash" class="risBtn risDelete mr-2 mb-2"></button>
+                <button pButton pRipple type="button" (click)="organogramActiveInactive()" label="Activity" icon="pi pi-box" class="risBtn risAll mr-2 mb-2"></button>               
+                <p-dialog header="Delete Record" [(visible)]="display" [style]="{width: '35vw'}">
+                    <p>Do you want to delete this record?</p>
+                    <ng-template pTemplate="footer">
+                        <button class="pi pi-times risBtn risClose" (click)="display=false"> No</button>
+                        <button class="pi pi-check risBtn risSave" (click)="deleteOrganogram()"> Yes</button>
+                    </ng-template>
+                </p-dialog>
+                <p-table #dt1 [value]="OrganogramList" [paginator]="true" [rows]="10" selectionMode="single" [(selection)]="selectedorganogram" dataKey="organogram_id" [showCurrentPageReport]="true" responsiveLayout="scroll" styleClass="p-datatable-striped p-datatable-sm"
+                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)"
+                         [globalFilterFields]="['location_code','location_name','department']">
+                    <ng-template pTemplate="caption">
+                        <div class="flex">
+
+                            <span class="p-input-icon-left ml-auto">
+                                <i class="pi pi-search"></i>
+                                <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Search by Any" />
+                            </span>
+                        </div>
+                    </ng-template>
+                    <ng-template pTemplate="header">
+                        <tr>
+
+                            <th pSortableColumn="company_name">
+
+                                Company
+                                <p-columnFilter type="text" field="company_name" display="menu"></p-columnFilter>
+                                <p-sortIcon field="company_name"></p-sortIcon>
+
+                            </th>
+                            <th pSortableColumn="location_code">
+                                Location Code
+                                <p-columnFilter type="text" field="location_code" display="menu"></p-columnFilter>
+                            </th>
+                            <th pSortableColumn="location_name">Location Name</th>
+                            <th pSortableColumn="department">Department</th>
+                            <!--<th>Activity</th>-->
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-organogram let-rowData let-columns="columns">
+                        <tr [pSelectableRow]="organogram">
+                            <td>{{organogram.company_name}}</td>
+                            <td>{{organogram.location_code}}</td>
+                            <td>{{organogram.location_name}}</td>
+                            <td>{{organogram.department}}</td>
+                            
+                            <!--<td *ngIf="organogram.IsActive===true">{{"Active"}}</td>
+                            <td *ngIf="organogram.IsActive===false">{{"InActive"}}</td>-->
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+    </div>
+</div>

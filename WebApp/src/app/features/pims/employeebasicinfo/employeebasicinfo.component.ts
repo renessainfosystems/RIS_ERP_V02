@@ -15,7 +15,7 @@ import { Observable } from 'rxjs';
 export class EmployeebasicinfoComponent implements OnInit {
 
 
-    companyForm: FormGroup;
+    //companyForm: FormGroup;
     submitted = false;
 
     //start grid and form show hide ********************
