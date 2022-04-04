@@ -1492,6 +1492,7 @@ export class DealerinfoComponent implements OnInit {
                         this.dealerDocumentIndex();
                         this.isDealerDocumentinfoEdit = false;
                         this.submittedDocument = false;
+                        this.dealerdocumentForm.reset();
                     }
                 }
             );
