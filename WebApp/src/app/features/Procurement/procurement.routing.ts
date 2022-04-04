@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { SupplierApplicationComponent } from './supplier-application/supplier-application.component';
-import { SupplierlistComponent } from './supplierlist/supplierlist.component';
+import { SupplierListComponent } from './supplierlist/supplierlist.component';
 
 
 
@@ -13,7 +13,7 @@ export const ProcurementRoutes: Routes = [
 
   {
     path: 'supplierlist',
-    component: SupplierlistComponent,
+      component: SupplierListComponent,
   },
   
 ];
