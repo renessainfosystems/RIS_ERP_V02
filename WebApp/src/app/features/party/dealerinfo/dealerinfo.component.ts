@@ -111,6 +111,8 @@ export class DealerinfoComponent implements OnInit {
     rows = 10;
     //end dropdown List prperty
     rowData: any;
+    rowDataContact: any;
+    rowDataLocation: any;
     rowDataDocument: any;
     dataSaved = false;
     // for delete data modal
@@ -459,6 +461,28 @@ export class DealerinfoComponent implements OnInit {
         this.rowData = null;
     }
 
+    onRowSelectContact(event) {
+        debugger;
+        this.rowSelected = true;
+        this.rowDataContact = event.data;
+
+    }
+    onRowUnselectContact(event) {
+        this.rowSelected = false;
+        this.rowDataContact = null;
+    }
+
+    onRowSelectLocation(event) {
+        debugger;
+        this.rowSelected = true;
+        this.rowDataLocation = event.data;
+
+    }
+    onRowUnselectLocation(event) {
+        this.rowSelected = false;
+        this.rowDataLocation = null;
+    }
+
     onRowSelectDocument(event) {
         debugger;
         this.rowSelected = true;
@@ -771,7 +795,6 @@ export class DealerinfoComponent implements OnInit {
                     this.dealerinfoList.unshift(result.Data);
                     this.selecteddealerinfo = result.Data;
                     this.rowData = null;
-                    this.onRowUnselect(event);
                     this.dealerIndex();
                     this.isDealerinfoEdit = false;
                     this.toggleFormDisplay();
@@ -1055,7 +1078,7 @@ export class DealerinfoComponent implements OnInit {
         for (const key of Object.keys(this.dealercontactForm.value)) {
             const value = this.dealercontactForm.value[key];
             if (key == "dealer_info_id") {
-                let dealerinfoId = this.rowData.DealerInfoId;
+                let dealerinfoId = this.rowDataContact.DealerInfoId;
                 formData.append("dealer_info_id", dealerinfoId);
             }
             if (key == "date_of_birth") {
@@ -1069,8 +1092,8 @@ export class DealerinfoComponent implements OnInit {
 
         if (this.isDealerContactinfoEdit) {
            
-            data.dealerContactinfoId = this.rowData.DealerContactInfoId;
-            formData.append("dealer_contact_info_id", this.rowData.DealerContactInfoId);
+            data.dealerContactinfoId = this.rowDataContact.DealerContactInfoId;
+            formData.append("dealer_contact_info_id", this.rowDataContact.DealerContactInfoId);
             this.dealerinfoService.updateDealerContactInfo(formData).subscribe(result => {
 
                 this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
@@ -1079,8 +1102,7 @@ export class DealerinfoComponent implements OnInit {
                     this.dealercontactinfoList.splice(this.dealercontactinfoList.findIndex(item => item.DealerContactInfoId === data.dealerContactinfoId), 1);
                     this.dealercontactinfoList.unshift(result.Data);
                     this.selecteddealerinfo = result.Data;
-                    this.rowData = result.Data;
-                    this.onRowUnselect(event);
+                    this.rowDataContact = result.Data;
                     this.dealerContactIndex();
                     this.isDealerContactinfoEdit = false;
                     this.submittedContact = false;
@@ -1091,7 +1113,7 @@ export class DealerinfoComponent implements OnInit {
             this.formDisplayContact = true;
         }
         else {
-            formData.append("dealer_info_id", this.rowData.DealerInfoId);
+            formData.append("dealer_info_id", this.rowDataContact.DealerInfoId);
             this.dealerinfoService.createDealerContactInfo(formData).subscribe(
                 result => {
                     this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
@@ -1099,8 +1121,7 @@ export class DealerinfoComponent implements OnInit {
                     if (result.MessageType == 1) {
                         this.dealercontactinfoList.unshift(result.Data);
                         this.selecteddealercontactinfo = result.Data;
-                        this.rowData = result.Data;
-                        this.onRowUnselect(event);
+                        this.rowDataContact = result.Data;
                         this.dealerContactIndex();
                         this.isDealerContactinfoEdit = false;
                         this.submittedContact = false;
@@ -1115,11 +1136,11 @@ export class DealerinfoComponent implements OnInit {
 
     loadDealerContactinfoToEdit() {
 
-        if (this.rowData == null) {
+        if (this.rowDataContact == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
 
-        let dealerContactinfoId = this.rowData.DealerContactInfoId;
+        let dealerContactinfoId = this.rowDataContact.DealerContactInfoId;
         this.dealerinfoService.getDealerContactInfoById(dealerContactinfoId).subscribe(data => {
             if (data != null) {
                 this.isDealerContactinfoEdit = true;
@@ -1183,10 +1204,10 @@ export class DealerinfoComponent implements OnInit {
 
     deleteDealerContactinfo() {
         this.showDialog();
-        if (this.rowData == null) {
+        if (this.rowDataContact == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
-        let dealerContactinfoId = this.rowData.DealerContactInfoId;
+        let dealerContactinfoId = this.rowDataContact.DealerContactInfoId;
         this.dealerinfoService.deleteDealerContactInfo(dealerContactinfoId).subscribe(data => {
             if (data.MessageType == 1) {
                 this.dealercontactinfoList.splice(this.dealercontactinfoList.findIndex(item => item.DealerContactInfoId === data.dealerContactinfoId), 1);
@@ -1197,7 +1218,7 @@ export class DealerinfoComponent implements OnInit {
     }
 
     deleteContact(event: Event) {
-        if (this.rowData == null) {
+        if (this.rowDataContact == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
 
@@ -1272,7 +1293,7 @@ export class DealerinfoComponent implements OnInit {
         for (const key of Object.keys(this.dealerlocationForm.value)) {
             const value = this.dealerlocationForm.value[key];
             if (key == "dealer_info_id") {
-                let dealerinfoId = this.rowData.DealerInfoId;
+                let dealerinfoId = this.rowDataLocation.DealerInfoId;
                 formData.append("dealer_info_id", dealerinfoId);
             }
             if (key == "trade_license_date") {
@@ -1286,8 +1307,8 @@ export class DealerinfoComponent implements OnInit {
 
         if (this.isDealerLocationinfoEdit) {
 
-            data.dealerLocationinfoId = this.rowData.DealerLocationInfoId;
-            formData.append("dealer_location_info_id", this.rowData.DealerLocationInfoId);
+            data.dealerLocationinfoId = this.rowDataLocation.DealerLocationInfoId;
+            formData.append("dealer_location_info_id", this.rowDataLocation.DealerLocationInfoId);
             this.dealerinfoService.updateDealerLocationInfo(formData).subscribe(result => {
 
                 this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
@@ -1296,7 +1317,7 @@ export class DealerinfoComponent implements OnInit {
                     this.dealerlocationinfoList.splice(this.dealerlocationinfoList.findIndex(item => item.DealerLocationInfoId === data.dealerLocationinfoId), 1);
                     this.dealerlocationinfoList.unshift(result.Data);
                     this.selecteddealerlocationinfo = result.Data;
-                    this.rowData = result.Data;
+                    this.rowDataLocation = result.Data;
                     this.dealerLocationIndex();
                     this.isDealerLocationinfoEdit = false;
                     this.submittedLocation = false;
@@ -1306,14 +1327,14 @@ export class DealerinfoComponent implements OnInit {
             this.formDisplayLocation = true;
         }
         else {
-            formData.append("dealer_info_id", this.rowData.DealerInfoId);
+            formData.append("dealer_info_id", this.rowDataLocation.DealerInfoId);
             this.dealerinfoService.createDealerLocationInfo(formData).subscribe(
                 result => {
                     this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
                     if (result.MessageType == 1) {
                         this.dealerlocationinfoList.unshift(result.Data);
                         this.selecteddealerlocationinfo = result.Data;
-                        this.rowData = result.Data;
+                        this.rowDataLocation = result.Data;
                         this.dealerLocationIndex();
                         this.isDealerLocationinfoEdit = false;
                         this.submittedLocation = false;
@@ -1329,11 +1350,11 @@ export class DealerinfoComponent implements OnInit {
     loadDealerLocationinfoToEdit() {
 
         debugger;
-        if (this.rowData == null) {
+        if (this.rowDataLocation == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
 
-        let dealerLocationinfoId = this.rowData.DealerLocationInfoId;
+        let dealerLocationinfoId = this.rowDataLocation.DealerLocationInfoId;
         this.dealerinfoService.getDealerLocationInfoById(dealerLocationinfoId).subscribe(data => {
             if (data != null) {
                 this.isDealerLocationinfoEdit = true;
@@ -1370,10 +1391,10 @@ export class DealerinfoComponent implements OnInit {
 
     deleteDealerLocationinfo() {
         this.showDialog();
-        if (this.rowData == null) {
+        if (this.rowDataLocation == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
-        let dealerLocationinfoId = this.rowData.DealerLocationInfoId;
+        let dealerLocationinfoId = this.rowDataLocation.DealerLocationInfoId;
         this.dealerinfoService.deleteDealerLocationInfo(dealerLocationinfoId).subscribe(data => {
             if (data.MessageType == 1) {
                 this.dealerlocationinfoList.splice(this.dealerlocationinfoList.findIndex(item => item.DealerLocationInfoId === data.dealerLocationinfoId), 1);
@@ -1384,7 +1405,7 @@ export class DealerinfoComponent implements OnInit {
     }
 
     deleteLocation(event: Event) {
-        if (this.rowData == null) {
+        if (this.rowDataLocation == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
 
@@ -1420,7 +1441,7 @@ export class DealerinfoComponent implements OnInit {
         for (const key of Object.keys(this.dealerdocumentForm.value)) {
             const value = this.dealerdocumentForm.value[key];
             if (key == "dealer_info_id") {
-                let dealerinfoId = this.rowData.DealerInfoId;
+                let dealerinfoId = this.rowDataDocument.DealerInfoId;
                 formData.append("dealer_info_id", dealerinfoId);
             }
             if (key == "issue_date") {
@@ -1433,7 +1454,7 @@ export class DealerinfoComponent implements OnInit {
             }
             else {
                 formData.append(key, value);
-                formData.append("dealer_info_id", this.rowData.DealerInfoId);
+                formData.append("dealer_info_id", this.rowDataDocument.DealerInfoId);
                 formData.append("FileUpload", this.fileToUploadDocumentForm);
             }
         }
@@ -1451,7 +1472,6 @@ export class DealerinfoComponent implements OnInit {
                     this.dealerdocumentinfoList.unshift(result.Data);
                     this.selecteddealerdocumentinfo = result.Data;
                     this.rowDataDocument = result.Data;
-                    this.onRowUnselectDocument(event);
                     this.dealerDocumentIndex();
                     this.isDealerDocumentinfoEdit = false;
                     this.submittedDocument = false;
@@ -1470,7 +1490,6 @@ export class DealerinfoComponent implements OnInit {
                         this.dealerdocumentinfoList.unshift(result.Data);
                         this.selecteddealerdocumentinfo = result.Data;
                         this.rowDataDocument = result.Data;
-                        this.onRowUnselectDocument(event);
                         this.dealerDocumentIndex();
                         this.isDealerDocumentinfoEdit = false;
                         this.submittedDocument = false;

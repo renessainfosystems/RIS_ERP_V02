@@ -595,7 +595,7 @@
                             <p-confirmPopup key="delete"></p-confirmPopup>
 
                             <p-table [value]="dealercontactinfoList" styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm" [paginator]="true" [rows]="10" selectionMode="single" [showCurrentPageReport]="true" responsiveLayout="scroll"
-                                     [(selection)]="selecteddealercontactinfo" dataKey="DealerContactInfoId" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
+                                     [(selection)]="selecteddealercontactinfo" dataKey="DealerContactInfoId" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelectContact($event)" (onRowUnselect)="onRowUnselectContact($event)">
                                 <ng-template pTemplate="header">
                                     <tr>
                                         <!--<th pSortableColumn="PersonalPhone">Id</th>-->
@@ -615,7 +615,7 @@
                                     </tr>
                                 </ng-template>
 
-                                <ng-template pTemplate="body" let-dealercontactinfo let-rowData let-columns="columns">
+                                <ng-template pTemplate="body" let-dealercontactinfo let-rowDataContact let-columns="columns">
 
                                     <tr [pSelectableRow]="dealercontactinfo">
                                         <td hidden>{{dealercontactinfo.DealerInfoId}}</td>
@@ -799,7 +799,7 @@
                             <p-confirmPopup key="delete"></p-confirmPopup>
 
                             <p-table [value]="dealerlocationinfoList" styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm" [paginator]="true" [rows]="10" selectionMode="single" [showCurrentPageReport]="true" responsiveLayout="scroll"
-                                     [(selection)]="selecteddealerlocationinfo" dataKey="DealerLocationInfoId" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
+                                     [(selection)]="selecteddealerlocationinfo" dataKey="DealerLocationInfoId" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelectLocation($event)" (onRowUnselect)="onRowUnselectLocation($event)">
                                 <ng-template pTemplate="header">
                                     <tr>
                                         <!--<th pSortableColumn="PersonalPhone">Id</th>-->
@@ -818,7 +818,7 @@
                                     </tr>
                                 </ng-template>
 
-                                <ng-template pTemplate="body" let-dealerlocationinfo let-rowData let-columns="columns">
+                                <ng-template pTemplate="body" let-dealerlocationinfo let-rowDataLocation let-columns="columns">
 
                                     <tr [pSelectableRow]="dealerlocationinfo">
                                         <td hidden>{{dealerlocationinfo.DealerInfoId}}</td>
@@ -879,13 +879,13 @@
                                         </div>
                                     </div>
                                     <div class="field col-12 md:col-1">
-                                        <button pButton pRipple type="button" (click)="SaveDealerDocumentInfo()" label="Add" class="risAdd mr-2 mb-2" icon="pi pi-plus"></button>
+                                        <button pButton pRipple type="button" (click)="SaveDealerDocumentInfo()" label="Add" class=" risBtn risAdd mr-2 mb-2" icon="pi pi-plus"></button>
                                     </div>
                                     <div class="field col-12 md:col-1">
-                                        <button pButton pRipple type="button" (click)="loadDealerDocumentinfoToEdit()" label="Edit" class="risEdit mr-2 mb-2" icon="pi pi-pencil"></button>
+                                        <button pButton pRipple type="button" (click)="loadDealerDocumentinfoToEdit()" label="Edit" class="risBtn risEdit mr-2 mb-2" icon="pi pi-pencil"></button>
                                     </div>
                                     <div class="field col-12 md:col-1">
-                                        <button pButton pRipple type="button" (click)="deleteDocument($event)" label="Del" class="risDelete mr-2 mb-2" icon="pi pi-trash"></button>
+                                        <button pButton pRipple type="button" (click)="deleteDocument($event)" label="Delete" class="risBtn risDelete mr-2 mb-2" icon="pi pi-trash"></button>
                                         <p-confirmPopup key="delete"></p-confirmPopup>
                                     </div>
                                 </div>
