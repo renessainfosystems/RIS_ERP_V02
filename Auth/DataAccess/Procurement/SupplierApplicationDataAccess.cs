@@ -832,7 +832,7 @@ namespace DataAccess.Procurement
 
             try
             {
-                var sql = "select IST.industry_sector_id, IST.industry_sector_name, ISS.industry_sub_sector_id,ISS.industry_sub_sector_name " +
+                var sql = "select IST.industry_sector_id, IST.industry_sector_name, ISS.industry_sub_sector_id,ISS.industry_sub_sector_name,sss.supplier_id " +
                              " from[Procurement].[Supplier_Industry_Sub_Sector] SSS " +
                              " left join[Administrative].[Industry_Sub_Sector] ISS on SSS.industry_sub_sector_id = ISS.industry_sub_sector_id " +
                              " left join[Administrative].[Industry_Sector] IST on ISS.industry_sector_id = IST.industry_sector_id " +
@@ -877,7 +877,7 @@ namespace DataAccess.Procurement
             try
             {
 
-                var sql = " select EP.ecommerce_paltforms_id id,EP.ecommerce_paltforms_name name,CASE	 WHEN (SEP.ecommerce_platforms_id IS not NULL) THEN	1 ELSE 0 END status " +
+                var sql = " select EP.ecommerce_paltforms_id id,EP.ecommerce_paltforms_name name,country_id code, CASE	 WHEN (SEP.ecommerce_platforms_id IS not NULL) THEN	1 ELSE 0 END status " +
 "FROM[Administrative].[Ecommerce_Platforms] EP " +
 "LEFT JOIN[Procurement].[Supplier_Ecommerce_Platforms] SEP on SEP.ecommerce_platforms_id = EP.ecommerce_paltforms_id  AND SEP.supplier_id = @supplier_id";
 

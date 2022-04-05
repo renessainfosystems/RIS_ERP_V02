@@ -11,6 +11,7 @@ namespace Auth.Model.Party.ViewModel
         public int DealerDocumentInfoId { get; set; }
         public int DealerInfoId { get; set; }
         public int DocumentTypeId { get; set; }
+        public string DocumentTypeName { get; set; }
         public string DocumentNumber { get; set; }
         public DateTime? IssueDate { get; set; }
         public DateTime? ExpiryDate { get; set; }
@@ -29,6 +30,7 @@ namespace Auth.Model.Party.ViewModel
             model.DealerDocumentInfoId = dealerDocument.dealer_document_info_id ?? 0;
             model.DealerInfoId = dealerDocument.dealer_info_id ?? 0;
             model.DocumentTypeId = dealerDocument.document_type_id ?? 0;
+            model.DocumentTypeName = dealerDocument.document_type_name ?? "";
             model.DocumentNumber = dealerDocument.document_number ?? "";
             model.IssueDate = dealerDocument.issue_date;
             model.ExpiryDate = dealerDocument.expiry_date;

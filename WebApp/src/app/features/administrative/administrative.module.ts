@@ -33,6 +33,7 @@ import { EcommercePlatformComponent } from '../administrative/ecommerce-platform
 import { RegistryAuthorityComponent } from '../administrative/registry-authority/registry-authority.component';
 import { RegulatorComponent } from '../administrative/regulator/regulator.component';
 import { PrimeNGModule } from '../../root/primengreference.module';
+import { OrganogramComponent } from './organogram/organogram.component';
 
 
 
@@ -76,6 +77,7 @@ import { PrimeNGModule } from '../../root/primengreference.module';
     RegistryAuthorityComponent,
     EcommercePlatformComponent,
     RegulatorComponent,
+    OrganogramComponent,
   ]
   
 })
