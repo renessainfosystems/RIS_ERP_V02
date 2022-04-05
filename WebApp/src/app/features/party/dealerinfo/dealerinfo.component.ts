@@ -1078,7 +1078,7 @@ export class DealerinfoComponent implements OnInit {
         for (const key of Object.keys(this.dealercontactForm.value)) {
             const value = this.dealercontactForm.value[key];
             if (key == "dealer_info_id") {
-                let dealerinfoId = this.rowDataContact.DealerInfoId;
+                let dealerinfoId = this.rowData.DealerInfoId;
                 formData.append("dealer_info_id", dealerinfoId);
             }
             if (key == "date_of_birth") {
@@ -1113,7 +1113,7 @@ export class DealerinfoComponent implements OnInit {
             this.formDisplayContact = true;
         }
         else {
-            formData.append("dealer_info_id", this.rowDataContact.DealerInfoId);
+            formData.append("dealer_info_id", this.rowData.DealerInfoId);
             this.dealerinfoService.createDealerContactInfo(formData).subscribe(
                 result => {
                     this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
@@ -1293,7 +1293,7 @@ export class DealerinfoComponent implements OnInit {
         for (const key of Object.keys(this.dealerlocationForm.value)) {
             const value = this.dealerlocationForm.value[key];
             if (key == "dealer_info_id") {
-                let dealerinfoId = this.rowDataLocation.DealerInfoId;
+                let dealerinfoId = this.rowData.DealerInfoId;
                 formData.append("dealer_info_id", dealerinfoId);
             }
             if (key == "trade_license_date") {
@@ -1327,7 +1327,7 @@ export class DealerinfoComponent implements OnInit {
             this.formDisplayLocation = true;
         }
         else {
-            formData.append("dealer_info_id", this.rowDataLocation.DealerInfoId);
+            formData.append("dealer_info_id", this.rowData.DealerInfoId);
             this.dealerinfoService.createDealerLocationInfo(formData).subscribe(
                 result => {
                     this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
@@ -1441,7 +1441,7 @@ export class DealerinfoComponent implements OnInit {
         for (const key of Object.keys(this.dealerdocumentForm.value)) {
             const value = this.dealerdocumentForm.value[key];
             if (key == "dealer_info_id") {
-                let dealerinfoId = this.rowDataDocument.DealerInfoId;
+                let dealerinfoId = this.rowData.DealerInfoId;
                 formData.append("dealer_info_id", dealerinfoId);
             }
             if (key == "issue_date") {
@@ -1454,7 +1454,7 @@ export class DealerinfoComponent implements OnInit {
             }
             else {
                 formData.append(key, value);
-                formData.append("dealer_info_id", this.rowDataDocument.DealerInfoId);
+                formData.append("dealer_info_id", this.rowData.DealerInfoId);
                 formData.append("FileUpload", this.fileToUploadDocumentForm);
             }
         }
@@ -1482,7 +1482,6 @@ export class DealerinfoComponent implements OnInit {
             this.formDisplayDocument = true;
         }
         else {
-            
             this.dealerinfoService.createDealerDocumentInfo(formData).subscribe(
                 result => {
                     this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
@@ -1493,6 +1492,7 @@ export class DealerinfoComponent implements OnInit {
                         this.dealerDocumentIndex();
                         this.isDealerDocumentinfoEdit = false;
                         this.submittedDocument = false;
+                        this.dealerdocumentForm.reset();
                     }
                 }
             );
