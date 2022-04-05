@@ -72,5 +72,13 @@ namespace Auth.Controllers.Attendance
             return await _absenteeismPolicyRepository.GetAbsenteeismPolicyCode();
 
         }
+
+        [HttpGet]
+        public async Task<dynamic> GetAllAbsenteeismPolicyForDP()
+        {
+
+            return await _absenteeismPolicyRepository.GetAllAbsenteeismPolicyForDP();
+        }
+
     }
 }

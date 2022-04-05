@@ -257,7 +257,7 @@ namespace Auth.DataAccess.Attendance
             {
 
                 var sql = "DECLARE @pv_is_shared BIT SELECT @pv_is_shared = is_shared FROM Auth.Software_Sharing_Policy " +
-                    "SELECT S.roster_policy_id,S.roster_policy_names FROM Attendance.Roster_Policy s  " +
+                    "SELECT S.roster_policy_id,S.roster_policy_name FROM Attendance.Roster_Policy s  " +
                     "WHERE S.company_group_id = CASE WHEN(@pv_is_shared = 1) THEN @param_company_group_id ELSE S.company_group_id END AND S.company_id = CASE WHEN(@pv_is_shared = 0) THEN @param_company_id ELSE S.company_id END AND is_active = 1";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@param_company_group_id", company_group_id);

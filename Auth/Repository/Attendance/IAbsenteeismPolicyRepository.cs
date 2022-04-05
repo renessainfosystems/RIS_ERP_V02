@@ -15,5 +15,6 @@ namespace Auth.Repository.Attendance
 
         Task<dynamic> GetAbsenteeismPolicyCode();
         Task<dynamic> IUD_Absenteeism_Policy(AbsenteeismPolicy absenteeismPolicy, int dbOperation);
+        Task<dynamic> GetAllAbsenteeismPolicyForDP();
     }
 }
