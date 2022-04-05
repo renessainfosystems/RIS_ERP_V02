@@ -1480,6 +1480,46 @@
                             <div class="col-12">
                                 <div class="p-fluid p-formgrid grid">
 
+                                    <div class="p-fluid grid col-12 flex justify-content-end flex-wrap card-container">
+                                        <p-table [value]="categories" dataKey="id" editMode="row">
+                                            <ng-template pTemplate="header">
+                                                <tr>
+                                                    <th>Code</th>
+                                                    <th>Name</th>
+                                                    <th style="width:8rem"></th>
+                                                </tr>
+                                            </ng-template>
+                                            <ng-template pTemplate="body" let-category let-editing="editing" let-ri="rowIndex">
+                                                <tr [pEditableRow]="category">
+                                                    <td pEditableColumn>
+                                                        <p-cellEditor>
+                                                            <ng-template pTemplate="input">
+                                                                <input pInputText type="text"  name="category.id" formControlName="category_id">
+                                                            </ng-template>
+                                                            <ng-template pTemplate="output">
+                                                                {{category.id}}
+                                                            </ng-template>
+                                                        </p-cellEditor>
+                                                    </td>
+                                                    <td pEditableColumn>
+                                                        <p-cellEditor>
+                                                            <ng-template pTemplate="input">
+                                                                <input pInputText type="text" name="category.name" formControlName="category_name" required>
+                                                            </ng-template>
+                                                            <ng-template pTemplate="output">
+                                                                {{category.name}}
+                                                            </ng-template>
+                                                        </p-cellEditor>
+                                                    </td>
+                                                    <td style="text-align:center">
+                                                        <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" (click)="onRowEditInit(category)" class="p-button-rounded p-button-text"></button>
+                                                        <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(category)" class="p-button-rounded p-button-text p-button-success p-mr-2"></button>
+                                                        <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" (click)="onRowEditCancel(category, ri)" class="p-button-rounded p-button-text p-button-danger"></button>
+                                                    </td>
+                                                </tr>
+                                            </ng-template>
+                                        </p-table>
+                                    </div>
                                     <div class="p-fluid grid col-6 flex justify-content-end flex-wrap card-container">
                                         <div class="col-4 mt-2 text-right">
                                             <label for="" class=" d-md-inline-flex">Comment</label>

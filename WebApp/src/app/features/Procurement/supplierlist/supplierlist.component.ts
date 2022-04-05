@@ -8,6 +8,18 @@ import { SupplierListService } from './supplierlist.service';
 import { NotificationService } from '../../../service/CommonMessage/notification.service';
 
 
+import { SelectItem } from 'primeng/api';
+import { MessageService } from 'primeng/api';
+import { Category } from './category';
+
+
+//import { ReactiveFormsModule } from "@angular/forms";
+//import { DialogService, MessageService } from "primeng/api";
+//import { CalendarModule } from "primeng/calendar";
+//import { TableModule } from "primeng/table";
+//import { ToastModule } from "primeng/toast";
+
+
 
 @Component({
     selector: 'app-supplierlist',
@@ -68,6 +80,11 @@ export class SupplierListComponent implements OnInit {
     }
     //end grid and form show hide ********************
 
+    categories: Category[];
+
+    statuses: SelectItem[];
+
+    clonedProducts: { [s: string]: Category; } = {};
 
 
     // for photo and signature upload
@@ -188,7 +205,9 @@ export class SupplierListComponent implements OnInit {
     selectedSubSector: any;
     allSubSector: any[];
 
-    categories: any[] = [];
+ 
+
+  /*  products2: Product[];*/
     selectedItemsList = [];
     checkedIDs = [];
 
@@ -355,7 +374,7 @@ export class SupplierListComponent implements OnInit {
 
 
 
-    constructor(private formbulider: FormBuilder, private SupplierListService: SupplierListService, private toastr: ToastrService, private notifyService: NotificationService, private sanitizer: DomSanitizer) {
+    constructor(private formbulider: FormBuilder, private SupplierListService: SupplierListService, private toastr: ToastrService, private notifyService: NotificationService, private sanitizer: DomSanitizer, private messageService: MessageService) {
 
     }
 
@@ -611,7 +630,10 @@ export class SupplierListComponent implements OnInit {
         this.AssesmentApplicationForm = this.formbulider.group({
             comment: ['', [Validators.required]],
             suggestion: ['', [Validators.required]],
+            category_id: [''],
+            category_name: [''],
 
+            
         });
         this.LoadAllBankTypeCboList();
         this.AssesmentApplicationForm.controls['comment'].disable();
@@ -783,12 +805,12 @@ export class SupplierListComponent implements OnInit {
                 this.financialApplicationForm.controls['currency_id'].setValue(data.currency_id);
                 this.financialApplicationForm.controls['credit_days'].setValue(data.credit_days);
                 this.financialApplicationForm.controls['credit_limit'].setValue(data.credit_limit);
-                this.financialApplicationForm.controls['is_payment_monthly'].setValue(data.is_payment_monthly);
+                this.financialApplicationForm.controls['payment_frequency_id'].setValue(data.payment_frequency_id);
             }
         });
 
-        this.AssesmentApplicationForm.controls['comment'].enable();
-        this.AssesmentApplicationForm.controls['suggestion'].enable();
+        //this.AssesmentApplicationForm.controls['comment'].enable();
+        //this.AssesmentApplicationForm.controls['suggestion'].enable();
         this.toggleGridDisplay();
     }
 
@@ -2030,8 +2052,6 @@ export class SupplierListComponent implements OnInit {
     }
 
     onFormApprove() {
-
-
         let supplierId = this.rowData.supplierId;
         if (supplierId == null) {
             return this.notifyService.ShowNotification(3, 'Please click view on specific supplier');
@@ -2055,6 +2075,26 @@ export class SupplierListComponent implements OnInit {
             this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage);
             this.loadAllConfirmSupplierinfos();
         });
+    }
+
+    onRowEditInit(category: Category) {
+        debugger
+        this.clonedProducts[category.id] = { ...category };
+    }
+
+    onRowEditSave(category: Category) {
+        if (category.id > 0) {
+            delete this.clonedProducts[category.id];
+            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Product is updated' });
+        }
+        else {
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Invalid Price' });
+        }
+    }
+
+    onRowEditCancel(category: Category, index: number) {
+        this.categories[index] = this.clonedProducts[category.id];
+        delete this.categories[category.id];
     }
 
 }

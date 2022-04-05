@@ -877,7 +877,7 @@ namespace DataAccess.Procurement
             try
             {
 
-                var sql = " select EP.ecommerce_paltforms_id id,EP.ecommerce_paltforms_name name,CASE	 WHEN (SEP.ecommerce_platforms_id IS not NULL) THEN	1 ELSE 0 END status " +
+                var sql = " select EP.ecommerce_paltforms_id id,EP.ecommerce_paltforms_name name,country_id code, CASE	 WHEN (SEP.ecommerce_platforms_id IS not NULL) THEN	1 ELSE 0 END status " +
 "FROM[Administrative].[Ecommerce_Platforms] EP " +
 "LEFT JOIN[Procurement].[Supplier_Ecommerce_Platforms] SEP on SEP.ecommerce_platforms_id = EP.ecommerce_paltforms_id  AND SEP.supplier_id = @supplier_id";
 
