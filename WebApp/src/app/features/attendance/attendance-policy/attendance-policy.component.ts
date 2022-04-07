@@ -232,8 +232,23 @@ export class AttendancePolicyComponent implements OnInit {
 
         this.AttendancePolicyService.getAttendancePolicyById(attendance_policy_id).subscribe(data => {
 
-            this.AttendancePolicyForm.controls['roster_policy_name'].setValue(data.roster_policy_name);
-            this.AttendancePolicyForm.controls['roster_cycle'].setValue(data.roster_cycle);
+            this.AttendancePolicyForm.controls['policy_name'].setValue(data.policy_name);
+            this.AttendancePolicyForm.controls['code'].setValue(data.code);
+            this.AttendancePolicyForm.controls['remarks'].setValue(data.remarks);
+            this.AttendancePolicyForm.controls['attendance_calendar_id'].setValue(data.attendance_calendar_id);
+            this.AttendancePolicyForm.controls['absenteeism_policy_id'].setValue(data.absenteeism_policy_id);
+            this.AttendancePolicyForm.controls['late_early_policy_id'].setValue(data.late_early_policy_id);
+            this.AttendancePolicyForm.controls['roster_policy_id'].setValue(data.roster_policy_id);
+            this.AttendancePolicyForm.controls['is_random_dayoff'].setValue(data.is_random_dayoff);
+            this.AttendancePolicyForm.controls['no_of_random_dayoff'].setValue(data.no_of_random_dayoff);
+            this.dayOffPolicyDetails = data.attendance_Policy_Dayoffs;
+            this.attBenefitDetails = data.attendance_Policy_Benefits;
+            this.leavePolicyDetails = data.attendance_Policy_Leaves;
+            this.shiftDetails = data.attendance_Policy_Shifts;
+            if (data.is_random_dayoff) {
+                this.isShownDayOff = false;
+                this.isShownNoOfDayOff = true;
+            }
             this.isAttendancePolicyEdit = true;
         });
 
@@ -356,10 +371,10 @@ export class AttendancePolicyComponent implements OnInit {
                 this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
                 if (result.MessageType == 1) {
                     this.resetForm();
-                    this.AttendancePolicies.unshift(result.Data);
-                    this.selectedPolicy = result.Data;
+                    this.AttendancePolicies.unshift(result.Data[0]);
+                    this.selectedPolicy = result.Data[0];
                     this.rowSelected = true;
-                    this.rowData = result.Data;
+                    this.rowData = result.Data[0];
                 }
             }
         );
@@ -434,7 +449,7 @@ export class AttendancePolicyComponent implements OnInit {
         //    return;
         //}
         //let roster_policy_name = this.AttendancePolicyForm.get('roster_policy_name')?.value;
-
+        debugger
         let abp_id = this.AttendancePolicyForm.get('abp_id')?.value.abp_id;
 
         let abp_name = (this.AttendancePolicyForm.get('abp_id')?.value.abp_name);
@@ -530,7 +545,7 @@ export class AttendancePolicyComponent implements OnInit {
 
             let attendance_policy_id = this.rowData.attendance_policy_id;
             shiftObj.attendance_policy_id = attendance_policy_id;
-            this.AttendancePolicyService.createPolicyBenefit(shiftObj).subscribe(data => {
+            this.AttendancePolicyService.createPolicyShift(shiftObj).subscribe(data => {
 
                 if (data.MessageType == 1) {
                     this.shiftDetails.unshift(data.Data[0]);
@@ -637,7 +652,7 @@ export class AttendancePolicyComponent implements OnInit {
             let attendance_policy_id = this.rowData.attendance_policy_id;
 
 
-            this.AttendancePolicyService.deletePolicyShift(row.attendance_policy_leave_id).subscribe(data => {
+            this.AttendancePolicyService.deletePolicyLeave(row.attendance_policy_leave_id).subscribe(data => {
 
                 if (data.MessageType == 1) {
                     this.leavePolicyDetails.splice(this.leavePolicyDetails.findIndex(item => item.attendance_policy_leave_id === row.attendance_policy_leave_id), 1);
@@ -691,7 +706,7 @@ export class AttendancePolicyComponent implements OnInit {
 
             let attendance_policy_id = this.rowData.attendance_policy_id;
             dayOffPolicyObj.attendance_policy_id = attendance_policy_id;
-            this.AttendancePolicyService.createPolicyLeave(dayOffPolicyObj).subscribe(data => {
+            this.AttendancePolicyService.createPolicyDayOff(dayOffPolicyObj).subscribe(data => {
 
                 if (data.MessageType == 1) {
                     this.dayOffPolicyDetails.unshift(data.Data[0]);
@@ -720,7 +735,7 @@ export class AttendancePolicyComponent implements OnInit {
             let attendance_policy_id = this.rowData.attendance_policy_id;
 
 
-            this.AttendancePolicyService.deletePolicyShift(row.attendance_policy_dayoff_id).subscribe(data => {
+            this.AttendancePolicyService.deletePolicyDayOff(row.attendance_policy_dayoff_id).subscribe(data => {
 
                 if (data.MessageType == 1) {
                     this.dayOffPolicyDetails.splice(this.dayOffPolicyDetails.findIndex(item => item.attendance_policy_leave_id === row.attendance_policy_leave_id), 1);
