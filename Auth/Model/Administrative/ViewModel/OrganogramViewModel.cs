@@ -15,7 +15,8 @@ namespace Auth.Model.Administrative.ViewModel
         public int location_id { get; set; }
         public int company_id { get; set; }
         public int organogram_id { get; set; }
-
+        public Boolean IsActive { get; set; }
+        public int SortingPriority { get; set; }
         public static OrganogramViewModel ConvertToModel(dynamic user)
         {
             var model = new OrganogramViewModel();
@@ -27,6 +28,8 @@ namespace Auth.Model.Administrative.ViewModel
             model.department_id = user.department_id ?? 0;
             model.location_id = user.location_id ?? 0;
             model.company_id = user.company_id ?? 0;
+            model.IsActive = user.is_active ?? 0;
+            model.SortingPriority = user.sorting_priority ?? 0;
             return model;
         }
     }
