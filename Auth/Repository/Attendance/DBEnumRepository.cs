@@ -22,6 +22,7 @@ namespace Auth.Repository.Attendance
            return await _dBEnumDataAcess.GetDayOffTypeForDP();
         }
 
+
         public async Task<dynamic> GetDayOffAlternativeForDP()
         {
             return await _dBEnumDataAcess.GetDayOffAlternativeForDP();

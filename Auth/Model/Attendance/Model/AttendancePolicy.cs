@@ -5,9 +5,14 @@ using System.Threading.Tasks;
 
 namespace Auth.Model.Attendance.Model
 {
-    public class AttendancePolicy
+	public class AttendancePolicy
 	{
-    public int attendance_policy_id { get; set; }
+		public AttendancePolicy()
+	{
+			attendance_policy_id=0;
+			absenteeism_policy_id = 0;
+	}
+    public int? attendance_policy_id { get; set; }
 	public string code { get; set; }
 	public string policy_name { get; set; }
 	public string remarks { get; set; }
