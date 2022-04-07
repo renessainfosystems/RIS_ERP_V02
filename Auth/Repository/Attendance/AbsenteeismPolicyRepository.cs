@@ -36,5 +36,10 @@ namespace Auth.Repository.Attendance
         {
             return await _absenteeismPolicyDataAccess.IUD_Absenteeism_Policy(absenteeismPolicy,dbOperation);
         }
+
+        public async Task<dynamic> GetAllAbsenteeismPolicyForDP()
+        {
+            return await _absenteeismPolicyDataAccess.GetAllAbsenteeismPolicyForDP();
+        }
     }
 }

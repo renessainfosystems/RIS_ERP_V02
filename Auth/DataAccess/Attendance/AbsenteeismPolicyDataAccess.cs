@@ -137,7 +137,9 @@ namespace Auth.DataAccess.Attendance
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@param_company_group_id", company_group_id);
                 parameters.Add("@param_company_id", company_id);
-                result = await _dbConnection.QueryAsync<dynamic>("[Attendance].[SP_All_Absenteeism_Policy_Get]", parameters, commandType: CommandType.StoredProcedure);
+                var sql = " SELECT * FROM [Attendance].[View_AbsenteeismPolicy] s " + 
+                    "WHERE S.company_group_id = CASE WHEN(isShared = 1) THEN @param_company_group_id ELSE S.company_group_id END AND S.company_id = CASE WHEN(isShared = 0) THEN @param_company_id ELSE S.company_id END ";
+                result = await _dbConnection.QueryAsync<dynamic>(sql, parameters);
              
             }
             catch (Exception ex)
@@ -210,5 +212,41 @@ namespace Auth.DataAccess.Attendance
 
             return result;
         }
+
+        public async Task<dynamic> GetAllAbsenteeismPolicyForDP()
+        {
+            var message = new CommonMessage();
+            var company_group_id = _httpContextAccessor.HttpContext.Items["company_group_id"];
+            var company_id = _httpContextAccessor.HttpContext.Items["company_id"];
+            var result = (dynamic)null;
+
+            if (_dbConnection.State == ConnectionState.Closed)
+                _dbConnection.Open();
+
+
+            try
+            {
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@param_company_group_id", company_group_id);
+                parameters.Add("@param_company_id", company_id);
+                var sql = " SELECT S.absenteeism_policy_id,S.absenteeism_policy_name FROM [Attendance].[View_AbsenteeismPolicy] s " +
+                    "WHERE S.company_group_id = CASE WHEN(isShared = 1) THEN @param_company_group_id ELSE S.company_group_id END AND S.company_id = CASE WHEN(isShared = 0) THEN @param_company_id ELSE S.company_id END AND S.is_active=1";
+                result = await _dbConnection.QueryAsync<dynamic>(sql, parameters);
+
+            }
+            catch (Exception ex)
+            {
+                throw ex.InnerException;
+            }
+            finally
+            {
+
+                _dbConnection.Close();
+            }
+
+
+            return (result);
+        }
+
     }
 }

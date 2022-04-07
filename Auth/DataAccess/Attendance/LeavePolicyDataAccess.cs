@@ -185,7 +185,7 @@ namespace Auth.DataAccess.Attendance
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@param_company_group_id", company_group_id);
                 parameters.Add("@param_company_id", company_id);
-                var sql = " SELECT * FROM Leave.LeavePolicies s " +
+                var sql = " SELECT * FROM Leave.View_LeavePolicies s " +
                     "WHERE S.company_group_id = CASE WHEN(isShared = 1) THEN @param_company_group_id ELSE S.company_group_id END AND S.company_id = CASE WHEN(isShared = 0) THEN @param_company_id ELSE S.company_id END ORDER BY S.leave_policy_id DESC";
                 result = await _dbConnection.QueryAsync<dynamic>(sql, parameters);
 
@@ -221,7 +221,7 @@ namespace Auth.DataAccess.Attendance
                 parameters.Add("@param_company_group_id", company_group_id);
                 parameters.Add("@param_company_id", company_id);
                 parameters.Add("@param_policy_or_leave_name", policy_or_leave_name + '%');
-                var sql = " SELECT * FROM Leave.LeavePolicies s " +
+                var sql = " SELECT * FROM Leave.View_LeavePolicies s " +
                     "WHERE S.company_group_id = CASE WHEN(isShared = 1) " +
                     "THEN @param_company_group_id ELSE S.company_group_id END AND " +
                     "S.company_id = CASE WHEN(isShared = 0) THEN @param_company_id ELSE S.company_id END AND (leave_policy_name like @param_policy_or_leave_name Or head_name like @param_policy_or_leave_name)";

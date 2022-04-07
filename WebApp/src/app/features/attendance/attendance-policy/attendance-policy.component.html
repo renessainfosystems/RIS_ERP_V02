@@ -1,1 +1,478 @@
-<p>attendance-policy works!</p>
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+
+            <h4>Attendance Policy</h4>
+            <div [hidden]="formDisplay">
+
+                <form action="" [formGroup]="AttendancePolicyForm">
+
+                    <div class="col-12">
+                        <div class="p-fluid p-formgrid grid md:pl-5 md:pr-5">
+                            <div class="field col-12 md:col-6 flex justify-content-start flex-wrap ">
+                                <label pTooltip="Attendance Policy Name" tooltipPosition="top">Name<span class="req">*</span> </label>
+                                <input id="lastname2" type="text" class="from-contro flex align-items-center justify-content-centerl" formControlName="policy_name"
+                                       [ngClass]="{ 'is-invalid': submitted && f.policy_name.errors }"
+                                       placeholder="" pInputText required />
+
+                                <div *ngIf="submitted && f.policy_name.errors" class="invalid-feedback">
+                                    <small *ngIf="f.policy_name.errors.required" class="p-error">Policy name is required</small>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-6 float-right">
+                                <label pTooltip="Attendance Policy Code" tooltipPosition="top">Code<span class="req">*</span></label>
+                                <input pInputText id="firstname2" type="text" formControlName="code" pInputText disabled />
+                            </div>
+
+
+
+                            <div class="field col-12" style="padding-left: 0; padding-right: 13px;">
+                                <label pTooltip="Remarks" tooltipPosition="top">Remarks </label>
+                                <input id="lastname2" type="text" formControlName="remarks" placeholder="" pInputText />
+
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label pTooltip="Calendar" tooltipPosition="top">Calendar<span class="req">*</span></label>
+                                <p-dropdown [options]="calendarsDP" [(ngModel)]="selectedCalendar" formControlName="attendance_calendar_id" [ngClass]="{ 'is-invalid': submitted && f.attendance_calendar_id.errors }" placeholder="Select Calendar"
+                                            optionLabel="AttendanceCalendarName" optionValue="AttendanceCalendarId" [showClear]="true"></p-dropdown>
+
+                                <div *ngIf="submitted && f.attendance_calendar_id.errors" class="invalid-feedback">
+                                    <small *ngIf="f.attendance_calendar_id.errors.required" class="p-error">Calendar is required</small>
+                                </div>
+                            </div>
+
+
+                            <div class="field col-12 md:col-6 ">
+
+                                <label pTooltip="Absenteeism policy" tooltipPosition="top">Absenteeism policy<span class="req">*</span></label>
+
+                                <div class="grid">
+                                    <div class=" col-12 md:col-10">
+                                        <p-dropdown [options]="absenteeismDP" [(ngModel)]="selectedAbsenteeism" formControlName="absenteeism_policy_id" [ngClass]="{ 'is-invalid': submitted && f.absenteeism_policy_id.errors }" placeholder="Select Absenteeism Policy" optionLabel="absenteeism_policy_name"   optionValue="absenteeism_policy_id" [showClear]="true"></p-dropdown>
+                                    </div>
+                                    <div class=" col-12 md:col-1">
+
+                                        <button class=" pi pi-eye risBtn risAll mr-2" (click)="viewAbsenteeismPolicy()" label="Add">View</button>
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="field col-12 md:col-6 ">
+
+                                <label pTooltip="Late Early Policy" tooltipPosition="top">Late Early Policy<span class="req">*</span></label>
+                                <div class="grid">
+                                    <div class=" col-12 md:col-10">
+                                        <p-dropdown [options]="lateEarlyDP" formControlName="late_early_policy_id" [ngClass]="{ 'is-invalid': submitted && f.late_early_policy_id.errors }" placeholder="Select Late Early Policy"
+                                                    optionLabel="late_early_policy_name" optionValue="late_early_policy_id"  [showClear]="true"></p-dropdown>
+
+                                    </div>
+                                    <div class=" col-12 md:col-1">
+
+                                        <button class=" pi pi-eye risBtn risAll mr-2" (click)="viewLateEarlyPolicy()" label="Add">View</button>
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="field col-12 md:col-6 ">
+
+                                <label pTooltip="Roster Policy" tooltipPosition="top">Roster Policy<span class="req">*</span></label>
+                                <div class="grid">
+                                    <div class=" col-12 md:col-10">
+                                        <p-dropdown [options]="rosterPolicyDP" formControlName="roster_policy_id" [ngClass]="{ 'is-invalid': submitted && f.roster_policy_id.errors }" placeholder="Select Roster Policy"
+                                                    optionLabel="roster_policy_name"optionValue="roster_policy_id" [showClear]="true"></p-dropdown>
+
+                                    </div>
+                                    <div class=" col-12 md:col-1">
+
+                                        <button class=" pi pi-eye risBtn risAll mr-2" (click)="viewRosterPolicy()" label="Add">View</button>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-6 float-right">
+                                <label pTooltip="Benefit Policy" tooltipPosition="top">Benefit Policy <span class="req"></span></label>
+                                <div class="grid">
+                                    <div class=" col-12 md:col-10">
+
+                                        <p-dropdown [options]="benefitPolicyDP" formControlName="abp_id" [ngClass]="{ 'is-invalid': submitted && f.abp_id.errors }" placeholder="Select Benefit Policy"
+                                                    optionLabel="abp_name"  [showClear]="true"></p-dropdown>
+
+                                    </div>
+                                    <div class=" col-12 md:col-1">
+
+                                        <button class=" pi pi-plus risBtn risAdd mr-2" (click)="addAttendanceBenefit()" label="Add">Add</button>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="field col-12 md:col-6 ">
+
+                                <label pTooltip="Shift" tooltipPosition="top">Shift<span class="req">*</span></label>
+
+                                <div class="grid">
+                                    <div class=" col-12 md:col-10">
+                                        <p-dropdown [options]="allShifts" formControlName="shift_id" [ngClass]="{ 'is-invalid': submitted && f.shift_id.errors }" placeholder="Select Shift"
+                                                    optionLabel="shift_name" [showClear]="true"></p-dropdown>
+
+                                    </div>
+                                    <div class=" col-12 md:col-1">
+
+                                        <button class=" pi pi-plus risBtn risAdd mr-2" (click)="addShift()" label="Add">Add</button>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <p-table [value]="attBenefitDetails" styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm" responsiveLayout="scroll">
+
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th style="width:50px">#SL</th>
+
+                                            <th style="width:350px"> Benefit   </th>
+
+                                            <th style="width:50px">Action</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-rowIndex="rowIndex" let-slab>
+
+                                        <tr>
+                                            <td>{{rowIndex+1}}</td>
+
+                                            <td>{{slab.abp_name}}</td>
+
+                                            <td> <button pButton pRipple type="button" icon="pi pi-times-circle" class="risBtn risDelete" (click)="removeattBenifit(rowIndex,slab)"> </button></td>
+
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+
+                            <div class="field col-12 md:col-6">
+                                <p-table [value]="shiftDetails" styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm" responsiveLayout="scroll">
+
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th style="width:50px">#SL</th>
+
+                                            <th style="width:350px"> Shift    </th>
+
+                                            <th style="width:50px">Action</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-rowIndex="rowIndex" let-slab>
+
+                                        <tr>
+                                            <td>{{rowIndex+1}}</td>
+
+                                            <td>{{slab.shift_name}}</td>
+
+
+                                            <td> <button pButton pRipple type="button" icon="pi pi-times-circle" class="risBtn risDelete" (click)="removeShift(rowIndex,slab)"> </button></td>
+
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+
+
+                            <div class="field col-12 md:col-6 ">
+
+                                <label pTooltip="Leave Policy" tooltipPosition="top">Leave Policy<span class="req">*</span></label>
+
+                                <div class="grid">
+                                    <div class=" col-12 md:col-10">
+                                        <p-dropdown [options]="leavePolicyDP" formControlName="leave_policy_id" [ngClass]="{ 'is-invalid': submitted && f.leave_policy_id.errors }" placeholder="Select Leave Policy"
+                                                    optionLabel="leave_policy_name" [showClear]="true"></p-dropdown>
+
+
+                                    </div>
+                                    <div class=" col-12 md:col-1">
+
+                                        <button class=" pi pi-plus risBtn risAdd mr-2" (click)="addLeavePolicy()" label="Add">Add</button>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-12 pl-0 mt-2 pr-3">
+                                <p-table [value]="leavePolicyDetails" styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm" responsiveLayout="scroll">
+
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th style="width:50px">#SL</th>
+
+                                            <th style="width:250px"> Policy Name    </th>
+                                            <th>Leave</th>
+                                            <th>Total Leave</th>
+                                            <th>Activation</th>
+                                            <th style="width:50px">Action</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-rowIndex="rowIndex" let-slab>
+
+                                        <tr>
+                                            <td>{{rowIndex+1}}</td>
+
+                                            <td>{{slab.leave_policy_name}}</td>
+
+                                            <td>{{slab.leave_head_short_name}}</td>
+                                            <td>{{slab.default_leave_balance_day}}</td>
+
+                                            <td>{{slab.activationdays}}</td>
+                                            <td> <button pButton pRipple type="button" icon="pi pi-times-circle" class="risBtn risDelete" (click)="removeLeavePolicy(rowIndex,slab)"> </button></td>
+
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                            <div class="field col-12 md:col-12 float-right">
+
+                                <div class="grid">
+                                    <div class=" col-12 md:col-6">
+                                        <div class="field-checkbox mb-0">
+                                            <p-checkbox name="is_negetive_balance" formControlName="is_random_dayoff" (onChange)="onAllowRandomDayOff($event)" binary="true"></p-checkbox>
+                                            <label for="ch">Enable Random day off days</label>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="isShownNoOfDayOff" class=" col-12 md:col-6">
+                                        <label pTooltip="Max Negative Balance" tooltipPosition="top">No of Day Off<span class="req"></span></label>
+                                        <div class="field-checkbox mb-0 md:mr-1 mt-2 ">
+                                            <input id="no_of_random_dayoff" type="number" min="0" formControlName="no_of_random_dayoff" placeholder="" pInputText />
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div *ngIf="isShownDayOff" class="field col-12 md:col-6">
+                                <label pTooltip="Next Shift" tooltipPosition="top">Week Day<span class="req">*</span></label>
+                                <div class="grid">
+                                    <div class="field col-12 md:col-7">
+
+                                        <p-dropdown [options]="weekDaysDP" formControlName="week_day" [ngClass]="{ 'is-invalid': submitted && f.week_day.errors }" placeholder="Select Week Day"
+                                                    optionLabel="week_day" [showClear]="true"></p-dropdown>
+
+
+                                    </div>
+                                    <div class="field col-12 md:col-5">
+
+                                        <p-dropdown [options]="DayOffDP" formControlName="dayoff_type_id" [ngClass]="{ 'is-invalid': submitted && f.dayoff_type_id.errors }" placeholder="Select Day Off"
+                                                    optionLabel="dayoff_type_name" [showClear]="true"></p-dropdown>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="isShownDayOff" class="field col-12 md:col-6">
+                                <label pTooltip="Next Shift" tooltipPosition="top">Day Off Alternative<span class="req">*</span></label>
+                                <div class="grid">
+                                    <div class="field col-12 md:col-10">
+
+                                        <p-dropdown [options]="DayOffAlternativeDP" formControlName="dayoff_alternative_id" [ngClass]="{ 'is-invalid': submitted && f.dayoff_alternative_id.errors }" placeholder="Select Day Off Alternative"
+                                                    optionLabel="dayoff_alternative_name" [showClear]="true"></p-dropdown>
+                                    </div>
+                                    <div class="field col-12 md:col-2">
+
+                                        <button class=" pi pi-plus risBtn risAdd mr-2" (click)="addDayOffPolicy()" label="Add">Add</button>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="isShownDayOff" class="field col-12 md:col-12 pl-0 pr-3">
+                                <p-table [value]="dayOffPolicyDetails" styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm" responsiveLayout="scroll">
+
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th style="width:50px">#SL</th>
+
+                                            <th style="width:350px">Day Off    </th>
+
+                                            <th style="width:50px">Action</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-rowIndex="rowIndex" let-slab>
+
+                                        <tr>
+                                            <td>{{rowIndex+1}}</td>
+
+                                            <td>{{slab.week_day}} {{slab.dayoff_type_name}} {{slab.dayoff_alternative_name}}</td>
+
+
+                                            <td> <button pButton pRipple type="button" icon="pi pi-times-circle" class="risBtn risDelete" (click)="removeDayOffPolicy(rowIndex,slab)"> </button></td>
+
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </div>
+                        <div class="flex justify-content-end md:pl-5 md:pr-5">
+                            <button pButton pRipple type="button" label="Save" (click)="saveAttendancePolicy()" class="risBtn risSave mr-2 mb-2" icon="pi pi-check"></button>
+                            <button pButton pRipple type="button" (click)="toggleFormClose()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
+                        </div>
+                    </div>
+
+
+                </form>
+
+            </div>
+
+            <!--end form display------------->
+
+            <div [hidden]="gridDisplay">
+                <button pButton pRipple type="button" label="New" (click)="showBasicDialog()" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
+                <button pButton pRipple type="button" label="Edit" (click)="loadRosterPolicyToEdit()" icon="pi pi-pencil" class="risBtn risEdit mr-2 mb-2"></button>
+                <button pButton pRipple type="button" label="Delete" icon="pi pi-trash" class="risBtn risDelete mr-2 mb-2" (click)="deleteModal($event)"> </button>
+                <button pButton pRipple type="button" label="Activity" icon="pi pi-box" class="risBtn risAll mr-2 mb-2"> </button>
+                <button pButton pRipple type="button" label="Approve" icon="pi pi-box" class="risBtn risAll mr-2 mb-2" (click)="approveModal($event)"> </button>
+                <button pButton pRipple type="button" label="Copy" icon="pi pi-copy" class="risBtn risAll mr-2 mb-2" (click)="copyModal($event)"> </button>
+                <p-confirmPopup key="approve"></p-confirmPopup>
+                <p-confirmPopup key="delete"></p-confirmPopup>
+                <p-confirmPopup key="copy"></p-confirmPopup>
+                <p-table [value]="AttendancePolicies" styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm" [paginator]="true" [rows]="10" selectionMode="single" [showCurrentPageReport]="true" responsiveLayout="scroll"
+                         [(selection)]="selectedPolicy" dataKey="attendance_policy_id" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Policy Name</th>
+                            <th>Calendar</th>
+                            <th>Leave Policy</th>
+                            <th>Late Early Policy</th>
+                            <th>Absenteeism Policy</th>
+                            <th>Roster Policy</th>
+                            <th>Approve</th>
+                            <th>Activity</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-attPolicy>
+                        <tr [pSelectableRow]="attPolicy">
+
+                            <td>{{attPolicy.policy_name}}</td>
+                            <td>{{attPolicy.attendance_calendar_name}}</td>
+                            <td>{{attPolicy.leave_policy_name}}</td>
+                            <td>{{attPolicy.late_early_policy_name}}</td>
+                            <td>{{attPolicy.absenteeism_policy_name}}</td>
+                            <td>{{attPolicy.roster_policy_name}}</td>
+                            <td>{{attPolicy.approvedBy}}</td>
+                            <td *ngIf="attPolicy.is_active===true">{{"Active"}}</td>
+                            <td *ngIf="attPolicy.is_active===false">{{"InActive"}}</td>
+
+                        </tr>
+                    </ng-template>
+
+                </p-table>
+                <!--end grid display -------------->
+            </div>
+
+            <p-dialog header="Late Early Details" [(visible)]="lateearlydisplay" modal="modal" showEffect="fade" [style]="{width: '50vw'}" [breakpoints]="{'960px': '75vw'}">
+                <div class="col-12 ">
+                    <p-table [value]="latEarlySlabDataSources" styleClass="p-datatable-sm" class="p-0" responsiveLayout="scroll">
+
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>#SL</th>
+
+                                <th>Rules For</th>
+                                <th>Description</th>
+                                <th>Leave Adjustment</th>
+                                <th>Salary Adjustment</th>
+
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-rowIndex="rowIndex" let-slab>
+
+                            <tr>
+                                <td>{{rowIndex+1}}</td>
+
+                                <td>{{slab.rulesFor}}</td>
+                                <td>{{slab.description}}</td>
+                                <td>{{slab.leaveadjustment}}</td>
+                                <td>{{slab.Salaryadjustment}}</td>
+
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+                <ng-template pTemplate="footer">
+                    <button pButton icon="pi pi-check" (click)="lateearlydisplay=false" label="Ok" class="p-button-outlined"></button>
+                </ng-template>
+            </p-dialog>
+
+            <p-dialog header="Roster Policy Details" [(visible)]="rosterPolicydisplay" modal="modal" showEffect="fade" [style]="{width: '50vw'}" [breakpoints]="{'960px': '75vw'}">
+                <div class="field col-12 md:col-12 pl-0 pr-3">
+                    <p-table [value]="rosterDetails" styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm" responsiveLayout="scroll">
+
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th style="width:100px">#SL</th>
+
+                                <th style="width:250px"> Shift    </th>
+                                <th>Next Shift</th>
+
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-rowIndex="rowIndex" let-slab>
+
+                            <tr>
+                                <td>{{rowIndex+1}}</td>
+
+                                <td>{{slab.shift_name}}</td>
+
+                                <td>{{slab.next_shift_name}}</td>
+
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+                <ng-template pTemplate="footer">
+                    <button pButton icon="pi pi-check" (click)="rosterPolicydisplay=false" label="Ok" class="p-button-outlined"></button>
+                </ng-template>
+            </p-dialog>
+
+            <p-dialog header="Absenteeism Policy Details" [(visible)]="absenteeismdisplay" modal="modal" showEffect="fade" [style]="{width: '50vw'}" [breakpoints]="{'960px': '75vw'}">
+                <form action="" [formGroup]="AbsenteeismPolicyForm">
+                    <div class="p-fluid grid col-12 flex justify-content-start flex-wrap card-container">
+                      
+                        <div class="col-12 p-fluid ">
+                            <p-checkbox name="group" formControlName="is_leave_adjustment" binary="true" pl-1></p-checkbox>
+                            <label for="" class=" d-md-inline-flex  pl-2">Leave Adjustment as per deduction priority.System will apply leave automatically</label>
+                        </div>
+
+                    </div>
+                    <div class="p-fluid grid col-12 flex justify-content-start flex-wrap card-container">
+                        
+                        <div class="col-12 p-fluid ">
+                            <label for="" pl class=" d-md-inline-flex">
+                                If there is no sufficient leave balance or no leave adjustment is declared,system will deduct from salary if user configure "Salary Adjustment"
+                            </label>
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="p-fluid grid col-12 flex justify-content-start flex-wrap card-container">
+         
+                        <div class="col-12 p-fluid ">
+                            <p-checkbox name="group" formControlName="is_monetary_benefit" binary="true" pl-1></p-checkbox>
+                            <label for="" style="font-weight: bold;" class=" d-md-inline-flex  pl-2">Salary Adjustment(Deduction)</label>
+                            <br />
+                            <br />
+                            <label for="" pl class=" d-md-inline-flex">
+                                Under the salary head "Absent" following amount will be deducted.
+                                Daily 100 % of "Basic" will be deducted.
+                            </label>
+                        </div>
+                       
+                    </div>
+                    </form>
+                    <ng-template pTemplate="footer">
+                        <button pButton icon="pi pi-check" (click)="absenteeismdisplay=false" label="Ok" class="p-button-outlined"></button>
+                    </ng-template>
+            </p-dialog>
+        </div>
+    </div>
+</div>

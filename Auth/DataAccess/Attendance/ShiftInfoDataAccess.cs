@@ -379,7 +379,7 @@ namespace Auth.DataAccess.Attendance
                 parameters.Add("@param_company_id", company_id);
                 var sql = "DECLARE @pv_is_shared BIT " +
                     "SELECT @pv_is_shared = is_shared from Auth.Software_Sharing_Policy " +
-                    "SELECT S.shift_id,S.shift_name FROM[Attendance].[Shift_Info] s " +
+                    "SELECT shift_id,shift_name+'('+Convert(varchar(5),[shift_start]) +'-'+ Convert(varchar(5),[shift_end])+')' shift_name FROM[Attendance].[Shift_Info] s " +
                     "WHERE S.company_group_id = CASE WHEN(@pv_is_shared = 1) THEN @param_company_group_id ELSE S.company_group_id END " +
                     "AND S.company_id = CASE WHEN(@pv_is_shared = 0) THEN @param_company_id ELSE S.company_id END AND is_active = 1";
                 result = await _dbConnection.QueryAsync<dynamic>(sql, parameters);

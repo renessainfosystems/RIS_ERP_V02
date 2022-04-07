@@ -13,6 +13,7 @@ namespace Auth.Repository.Attendance
         Task<dynamic> GetAttendanceBenefitPolicyById(int abp_id);
 
         Task<dynamic> GetBenefitPolicyCode();
+        Task<dynamic> GetAllAttBenefitPolicyForDP();
         Task<dynamic> IUD_Attendance_Benefit_Policy(AttendanceBenefitPolicy attendanceBenefitPolicy, int dbOperation);
     }
 }

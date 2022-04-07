@@ -73,6 +73,12 @@ namespace Auth.Controllers.Attendance
             return await _attendanceBenefitPolicyRepository.GetBenefitPolicyCode();
 
         }
+        [HttpGet]
+        public async Task<dynamic> GetAllAttBenefitPolicyForDP()
+        {
+
+            return await _attendanceBenefitPolicyRepository.GetAllAttBenefitPolicyForDP();
+        }
     }
 
 }

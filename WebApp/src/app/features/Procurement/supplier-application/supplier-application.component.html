@@ -266,6 +266,7 @@
                                                     <th>#SL</th>
                                                     <th>Sector</th>
                                                     <th>Sub Sector</th>
+                                                    <th>Supplier ID</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </ng-template>
@@ -274,6 +275,7 @@
                                                     <td>{{rowIndex+1}}</td>
                                                     <td>{{subSector.industry_sector_name}}</td>
                                                     <td>{{subSector.industry_sub_sector_name}}</td>
+                                                    <td>{{subSector.supplier_id}}</td>
                                                     <td> <button class="pi pi-times-circle risBtn risDelete" (click)="removeSubSector(rowIndex,event)"> </button></td>
                                                 </tr>
                                             </ng-template>

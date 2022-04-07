@@ -17,14 +17,15 @@ namespace Auth.Repository.Attendance
         }
 
 
-        public Task<dynamic> GetDayOffTypeForDP()
+        public async Task<dynamic> GetDayOffTypeForDP()
         {
-            throw new NotImplementedException();
+           return await _dBEnumDataAcess.GetDayOffTypeForDP();
         }
 
-        public Task<dynamic> GetDayOffAlternativeForDP()
+
+        public async Task<dynamic> GetDayOffAlternativeForDP()
         {
-            throw new NotImplementedException();
+            return await _dBEnumDataAcess.GetDayOffAlternativeForDP();
         }
     }
 }

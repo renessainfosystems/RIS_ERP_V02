@@ -610,7 +610,7 @@ export class LeavePolicyComponent implements OnInit {
     onLeaveHeadChange(event) {
         let leaveHeadId = event.value;
         let data=    this.leaveHeads.filter(
-            book => book.LeaveHeadId === leaveHeadId);
+            leave => leave.LeaveHeadId === leaveHeadId);
         this.leavePolicyForm.controls['description'].setValue('['+data[0].LeaveHeadShortName + ': ' + data[0].LeaveTypeName +'] '+ '[Applicable for: ' +  data[0].RequiredFor +']');
         if (data[0].LeaveTypeIdEnum === 3) {
             this.isShownEarnLeave = true;

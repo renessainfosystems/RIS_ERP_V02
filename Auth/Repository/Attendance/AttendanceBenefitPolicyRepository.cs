@@ -38,6 +38,11 @@ namespace Auth.Repository.Attendance
         {
             return await _attendanceBenefitPolicyDataAccess.IUD_Attendance_Benefit_Policy(attendanceBenefitPolicy, dbOperation);
         }
+
+        public async Task<dynamic> GetAllAttBenefitPolicyForDP()
+        {
+            return await _attendanceBenefitPolicyDataAccess.GetAllAttBenefitPolicyForDP();
+        }
     }
     }
 
