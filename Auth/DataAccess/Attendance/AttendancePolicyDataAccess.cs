@@ -197,7 +197,7 @@ namespace Auth.DataAccess.Attendance
                         {
                             item.attendance_policy_id = data[0].attendance_policy_id;
                             var slabParameters = AttendancePolicyBenefitParameterBinding(item, dbOperation);
-                            dynamic slabData = _dbConnection.QueryFirstOrDefaultAsync("[Attendance].[SP_Attendance_Policy_Benefit_IUD]", slabParameters, commandType: CommandType.StoredProcedure);
+                            dynamic slabData = _dbConnection.QueryFirstOrDefault<dynamic>("[Attendance].[SP_Attendance_Policy_Benefit_IUD]", slabParameters, commandType: CommandType.StoredProcedure);
 
                         }
                     }
@@ -210,7 +210,7 @@ namespace Auth.DataAccess.Attendance
                         {
                             item.attendance_policy_id = data[0].attendance_policy_id;
                             var slabParameters = AttendancePolicyDayoffParameterBinding(item, dbOperation);
-                            dynamic slabData = _dbConnection.QueryFirstOrDefaultAsync("[Attendance].[SP_Attendance_Policy_Dayoff_IUD]", slabParameters, commandType: CommandType.StoredProcedure);
+                            dynamic slabData = _dbConnection.QueryFirstOrDefault<dynamic>("[Attendance].[SP_Attendance_Policy_Dayoff_IUD]", slabParameters, commandType: CommandType.StoredProcedure);
 
                         }
                     }
@@ -223,7 +223,7 @@ namespace Auth.DataAccess.Attendance
                         {
                             item.attendance_policy_id = data[0].attendance_policy_id;
                             var slabParameters = AttendancePolicyShiftParameterBinding(item, dbOperation);
-                            dynamic slabData = _dbConnection.QueryFirstOrDefaultAsync("[Attendance].[SP_Attendance_Policy_Shift_IUD]", slabParameters, commandType: CommandType.StoredProcedure);
+                            dynamic slabData = _dbConnection.QueryFirstOrDefault<dynamic>("[Attendance].[SP_Attendance_Policy_Shift_IUD]", slabParameters, commandType: CommandType.StoredProcedure);
 
                         }
                     }
@@ -236,7 +236,7 @@ namespace Auth.DataAccess.Attendance
                         {
                             item.attendance_policy_id = data[0].attendance_policy_id;
                             var slabParameters = AttendancePolicyLeaveParameterBinding(item, dbOperation);
-                            dynamic slabData = _dbConnection.QueryFirstOrDefaultAsync("[Attendance].[SP_Attendance_Policy_Leave_IUD]", slabParameters, commandType: CommandType.StoredProcedure);
+                            dynamic slabData = _dbConnection.QueryFirstOrDefault<dynamic>("[Attendance].[SP_Attendance_Policy_Leave_IUD]", slabParameters, commandType: CommandType.StoredProcedure);
 
                         }
                     }
@@ -516,16 +516,18 @@ namespace Auth.DataAccess.Attendance
       "WHERE attendance_policy_id =@attendance_policy_id " +
 
 
-      "SELECT r.attendance_policy_dayoff_id,r.attendance_policy_id,r.dayoff_type_id,r.week_day + '[' + d.dayoff_type_name + ']' week_day FROM Attendance.Attendance_Policy_Dayoff r " +
+      "SELECT r.attendance_policy_dayoff_id,r.attendance_policy_id,r.dayoff_type_id,r.week_day+'['+d.dayoff_type_name+']'+case when (da.dayoff_alternative_name is not null) then '['+da.dayoff_alternative_name+']' else '' end week_day FROM Attendance.Attendance_Policy_Dayoff r " +
       "Inner join DBEnum.Dayoff_Type d on d.dayoff_type_id = r.dayoff_type_id " +
-     " WHERE attendance_policy_id = @attendance_policy_id " +
+      "left join DBEnum.Dayoff_Alternative da on da.dayoff_alternative_id=r.dayoff_alternative_id" +
+      " WHERE attendance_policy_id = @attendance_policy_id " +
 
-     " SELECT r.attendance_policy_leave_id,r.attendance_policy_id,r.leave_policy_id,l.leave_policy_name FROM Attendance.Attendance_Policy_Leave r " +
+     " SELECT r.attendance_policy_leave_id,r.attendance_policy_id,r.leave_policy_id,l.leave_policy_name,lh.leave_head_short_name,l.default_leave_balance_day,CASE WHEN (is_activation_on_joining=1) then  'After'+' '+cast(activation_days as varchar)+' '+'days of joining' else 'After'+' '+cast(activation_days as varchar) +' '+'days of confirmation' end activationdays FROM Attendance.Attendance_Policy_Leave r " +
      " Inner join leave.Leave_Policy l on l.leave_policy_id = r.leave_policy_id " +
+     "  inner join Leave.Leave_Head lh on l.leave_head_id=lh.leave_head_id" +
      " WHERE attendance_policy_id = @attendance_policy_id " +
 
 
-     " SELECT r.attendance_policy_shift_id,r.attendance_policy_shift_id,r.shift_id,s.shift_name FROM Attendance.Attendance_Policy_Shift r "+
+     " SELECT r.attendance_policy_id,r.attendance_policy_shift_id,r.shift_id,s.shift_name FROM Attendance.Attendance_Policy_Shift r " +
      " INNER JOIN Attendance.Shift_Info s on s.shift_id = r.shift_id WHERE attendance_policy_id = @attendance_policy_id ";
            
              DynamicParameters parameters = new DynamicParameters();
@@ -534,9 +536,11 @@ namespace Auth.DataAccess.Attendance
                 {
                     result = multi.Read<AttendancePolicy>().Single();
                     var benefitPolicy = multi.Read<AttendancePolicyBenefit>().ToList();
-                    var shiftPolicy = multi.Read<AttendancePolicyShift>().ToList();
-                    var leavePolicy = multi.Read<AttendancePolicyLeave>().ToList();
                     var dayoffPolicy = multi.Read<AttendancePolicyDayoff>().ToList();
+                    var leavePolicy = multi.Read<AttendancePolicyLeave>().ToList();
+                    var shiftPolicy = multi.Read<AttendancePolicyShift>().ToList();
+                 
+                   
 
                     result.attendance_Policy_Shifts=shiftPolicy;
                     result.attendance_Policy_Benefits = benefitPolicy;
