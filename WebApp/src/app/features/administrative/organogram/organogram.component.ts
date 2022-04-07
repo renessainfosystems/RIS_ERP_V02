@@ -2,8 +2,10 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { TreeNode } from 'primeng/api';
 import { Observable } from 'rxjs';
 import { NotificationService } from '../../../service/CommonMessage/notification.service';
+import { NodeService } from '../../../service/nodeservice';
 import { OrganogramService } from './organogram.service';
 
 @Component({
@@ -12,6 +14,22 @@ import { OrganogramService } from './organogram.service';
   styleUrls: ['./organogram.component.scss']
 })
 export class OrganogramComponent implements OnInit {
+
+
+    files1: TreeNode[];
+
+    files2: TreeNode[];
+
+    files3: TreeNode[];
+
+    selectedFiles1: TreeNode;
+
+    selectedFiles2: TreeNode[];
+
+    selectedFiles3: TreeNode;
+
+    cols: any[];
+
 
 
    // organogramForm: FormGroup;
@@ -38,7 +56,9 @@ export class OrganogramComponent implements OnInit {
     rowData: any;
     dataSaved = false;
     //companyForm: any;
-    OrganogramList: any[];
+    //OrganogramList: any[];
+    OrganogramList: TreeNode[];
+
     organogramdataSource: any[];//single organogram
     selectedorganogram: any;
     isOrganogramEdit: boolean = false;
@@ -124,12 +144,15 @@ export class OrganogramComponent implements OnInit {
         //    return;
         //}
     }
-    constructor(private formbulider: FormBuilder, private organogramService: OrganogramService, private toastr: ToastrService, private notifyService: NotificationService) { }
+    constructor(private formbulider: FormBuilder, private nodeService: NodeService, private organogramService: OrganogramService, private toastr: ToastrService, private notifyService: NotificationService) { }
 
     ngOnInit(): void {
         this.organogramForm = this.formbulider.group({
 
             organogram_code: ['', [Validators.required]],
+            Group: [''],
+            location_name: [''],
+            department: [''],
             department_id: ['', [Validators.required]],
             location_id: ['', [Validators.required]],
             parent_id: ['', [Validators.required]],
@@ -193,7 +216,16 @@ export class OrganogramComponent implements OnInit {
         //this.loadAllEmployees();
         //this.loadPresentCountrydrpdwn();
         //this.loadPermanentCountrydrpdwn();
-
+        this.cols = [
+            { field: 'Node_Name', header: 'Organogram' }
+            //{ field: 'size', header: 'size' },
+            //{ field: 'type', header: 'type' }
+        ];
+        //this.cols = [
+        //    { field: 'company_name', header: 'Company' },
+        //    { field: 'location_name', header: 'Location' },
+        //    { field: 'department', header: 'Department' }
+        //];
     }
     onRowSelect(event) {
         debugger;
@@ -209,11 +241,19 @@ export class OrganogramComponent implements OnInit {
 
     }
     loadAllOrganogram() {
-        this.organogramService.getAllOrganogram().subscribe(data => {
-            console.log(data)
-            this.OrganogramList = data;
+        this.organogramService.getAllOrganogram().subscribe(data1 => {
+            debugger
+            console.log(data1)
+            this.OrganogramList = data1;
         });
+        //this.nodeService.getFilesystem().then(data => {
+        //    debugger
+        //    console.log(data)
+        //    this.OrganogramList = data;
+        //});
     }
+
+    
     onFormSubmit() {
         debugger
        const data = this.organogramForm.value;

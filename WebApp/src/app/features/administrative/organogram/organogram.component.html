@@ -4,15 +4,90 @@
             <h5>Organogram List</h5>
             <div [hidden]="formDisplay">
                 <form action="" [formGroup]="organogramForm">
+                    <div class="card-body">
+                        <div class="col-12">
+                            <div class="p-fluid p-formgrid grid">
+
+                                <div class="field col-6 md:col-6">
+                                    <div class="field col-12 md:col-12">
+                                        <label for="" class=" d-md-inline-flex" pTooltip="Group" tooltipPosition="top">Group</label>
+                                        <input id="float-input p-fluid" type="text" formControlName="Group" pInputText>
+                                    </div>
+
+                                    <div class="field col-12 md:col-12">
+                                        <label for="" class=" d-md-inline-flex" pTooltip="Company" tooltipPosition="top">Company</label>
+                                        <input id="float-input p-fluid" type="text" formControlName="Group" pInputText>
+                                    </div>
+
+                                </div>
+                                <div class="field col-6 md:col-6">
+                                    <div class="field col-12 md:col-12">
+                                        <label for="" class=" d-md-inline-flex" pTooltip="Organogram Code" tooltipPosition="top">Code</label>
+                                        <input id="float-input p-fluid" type="text" formControlName="organogram_code" pInputText>
+                                    </div>
+                                    <div class="field col-12 md:col-12">
+                                        <label for="" class=" d-md-inline-flex" pTooltip="Location name" tooltipPosition="top">Location/Branch</label>
+                                        <input id="float-input p-fluid" type="text" formControlName="location_name" pInputText>
+                                    </div>
+                                </div>
+                                <!--<div class="field col-12 md:col-12">
+                                  
+                                                                   
+                                </div>-->
+                                <div class="field col-6 md:col-6">
+                                    <div class="field col-12 md:col-12">
+                                        <label for="" class=" d-md-inline-flex" pTooltip="Department" tooltipPosition="top">Department</label>
+                                        <input id="float-input p-fluid" type="text" formControlName="department" pInputText>
+                                    </div>
+                                    <div class="field col-12 md:col-12">
+                                        <label for="" class=" d-md-inline-flex" pTooltip="No Of Manpower" tooltipPosition="top">No of Manpower</label>
+                                        <input id="float-input p-fluid" type="text" formControlName="department" pInputText>
+                                    </div>
+
+                                    <div class="field col-12 md:col-12">
+                                        <label for="" class=" d-md-inline-flex" pTooltip="Budget" tooltipPosition="top">Budget</label>
+                                        <input id="float-input p-fluid" type="text" formControlName="department" pInputText>
+                                    </div>
+                                    <div class="field col-12 md:col-12">
+                                        <label for="" class=" d-md-inline-flex" pTooltip="Open" tooltipPosition="top">Open</label>
+                                        <input id="float-input p-fluid" type="text" formControlName="department" pInputText>
+                                    </div>
+
+                                </div>
+                                <div class="field col-6 md:col-6">
+                                    <div class="field col-12 md:col-12">
+                                        <label for="" class=" d-md-inline-flex" pTooltip="Positions" tooltipPosition="top">Positions</label>
+                                        <input id="float-input p-fluid" type="text" formControlName="department" pInputText>
+                                    </div>
+                                    <div class="field col-12 md:col-12">
+                                        <label for="" class=" d-md-inline-flex" pTooltip="To" tooltipPosition="top">to</label>
+                                        <input id="float-input p-fluid" type="text" formControlName="department" pInputText>
+                                    </div>
+                                    <div class="field col-12 md:col-12">
+                                        <label for="" class=" d-md-inline-flex" pTooltip="To" tooltipPosition="top">to</label>
+                                        <input id="float-input p-fluid" type="text" formControlName="department" pInputText>
+                                    </div>
+                                    <div class="field col-12 md:col-12">
+                                        <label for="" class=" d-md-inline-flex" pTooltip="Deferred" tooltipPosition="top">Deferred</label>
+                                        <input id="float-input p-fluid" type="text" formControlName="department" pInputText>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        <div class="flex justify-content-end pr-2">
+                            <button pButton pRipple type="button" (click)="toggleFormClose()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
+
+                        </div>
+                    </div>
                 </form>
             </div>
 
             <div [hidden]="gridDisplay">
-               
-                <button pButton pRipple type="button" (click)="showBasicDialog()" label="New" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>              
-                <button pButton pRipple type="button" (click)="loadOrganogramToEdit()" label="Edit" icon="pi pi-pencil" class="risBtn risEdit mr-2 mb-2"></button>               
+
+                <button pButton pRipple type="button" (click)="showBasicDialog()" label="New" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
+                <button pButton pRipple type="button" (click)="loadOrganogramToEdit()" label="Edit" icon="pi pi-pencil" class="risBtn risEdit mr-2 mb-2"></button>
                 <button pButton pRipple type="button" (click)="showDialog()" label="Delete" icon="pi pi-trash" class="risBtn risDelete mr-2 mb-2"></button>
-                <button pButton pRipple type="button" (click)="organogramActiveInactive()" label="Activity" icon="pi pi-box" class="risBtn risAll mr-2 mb-2"></button>               
+                <button pButton pRipple type="button" (click)="organogramActiveInactive()" label="Activity" icon="pi pi-box" class="risBtn risAll mr-2 mb-2"></button>
                 <p-dialog header="Delete Record" [(visible)]="display" [style]="{width: '35vw'}">
                     <p>Do you want to delete this record?</p>
                     <ng-template pTemplate="footer">
@@ -20,49 +95,29 @@
                         <button class="pi pi-check risBtn risSave" (click)="deleteOrganogram()"> Yes</button>
                     </ng-template>
                 </p-dialog>
-                <p-table #dt1 [value]="OrganogramList" [paginator]="true" [rows]="10" selectionMode="single" [(selection)]="selectedorganogram" dataKey="organogram_id" [showCurrentPageReport]="true" responsiveLayout="scroll" styleClass="p-datatable-striped p-datatable-sm"
-                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)"
-                         [globalFilterFields]="['location_code','location_name','department']">
-                    <ng-template pTemplate="caption">
-                        <div class="flex">
 
-                            <span class="p-input-icon-left ml-auto">
-                                <i class="pi pi-search"></i>
-                                <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Search by Any" />
-                            </span>
-                        </div>
-                    </ng-template>
-                    <ng-template pTemplate="header">
+
+                <p-treeTable [value]="OrganogramList" [columns]="cols" selectionMode="checkbox" [(selection)]="selectedorganogram">
+                    <!--<ng-template pTemplate="caption">
+                        Organogram
+                    </ng-template>-->
+                    <ng-template pTemplate="header" let-columns>
                         <tr>
-
-                            <th pSortableColumn="company_name">
-
-                                Company
-                                <p-columnFilter type="text" field="company_name" display="menu"></p-columnFilter>
-                                <p-sortIcon field="company_name"></p-sortIcon>
-
+                            <th *ngFor="let col of columns">
+                                {{col.header}}
                             </th>
-                            <th pSortableColumn="location_code">
-                                Location Code
-                                <p-columnFilter type="text" field="location_code" display="menu"></p-columnFilter>
-                            </th>
-                            <th pSortableColumn="location_name">Location Name</th>
-                            <th pSortableColumn="department">Department</th>
-                            <!--<th>Activity</th>-->
                         </tr>
                     </ng-template>
-                    <ng-template pTemplate="body" let-organogram let-rowData let-columns="columns">
-                        <tr [pSelectableRow]="organogram">
-                            <td>{{organogram.company_name}}</td>
-                            <td>{{organogram.location_code}}</td>
-                            <td>{{organogram.location_name}}</td>
-                            <td>{{organogram.department}}</td>
-                            
-                            <!--<td *ngIf="organogram.IsActive===true">{{"Active"}}</td>
-                            <td *ngIf="organogram.IsActive===false">{{"InActive"}}</td>-->
+                    <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
+                        <tr>
+                            <td *ngFor="let col of columns; let i = index">
+                                <p-treeTableToggler [rowNode]="rowNode" *ngIf="i == 0"></p-treeTableToggler>
+                                <p-treeTableCheckbox [value]="rowNode" *ngIf="i == 0"></p-treeTableCheckbox>
+                                {{rowData[col.field]}}
+                            </td>
                         </tr>
                     </ng-template>
-                </p-table>
+                </p-treeTable>
             </div>
         </div>
     </div>

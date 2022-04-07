@@ -1,0 +1,133 @@
+{
+  "data":
+  [
+    {
+      "data": {
+        "department_id": 1,
+        "company_name": "Test Entry",
+        "company_id": 1,
+        "location_id": 1,
+        "location_name": "L01 - Local",
+        "department": "HR",
+        "IsActive": false,
+        "SortingPriority": 0
+      },
+      "children": [
+        {
+          "data": {
+            "department_id": 1,
+            "company_name": "Test Entry",
+            "company_id": 1,
+            "location_id": 1,
+            "location_name": "L01 - Local",
+            "department": "HR",
+            "IsActive": false,
+            "SortingPriority": 0
+          },
+          "children": [
+            {//ok
+              "data": {
+                "department_id": 1,
+                "company_name": "Test Entry",
+                "company_id": 1,
+                "location_id": 1,
+                "location_name": "L01 - Local",
+                "department": "HR",
+                "IsActive": false,
+                "SortingPriority": 0
+              }
+            },
+            {
+              "data": {
+                "department_id": 2,
+                "company_name": "Test Entry",
+                "company_id": 1,
+                "location_id": 1,
+                "location_name": "L01 - Local",
+                "department": "MIS",
+                "IsActive": false,
+                "SortingPriority": 0
+              }
+            },
+            {
+              "data": {
+                "department_id": 3,
+                "company_name": "Test Entry",
+                "company_id": 1,
+                "location_id": 1,
+                "location_name": "L01 - Local",
+                "department": "Accounts",
+                "IsActive": false,
+                "SortingPriority": 0
+              }
+            },
+            {
+              "data": {
+                "department_id": 5,
+                "company_name": "Test Entry",
+                "company_id": 1,
+                "location_id": 1,
+                "location_name": "L01 - Local",
+                "department": null,
+                "IsActive": false,
+                "SortingPriority": 0
+              }
+            }
+          ]
+        },
+        {
+          "data": {
+            "department_id": 0,
+            "company_name": "Test Entry",
+            "company_id": 1,
+            "location_id": 2,
+            "location_name": "G02 - Global",
+            "department": null,
+            "IsActive": false,
+            "SortingPriority": 0
+          },
+          "children": [
+            {
+              "data": {
+                "department_id": 0,
+                "company_name": "Test Entry",
+                "company_id": 1,
+                "location_id": 2,
+                "location_name": "G02 - Global",
+                "department": null,
+                "IsActive": false,
+                "SortingPriority": 0
+              }
+            }
+          ]
+        },
+        {
+          "data": {
+            "department_id": 0,
+            "company_name": "Test Entry",
+            "company_id": 1,
+            "location_id": 3,
+            "location_name": "L03 - Locals",
+            "department": null,
+            "IsActive": false,
+            "SortingPriority": 0
+          },
+          "children": [
+            {
+              "data": {
+                "department_id": 0,
+                "company_name": "Test Entry",
+                "company_id": 1,
+                "location_id": 3,
+                "location_name": "L03 - Locals",
+                "department": null,
+                "IsActive": false,
+                "SortingPriority": 0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
