@@ -69,7 +69,16 @@ export class OrganogramService {
   OrganogramActivity(Organogram_id: Number): Observable<any> {
 
     return this.http.post(this.ipconfig.base_IP + 'Organogram/OrganogramActivity?Organogram_id=' + Organogram_id, httpOptions);
-  }
+    }
+
+    getAllDepartment(): Observable<any[]> {
+
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'Department/GetDepartmentByTyes');
+    }
+    getAllDepartmentByTypeId(Type_id: Number): Observable<any> {
+
+        return this.http.post(this.ipconfig.base_IP + 'Department/GetDepartmentByTyeId?Department_Type_id=' + Type_id, httpOptions);
+    }
   //getAllDivision(): Observable<any[]> {
   //  return this.http.get<any[]>(this.ipconfig.base_IP + 'Division/GetAllDivision');
   //}

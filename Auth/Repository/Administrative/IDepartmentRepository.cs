@@ -12,6 +12,7 @@ namespace Auth.Repository.Administrative
         Department GetById(int department_id);
         IEnumerable<object> DepartmentCboList();
         void Delete(int department_id);
+        IEnumerable<dynamic> GetByIdRawSql(string sqlquery);
 
     }
 }

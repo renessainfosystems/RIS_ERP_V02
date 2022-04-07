@@ -10,13 +10,13 @@
 
                                 <div class="field col-6 md:col-6">
                                     <div class="field col-12 md:col-12">
-                                        <label for="" class=" d-md-inline-flex" pTooltip="Group" tooltipPosition="top">Group</label>
-                                        <input id="float-input p-fluid" type="text" formControlName="Group" pInputText>
+                                        <label for="" class=" d-md-inline-flex" pTooltip="Group Name" tooltipPosition="top">Group</label>
+                                        <input id="float-input p-fluid" disabled type="text" formControlName="Group" pInputText>
                                     </div>
 
                                     <div class="field col-12 md:col-12">
                                         <label for="" class=" d-md-inline-flex" pTooltip="Company" tooltipPosition="top">Company</label>
-                                        <input id="float-input p-fluid" type="text" formControlName="Group" pInputText>
+                                        <input id="float-input p-fluid" disabled type="text" formControlName="Company" pInputText>
                                     </div>
 
                                 </div>
@@ -26,14 +26,14 @@
                                         <input id="float-input p-fluid" type="text" formControlName="organogram_code" pInputText>
                                     </div>
                                     <div class="field col-12 md:col-12">
-                                        <label for="" class=" d-md-inline-flex" pTooltip="Location name" tooltipPosition="top">Location/Branch</label>
-                                        <input id="float-input p-fluid" type="text" formControlName="location_name" pInputText>
+                                        <label for="" class=" d-md-inline-flex" pTooltip="Location/Branch" tooltipPosition="top">Location/Branch</label>
+                                        <input id="float-input p-fluid" disabled type="text" formControlName="location_name" pInputText>
                                     </div>
                                 </div>
                                 <!--<div class="field col-12 md:col-12">
-                                  
-                                                                   
-                                </div>-->
+
+
+            </div>-->
                                 <div class="field col-6 md:col-6">
                                     <div class="field col-12 md:col-12">
                                         <label for="" class=" d-md-inline-flex" pTooltip="Department" tooltipPosition="top">Department</label>
@@ -52,7 +52,18 @@
                                         <label for="" class=" d-md-inline-flex" pTooltip="Open" tooltipPosition="top">Open</label>
                                         <input id="float-input p-fluid" type="text" formControlName="department" pInputText>
                                     </div>
-
+                                    <div class="field col-12 md:col-12">
+                                        <label for="" class=" d-md-inline-flex" pTooltip="Open" tooltipPosition="top">Yearly Increment (%)</label>
+                                        <input id="float-input p-fluid" type="text" formControlName="department" pInputText>
+                                    </div>
+                                    <div class="field col-12 md:col-12">
+                                        <label for="" class=" d-md-inline-flex" pTooltip="Open" tooltipPosition="top">Year of Experience</label>
+                                        <input id="float-input p-fluid" type="text" formControlName="department" pInputText>
+                                    </div>
+                                    <div class="field col-12 md:col-12">
+                                        <label for="" class=" d-md-inline-flex" pTooltip="days from the date of join" tooltipPosition="top">Confirmation</label>
+                                        <input id="float-input p-fluid" type="text" formControlName="department" pInputText>
+                                    </div>
                                 </div>
                                 <div class="field col-6 md:col-6">
                                     <div class="field col-12 md:col-12">
@@ -71,15 +82,33 @@
                                         <label for="" class=" d-md-inline-flex" pTooltip="Deferred" tooltipPosition="top">Deferred</label>
                                         <input id="float-input p-fluid" type="text" formControlName="department" pInputText>
                                     </div>
-                                </div>
+                                    <div class="field col-12 md:col-12">
+                                        <label for="" class=" d-md-inline-flex" pTooltip="Is Gross" tooltipPosition="top">Is Gross</label>
+                                        <input id="float-input p-fluid" type="text" formControlName="department" pInputText>
+                                    </div>
+                                    <div class="field col-12 md:col-12">
+                                        <label for="" class=" d-md-inline-flex" pTooltip="To" tooltipPosition="top">to</label>
+                                        <input id="float-input p-fluid" type="text" formControlName="department" pInputText>
+                                    </div>
                                 </div>
                             </div>
-                        <div class="flex justify-content-end pr-2">
-                            <button pButton pRipple type="button" (click)="toggleFormClose()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
-
                         </div>
-                    </div>
-                </form>
+                        <div class="flex justify-content-center pr-2">
+                            <button pButton pRipple type="button" (click)="toggleFormClose()" label="Add" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
+                            <button pButton pRipple type="button" (click)="toggleFormClose()" label="Remove" icon="pi pi-trash" class="risBtn risDelete mr-2 mb-2"></button>
+                            <button pButton pRipple type="button" (click)="toggleFormClose()" label="Activity" icon="pi pi-box" class="risBtn risAll mr-2 mb-2"></button>
+                        </div>
+                        <div class="col-12">
+                            <div class="p-fluid p-formgrid grid">
+                                <!--need children Grid-->
+                            </div>
+                            </div>
+                            <div class="flex justify-content-end pr-2">
+                                <button pButton pRipple type="button" (click)="toggleFormClose()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
+
+                            </div>
+                        </div>
+</form>
             </div>
 
             <div [hidden]="gridDisplay">

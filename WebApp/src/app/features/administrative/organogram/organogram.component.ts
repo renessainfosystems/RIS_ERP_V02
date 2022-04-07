@@ -93,6 +93,16 @@ export class OrganogramComponent implements OnInit {
 
     //selectedCompany: any;
     //companys: any[];
+    selectedDepartment: any;
+    drpdwnDepartmentList: any[];
+
+    selectedPosition: any;
+    drpdwnPositionList: any[];
+
+    selectedSalaryHead: any;
+    drpdwnSalaryHeadList: any[];
+
+
     rowSelected: boolean = false;
     date1: Date;
 
@@ -101,6 +111,7 @@ export class OrganogramComponent implements OnInit {
     // for delete data modal
     display: boolean = false;
     showDialog() {
+        debugger
         if (this.rowData == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
@@ -151,6 +162,7 @@ export class OrganogramComponent implements OnInit {
 
             organogram_code: ['', [Validators.required]],
             Group: [''],
+            Company: [''],
             location_name: [''],
             department: [''],
             department_id: ['', [Validators.required]],
@@ -205,6 +217,7 @@ export class OrganogramComponent implements OnInit {
         });
         //Load Dropdown
         this.loadAllOrganogram();
+        this.loadDepartmentrpdwn();
         //this.loadEmployeeGenderdrpdwn();
         //this.loadEmployeeReligiondrpdwn();
         //this.loadEmployeeBloodGroupdrpdwn();
@@ -226,6 +239,12 @@ export class OrganogramComponent implements OnInit {
         //    { field: 'location_name', header: 'Location' },
         //    { field: 'department', header: 'Department' }
         //];
+    }
+
+    loadDepartmentrpdwn() {
+        this.organogramService.getAllDepartment().subscribe(data => {
+            this.drpdwnDepartmentList = data;
+        });
     }
     onRowSelect(event) {
         debugger;
