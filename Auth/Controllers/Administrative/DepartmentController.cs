@@ -47,7 +47,7 @@ namespace Auth.Controllers.Administrative
         }
 
         [HttpGet]
-        public dynamic GetDepartmentByTyes()
+        public dynamic GetDepartmentByTypes()
         {
 
             dynamic data = (dynamic)null;
@@ -62,7 +62,7 @@ namespace Auth.Controllers.Administrative
             return data;
         }
         [HttpGet]
-        public dynamic GetDepartmentByTyeId(int Department_Type_id)
+        public dynamic GetDepartmentByTypeId(int Department_Type_id)
         {
 
             dynamic data = (dynamic)null;

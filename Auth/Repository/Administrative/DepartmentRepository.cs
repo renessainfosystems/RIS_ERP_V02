@@ -94,9 +94,8 @@ namespace Auth.Repository.Administrative
         {
             try
             {
-                var sql =string.Format(@"select department_id,department_name from Administrative.Department d where 1=1 {0} ", sqlquery);
-                
-                return _entityDataAccess.SqlRawQuery(sql);
+                var sql =string.Format(@"select * from Administrative.Department d where 1=1 {0} ", sqlquery);                
+                return _entityDataAccess.SqlRawQuery(sql).Select(r=> new { department_id = r.department_id, department_name = r.department_name }).ToList();
             }
             catch (Exception ex)
             {

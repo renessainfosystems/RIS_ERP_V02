@@ -169,6 +169,7 @@ from Administrative.Location l left join Administrative.Company c on l.company_i
                 DynamicParameters parametersLocation = new DynamicParameters();
                 parametersLocation.Add("@company_group_id", company_group_id);
                 dynamic dataLocation = await _dbConnection.QueryAsync<dynamic>(sqlL, parametersLocation);
+
                 string sql = @"select c.company_name,location_code,location_code+' - '+location_name location_name,(select d.department_name from Administrative.Department d where d.department_id=og.department_id)as department,isnull(og.department_id,'0') as department_id,l.location_id,c.company_id,isnull(og.organogram_id,'0')organogram_id,isnull(og.is_active,'false')is_active,isnull(og.sorting_priority,0)sorting_priority from Administrative.Location l left join Administrative.Company c on l.company_id=c.company_id
 left join Administrative.Organogram og on l.location_id=og.location_id where l.company_group_id=@company_group_id";
                 DynamicParameters parameters = new DynamicParameters();
@@ -278,47 +279,7 @@ left join Administrative.Organogram og on l.location_id=og.location_id where l.c
             }
             return (result);
         }
-        //private static IList<Dtotree> BuildLocationsTrees(int? lid, IList<Dtotree> candicates)
-        //{
-        //    var children = candicates.Where(c => c.data.location_id == lid).ToList();
-        //    //var children = candicates.ToList();
-        //    if (children == null || children.Count() == 0)
-        //    {
-        //        return null;
-        //    }
-        //    foreach (var i in children)
-        //    {
-        //        i.children = BuildTrees(i.data.location_id, candicates);
-        //    }
-        //    return children;
-        //}
-        //private static IList<Dtotree> BuildTrees(int? lid, IList<Dtotree> candicates)
-        //{
-        //    var children = candicates.Where(c => c.data.location_id == lid).ToList();
-        //    //var children = candicates.ToList();
-        //    if (children == null || children.Count() == 0)
-        //    {
-        //        return null;
-        //    }
-        //    foreach (var i in children)
-        //    {
-        //        i.children = BuildTrees(i.data.location_id, candicates);
-        //    }
-        //    return children;
-        //}
-        //private static IList<Dtotree> BuildDeptTrees(int? lid, IList<Dtotree> candicates)
-        //{
-        //    var children = candicates.Where(c => c.data.location_id == lid).ToList();
-        //    if (children == null || children.Count() == 0)
-        //    {
-        //        return null;
-        //    }
-        //    foreach (var i in children)
-        //    {
-        //        i.children = BuildTrees(i.data.location_id, candicates);
-        //    }
-        //    return children;
-        //}
+       
         public async Task<dynamic> GetOrganogramById(long Organogram_id)
         {
             var result = (dynamic)null;

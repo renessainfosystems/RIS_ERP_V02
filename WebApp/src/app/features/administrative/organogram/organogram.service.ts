@@ -73,11 +73,11 @@ export class OrganogramService {
 
     getAllDepartment(): Observable<any[]> {
 
-        return this.http.get<any[]>(this.ipconfig.base_IP + 'Department/GetDepartmentByTyes');
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'Department/GetDepartmentByTypes', httpOptions);
     }
-    getAllDepartmentByTypeId(Type_id: Number): Observable<any> {
+    GetDepartmentByTypeId(Type_id: Number): Observable<any> {
 
-        return this.http.post(this.ipconfig.base_IP + 'Department/GetDepartmentByTyeId?Department_Type_id=' + Type_id, httpOptions);
+        return this.http.post(this.ipconfig.base_IP + 'Department/GetDepartmentByTypeId?Department_Type_id=' + Type_id, httpOptions);
     }
   //getAllDivision(): Observable<any[]> {
   //  return this.http.get<any[]>(this.ipconfig.base_IP + 'Division/GetAllDivision');
