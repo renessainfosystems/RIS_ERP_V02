@@ -57,8 +57,8 @@
                                         <input id="float-input p-fluid" type="text" formControlName="min_budget" pInputText>
                                     </div>
                                     <div class="field-radiobutton col-12 md:col-12">
-                                        <p-radioButton name="budget_type" formControlName="is_open" label="Open"></p-radioButton>
-                                        <p-radioButton name="budget_type" formControlName="budget_typedeferred" label="Deferred"></p-radioButton>
+                                        <p-radioButton name="is_open" value="0" binary="true"  formControlName="is_open" label="Open"></p-radioButton>
+                                        <p-radioButton name="is_open" value="1" binary="true"  formControlName="is_open" label="Deferred"></p-radioButton>
                                     </div>
                                    
                                    
@@ -80,7 +80,7 @@
                                         <input id="float-input p-fluid" type="text" formControlName="max_budget" pInputText>
                                     </div>
                                     <div class="field col-12 md:col-12">
-                                        <p-checkbox binary="true" label="Is Gross" inputId="binary"></p-checkbox>
+                                        <p-checkbox binary="true" formControlName="is_gross" label="Is Gross" inputId="binary"></p-checkbox>
                                     </div>
                                     
                                 </div>
@@ -108,7 +108,7 @@
                                 </div>
                             </div>
                             </div>
-                        <div class="flex justify-content-center pr-2">
+                        <div class="flex justify-content-left pr-2">
                             <button pButton pRipple type="button" (click)="toggleFormClose()" label="Add" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
                             <button pButton pRipple type="button" (click)="toggleFormClose()" label="Remove" icon="pi pi-trash" class="risBtn risDelete mr-2 mb-2"></button>
                             <button pButton pRipple type="button" (click)="toggleFormClose()" label="Activity" icon="pi pi-box" class="risBtn risAll mr-2 mb-2"></button>
@@ -125,15 +125,19 @@
                                             <th>No of Man</th>
                                             <th>Budget</th>
                                             <th>Increment (%)</th>
+                                            <th>Activity</th>
+                                            <th>Experience</th>
                                         </tr>
                                     </ng-template>
-                                    <ng-template pTemplate="body" let-organogramDetail let-rowDetailData let-columns="columns">
+                                    <ng-template pTemplate="body" let-organogramDetail let-rowDetailData="rowDetailData" let-columns="columns">
                                         <tr [pSelectableRow]="organogramDetail">
-                                            <td>{{organogramDetail.Code}}</td>
-                                            <td>{{organogramDetail.EmployeeName}}</td>
-                                            <td>{{organogramDetail.PersonalPhone}}</td>
-                                            <td>{{organogramDetail.PersonalEmail}}</td>
-                                            <td>{{organogramDetail.PresentAddressNote}}</td>
+                                            <td>{{organogramDetail.code}}</td>
+                                            <td>{{organogramDetail.position_name}}</td>
+                                            <td>{{organogramDetail.manpower}}</td>
+                                            <td>{{organogramDetail.budget}}</td>
+                                            <td>{{organogramDetail.increment_percentage_yearly}}</td>
+                                            <td>{{organogramDetail.Activity}}</td>
+                                            <td>{{organogramDetail.Experience}}</td>
                                             <!--<td *ngIf="employee.IsActive===true">{{"Active"}}</td>
                                             <td *ngIf="employee.IsActive===false">{{"InActive"}}</td>-->
                                         </tr>
@@ -141,10 +145,11 @@
                                 </p-table>
                             </div>
                             </div>
-                            <div class="flex justify-content-end pr-2">
-                                <button pButton pRipple type="button" (click)="toggleFormClose()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
+                        <div class="flex justify-content-end pr-2">
+                            <button pButton pRipple type="button" (click)="onGeneral()" label="Save" class="risBtn risSave mr-2 mb-2" icon="pi pi-check"></button>                           
+                            <button pButton pRipple type="button" (click)="toggleFormClose()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
 
-                            </div>
+                        </div>
                         </div>
 </form>
             </div>
