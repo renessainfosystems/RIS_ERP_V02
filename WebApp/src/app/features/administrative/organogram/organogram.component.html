@@ -33,66 +33,81 @@
                                 <!--<div class="field col-12 md:col-12">
 
 
-            </div>-->
+        </div>-->
                                 <div class="field col-6 md:col-6">
                                     <div class="field col-12 md:col-12">
                                         <label for="" class=" d-md-inline-flex" pTooltip="Department" tooltipPosition="top">Department</label>
-                                        <input id="float-input p-fluid" type="text" formControlName="department" pInputText>
+
+                                        <!--<input id="float-input p-fluid" type="text" formControlName="department" pInputText>-->
+                                        <p-dropdown [options]="drpdwnDepartmentList" formControlName="department_id" placeholder="--Select--" [ngClass]="{ 'is-invalid': submitted && f.department_id.errors }"
+                                                    optionLabel="department_name" optionValue="department_id" [showClear]="true" [filter]="true" filterBy="department_name">
+                                        </p-dropdown>
+                                        <div *ngIf="submitted && f.department_id.errors" class="invalid-feedback">
+                                            <small *ngIf="f.department_id.errors.required" class="p-error">Department is required</small>
+                                        </div>
+
                                     </div>
                                     <div class="field col-12 md:col-12">
                                         <label for="" class=" d-md-inline-flex" pTooltip="No Of Manpower" tooltipPosition="top">No of Manpower</label>
-                                        <input id="float-input p-fluid" type="text" formControlName="department" pInputText>
+                                        <input id="float-input p-fluid" type="text" formControlName="min_no_of_manpower" pInputText>
                                     </div>
 
                                     <div class="field col-12 md:col-12">
                                         <label for="" class=" d-md-inline-flex" pTooltip="Budget" tooltipPosition="top">Budget</label>
-                                        <input id="float-input p-fluid" type="text" formControlName="department" pInputText>
+                                        <input id="float-input p-fluid" type="text" formControlName="min_budget" pInputText>
                                     </div>
-                                    <div class="field col-12 md:col-12">
-                                        <label for="" class=" d-md-inline-flex" pTooltip="Open" tooltipPosition="top">Open</label>
-                                        <input id="float-input p-fluid" type="text" formControlName="department" pInputText>
+                                    <div class="field-radiobutton col-12 md:col-12">
+                                        <p-radioButton name="budget_type" formControlName="is_open" label="Open"></p-radioButton>
+                                        <p-radioButton name="budget_type" formControlName="budget_typedeferred" label="Deferred"></p-radioButton>
                                     </div>
-                                    <div class="field col-12 md:col-12">
-                                        <label for="" class=" d-md-inline-flex" pTooltip="Open" tooltipPosition="top">Yearly Increment (%)</label>
-                                        <input id="float-input p-fluid" type="text" formControlName="department" pInputText>
-                                    </div>
-                                    <div class="field col-12 md:col-12">
-                                        <label for="" class=" d-md-inline-flex" pTooltip="Open" tooltipPosition="top">Year of Experience</label>
-                                        <input id="float-input p-fluid" type="text" formControlName="department" pInputText>
-                                    </div>
-                                    <div class="field col-12 md:col-12">
-                                        <label for="" class=" d-md-inline-flex" pTooltip="days from the date of join" tooltipPosition="top">Confirmation</label>
-                                        <input id="float-input p-fluid" type="text" formControlName="department" pInputText>
-                                    </div>
+                                   
+                                   
+                                  
                                 </div>
                                 <div class="field col-6 md:col-6">
                                     <div class="field col-12 md:col-12">
                                         <label for="" class=" d-md-inline-flex" pTooltip="Positions" tooltipPosition="top">Positions</label>
-                                        <input id="float-input p-fluid" type="text" formControlName="department" pInputText>
+                                        <p-dropdown [options]="drpdwnPositionList" formControlName="position_id" placeholder="--Select--" 
+                                                    optionLabel="position_name" optionValue="position_id" [showClear]="true" [filter]="true" filterBy="position_name">
+                                        </p-dropdown>
                                     </div>
                                     <div class="field col-12 md:col-12">
                                         <label for="" class=" d-md-inline-flex" pTooltip="To" tooltipPosition="top">to</label>
-                                        <input id="float-input p-fluid" type="text" formControlName="department" pInputText>
+                                        <input id="float-input p-fluid" type="text" formControlName="max_no_of_manpower" pInputText>
                                     </div>
                                     <div class="field col-12 md:col-12">
                                         <label for="" class=" d-md-inline-flex" pTooltip="To" tooltipPosition="top">to</label>
-                                        <input id="float-input p-fluid" type="text" formControlName="department" pInputText>
+                                        <input id="float-input p-fluid" type="text" formControlName="max_budget" pInputText>
                                     </div>
                                     <div class="field col-12 md:col-12">
-                                        <label for="" class=" d-md-inline-flex" pTooltip="Deferred" tooltipPosition="top">Deferred</label>
-                                        <input id="float-input p-fluid" type="text" formControlName="department" pInputText>
+                                        <p-checkbox binary="true" label="Is Gross" inputId="binary"></p-checkbox>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            <div class="p-fluid p-formgrid grid">
+                                <div class="field col-6 md:col-6">
+                                    <div class="field col-12 md:col-12">
+                                        <label for="" class=" d-md-inline-flex" pTooltip="Open" tooltipPosition="top">Year of Experience</label>
+                                        <input id="float-input p-fluid" type="text" formControlName="min_year_of_experience" pInputText>
                                     </div>
                                     <div class="field col-12 md:col-12">
-                                        <label for="" class=" d-md-inline-flex" pTooltip="Is Gross" tooltipPosition="top">Is Gross</label>
-                                        <input id="float-input p-fluid" type="text" formControlName="department" pInputText>
+                                        <label for="" class=" d-md-inline-flex" pTooltip="Open" tooltipPosition="top">Yearly Increment (%)</label>
+                                        <input id="float-input p-fluid" type="text" formControlName="increment_percentage_yearly" pInputText>
+                                    </div>
+                                </div>
+                                <div class="field col-6 md:col-6">
+                                    <div class="field col-12 md:col-12">
+                                        <label for="" class=" d-md-inline-flex" pTooltip="Open" tooltipPosition="top">To</label>
+                                        <input id="float-input p-fluid" type="text" formControlName="max_year_of_experience" pInputText>
                                     </div>
                                     <div class="field col-12 md:col-12">
-                                        <label for="" class=" d-md-inline-flex" pTooltip="To" tooltipPosition="top">to</label>
-                                        <input id="float-input p-fluid" type="text" formControlName="department" pInputText>
+                                        <label for="" class=" d-md-inline-flex" pTooltip="days from the date of join" tooltipPosition="top">Confirmation</label>
+                                        <input id="float-input p-fluid" type="text" formControlName="days_of_confirmation" pInputText>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                            </div>
                         <div class="flex justify-content-center pr-2">
                             <button pButton pRipple type="button" (click)="toggleFormClose()" label="Add" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
                             <button pButton pRipple type="button" (click)="toggleFormClose()" label="Remove" icon="pi pi-trash" class="risBtn risDelete mr-2 mb-2"></button>
@@ -100,7 +115,30 @@
                         </div>
                         <div class="col-12">
                             <div class="p-fluid p-formgrid grid">
-                                <!--need children Grid-->
+                                <p-table #dt1 [value]="organogramDetailList" [paginator]="true" [rows]="10" selectionMode="single" [(selection)]="selectedorganogramDetail" dataKey="organogram_detail_id" [showCurrentPageReport]="true" responsiveLayout="scroll" styleClass="p-datatable-striped p-datatable-sm"
+                                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)" >
+                                   
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th>Code</th>
+                                            <th>Positions</th>
+                                            <th>No of Man</th>
+                                            <th>Budget</th>
+                                            <th>Increment (%)</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-organogramDetail let-rowDetailData let-columns="columns">
+                                        <tr [pSelectableRow]="organogramDetail">
+                                            <td>{{organogramDetail.Code}}</td>
+                                            <td>{{organogramDetail.EmployeeName}}</td>
+                                            <td>{{organogramDetail.PersonalPhone}}</td>
+                                            <td>{{organogramDetail.PersonalEmail}}</td>
+                                            <td>{{organogramDetail.PresentAddressNote}}</td>
+                                            <!--<td *ngIf="employee.IsActive===true">{{"Active"}}</td>
+                                            <td *ngIf="employee.IsActive===false">{{"InActive"}}</td>-->
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
                             </div>
                             </div>
                             <div class="flex justify-content-end pr-2">
@@ -126,7 +164,7 @@
                 </p-dialog>
 
 
-                <p-treeTable [value]="OrganogramList" [columns]="cols" selectionMode="checkbox" [(selection)]="selectedorganogram">
+                <p-treeTable [value]="OrganogramList" [columns]="cols" selectionMode="checkbox" [(selection)]="selectedorganogram" (onNodeSelect)="nodeSelect($event)" (onNodeUnselect)="nodeUnselect($event)">
                     <!--<ng-template pTemplate="caption">
                         Organogram
                     </ng-template>-->

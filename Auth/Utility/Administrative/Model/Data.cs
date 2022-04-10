@@ -17,7 +17,9 @@ namespace Auth.Utility.Administrative.Model
         public int SortingPriority { get; set; }
 
         public string Node_Name { get; set; }
+        public string group_name { get; set; }
         public int Organogram_Id { get; set; }
+        public int TreeLavel { get; set; }//0=Company,1=Location,2=Department
 
     }
     public class Dtotree
