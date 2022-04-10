@@ -44,7 +44,7 @@ namespace Auth.DataAccess.Party
                 parameters.Add("@param_dealer_info_id", dealerCreditInfo.dealer_info_id, DbType.Int32);
                 parameters.Add("@param_security_deposit_id", dealerCreditInfo.security_deposit_id, DbType.Int32);
                 parameters.Add("@param_Amount", dealerCreditInfo.amount, DbType.Decimal);
-                parameters.Add("@param_expiery_date", dealerCreditInfo.expiery_date, DbType.Date);
+                parameters.Add("@param_expiry_date", dealerCreditInfo.expiry_date, DbType.Date);
                 parameters.Add("@param_attachment", dealerCreditInfo.attachment, DbType.String);
                 parameters.Add("@param_remarks", dealerCreditInfo.remarks, DbType.String);
                 parameters.Add("@param_is_Approved", false, DbType.Boolean);

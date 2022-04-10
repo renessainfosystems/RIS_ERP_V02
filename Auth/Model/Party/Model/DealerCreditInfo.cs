@@ -17,7 +17,7 @@ namespace Auth.Model.Party.Model
         public int dealer_info_id { get; set; }
         public int security_deposit_id { get; set; }
         public decimal amount { get; set; }
-        public DateTime expiery_date { get; set; }
+        public DateTime expiry_date { get; set; }
         public string attachment { get; set; }
         public string remarks { get; set; }
         public bool is_Approved { get; set; }
