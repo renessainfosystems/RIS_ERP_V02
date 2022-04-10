@@ -53,7 +53,6 @@ namespace Auth.Controllers.Party
                 dealerCreditInfo.attachment = GetImagePath(dealerCreditInfo.ImageUpload);
             }
            return await _dealerCreditInfoRepository.IUD_DealerCreditInfo(dealerCreditInfo, (int)GlobalEnumList.DBOperation.Update);
-
         }
    
         [HttpPost]
@@ -81,7 +80,6 @@ namespace Auth.Controllers.Party
         {
             return await _dealerCreditInfoRepository.GetCreditInfoByDealerId(dealer_info_id);
         }
-
 
         private string GetImagePath(IFormFile image)
         {
