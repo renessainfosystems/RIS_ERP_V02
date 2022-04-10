@@ -47,7 +47,13 @@ export class DealerinfoComponent implements OnInit {
     dealerdocumentForm: any;//Dealer Contact Form
     isDealerDocumentinfoEdit: boolean = false;
     dealerdocumentinfoList: any[];//List Dealer Contact info
-    selecteddealerdocumentinfo: any;// Selected Dealerinfo 
+    selecteddealerdocumentinfo: any;// Selected Dealerinfo
+
+    submittedCredit = false;
+    dealercreditForm: any;//Dealer Contact Form
+    isDealerCreditinfoEdit: boolean = false;
+    dealercreditinfoList: any[];//List Dealer Contact info
+    selecteddealercreditinfo: any;// Selected Dealerinfo 
 
     //declare dropdown List Property
     selectedDomicile: any;
@@ -114,6 +120,7 @@ export class DealerinfoComponent implements OnInit {
     rowDataContact: any;
     rowDataLocation: any;
     rowDataDocument: any;
+    rowDataCredit: any;
     dataSaved = false;
     // for delete data modal
     
@@ -126,6 +133,8 @@ export class DealerinfoComponent implements OnInit {
     index: number = 0;
     indexContact: number = 0;
     indexLocation: number = 0;
+    indexDocument: number = 0;
+    indexCredit: number = 0;
     display: boolean = false;
     showDialog() {
         if (this.rowData == null) {
@@ -279,6 +288,45 @@ export class DealerinfoComponent implements OnInit {
         this.formDisplayDocument = true;
     }
     toggleFormCloseDocument() {
+        this.toggleFormDisplayDocument();
+        this.dealerDocumentIndex();
+    }
+
+
+    // Credit Start
+    gridDisplayCredit = false;
+    formDisplayCredit = true;
+
+    showBasicDialogCreditNew() {
+        this.ngOnInit();
+        this.toggleGridDisplay();
+        this.dealerDocumentIndex();
+        this.gridDisplayDocument = true;
+        this.formDisplayDocument = false;
+    }
+
+    showBasicDialogCreditGrid() {
+        this.toggleGridDisplayDocument();
+        this.toggleGridDisplay();
+        this.dealerDocumentIndex();
+    }
+    showBasicDialogCreditEdit() {
+        this.toggleFormDisplayDocument();
+        this.toggleGridDisplay();
+        this.dealerDocumentIndex();
+    }
+
+    toggleFormDisplayCredit() {
+        this.gridDisplayDocument = false;
+        this.formDisplayDocument = true;
+        this.dealerContactIndex();
+    }
+
+    toggleGridDisplayCredit() {
+        this.gridDisplayDocument = false;
+        this.formDisplayDocument = true;
+    }
+    toggleFormCloseCredit() {
         this.toggleFormDisplayDocument();
         this.dealerDocumentIndex();
     }
@@ -644,8 +692,26 @@ export class DealerinfoComponent implements OnInit {
             }
             this.loadAllDealerDocumentinfos();
         });
-        this.showBasicDialogLocationEdit();
+        this.showBasicDialogDocumentEdit();
         this.index = 6;
+    }
+
+    loadDealerinfoCreditGrid() {
+
+        debugger;
+        if (this.rowData == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+
+        let dealerinfoId = this.rowData.DealerInfoId;
+        this.dealerinfoService.getDealerInfoById(dealerinfoId).subscribe(data => {
+            if (data != null) {
+                this.isDealerinfoEdit = true;
+            }
+            this.loadAllDealerDocumentinfos();
+        });
+        this.showBasicDialogCreditEdit();
+        this.index = 7;
     }
 
     deleteDealerinfo() {
@@ -1641,23 +1707,40 @@ export class DealerinfoComponent implements OnInit {
         this.indexLocation = (this.indexLocation === 0) ? 1 : this.indexLocation - 1;
     }
 
-
     // Document Infomation Start
     dealerDocumentIndex() {
         this.index = 6;
-        this.indexLocation = 0;
+        this.indexDocument = 0;
     }
 
     functionDocument(e) {
-        this.indexLocation = e.indexLocation;
+        this.indexDocument = e.indexDocument;
     }
 
     openNextDocument() {
-        this.indexLocation = (this.indexLocation === 1) ? 0 : this.indexLocation + 1;
+        this.indexDocument = (this.indexDocument === 1) ? 0 : this.indexDocument + 1;
     }
 
     openPrevDocument() {
-        this.indexLocation = (this.indexLocation === 0) ? 1 : this.indexLocation - 1;
+        this.indexDocument = (this.indexDocument === 0) ? 1 : this.indexDocument - 1;
+    }
+
+    // Credit Infomation Start
+    dealerCreditIndex() {
+        this.index = 6;
+        this.indexCredit = 0;
+    }
+
+    functionCredit(e) {
+        this.indexCredit = e.indexCredit;
+    }
+
+    openNextCredit() {
+        this.indexCredit = (this.indexCredit === 1) ? 0 : this.indexCredit + 1;
+    }
+
+    openPrevCredit() {
+        this.indexCredit = (this.indexCredit === 0) ? 1 : this.indexCredit - 1;
     }
 
 }
