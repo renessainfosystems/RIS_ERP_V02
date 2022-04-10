@@ -54,45 +54,24 @@ export class OrganogramComponent implements OnInit {
     //end grid and form show hide ********************
     index: number = 0;
     rowData: any;
+    rowDetailData: any;
     dataSaved = false;
-    //companyForm: any;
-    //OrganogramList: any[];
+   
     OrganogramList: TreeNode[];
-
+    organogramDetailList: any[];
     organogramdataSource: any[];//single organogram
     selectedorganogram: any;
+    selectedorganogramDetail: any;
     isOrganogramEdit: boolean = false;
     nodeSelected: boolean = false;
+    nodeDetailSelected: boolean = false;
     companyIdUpdate = null;
     createdDate = null;
-    serverDate = null;
-    //createdUserId = null;
-    //companyCorporateId = null;
-    //companyGroupId = null;
-
+    serverDate = null;    
+    rowEvent: any;
+  
     massage = null;
-   // displayedColumns: string[] = ['CompanyName', 'Remarks'];
-
-    //selectedCountry: any;
-    //allCountry: any[];
-
-    //selectedDivision: any;
-    //allDivision: any[];
-
-    //selectedDistrict: any;
-    //allDistrict: any[];
-
-    //selectedThana: any;
-    //allThana: any[];
-
-    //selectedCurrency: any;
-    //allCurrency: any[];
-
-    //selectedCompanyGroup: any;
-    //allCompanyGroup: any[];
-
-    //selectedCompany: any;
-    //companys: any[];
+  
     selectedDepartment: any;
     drpdwnDepartmentList: any[];
 
@@ -121,8 +100,20 @@ export class OrganogramComponent implements OnInit {
     // for Insert and update data modal
     //displayBasic: boolean = false;
     showBasicDialog() {
+        //new
+        if (this.rowData == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
        // this.resetForm();
-        this.toggleGridDisplay();
+        if (this.rowData.TreeLavel==0) {
+            return this.notifyService.ShowNotification(3, 'You can not Create Node Under Company');
+        }
+        this.loadLocationOrganogram();
+      //  if (this.rowData.TreeLavel == 1) {
+            this.toggleGridDisplay();
+       // }
+       
+        
     }
     generalIndex() {
         this.index = 0;
@@ -166,10 +157,25 @@ export class OrganogramComponent implements OnInit {
             location_name: [''],
             department: [''],
             department_id: ['', [Validators.required]],
-            location_id: ['', [Validators.required]],
+            location_id: ['', [Validators.required]],           
             parent_id: ['', [Validators.required]],
+            budget_typeOpen: [''],
+            budget_typedeferred: [''],
             sorting_priority: [0],
 
+            position_id: [0],
+            min_no_of_manpower: [0],
+            max_no_of_manpower: [0],
+            min_budget: [0],
+            max_budget: [0],
+            min_year_of_experience: [0],
+            max_year_of_experience: [0],           
+            is_open: [''],
+            is_gross: [''],
+            increment_percentage_yearly: [0],
+            salary_head_id: [0],
+            is_active: [0],
+            days_of_confirmation: [0],
             //drownlist field
             //title_enum_id: ['', [Validators.required]],
             //gender_enum_id: ['', [Validators.required]],
@@ -217,7 +223,8 @@ export class OrganogramComponent implements OnInit {
         });
         //Load Dropdown
         this.loadAllOrganogram();
-        this.loadDepartmentrpdwn();
+        this.loadDepartmentdrpdwn();
+        this.loadPositiondrpdwn();
         //this.loadEmployeeGenderdrpdwn();
         //this.loadEmployeeReligiondrpdwn();
         //this.loadEmployeeBloodGroupdrpdwn();
@@ -241,20 +248,42 @@ export class OrganogramComponent implements OnInit {
         //];
     }
 
-    loadDepartmentrpdwn() {
+    loadDepartmentdrpdwn() {
         this.organogramService.getAllDepartment().subscribe(data => {
             this.drpdwnDepartmentList = data;
         });
     }
+    loadPositiondrpdwn() {
+        this.organogramService.getPositionList().subscribe(data => {
+            this.drpdwnPositionList = data;
+        });
+    }
+    
     onRowSelect(event) {
         debugger;
         // this.toggle();
-        this.nodeSelected = true;
-        this.rowData = event.data;
+        this.nodeDetailSelected = true;
+        this.rowDetailData = event.data;
 
     }
     onRowUnselect(event) {
         // this.toggle();
+        debugger;
+        this.nodeDetailSelected = false;
+        this.rowDetailData = null;
+
+    }
+    nodeSelect(event) {
+        debugger;
+        // this.toggle();
+        this.nodeSelected = true;
+        this.rowData = event.node.data;
+
+    }
+   
+    nodeUnselect(event) {
+        // this.toggle();
+        debugger;
         this.nodeSelected = false;
         this.rowData = null;
 
@@ -272,7 +301,24 @@ export class OrganogramComponent implements OnInit {
         //});
     }
 
-    
+    loadLocationOrganogram() {
+        debugger;
+        if (this.rowData == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+       
+
+        debugger;
+        //let locationId = this.rowData.Node_Name;
+        
+        
+            this.organogramForm.controls['location_name'].setValue(this.rowData.location_name);
+            this.organogramForm.controls['Company'].setValue(this.rowData.company_name);
+            this.organogramForm.controls['Group'].setValue(this.rowData.group_name);
+        
+        //this.notifyService.ShowNotification(3, 'selected level is : ' + this.rowData.TreeLavel);
+
+    }
     onFormSubmit() {
         debugger
        const data = this.organogramForm.value;
