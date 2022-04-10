@@ -227,4 +227,41 @@ export class DealerInfoService {
     }
 
     // End Dealer Document Info ------***------
+
+
+    // Start Dealer Credit Info  ------***------
+    createDealerCreditInfo(dealerCreditInfo: FormData): Observable<any> {
+
+        return this.http.post<any>(this.ipconfig.base_IP + 'DealerCreditInfo/Create', dealerCreditInfo, httpOptionsForFileUpload);
+
+    }
+    updateDealerCreditInfo(dealerCreditInfo: FormData): Observable<any> {
+
+        return this.http.post<any>(this.ipconfig.base_IP + 'DealerCreditInfo/Update', dealerCreditInfo, httpOptionsForFileUpload);
+
+    }
+    deleteDealerCreditInfo(dealer_credit_info_id: number): Observable<any> {
+
+        return this.http.post(this.ipconfig.base_IP + 'DealerCreditInfo/Delete?dealer_credit_info_id=' + dealer_credit_info_id, httpOptions);
+
+    }
+    getAllCreditInfoByDealerId(dealer_info_id: Number): Observable<any[]> {
+
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'DealerCreditInfo/GetCreditInfoByDealerId?dealer_info_id=' + dealer_info_id, httpOptions);
+
+    }
+    getAllDealerCreditInfo(): Observable<any[]> {
+
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'DealerCreditInfo/GetAllDealerCreditInfo', httpOptions);
+
+    }
+    getDealerCreditInfoById(dealer_credit_info_id: Number): Observable<any> {
+        return this.http.get(this.ipconfig.base_IP + 'DealerCreditInfo/GetDealerCreditInfoById?dealer_credit_info_id=' + dealer_credit_info_id, httpOptions);
+    }
+
+    getAllSecurityTypeCboList(): Observable<any[]> {
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'SecurityDeposit/SecurityDepositCboList', httpOptions);
+    }
+
+    // End Dealer Document Info ------***------
 }

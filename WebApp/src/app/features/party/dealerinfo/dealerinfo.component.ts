@@ -23,6 +23,10 @@ export class DealerinfoComponent implements OnInit {
         static: true
     }) dealerDocumentImageFile;
 
+    @ViewChild('dealerCreditImageFile', {
+        static: true
+    }) dealerCreditImageFile;
+
     submitted = false; 
     dealerinfoForm: any;//DealerFormName  
     dealerinfoList: any[];//List Dealerinfo
@@ -47,7 +51,13 @@ export class DealerinfoComponent implements OnInit {
     dealerdocumentForm: any;//Dealer Contact Form
     isDealerDocumentinfoEdit: boolean = false;
     dealerdocumentinfoList: any[];//List Dealer Contact info
-    selecteddealerdocumentinfo: any;// Selected Dealerinfo 
+    selecteddealerdocumentinfo: any;// Selected Dealerinfo
+
+    submittedCredit = false;
+    dealercreditForm: any;//Dealer Contact Form
+    isDealerCreditinfoEdit: boolean = false;
+    dealercreditinfoList: any[];//List Dealer Contact info
+    selecteddealercreditinfo: any;// Selected Dealerinfo 
 
     //declare dropdown List Property
     selectedDomicile: any;
@@ -106,6 +116,7 @@ export class DealerinfoComponent implements OnInit {
     allReligion: any[];
     allBloodGroup: any[];
     allDocument: any[];
+    allSecurityDeposit: any[];
 
     first = 0;
     rows = 10;
@@ -114,6 +125,7 @@ export class DealerinfoComponent implements OnInit {
     rowDataContact: any;
     rowDataLocation: any;
     rowDataDocument: any;
+    rowDataCredit: any;
     dataSaved = false;
     // for delete data modal
     
@@ -126,6 +138,8 @@ export class DealerinfoComponent implements OnInit {
     index: number = 0;
     indexContact: number = 0;
     indexLocation: number = 0;
+    indexDocument: number = 0;
+    indexCredit: number = 0;
     display: boolean = false;
     showDialog() {
         if (this.rowData == null) {
@@ -142,6 +156,15 @@ export class DealerinfoComponent implements OnInit {
         }
         else
             this.displayDocument = true;
+    }
+
+    displayCredit: boolean = false;
+    showDialogCredit() {
+        if (this.rowDataCredit == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+        else
+            this.displayCredit = true;
     }
 
     displayBasic: boolean = false;
@@ -284,9 +307,49 @@ export class DealerinfoComponent implements OnInit {
     }
 
 
+    // Credit Start
+    gridDisplayCredit = false;
+    formDisplayCredit = true;
+
+    showBasicDialogCreditNew() {
+        this.ngOnInit();
+        this.toggleGridDisplay();
+        this.dealerDocumentIndex();
+        this.gridDisplayDocument = true;
+        this.formDisplayDocument = false;
+    }
+
+    showBasicDialogCreditGrid() {
+        this.toggleGridDisplayDocument();
+        this.toggleGridDisplay();
+        this.dealerDocumentIndex();
+    }
+    showBasicDialogCreditEdit() {
+        this.toggleFormDisplayDocument();
+        this.toggleGridDisplay();
+        this.dealerDocumentIndex();
+    }
+
+    toggleFormDisplayCredit() {
+        this.gridDisplayDocument = false;
+        this.formDisplayDocument = true;
+        this.dealerContactIndex();
+    }
+
+    toggleGridDisplayCredit() {
+        this.gridDisplayDocument = false;
+        this.formDisplayDocument = true;
+    }
+    toggleFormCloseCredit() {
+        this.toggleFormDisplayDocument();
+        this.dealerDocumentIndex();
+    }
+
+
     // for photo and signature upload
 
     fileToUploadDocumentForm: File | null = null;
+    fileToUploadCreditForm: File | null = null;
 
     photourllink: string = "assets/images/defaultimg.jpeg";
     selectFile(event) {
@@ -429,6 +492,15 @@ export class DealerinfoComponent implements OnInit {
             FileUpload: new FormControl(''),
         });
 
+        this.dealercreditForm = this.formbulider.group({
+            dealer_info_id: [''],
+            security_deposit_id: ['', [Validators.required]],
+            amount: ['', [Validators.required]],
+            expiry_date: ['', [Validators.required]],
+            remarks: [''],
+            //FileUpload: new FormControl(''),
+        });
+
         //Load Dropdown
         this.loadAllDomicileEnum();
         this.loadAllContinentEnum();
@@ -448,6 +520,7 @@ export class DealerinfoComponent implements OnInit {
         this.loadAllReligionEnum();
         this.loadAllBloodGroupEnum();
         this.loadAllDocumentCboList();
+        this.LoadAllSecurityTypeCboList();
     }
 
     onRowSelect(event) {
@@ -492,6 +565,17 @@ export class DealerinfoComponent implements OnInit {
     onRowUnselectDocument(event) {
         this.rowSelected = false;
         this.rowDataDocument = null;
+    }
+
+    onRowSelectCredit(event) {
+        debugger;
+        this.rowSelected = true;
+        this.rowDataCredit = event.data;
+
+    }
+    onRowUnselectCredit(event) {
+        this.rowSelected = false;
+        this.rowDataCredit = null;
     }
 
     
@@ -644,8 +728,26 @@ export class DealerinfoComponent implements OnInit {
             }
             this.loadAllDealerDocumentinfos();
         });
-        this.showBasicDialogLocationEdit();
+        this.showBasicDialogDocumentEdit();
         this.index = 6;
+    }
+
+    loadDealerinfoCreditGrid() {
+
+        debugger;
+        if (this.rowData == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+
+        let dealerinfoId = this.rowData.DealerInfoId;
+        this.dealerinfoService.getDealerInfoById(dealerinfoId).subscribe(data => {
+            if (data != null) {
+                this.isDealerinfoEdit = true;
+            }
+            this.loadAllDealerCreditinfos();
+        });
+        this.showBasicDialogCreditEdit();
+        this.index = 7;
     }
 
     deleteDealerinfo() {
@@ -965,6 +1067,18 @@ export class DealerinfoComponent implements OnInit {
         });
     }
 
+    loadAllDocumentCboList() {
+        this.dealerinfoService.getAllDocumentCboList().subscribe(data => {
+            this.allDocument = data;
+        });
+    }
+
+    LoadAllSecurityTypeCboList() {
+        this.dealerinfoService.getAllSecurityTypeCboList().subscribe(data => {
+            this.allSecurityDeposit = data;
+        });
+    }
+
     // All Dealer List 
     loadAllDealerinfos() {
         this.dealerinfoService.getAllDealerInfo().subscribe(data => {
@@ -992,12 +1106,13 @@ export class DealerinfoComponent implements OnInit {
             this.dealerdocumentinfoList = data;
         });
     }
-
-    loadAllDocumentCboList() {
-        this.dealerinfoService.getAllDocumentCboList().subscribe(data => {
-            this.allDocument = data;
+    loadAllDealerCreditinfos() {
+        let dealerinfoId = this.rowData.DealerInfoId;
+        this.dealerinfoService.getAllCreditInfoByDealerId(dealerinfoId).subscribe(data => {
+            this.dealercreditinfoList = data;
         });
     }
+    
 
     resetForm() {
         this.isDealerinfoEdit = false;
@@ -1006,7 +1121,6 @@ export class DealerinfoComponent implements OnInit {
     }
 
     
-
     // Contact Info Start
 
     sameAddress(event) {
@@ -1587,6 +1701,164 @@ export class DealerinfoComponent implements OnInit {
         this.fileToUploadDocumentForm = files.item(0);
     }
 
+
+    // Start Dealer Credit Info
+
+    get e(): { [key: string]: AbstractControl } {
+        return this.dealercreditForm.controls;
+    }
+
+    SaveDealerCreditInfo() {
+        this.submittedCredit = true;
+        const data = this.dealercreditForm.value;
+
+        if (this.dealercreditForm.invalid) {
+            return;
+        }
+        let formData = new FormData();
+        for (const key of Object.keys(this.dealercreditForm.value)) {
+            const value = this.dealercreditForm.value[key];
+            if (key == "dealer_info_id") {
+                let dealerinfoId = this.rowData.DealerInfoId;
+                formData.append("dealer_info_id", dealerinfoId);
+            }
+            
+            if (key == "expiry_date") {
+                let date = new Date(value).toISOString();
+                formData.append("expiry_date", date);
+            }
+            else {
+                formData.append(key, value);
+                formData.append("dealer_info_id", this.rowData.DealerInfoId);
+                //formData.append("FileUpload", this.fileToUploadCreditForm);
+            }
+        }
+
+        if (this.isDealerCreditinfoEdit) {
+
+            data.dealerCreditinfoId = this.rowDataCredit.DealerCreditInfoId;
+            formData.append("dealer_credit_info_id", this.rowDataCredit.DealerCreditInfoId);
+            this.dealerinfoService.updateDealerCreditInfo(formData).subscribe(result => {
+
+                this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
+
+                if (result.MessageType == 1) {
+                    this.dealercreditinfoList.splice(this.dealercreditinfoList.findIndex(item => item.DealerCreditInfoId === data.dealerCreditinfoId), 1);
+                    this.dealercreditinfoList.unshift(result.Data);
+                    this.selecteddealercreditinfo = result.Data;
+                    this.rowDataCredit = result.Data;
+                    this.dealerCreditIndex();
+                    this.isDealerCreditinfoEdit = false;
+                    this.submittedCredit = false;
+                    this.dealercreditForm.reset();
+                }
+            });
+            this.gridDisplayCredit = false;
+            this.formDisplayCredit = true;
+        }
+        else {
+            this.dealerinfoService.createDealerCreditInfo(formData).subscribe(
+                result => {
+                    this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
+                    if (result.MessageType == 1) {
+                        this.dealercreditinfoList.unshift(result.Data);
+                        this.selecteddealercreditinfo = result.Data;
+                        this.rowDataCredit = result.Data;
+                        this.dealerCreditIndex();
+                        this.isDealerCreditinfoEdit = false;
+                        this.submittedCredit = false;
+                        this.dealercreditForm.reset();
+                    }
+                }
+            );
+            this.gridDisplayCredit = false;
+            this.formDisplayCredit = true;
+        }
+
+    }
+
+    loadDealerCreditinfoToEdit() {
+
+        debugger;
+        if (this.rowDataCredit == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+
+        let dealerCreditinfoId = this.rowDataCredit.DealerCreditInfoId;
+        this.dealerinfoService.getDealerCreditInfoById(dealerCreditinfoId).subscribe(data => {
+            if (data != null) {
+                this.isDealerCreditinfoEdit = true;
+            }
+            this.dealercreditForm.controls['dealer_info_id'].setValue(data.DealerInfoId);
+            this.dealercreditForm.controls['security_deposit_id'].setValue(data.SecurityDepositId);
+            this.dealercreditForm.controls['amount'].setValue(data.Amount);
+            this.dealercreditForm.controls['expiry_date'].setValue(new Date(data.ExpiryDate));
+            this.dealercreditForm.controls['remarks'].setValue(data.Remarks);
+            //this.dealercreditForm.controls['image_file'].setValue(data.ImageFile);
+            //this.photourllink = data.ImageFile;
+
+        });
+        this.gridDisplayCredit = false;
+        this.formDisplayCredit = true;
+    }
+
+    deleteDealerCreditinfo() {
+        if (this.rowDataCredit == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+
+        this.rowSelected = true;
+        let dealerCreditinfoId = this.rowDataCredit.DealerCreditInfoId;
+        this.dealerinfoService.deleteDealerCreditInfo(dealerCreditinfoId).subscribe(data => {
+            if (data.MessageType == 1) {
+                this.dealercreditinfoList.splice(this.dealercreditinfoList.findIndex(item => item.DealerCreditInfoId === data.dealerCreditinfoId), 1);
+            }
+            this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
+        });
+        this.displayCredit = false;
+    }
+
+    deleteCredit(event: Event) {
+        if (this.rowDataCredit == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+
+        this.confirmationService.confirm({
+            key: 'delete',
+            target: event.target,
+            message: 'Are you sure that you want to delete?',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                this.deleteDealerCreditinfo();
+            },
+            reject: () => {
+
+            }
+        });
+    }
+
+    onSelectCreditImage(event) {
+        if (event.target.files) {
+            var reader = new FileReader()
+            reader.readAsDataURL(event.target.files[0])
+            reader.onload = (event: any) => {
+                this.photourllink = event.target.result
+            }
+            alert(this.photourllink)
+            if (event.target.files.length > 0) {
+                const file = event.target.files[0];
+                this.dealerCreditImageFile.nativeElement.innerText = file.name;
+                this.dealercreditForm.patchValue({
+                    FileUpload: file,
+                });
+            }
+        }
+    }
+
+    creditFormFileInput(files: FileList) {
+        this.fileToUploadCreditForm = files.item(0);
+    }
+
     
     dealerIndex() {
         this.index = 0;
@@ -1597,11 +1869,11 @@ export class DealerinfoComponent implements OnInit {
     }
 
     openNext() {
-        this.index = (this.index === 6) ? 0 : this.index + 1;
+        this.index = (this.index === 7) ? 0 : this.index + 1;
     }
 
     openPrev() {
-        this.index = (this.index === 0) ? 6 : this.index - 1;
+        this.index = (this.index === 0) ? 7 : this.index - 1;
     }
 
 
@@ -1641,23 +1913,40 @@ export class DealerinfoComponent implements OnInit {
         this.indexLocation = (this.indexLocation === 0) ? 1 : this.indexLocation - 1;
     }
 
-
     // Document Infomation Start
     dealerDocumentIndex() {
         this.index = 6;
-        this.indexLocation = 0;
+        this.indexDocument = 0;
     }
 
     functionDocument(e) {
-        this.indexLocation = e.indexLocation;
+        this.indexDocument = e.indexDocument;
     }
 
     openNextDocument() {
-        this.indexLocation = (this.indexLocation === 1) ? 0 : this.indexLocation + 1;
+        this.indexDocument = (this.indexDocument === 1) ? 0 : this.indexDocument + 1;
     }
 
     openPrevDocument() {
-        this.indexLocation = (this.indexLocation === 0) ? 1 : this.indexLocation - 1;
+        this.indexDocument = (this.indexDocument === 0) ? 1 : this.indexDocument - 1;
+    }
+
+    // Credit Infomation Start
+    dealerCreditIndex() {
+        this.index = 7;
+        this.indexCredit = 0;
+    }
+
+    functionCredit(e) {
+        this.indexCredit = e.indexCredit;
+    }
+
+    openNextCredit() {
+        this.indexCredit = (this.indexCredit === 1) ? 0 : this.indexCredit + 1;
+    }
+
+    openPrevCredit() {
+        this.indexCredit = (this.indexCredit === 0) ? 1 : this.indexCredit - 1;
     }
 
 }
