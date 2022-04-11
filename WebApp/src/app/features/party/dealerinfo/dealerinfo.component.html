@@ -839,7 +839,7 @@
                             <div class="col-12">
                                 <div class="p-fluid p-formgrid grid">
                                     <div class="field col-12 md:col-3">
-                                        <label pTooltip="Document Type" tooltipPosition="top">Document Type</label>
+                                        <label pTooltip="Document Type" tooltipPosition="top">Document Type<span class="req">*</span></label>
                                         <p-dropdown [options]="allDocument" formControlName="document_type_id" [ngClass]="{ 'is-invalid': submittedDocument && d.document_type_id.errors }" placeholder="---Select---"
                                                     optionLabel="document_type_name" optionValue="document_type_id" [showClear]="true" [filter]="true" filterBy="document_type_name"></p-dropdown>
 
@@ -849,21 +849,21 @@
 
                                     </div>
                                     <div class="field col-12 md:col-3">
-                                        <label pTooltip="Document Number" tooltipPosition="top">Document Number</label>
+                                        <label pTooltip="Document Number" tooltipPosition="top">Document Number<span class="req">*</span></label>
                                         <input type="text" formControlName="document_number" [ngClass]="{ 'is-invalid': submittedDocument && d.document_number.errors }" placeholder="" pInputText />
                                         <div *ngIf="submittedDocument && d.document_number.errors" class="invalid-feedback">
                                             <small *ngIf="d.document_number.errors.required" class="p-error">Document Number is required</small>
                                         </div>
                                     </div>
                                     <div class="field col-12 md:col-3">
-                                        <label pTooltip="Issue Date" tooltipPosition="top">Issue Date</label>
+                                        <label pTooltip="Issue Date" tooltipPosition="top">Issue Date<span class="req">*</span></label>
                                         <p-calendar formControlName="issue_date" [ngClass]="{ 'is-invalid': submittedDocument && d.issue_date.errors }" placeholder="" [showIcon]="true" [showButtonBar]="true"></p-calendar>
                                         <div *ngIf="submittedDocument && d.issue_date.errors" class="invalid-feedback">
                                             <small *ngIf="d.issue_date.errors.required" class="p-error">Issue date is required</small>
                                         </div>
                                     </div>
                                     <div class="field col-12 md:col-3">
-                                        <label pTooltip="Expiry Date" tooltipPosition="top">Expiry Date</label>
+                                        <label pTooltip="Expiry Date" tooltipPosition="top">Expiry Date<span class="req">*</span></label>
                                         <p-calendar formControlName="expiry_date" [ngClass]="{ 'is-invalid': submittedDocument && d.expiry_date.errors }" placeholder="" [showIcon]="true" [showButtonBar]="true"></p-calendar>
                                         <div *ngIf="submittedDocument && d.expiry_date.errors" class="invalid-feedback">
                                             <small *ngIf="d.expiry_date.errors.required" class="p-error">Expiry date is required</small>
