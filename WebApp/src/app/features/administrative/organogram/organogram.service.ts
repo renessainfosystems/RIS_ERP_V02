@@ -17,9 +17,9 @@ const httpOptions = {
 export class OrganogramService {
 
   constructor(private http: HttpClient, private ipconfig: IPConfiguration) { }
-  createOrganogram(Organogram: any): Observable<any> {
+    createOrganogram(Organogram: any): Observable<any> {
 
-      return this.http.post<any>(this.ipconfig.base_IP + 'Organogram/Create', Organogram, httpOptions);
+        return this.http.post<any>(this.ipconfig.base_IP + 'Organogram/Create', Organogram, httpOptions);
 
   }
     updateOrganogram(Organogram: any): Observable<any> {

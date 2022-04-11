@@ -28,6 +28,7 @@ namespace Auth.Model.Administrative.ViewModel
         public bool is_gross { get; set; }
         public int min_year_of_experience { get; set; }
         public int max_year_of_experience { get; set; }
+        public int? salary_head_id { get; set; }
 
         public static OrganogramDetailViewModel ConvertToModel(dynamic user)
         {
@@ -35,6 +36,7 @@ namespace Auth.Model.Administrative.ViewModel
             model.organogram_id = user.organogram_id ?? 0;
             model.position_id = user.position_id ?? 0;
             model.organogram_detail_id = user.organogram_detail_id ?? 0;
+            model.salary_head_id = user.salary_head_id ?? 0;
             model.budget = user.budget ?? "";
             model.manpower = user.manpower ?? "";
             model.code = user.code ?? "";

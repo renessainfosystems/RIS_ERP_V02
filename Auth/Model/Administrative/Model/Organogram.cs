@@ -28,5 +28,7 @@ namespace Auth.Model.Administrative.Model
         public int company_corporate_id { get; set; }
         public int sorting_priority { get; set; }
         public bool is_active { get; set; }
+
+        public OrganogramDetail organogramDetails { get; set; }
     }
 }

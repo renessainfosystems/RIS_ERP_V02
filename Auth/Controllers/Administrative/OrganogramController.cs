@@ -20,13 +20,16 @@ namespace Auth.Controllers.Administrative
         //Intialize
         #region Constructor
         private IOrganogramRepository _organogramRepository;
+        private IOrganogramDetailRepository _organogramDetailRepository;
 
         public OrganogramController(
-            IOrganogramRepository organogramRepository
+            IOrganogramRepository organogramRepository,
+            IOrganogramDetailRepository OrganogramDetailRepository
             )
         {
 
             _organogramRepository = organogramRepository;
+            _organogramDetailRepository = OrganogramDetailRepository;
         }
 
         #endregion        

@@ -3,6 +3,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { TreeNode } from 'primeng/api';
+import { Tree } from 'primeng/tree';
 import { Observable } from 'rxjs';
 import { NotificationService } from '../../../service/CommonMessage/notification.service';
 import { NodeService } from '../../../service/nodeservice';
@@ -49,6 +50,7 @@ export class OrganogramComponent implements OnInit {
     index: number = 0;
     rowData: any;
     rowDetailData: any;
+    rowDetailData_1: any;
     dataSaved = false;
    
     OrganogramList: TreeNode[];
@@ -98,11 +100,14 @@ export class OrganogramComponent implements OnInit {
         if (this.rowData == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
-       // this.resetForm();
+      //  this.organogramForm.reset();
         if (this.rowData.TreeLavel==0) {
             return this.notifyService.ShowNotification(3, 'You can not Create Node Under Company');
         }
         this.loadLocationOrganogram();
+        //if (this.rowData.Organogram_Id > 0) {
+        //    this.loadOrganogramToEdit();
+        //}
       //  if (this.rowData.TreeLavel == 1) {
             this.toggleGridDisplay();
        // }
@@ -146,7 +151,7 @@ export class OrganogramComponent implements OnInit {
     ngOnInit(): void {
         this.organogramForm = this.formbulider.group({
 
-            organogram_code: ['', [Validators.required]],
+            organogram_code: [''],
             Group: [''],
             Company: [''],
             location_name: [''],
@@ -270,20 +275,56 @@ export class OrganogramComponent implements OnInit {
         if (this.rowData == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
-       
-
-        debugger;
-        //let locationId = this.rowData.Node_Name;
-        
-        
-            this.organogramForm.controls['location_name'].setValue(this.rowData.location_name);
-            this.organogramForm.controls['Company'].setValue(this.rowData.company_name);
-            this.organogramForm.controls['Group'].setValue(this.rowData.group_name);
+        debugger;       
+        this.organogramForm.controls['location_name'].setValue(this.rowData.location_name);
+        this.organogramForm.controls['Company'].setValue(this.rowData.company_name);
+        this.organogramForm.controls['Group'].setValue(this.rowData.group_name);
         this.organogramForm.controls['location_id'].setValue(this.rowData.location_id);
         this.organogramForm.controls['parent_id'].setValue(this.rowData.parent_id);
-        //this.notifyService.ShowNotification(3, 'selected level is : ' + this.rowData.TreeLavel);
-
     }
+
+    addtoGrid() {
+        this.submitted = true;
+        if (this.rowData == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+        if (this.organogramForm.invalid) {
+            return;
+        }
+        const data = this.organogramForm.value;
+        debugger
+        if (this.rowData.Organogram_Id > 0) {
+
+            let data1 = {
+                organogram_id: this.rowData.Organogram_Id,
+                code: '001',
+                position_id: data.position_id,
+                min_no_of_manpower: data.min_no_of_manpower,
+                max_no_of_manpower: data.max_no_of_manpower,
+                min_budget: data.min_budget,
+                max_budget: data.max_budget,
+                min_year_of_experience: data.min_year_of_experience,
+                max_year_of_experience: data.max_year_of_experience,
+                is_open: data.is_open == 0 ? true : false,
+                is_gross: data.is_gross == 0 ? true : false,
+                is_active: true,
+                increment_percentage_yearly: data.increment_percentage_yearly,
+                salary_head_id: data.salary_head_id,
+                days_of_confirmation: data.days_of_confirmation,
+            }
+            console.log(data1)         
+            this.organogramService.createOrganogramDetail(data1).subscribe(
+                result => {
+                    this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);                     
+                    this.loadAllOrganogramDetail(this.rowData.Organogram_Id);
+                }
+            );
+        }
+        else {
+            this.onFormSubmit();
+        }
+    }
+
     onFormSubmit() {
         debugger
         this.submitted = true;
@@ -292,78 +333,72 @@ export class OrganogramComponent implements OnInit {
         }
        const data = this.organogramForm.value;
 
-        //if (this.isOrganogramEdit) {
-        //    if (!(data.present_country_id)) {
-        //        return this.notifyService.ShowNotification(2, "Please select present country.")
-        //    }
-        //    if (!(data.present_division_id)) {
-        //        return this.notifyService.ShowNotification(2, "Please select present division.")
-        //    }
-        //    if (!(data.present_district_id)) {
-        //        return this.notifyService.ShowNotification(2, "Please select present district.")
-        //    }
-        //}
-        //let formData = new FormData();
-        //for (const key of Object.keys(this.organogramForm.value)) {
-        //    const value = this.organogramForm.value[key];
-            //if (key == "date_of_marriage") {
-            //    let date = new Date(value).toISOString();
-            //    formData.append("date_of_marriage", date);
-            //}
-            //else if (key == "date_of_birth") {
-            //    let date = new Date(value).toISOString();
-            //    formData.append("date_of_birth", date);
-            //}
-            //else {
-
-               // formData.append(key, value);
-           // }
-            //  formData.append(key, value);
-
-      //  } 
-       
-       // console.log(formData)
-
-
-        if (this.isOrganogramEdit) {
-
-            data.organogram_id = this.rowData.organogram_id;
-          //  formData.append("organogram_id", this.rowData.organogram_id);
-
+        if (this.rowData.Organogram_Id>0) {
+            data.organogram_id = this.rowData.Organogram_Id;           
             this.organogramService.updateOrganogram(data).subscribe(result => {
-
                 this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
-                this.loadAllOrganogram();
-                this.isOrganogramEdit = false;
-            });
-            this.ngOnInit();
+                this.loadAllOrganogram();                 
+            });           
         }
         else {
-
+            debugger
+            let data1= {
+                organogram_id : 0,
+                code : '001',
+                position_id: data.position_id,
+                min_no_of_manpower: data.min_no_of_manpower,
+                max_no_of_manpower: data.max_no_of_manpower,
+                min_budget: data.min_budget,
+                max_budget: data.max_budget,
+                min_year_of_experience: data.min_year_of_experience,
+                max_year_of_experience: data.max_year_of_experience,
+                is_open: data.is_open==0?true:false,
+                is_gross: data.is_gross == 0 ? true : false,
+                is_active: true,
+                increment_percentage_yearly: data.increment_percentage_yearly,
+                salary_head_id: data.salary_head_id,
+                days_of_confirmation: data.days_of_confirmation,
+            }
+            console.log(data1)
+            
+            debugger
+            data.organogramDetails = data1;
             this.organogramService.createOrganogram(data).subscribe(
                 result => {
                     this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
-                    if (result.Data) {
-                        //for (var i = 0; i < result.Data.length; i++) {
-
-                        //}
-                    }
+                    
                     this.loadAllOrganogram();
+                    this.loadAllOrganogramDetail(result.Data[0].organogram_id);
                 }
             );
-            this.ngOnInit();
-        }
-
-        // this.displayBasic = false;
-
+            //this.ngOnInit();
+        } 
     }
+
 
     loadOrganogramToEdit() {
         debugger;
         if (this.rowData == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
+        //this.organogramForm.reset();
+
+        this.organogramForm.controls['location_name'].setValue(this.rowData.location_name);
+        this.organogramForm.controls['Company'].setValue(this.rowData.company_name);
+        this.organogramForm.controls['Group'].setValue(this.rowData.group_name);
+        this.organogramForm.controls['location_id'].setValue(this.rowData.location_id);
+        this.organogramForm.controls['parent_id'].setValue(this.rowData.parent_id);
+        this.loadAllOrganogramDetail(this.rowData.Organogram_Id);
+        this.organogramService.getOrganogramById(this.rowData.Organogram_Id).subscribe(data => {
+            debugger
+            console.log(data)
+            this.organogramForm.controls['organogram_code'].setValue(data.organogram_code);
+            this.organogramForm.controls['department_id'].setValue(data.department_id);
+        });
+       
+        this.toggleGridDisplay();
     }
+    
     organogramActiveInactive() {
         if (this.rowData == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
