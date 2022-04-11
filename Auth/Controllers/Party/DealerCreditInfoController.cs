@@ -63,6 +63,13 @@ namespace Auth.Controllers.Party
             return await _dealerCreditInfoRepository.IUD_DealerCreditInfo(oDealerCreditInfo, (int)GlobalEnumList.DBOperation.Delete);
         }
 
+        [HttpPost]
+        public async Task<dynamic> Approve(DealerCreditInfo dealerCreditInfo)
+        {
+
+            return await _dealerCreditInfoRepository.IUD_DealerCreditInfo(dealerCreditInfo, (int)GlobalEnumList.DBOperation.Approve);
+        }
+
         [HttpGet]
         public async Task<dynamic> GetAllDealerCreditInfo()
         {

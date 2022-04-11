@@ -90,7 +90,13 @@ namespace Auth.DataAccess.Party
                 {
                     return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonDeleteMessage);
                 }
-               
+
+                if (dbOperation == (int)GlobalEnumList.DBOperation.Approve)
+                {
+                    //return message = CommonMessage.SetSuccessMessage("Dealer Credit Approved", data);
+                    return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonApproveMessage);
+                }
+
                 if (data.Count > 0)
                 {
                     result = DealerCreditInfoViewModel.ConvertToModel(data);

@@ -956,7 +956,7 @@
                                     </div>
                                     <div class="field col-12 md:col-3">
                                         <label pTooltip="Remarks" tooltipPosition="top">Remarks</label>
-                                        <input type="text" formControlName="remarks"  placeholder="" pInputText />
+                                        <input type="text" formControlName="remarks" placeholder="" pInputText />
 
                                     </div>
                                     <div class="field col-12 md:col-3">
@@ -970,8 +970,12 @@
                                         <button pButton pRipple type="button" (click)="loadDealerCreditinfoToEdit()" label="Edit" class="risBtn risEdit mr-2 mb-2" icon="pi pi-pencil"></button>
                                     </div>
                                     <div class="field col-12 md:col-1">
+                                        <button pButton pRipple type="button" (click)="approveModal($event)" label="Approve" class="risBtn risAll mr-2 mb-2"></button>
+                                    </div>
+                                    <div class="field col-12 md:col-1">
                                         <button pButton pRipple type="button" (click)="deleteCredit($event)" label="Delete" class="risBtn risDelete mr-2 mb-2" icon="pi pi-trash"></button>
                                         <p-confirmPopup key="delete"></p-confirmPopup>
+                                        <p-confirmPopup key="approve"></p-confirmPopup>
                                     </div>
                                 </div>
                             </div>

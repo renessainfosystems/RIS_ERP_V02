@@ -1836,6 +1836,48 @@ export class DealerinfoComponent implements OnInit {
         });
     }
 
+    approveModal(event: Event) {
+        if (this.rowDataCredit == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+        //if (this.rowDataCredit.approvedBy) {
+        //    return this.notifyService.ShowNotification(3, "This credit already approved");
+        //}
+        this.confirmationService.confirm({
+            key: 'approve',
+            target: event.target,
+            message: 'Are you sure that you want to approve?',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                this.creditApprove();
+            },
+            reject: () => {
+
+            }
+        });
+    }
+
+    creditApprove() {
+        if (this.rowDataCredit == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+        //if (this.rowDataCredit.approvedBy) {
+        //    return this.notifyService.ShowNotification(3, "This creidt already approved.");
+        //}
+        let dealerCreditinfoId = this.rowDataCredit.DealerCreditInfoId;
+        this.dealerinfoService.approve(dealerCreditinfoId).subscribe(
+            data => {
+                this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage);
+                if (data.MessageType == 1) {
+                    this.dealercreditinfoList.splice(this.dealercreditinfoList.findIndex(item => item.DealerCreditInfoId === data.dealerCreditinfoId), 1);
+                }
+                this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
+            }
+        );
+        this.gridDisplayCredit = false;
+        this.formDisplayCredit = true;
+    }
+
     onSelectCreditImage(event) {
         if (event.target.files) {
             var reader = new FileReader()
