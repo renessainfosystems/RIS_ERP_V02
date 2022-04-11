@@ -11,6 +11,8 @@ namespace Auth.Model.Party.ViewModel
         public int DealerCreditInfoId { get; set; }
         public int DealerInfoId { get; set; }
         public int SecurityDepositId { get; set; }
+        public string SecurityDepositName { get; set; }
+        public string SecurityDepositType { get; set; }
         public decimal Amount { get; set; }
         public DateTime ExpiryDate { get; set; }
         public string Attachment { get; set; }
@@ -27,6 +29,8 @@ namespace Auth.Model.Party.ViewModel
             model.DealerCreditInfoId = dealerCredit.dealer_credit_info_id ?? 0;
             model.DealerInfoId = dealerCredit.dealer_info_id ?? 0;
             model.SecurityDepositId = dealerCredit.security_deposit_id ?? 0;
+            model.SecurityDepositName = dealerCredit.security_deposit_name ?? "";
+            model.SecurityDepositType = dealerCredit.security_deposit_type ?? "";
             model.Amount = dealerCredit.amount ?? 0;
             model.ExpiryDate = dealerCredit.expiry_date;
             model.Attachment = dealerCredit.attachment ?? "";
