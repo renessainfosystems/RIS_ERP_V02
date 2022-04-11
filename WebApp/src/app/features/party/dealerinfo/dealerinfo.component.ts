@@ -1840,9 +1840,9 @@ export class DealerinfoComponent implements OnInit {
         if (this.rowDataCredit == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
-        //if (this.rowDataCredit.approvedBy) {
-        //    return this.notifyService.ShowNotification(3, "This credit already approved");
-        //}
+        if (this.rowDataCredit.IsApproved == true) {
+            return this.notifyService.ShowNotification(3, "This credit info already approved");
+        }
         this.confirmationService.confirm({
             key: 'approve',
             target: event.target,
@@ -1861,19 +1861,22 @@ export class DealerinfoComponent implements OnInit {
         if (this.rowDataCredit == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
-        //if (this.rowDataCredit.approvedBy) {
-        //    return this.notifyService.ShowNotification(3, "This creidt already approved.");
-        //}
+        if (this.rowDataCredit.IsApproved==true) {
+            return this.notifyService.ShowNotification(3, "This creidt info already approved.");
+        }
         let dealerCreditinfoId = this.rowDataCredit.DealerCreditInfoId;
-        this.dealerinfoService.approve(dealerCreditinfoId).subscribe(
-            data => {
-                this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage);
-                if (data.MessageType == 1) {
-                    this.dealercreditinfoList.splice(this.dealercreditinfoList.findIndex(item => item.DealerCreditInfoId === data.dealerCreditinfoId), 1);
-                }
-                this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
+        this.dealerinfoService.approve(dealerCreditinfoId).subscribe(data => {
+            if (data.MessageType == 1) {
+                this.dealercreditinfoList.splice(this.dealercreditinfoList.findIndex(item => item.DealerCreditInfoId === data.dealerCreditinfoId), 1);
+                this.dealercreditinfoList.unshift(data.Data);
+                this.selecteddealercreditinfo = data.Data;
+                this.rowDataCredit = data.Data;
+                this.dealerCreditIndex();
+                this.isDealerCreditinfoEdit = false;
+                this.submittedCredit = false;
             }
-        );
+            this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
+        });
         this.gridDisplayCredit = false;
         this.formDisplayCredit = true;
     }

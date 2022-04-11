@@ -58,7 +58,13 @@ namespace Auth.DataAccess.Party
             {
                 parameters.Add("@param_dealer_credit_info_id", dealerCreditInfo.dealer_credit_info_id, DbType.Int64);
                 parameters.Add("@param_DBOperation", GlobalEnumList.DBOperation.Delete);
-            }            
+            }
+            else if (operationType == (int)GlobalEnumList.DBOperation.Approve)
+            {
+                parameters.Add("@param_dealer_credit_info_id", dealerCreditInfo.dealer_credit_info_id, DbType.Int32);
+                parameters.Add("@param_created_user_info_id", currentUserInfoId ?? 0, DbType.Int32);
+                parameters.Add("@param_DBOperation", GlobalEnumList.DBOperation.Approve);
+            }
             return parameters;
         }
 
@@ -86,17 +92,17 @@ namespace Auth.DataAccess.Party
                     return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonUpdateMessage, result);
                 }
 
+                if (dbOperation == (int)GlobalEnumList.DBOperation.Approve)
+                {
+                    result = DealerCreditInfoViewModel.ConvertToModel(data);
+                    return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonApproveMessage, result);
+                }
+
                 if (dbOperation == (int)GlobalEnumList.DBOperation.Delete)
                 {
                     return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonDeleteMessage);
                 }
-
-                if (dbOperation == (int)GlobalEnumList.DBOperation.Approve)
-                {
-                    //return message = CommonMessage.SetSuccessMessage("Dealer Credit Approved", data);
-                    return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonApproveMessage);
-                }
-
+              
                 if (data.Count > 0)
                 {
                     result = DealerCreditInfoViewModel.ConvertToModel(data);
