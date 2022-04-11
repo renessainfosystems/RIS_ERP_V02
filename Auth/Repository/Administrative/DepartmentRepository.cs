@@ -85,6 +85,23 @@ namespace Auth.Repository.Administrative
         {
             return _entityDataAccess.GetById(department_id);
         }
+        public Department GetDepartmentByType(int department_id)
+        {
+            return _entityDataAccess.GetById(department_id);
+        }
+
+        public IEnumerable<dynamic> GetByIdRawSql(string sqlquery)
+        {
+            try
+            {
+                var sql =string.Format(@"select * from Administrative.Department d where 1=1 {0} ", sqlquery);                
+                return _entityDataAccess.SqlRawQuery(sql).Select(r=> new { department_id = r.department_id, department_name = r.department_name }).ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
 
         public IEnumerable<object> DepartmentCboList()
         {

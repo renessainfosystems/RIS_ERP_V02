@@ -18,6 +18,16 @@ namespace Auth.Model.Administrative.ViewModel
         public int organogram_detail_id { get; set; }
         public int position_id { get; set; }
         public int organogram_id { get; set; }
+        public bool is_open { get; set; }
+        public int min_no_of_manpower { get; set; }
+        public int max_no_of_manpower { get; set; }
+        public decimal min_budget { get; set; }
+        public decimal max_budget { get; set; }
+        public decimal increment_percentage_yearly { get; set; }
+        public bool is_active { get; set; }
+        public bool is_gross { get; set; }
+        public int min_year_of_experience { get; set; }
+        public int max_year_of_experience { get; set; }
 
         public static OrganogramDetailViewModel ConvertToModel(dynamic user)
         {
@@ -33,6 +43,16 @@ namespace Auth.Model.Administrative.ViewModel
             model.Position = user.Position ?? "";           
             model.Increment = user.Increment ?? "";           
             model.position_name = user.position_name ?? "";  
+            model.is_open = user.is_open;  
+            model.min_no_of_manpower = user.min_no_of_manpower;  
+            model.max_no_of_manpower = user.max_no_of_manpower;  
+            model.min_budget = user.min_budget;  
+            model.max_budget = user.max_budget;  
+            model.increment_percentage_yearly = user.increment_percentage_yearly;  
+            model.is_active = user.is_active;  
+            model.min_year_of_experience = user.min_year_of_experience;  
+            model.max_year_of_experience = user.max_year_of_experience;  
+            model.is_gross = user.is_gross;  
             return model;
         }
     }

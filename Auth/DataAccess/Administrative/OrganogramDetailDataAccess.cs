@@ -161,13 +161,14 @@ namespace Auth.DataAccess.Administrative
             try
             {               
                 string sql = @"select od.code,p.position_name,convert(varchar,od.min_no_of_manpower)+' - ' +convert(varchar,od.max_no_of_manpower) manpower,
-convert(varchar,od.min_budget)+' - ' +convert(varchar,od.max_budget) budget,
-convert(varchar,od.increment_percentage_yearly)+' % of '+ case when od.is_gross=1 then ' Gross' else 'need Sal head' end as  Increment,
-case when od.is_open=1 then 'Open' else 'Deferred' end as Position,case when od.is_active=1 then 'Active' else 'Inactive' end Activity,
-convert(varchar,od.min_year_of_experience)+' - ' +convert(varchar,od.max_year_of_experience) Experience,od.organogram_id,od.position_id,od.organogram_detail_id
-from Administrative.Organogram_Detail od 
-left join Administrative.Position p on od.position_id=p.position_id 
-where od.organogram_id=@organogramid order by od.organogram_detail_id";
+                               convert(varchar,od.min_budget)+' - ' +convert(varchar,od.max_budget) budget,
+                               convert(varchar,od.increment_percentage_yearly)+' % of '+ case when od.is_gross=1 then ' Gross' else 'need Sal head' end as  Increment,
+                               case when od.is_open=1 then 'Open' else 'Deferred' end as Position,case when od.is_active=1 then 'Active' else 'Inactive' end Activity,
+                               convert(varchar,od.min_year_of_experience)+' - ' +convert(varchar,od.max_year_of_experience) Experience,od.organogram_id,od.position_id,od.organogram_detail_id,od.is_open
+                               ,od.min_no_of_manpower,od.max_no_of_manpower,od.min_budget,od.max_budget,od.increment_percentage_yearly,od.is_active,od.min_year_of_experience,od.max_year_of_experience,od.is_gross
+                               from Administrative.Organogram_Detail od 
+                               left join Administrative.Position p on od.position_id=p.position_id 
+                               where od.organogram_id=@organogramid order by od.organogram_detail_id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@organogramid", organogramid);
                 dynamic data = await _dbConnection.QueryAsync<dynamic>(sql, parameters);
@@ -197,13 +198,14 @@ where od.organogram_id=@organogramid order by od.organogram_detail_id";
             try
             {
                 string sql = @"select od.code,p.position_name,convert(varchar,od.min_no_of_manpower)+' - ' +convert(varchar,od.max_no_of_manpower) manpower,
-convert(varchar,od.min_budget)+' - ' +convert(varchar,od.max_budget) budget,
-convert(varchar,od.increment_percentage_yearly)+' % of '+ case when od.is_gross=1 then ' Gross' else 'need Sal head' end as  Increment,
-case when od.is_open=1 then 'Open' else 'Deferred' end as Position,case when od.is_active=1 then 'Active' else 'Inactive' end Activity,
-convert(varchar,od.min_year_of_experience)+' - ' +convert(varchar,od.max_year_of_experience) Experience,od.organogram_id,od.position_id,od.organogram_detail_id
-from Administrative.Organogram_Detail od 
-left join Administrative.Position p on od.position_id=p.position_id 
-where od.organogram_detail_id=@Organogram_Detail_id order by od.organogram_detail_id";
+                                convert(varchar,od.min_budget)+' - ' +convert(varchar,od.max_budget) budget,
+                                convert(varchar,od.increment_percentage_yearly)+' % of '+ case when od.is_gross=1 then ' Gross' else 'need Sal head' end as  Increment,
+                                case when od.is_open=1 then 'Open' else 'Deferred' end as Position,case when od.is_active=1 then 'Active' else 'Inactive' end Activity,
+                                convert(varchar,od.min_year_of_experience)+' - ' +convert(varchar,od.max_year_of_experience) Experience,od.organogram_id,od.position_id,od.organogram_detail_id,od.is_open
+                                ,od.min_no_of_manpower,od.max_no_of_manpower,od.min_budget,od.max_budget,od.increment_percentage_yearly,od.is_active,od.min_year_of_experience,od.max_year_of_experience,od.is_gross
+                                from Administrative.Organogram_Detail od 
+                                left join Administrative.Position p on od.position_id=p.position_id 
+                                where od.organogram_detail_id=@Organogram_Detail_id order by od.organogram_detail_id";
               
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@Organogram_Detail_id", Organogram_Detail_id);
@@ -240,13 +242,14 @@ where od.organogram_detail_id=@Organogram_Detail_id order by od.organogram_detai
             try
             {
                 var sql = @"select od.code,p.position_name,convert(varchar,od.min_no_of_manpower)+' - ' +convert(varchar,od.max_no_of_manpower) manpower,
-convert(varchar,od.min_budget)+' - ' +convert(varchar,od.max_budget) budget,
-convert(varchar,od.increment_percentage_yearly)+' % of '+ case when od.is_gross=1 then ' Gross' else 'need Sal head' end as  Increment,
-case when od.is_open=1 then 'Open' else 'Deferred' end as Position,case when od.is_active=1 then 'Active' else 'Inactive' end Activity,
-convert(varchar,od.min_year_of_experience)+' - ' +convert(varchar,od.max_year_of_experience) Experience,od.organogram_id,od.position_id,od.organogram_detail_id
-from Administrative.Organogram_Detail od 
-left join Administrative.Position p on od.position_id=p.position_id 
-where od.organogram_id=@organogramid and od.is_active=1 order by od.organogram_detail_id";
+                            convert(varchar,od.min_budget)+' - ' +convert(varchar,od.max_budget) budget,
+                            convert(varchar,od.increment_percentage_yearly)+' % of '+ case when od.is_gross=1 then ' Gross' else 'need Sal head' end as  Increment,
+                            case when od.is_open=1 then 'Open' else 'Deferred' end as Position,case when od.is_active=1 then 'Active' else 'Inactive' end Activity,
+                            convert(varchar,od.min_year_of_experience)+' - ' +convert(varchar,od.max_year_of_experience) Experience,od.organogram_id,od.position_id,od.organogram_detail_id,od.is_open
+                            ,od.min_no_of_manpower,od.max_no_of_manpower,od.min_budget,od.max_budget,od.increment_percentage_yearly,od.is_active,od.min_year_of_experience,od.max_year_of_experience,od.is_gross
+                            from Administrative.Organogram_Detail od 
+                            left join Administrative.Position p on od.position_id=p.position_id 
+                            where od.organogram_id=@organogramid and od.is_active=1 order by od.organogram_detail_id";
 
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@organogramid", Organogram_id);

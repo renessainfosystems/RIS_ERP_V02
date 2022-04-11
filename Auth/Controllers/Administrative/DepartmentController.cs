@@ -47,6 +47,37 @@ namespace Auth.Controllers.Administrative
         }
 
         [HttpGet]
+        public dynamic GetDepartmentByTypes()
+        {
+
+            dynamic data = (dynamic)null;
+            try
+            {
+                data = _departmentRepository.GetByIdRawSql("and d.department_type_id in (1,4)");
+            }
+            catch (Exception ex)
+            {
+                data = ex.Message;
+            }
+            return data;
+        }
+        [HttpGet]
+        public dynamic GetDepartmentByTypeId(int Department_Type_id)
+        {
+
+            dynamic data = (dynamic)null;
+            try
+            {               
+                data = _departmentRepository.GetByIdRawSql("and d.department_type_id in ('"+ Department_Type_id + "')");
+            }
+            catch (Exception ex)
+            {
+                data = ex.Message;
+            }
+            return data;
+        }
+
+        [HttpGet]
         public dynamic GetById(int department_id)
         {
             

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
 import { NotificationService } from '../../../service/CommonMessage/notification.service';
+import { AbsenteeismPolicyService } from '../absenteeism-policy/absenteeism-policy.service';
+import { LateEarlyPolicyService } from '../late-early-policy/late-early-policy.service';
 import { RosterPolicyService } from '../roster-policy/roster-policy.service';
 import { AttendancePolicyService } from './attendance-policy.service';
 
@@ -12,6 +14,7 @@ import { AttendancePolicyService } from './attendance-policy.service';
 })
 export class AttendancePolicyComponent implements OnInit {
     AttendancePolicyForm: FormGroup;
+    AbsenteeismPolicyForm: FormGroup;
     submitted = false;
     selectedPolicy: any;
     AttendancePolicies: any[];
@@ -27,7 +30,12 @@ export class AttendancePolicyComponent implements OnInit {
     DayOffAlternativeDP: any[];
     weekDaysDP: any[];
     attBenefitDetails: any[] = [];
+    shiftDetails: any[] = [];
     selectedShift: any;
+    leavePolicyDetails: any[] = [];
+    dayOffPolicyDetails: any[] = [];
+    latEarlySlabDataSources: any[] = [];
+    rosterDetails: any[] = [];
     selectedNextShift: any;
     allShifts: any[];
     rowData: any;
@@ -50,31 +58,47 @@ export class AttendancePolicyComponent implements OnInit {
         this.toggleFormDisplay();
         this.resetForm();
     }
+    //Check Uncheck hidden by default
+    isShownDayOff: boolean = true;
+    isShownNoOfDayOff: boolean = false;
     //end grid and form show hide ********************
     // for delete data modal
-    display: boolean = false;
-
-    constructor(private formbulider: FormBuilder, private confirmationService: ConfirmationService, private AttendancePolicyService: AttendancePolicyService, private notifyService: NotificationService) { }
+    lateearlydisplay: boolean = false;
+    rosterPolicydisplay: boolean = false;
+    absenteeismdisplay: boolean = false;
+    constructor(private formbulider: FormBuilder, private confirmationService: ConfirmationService, private AttendancePolicyService: AttendancePolicyService, private notifyService: NotificationService, private LateEarlyPolicyService: LateEarlyPolicyService, private RosterPolicyService: RosterPolicyService, private absenteeismPolicyService: AbsenteeismPolicyService) { }
 
     ngOnInit(): void {
         this.AttendancePolicyForm = this.formbulider.group({
 
-            attendance_policy_name: [null, [Validators.required]],
-            attendance_policy_id: [null],
-            shift_id: [null],
-            code: [null],
+            policy_name: [null, [Validators.required]],
+            attendance_policy_id: [0],
+            shift_id: [0],
+            code: [''],
             remarks:[null],
-            attendance_calendar_id: [null, [Validators.required]],
-            absenteeism_policy_id: [null],
-            late_early_policy_id: [null],
-            leave_policy_id:[null],
-            dayoff_alternative_id: [null],
-            dayoff_type_id: [null],
-            week_day: [null],
+            attendance_calendar_id: [0, [Validators.required]],
+            absenteeism_policy_id: [0],
+            late_early_policy_id: [0],
+            leave_policy_id:[0],
+            dayoff_alternative_id: [0],
+            dayoff_type_id: [0],
+            week_day: [''],
             is_random_dayoff: false,
             no_of_random_dayoff: 0,
-            abd_id: [0],
+            abp_id: [0, [Validators.required]],
             roster_policy_id:0,
+        });
+        this.AbsenteeismPolicyForm = this.formbulider.group({
+
+            absenteeism_policy_name: [null, [Validators.required]],
+            code: [null, [Validators.required]],
+            is_leave_adjustment: [false, [Validators.required]],
+            remarks: ['', [Validators.required]],
+            salary_head_id: [0, [Validators.required]],
+            is_monetary_benefit: [false, [Validators.required]],
+            percent_value: [0, [Validators.required]],
+            is_gross: [false, [Validators.required]],
+            basic_salary_head_id: [0, [Validators.required]]
         });
         this.loadAllAttendancePolicy();
         this.loadAllShift();
@@ -87,6 +111,7 @@ export class AttendancePolicyComponent implements OnInit {
         this.loadAllWeekDays();
         this.loadAllDayOffType();
         this.loadAllDayOffAlternative();
+        this.getPolicyCode();
     }
     onRowSelect(event) {
         this.rowSelected = true;
@@ -104,7 +129,7 @@ export class AttendancePolicyComponent implements OnInit {
     showBasicDialog() {
         // this.displayBasic = true;
         this.toggleGridDisplay();
-        this.AttendancePolicyForm.reset();
+       // this.AttendancePolicyForm.reset();
         this.AttendancePolicyForm.valid;
     }
     //for validation messate -----------
@@ -176,82 +201,16 @@ export class AttendancePolicyComponent implements OnInit {
             this.weekDaysDP = data;
         });
     }
-    addAttendanceBenefit() {
-        //this.submitted = true;
+   
+    getPolicyCode() {
 
-        //if (this.AttendancePolicyForm.invalid) {
-        //    return;
-        //}
-        //let roster_policy_name = this.AttendancePolicyForm.get('roster_policy_name')?.value;
-      
-        let abp_id = this.AttendancePolicyForm.get('abp_id')?.value.abp_id;
+        this.AttendancePolicyService.getAttendancePolicyCode().subscribe(data => {
 
-        let abp_name = (this.AttendancePolicyForm.get('abp_id')?.value.abp_name);
+            this.AttendancePolicyForm.controls['code'].setValue(data.code);
 
-        
-        alert(abp_name)
-        if (this.dataExist(abp_id)) {
-            return this.notifyService.ShowNotification(2, "Selected shift already added")
-        }
-
-        const attBenefitObj = {
-            abp_id: abp_id,
-            attendance_policy_id: 0,
-            attendance_policy_benefit_id: 0,
-            abp_name: abp_name,
-            
-        }
-
-
-        if (this.isAttendancePolicyEdit) {
-
-            let attendance_policy_id = this.rowData.attendance_policy_id;
-            attBenefitObj.attendance_policy_id = attendance_policy_id;
-            this.AttendancePolicyService.createPolicyBenefit(attBenefitObj).subscribe(data => {
-
-                if (data.MessageType == 1) {
-                    this.attBenefitDetails.unshift(data.Data[0]);
-                }
-                this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
-            });
-        }
-        else {
-
-
-            
-            this.attBenefitDetails.push(attBenefitObj);
-        }
-    }
-
-    // ...
-
-    dataExist(abp_id) {
-
-        return this.attBenefitDetails.some(function (el) {
-            return el.abp_id === abp_id ;
+            console.log(data.code)
         });
     }
-    removeEvent(a, row) {
-        if (this.isAttendancePolicyEdit) {
-            let attendance_policy_id = this.rowData.attendance_policy_id;
-
-
-            this.AttendancePolicyService.deletePolicyBenefit(row.roster_policy_detail_id).subscribe(data => {
-
-                if (data.MessageType == 1) {
-                    this.attBenefitDetails.splice(this.attBenefitDetails.findIndex(item => item.roster_policy_detail_id === row.roster_policy_detail_id), 1);
-
-                }
-                this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
-            });
-        }
-        else {
-            this.attBenefitDetails = this.attBenefitDetails.slice(0, a).concat(this.attBenefitDetails.slice(a + 1));
-        }
-
-
-    }
-
     loadRosterPolicyToEdit() {
 
 
@@ -273,15 +232,30 @@ export class AttendancePolicyComponent implements OnInit {
 
         this.AttendancePolicyService.getAttendancePolicyById(attendance_policy_id).subscribe(data => {
 
-            this.AttendancePolicyForm.controls['roster_policy_name'].setValue(data.roster_policy_name);
-            this.AttendancePolicyForm.controls['roster_cycle'].setValue(data.roster_cycle);
+            this.AttendancePolicyForm.controls['policy_name'].setValue(data.policy_name);
+            this.AttendancePolicyForm.controls['code'].setValue(data.code);
+            this.AttendancePolicyForm.controls['remarks'].setValue(data.remarks);
+            this.AttendancePolicyForm.controls['attendance_calendar_id'].setValue(data.attendance_calendar_id);
+            this.AttendancePolicyForm.controls['absenteeism_policy_id'].setValue(data.absenteeism_policy_id);
+            this.AttendancePolicyForm.controls['late_early_policy_id'].setValue(data.late_early_policy_id);
+            this.AttendancePolicyForm.controls['roster_policy_id'].setValue(data.roster_policy_id);
+            this.AttendancePolicyForm.controls['is_random_dayoff'].setValue(data.is_random_dayoff);
+            this.AttendancePolicyForm.controls['no_of_random_dayoff'].setValue(data.no_of_random_dayoff);
+            this.dayOffPolicyDetails = data.attendance_Policy_Dayoffs;
+            this.attBenefitDetails = data.attendance_Policy_Benefits;
+            this.leavePolicyDetails = data.attendance_Policy_Leaves;
+            this.shiftDetails = data.attendance_Policy_Shifts;
+            if (data.is_random_dayoff) {
+                this.isShownDayOff = false;
+                this.isShownNoOfDayOff = true;
+            }
             this.isAttendancePolicyEdit = true;
         });
 
         this.toggleGridDisplay();
     }
 
-    deleteRoster() {
+    deleteAttendancePolicy() {
         if (this.rowData == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
@@ -300,7 +274,8 @@ export class AttendancePolicyComponent implements OnInit {
             }
             this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
         });
-        this.display = false;
+
+
     }
     policyApprove() {
         if (this.rowData == null) {
@@ -325,7 +300,7 @@ export class AttendancePolicyComponent implements OnInit {
         );
     }
 
-    saveRosterPolicy() {
+    saveAttendancePolicy() {
         const data = this.AttendancePolicyForm.value;
 
         this.submitted = true;
@@ -334,6 +309,13 @@ export class AttendancePolicyComponent implements OnInit {
 
             return;
         }
+        data.absenteeism_policy_id = data.absenteeism_policy_id;
+        console.log(data)
+        data.attendance_Policy_Dayoffs = this.dayOffPolicyDetails;
+        data.attendance_Policy_Benefits = this.attBenefitDetails;
+        data.attendance_Policy_Leaves = this.leavePolicyDetails;
+        data.attendance_Policy_Shifts = this.shiftDetails;
+
         if (this.isAttendancePolicyEdit) {
 
             data.attendance_policy_id = this.rowData.attendance_policy_id;
@@ -383,16 +365,16 @@ export class AttendancePolicyComponent implements OnInit {
         if (this.rowData.approvedBy) {
             return this.notifyService.ShowNotification(3, "This policy already approved.");
         }
-        let leave_policy_id = this.rowData.leave_policy_id;
-        this.AttendancePolicyService.copy(leave_policy_id).subscribe(
+        let attendance_policy_id = this.rowData.attendance_policy_id;
+        this.AttendancePolicyService.copy(attendance_policy_id).subscribe(
             result => {
                 this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
                 if (result.MessageType == 1) {
                     this.resetForm();
-                    this.AttendancePolicies.unshift(result.Data);
-                    this.selectedPolicy = result.Data;
+                    this.AttendancePolicies.unshift(result.Data[0]);
+                    this.selectedPolicy = result.Data[0];
                     this.rowSelected = true;
-                    this.rowData = result.Data;
+                    this.rowData = result.Data[0];
                 }
             }
         );
@@ -431,7 +413,7 @@ export class AttendancePolicyComponent implements OnInit {
             message: 'Are you sure that you want to delete?',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
-                this.deleteRoster();
+                this.deleteAttendancePolicy();
             },
             reject: () => {
 
@@ -458,8 +440,414 @@ export class AttendancePolicyComponent implements OnInit {
             }
         });
     }
+
+
+    addAttendanceBenefit() {
+        //this.submitted = true;
+
+        //if (this.AttendancePolicyForm.invalid) {
+        //    return;
+        //}
+        //let roster_policy_name = this.AttendancePolicyForm.get('roster_policy_name')?.value;
+        debugger
+        let abp_id = this.AttendancePolicyForm.get('abp_id')?.value.abp_id;
+
+        let abp_name = (this.AttendancePolicyForm.get('abp_id')?.value.abp_name);
+
+        if (this.attBenifitdataExist(abp_id)) {
+            return this.notifyService.ShowNotification(2, "Selected benefit already added")
+        }
+
+        const attBenefitObj = {
+            abp_id: abp_id,
+            attendance_policy_id: 0,
+            attendance_policy_benefit_id: 0,
+            abp_name: abp_name,
+
+        }
+
+
+        if (this.isAttendancePolicyEdit) {
+
+            let attendance_policy_id = this.rowData.attendance_policy_id;
+            attBenefitObj.attendance_policy_id = attendance_policy_id;
+            this.AttendancePolicyService.createPolicyBenefit(attBenefitObj).subscribe(data => {
+
+                if (data.MessageType == 1) {
+                    this.attBenefitDetails.unshift(data.Data[0]);
+                }
+                this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
+            });
+        }
+        else {
+
+
+
+            this.attBenefitDetails.push(attBenefitObj);
+        }
+    }
+
+    // ...
+
+    attBenifitdataExist(abp_id) {
+
+        return this.attBenefitDetails.some(function (el) {
+            return el.abp_id === abp_id;
+        });
+    }
+    removeattBenifit(a, row) {
+        if (this.isAttendancePolicyEdit) {
+            let attendance_policy_id = this.rowData.attendance_policy_id;
+
+
+            this.AttendancePolicyService.deletePolicyBenefit(row.roster_policy_detail_id).subscribe(data => {
+
+                if (data.MessageType == 1) {
+                    this.attBenefitDetails.splice(this.attBenefitDetails.findIndex(item => item.attendance_policy_benefit_id === row.attendance_policy_benefit_id), 1);
+
+                }
+                this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
+            });
+        }
+        else {
+            this.attBenefitDetails = this.attBenefitDetails.slice(0, a).concat(this.attBenefitDetails.slice(a + 1));
+        }
+
+
+    }
+
+    addShift() {
+        //this.submitted = true;
+
+        //if (this.AttendancePolicyForm.invalid) {
+        //    return;
+        //}
+        //let roster_policy_name = this.AttendancePolicyForm.get('roster_policy_name')?.value;
+
+        let shift_id = this.AttendancePolicyForm.get('shift_id')?.value.shift_id;
+
+        let shift_name = (this.AttendancePolicyForm.get('shift_id')?.value.shift_name);
+
+        if (this.shiftdataExist(shift_id)) {
+            return this.notifyService.ShowNotification(2, "Selected benefit already added")
+        }
+
+        const shiftObj = {
+            shift_id: shift_id,
+            attendance_policy_id: 0,
+            attendance_policy_shift_id: 0,
+            shift_name: shift_name,
+
+        }
+
+
+        if (this.isAttendancePolicyEdit) {
+
+            let attendance_policy_id = this.rowData.attendance_policy_id;
+            shiftObj.attendance_policy_id = attendance_policy_id;
+            this.AttendancePolicyService.createPolicyShift(shiftObj).subscribe(data => {
+
+                if (data.MessageType == 1) {
+                    this.shiftDetails.unshift(data.Data[0]);
+                }
+                this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
+            });
+        }
+        else {
+
+
+
+            this.shiftDetails.push(shiftObj);
+        }
+    }
+
+    // ...
+
+   shiftdataExist(shift_id) {
+
+        return this.shiftDetails.some(function (el) {
+            return el.shift_id === shift_id;
+        });
+    }
+    removeShift(a, row) {
+        if (this.isAttendancePolicyEdit) {
+            let attendance_policy_id = this.rowData.attendance_policy_id;
+
+
+            this.AttendancePolicyService.deletePolicyShift(row.attendance_policy_shift_id).subscribe(data => {
+
+                if (data.MessageType == 1) {
+                    this.shiftDetails.splice(this.shiftDetails.findIndex(item => item.attendance_policy_shift_id === row.attendance_policy_shift_id), 1);
+
+                }
+                this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
+            });
+        }
+        else {
+            this.shiftDetails = this.shiftDetails.slice(0, a).concat(this.shiftDetails.slice(a + 1));
+        }
+
+
+    }
+
+    addLeavePolicy() {
+        //this.submitted = true;
+
+        //if (this.AttendancePolicyForm.invalid) {
+        //    return;
+        //}
+        //let roster_policy_name = this.AttendancePolicyForm.get('roster_policy_name')?.value;
+
+        let leave_policy_id = this.AttendancePolicyForm.get('leave_policy_id')?.value.leave_policy_id;
+
+        let leave_policy_name = (this.AttendancePolicyForm.get('leave_policy_id')?.value.leave_policy_name);
+
+        if (this.leavePolicydataExist(leave_policy_id)) {
+            return this.notifyService.ShowNotification(2, "Selected benefit already added")
+        }
+        let data = this.leavePolicyDP.filter(
+            leave => leave.leave_policy_id === leave_policy_id);
+        
+        const leavePolicyObj = {
+            leave_policy_id: leave_policy_id,
+            attendance_policy_id: 0,
+            attendance_policy_leave_id: 0,
+            leave_policy_name: leave_policy_name,
+            leave_head_short_name: data[0].leave_head_short_name,
+            default_leave_balance_day: data[0].default_leave_balance_day,
+            activationdays: data[0].activationdays
+        }
+
+
+        if (this.isAttendancePolicyEdit) {
+
+            let attendance_policy_id = this.rowData.attendance_policy_id;
+            leavePolicyObj.attendance_policy_id = attendance_policy_id;
+            this.AttendancePolicyService.createPolicyLeave(leavePolicyObj).subscribe(data => {
+
+                if (data.MessageType == 1) {
+                    this.leavePolicyDetails.unshift(data.Data[0]);
+                }
+                this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
+            });
+        }
+        else {
+
+
+
+            this.leavePolicyDetails.push(leavePolicyObj);
+        }
+    }
+
+    // ...
+
+    leavePolicydataExist(leave_policy_id) {
+
+        return this.leavePolicyDetails.some(function (el) {
+            return el.leave_policy_id === leave_policy_id;
+        });
+    }
+    removeLeavePolicy(a, row) {
+        if (this.isAttendancePolicyEdit) {
+            let attendance_policy_id = this.rowData.attendance_policy_id;
+
+
+            this.AttendancePolicyService.deletePolicyLeave(row.attendance_policy_leave_id).subscribe(data => {
+
+                if (data.MessageType == 1) {
+                    this.leavePolicyDetails.splice(this.leavePolicyDetails.findIndex(item => item.attendance_policy_leave_id === row.attendance_policy_leave_id), 1);
+
+                }
+                this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
+            });
+        }
+        else {
+            this.leavePolicyDetails = this.leavePolicyDetails.slice(0, a).concat(this.leavePolicyDetails.slice(a + 1));
+        }
+
+
+    }
+
+    addDayOffPolicy() {
+        //this.submitted = true;
+
+        //if (this.AttendancePolicyForm.invalid) {
+        //    return;
+        //}
+        //let roster_policy_name = this.AttendancePolicyForm.get('roster_policy_name')?.value;
+
+        let dayoff_type_id = this.AttendancePolicyForm.get('dayoff_type_id')?.value.dayoff_type_id;
+
+        let dayoff_type_name = (this.AttendancePolicyForm.get('dayoff_type_id')?.value.dayoff_type_name);
+
+        let week_day = (this.AttendancePolicyForm.get('week_day')?.value.week_day);
+
+        let dayoff_alternative_id = this.AttendancePolicyForm.get('dayoff_alternative_id')?.value.dayoff_alternative_id;
+
+        let dayoff_alternative_name = (this.AttendancePolicyForm.get('dayoff_alternative_id')?.value.dayoff_alternative_name);
+
+        if (this.dayOffPolicydataExist(week_day)) {
+            return this.notifyService.ShowNotification(2, "Selected day off already added")
+        }
+
+
+        const dayOffPolicyObj = {
+            dayoff_type_id: dayoff_type_id,
+            attendance_policy_id: 0,
+            attendance_policy_dayoff_id: 0,
+            dayoff_type_name: '[' + dayoff_type_name + ']' ,
+            dayoff_alternative_id: dayoff_alternative_id,
+            dayoff_alternative_name: dayoff_alternative_name ? '[' + dayoff_alternative_name + ']' : '',
+            week_day: week_day
+        }
+
+
+        if (this.isAttendancePolicyEdit) {
+
+            let attendance_policy_id = this.rowData.attendance_policy_id;
+            dayOffPolicyObj.attendance_policy_id = attendance_policy_id;
+            this.AttendancePolicyService.createPolicyDayOff(dayOffPolicyObj).subscribe(data => {
+
+                if (data.MessageType == 1) {
+                    this.dayOffPolicyDetails.unshift(data.Data[0]);
+                }
+                this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
+            });
+        }
+        else {
+
+
+
+            this.dayOffPolicyDetails.push(dayOffPolicyObj);
+        }
+    }
+
+    // ...
+
+    dayOffPolicydataExist(week_day) {
+
+        return this.dayOffPolicyDetails.some(function (el) {
+            return el.week_day === week_day;
+        });
+    }
+    removeDayOffPolicy(a, row) {
+        if (this.isAttendancePolicyEdit) {
+            let attendance_policy_id = this.rowData.attendance_policy_id;
+
+
+            this.AttendancePolicyService.deletePolicyDayOff(row.attendance_policy_dayoff_id).subscribe(data => {
+
+                if (data.MessageType == 1) {
+                    this.dayOffPolicyDetails.splice(this.dayOffPolicyDetails.findIndex(item => item.attendance_policy_leave_id === row.attendance_policy_leave_id), 1);
+
+                }
+                this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
+            });
+        }
+        else {
+            this.dayOffPolicyDetails = this.dayOffPolicyDetails.slice(0, a).concat(this.dayOffPolicyDetails.slice(a + 1));
+        }
+
+
+    }
+
+    onAllowRandomDayOff(event) {
+        if (event.checked) {
+            this.isShownDayOff = false;
+            this.isShownNoOfDayOff = true;
+            this.AttendancePolicyForm.controls['week_day'].setValue(0);
+            this.AttendancePolicyForm.controls['dayoff_type_id'].setValue(0);
+            this.AttendancePolicyForm.controls['dayoff_alternative_id'].setValue(0);
+            this.dayOffPolicyDetails = [];
+        }
+        else {
+
+            this.AttendancePolicyForm.controls['no_of_random_dayoff'].setValue(0);
+            this.isShownDayOff = true;
+            this.isShownNoOfDayOff = false;
+
+        }
+    }
+    viewLateEarlyPolicy() {
+        this.lateearlydisplay = true;
+        let late_early_policy_id = this.AttendancePolicyForm.get('late_early_policy_id')?.value.late_early_policy_id;
+        this.LateEarlyPolicyService.getLateEarlyPolicyDetailsById(late_early_policy_id).subscribe(res => {
+
+            this.setLateEarlyDataSource(res);
+
+        });
+    }
+  
+    viewRosterPolicy() {
+        this.rosterPolicydisplay = true;
+        let roster_policy_id = this.AttendancePolicyForm.get('roster_policy_id')?.value.roster_policy_id;
+        this.RosterPolicyService.getRosterDetailsById(roster_policy_id).subscribe(res => {
+
+            this.rosterDetails = res;
+
+        });
+    }
+    viewAbsenteeismPolicy() {
+        this.absenteeismdisplay = true;
+        let absenteeism_policy_id = this.AttendancePolicyForm.get('absenteeism_policy_id')?.value.absenteeism_policy_id;
+        this.absenteeismPolicyService.getPolicyById(absenteeism_policy_id).subscribe(data => {
+            this.AbsenteeismPolicyForm.controls['absenteeism_policy_name'].setValue(data.absenteeism_policy_name);
+            this.AbsenteeismPolicyForm.controls['code'].setValue(data.code);
+            this.AbsenteeismPolicyForm.controls['remarks'].setValue(data.remarks);
+            this.AbsenteeismPolicyForm.controls['is_leave_adjustment'].setValue(data.is_leave_adjustment);
+            this.AbsenteeismPolicyForm.controls['salary_head_id'].setValue(data.salary_head_id);
+            this.AbsenteeismPolicyForm.controls['percent_value'].setValue(data.percent_value);
+            this.AbsenteeismPolicyForm.controls['is_gross'].setValue(data.is_gross);
+            this.AbsenteeismPolicyForm.controls['basic_salary_head_id'].setValue(data.basic_salary_head_id);
+
+
+
+            if (data.salary_head_id > 0) {
+                this.AbsenteeismPolicyForm.controls['is_monetary_benefit'].setValue(true);
+                
+            }
+        });
+    }
+    setLateEarlyDataSource(res) {
+        for (var i = 0; i < res.length; i++) {
+            let rulesFor = '';
+            let description = '';
+            let Salaryadjustment = '';
+            let leaveadjustment = '';
+            let lateSlab = '';
+            let grossBasic = res[i].is_gross ? "Gross" : "Basic";
+            if (res[i].late_early_type_id_enum == 1) {
+                rulesFor = "Late"
+                lateSlab = res[i].min_late_early_min + " to " + res[i].max_late_early_min + " minutes";
+                description = res[i].is_allow_late_early_slab ? res[i].late_early_days_for + " Days of Monthly Late (" + lateSlab + ")" : res[i].late_early_days_for + " Days of Monthly Late";
+                if (res[i].is_leave_adjustment) { leaveadjustment = res[i].is_leave_as_late_early_min ? "Monthly actual late min adjust with leave" : "Deduct " + res[i].leave_in_min / 8.0 + " day leave"; }
+                if (res[i].salary_head_id != 0) { Salaryadjustment = res[i].is_deduction_monthly_min ? "Deduct " + res[i].percent_value + "% " + grossBasic + "as per total late in minutes" : "Deduct " + +res[i].deduction_days + " days of " + res[i].percent_value + " % " + grossBasic }
+
+
+            }
+            if (res[i].late_early_type_id_enum == 2) {
+                rulesFor = "Early"
+                lateSlab = res[i].min_late_early_min + " to " + res[i].max_late_early_min + " minutes";
+                description = res[i].is_allow_late_early_slab ? res[i].late_early_days_for + " Days of Monthly Early(" + lateSlab + ")" : res[i].late_early_days_for + " Days of Monthly Early";
+                if (res[i].is_leave_adjustment) { leaveadjustment = res[i].is_leave_as_late_early_min ? "Monthly actual early min adjust with leave" : "Deduct " + res[i].leave_in_min / 8.0 + " day leave"; }
+                if (res[i].salary_head_id != 0) { Salaryadjustment = res[i].is_deduction_monthly_min ? "Deduct " + res[i].percent_value + "% " + grossBasic + "as per total early in minutes" : "Deduct " + + res[i].deduction_days + " days of " + res[i].percent_value + " % " + grossBasic }
+            }
+            if (res[i].late_early_type_id_enum == 3) {
+                rulesFor = "Both"
+                lateSlab = res[i].min_late_early_min + " to " + res[i].max_late_early_min + " minutes";
+                description = res[i].is_allow_late_early_slab ? res[i].late_early_days_for + " Days of Monthly Early/Late(" + lateSlab + ")" : res[i].late_early_days_for + " Days of Monthly Early/Late";
+                if (res[i].is_leave_adjustment) { leaveadjustment = res[i].is_leave_as_late_early_min ? "Monthly actual Early/Late min adjust with leave" : "Deduct " + res[i].leave_in_min / 8.0 + " day leave"; }
+                if (res[i].salary_head_id != 0) { Salaryadjustment = res[i].is_deduction_monthly_min ? "Deduct " + res[i].percent_value + "% " + grossBasic + "as per total Early/Late in minutes" : "Deduct " + + res[i].deduction_days + " days of " + res[i].percent_value + " % " + grossBasic }
+            }
+            res[i].rulesFor = rulesFor;
+            res[i].description = description;
+            res[i].leaveadjustment = leaveadjustment;
+            res[i].Salaryadjustment = Salaryadjustment;
+        }
+        this.latEarlySlabDataSources = res;
+    }
     resetForm() {
-        this.AttendancePolicyForm.reset();
+       // this.AttendancePolicyForm.reset();
         this.attBenefitDetails = [];
         this.submitted = false;
         this.isAttendancePolicyEdit = false;

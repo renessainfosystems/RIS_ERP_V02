@@ -1,6 +1,7 @@
 ﻿using Auth.Model.Administrative.Model;
 using Auth.Model.Administrative.ViewModel;
 using Auth.Utility;
+using Auth.Utility.Administrative.Model;
 using Auth.Utility.Administrative.Enum;
 using Dapper;
 using DataAccess;
@@ -154,16 +155,148 @@ namespace Auth.DataAccess.Administrative
             if (_dbConnection.State == ConnectionState.Closed)
                 _dbConnection.Open();
             try
-            {               
-                string sql = @"select c.company_name,location_code,location_name,(select d.department_name from Administrative.Department d where d.department_id=og.department_id)as department,og.department_id,og.location_id,c.company_id,og.organogram_id from Administrative.Location l left join Administrative.Company c on l.company_id=c.company_id
-left join Administrative.Organogram og on l.location_id=og.location_id where l.company_group_id=@company_group_id";
+            {
+                string sqlc = @"select c.company_name,c.company_id,g.group_name
+from Administrative.Location l left join Administrative.Company c on l.company_id=c.company_id
+left join Administrative.Company_Group g on c.company_group_id=g.company_group_id
+ where l.company_group_id=@company_group_id group by  c.company_name,c.company_id,g.group_name";
+                DynamicParameters parametersCompany = new DynamicParameters();
+                parametersCompany.Add("@company_group_id", company_group_id);
+                dynamic dataCompany = await _dbConnection.QueryAsync<dynamic>(sqlc, parametersCompany);
+               //
+                string sqlL = @"select l.location_name,l.location_id,c.company_id,c.company_name,g.group_name
+from Administrative.Location l left join Administrative.Company c on l.company_id=c.company_id
+left join Administrative.Company_Group g on c.company_group_id=g.company_group_id
+ where l.company_group_id=@company_group_id group by  l.location_name,l.location_id,c.company_id,c.company_name,g.group_name";
+                DynamicParameters parametersLocation = new DynamicParameters();
+                parametersLocation.Add("@company_group_id", company_group_id);
+                dynamic dataLocation = await _dbConnection.QueryAsync<dynamic>(sqlL, parametersLocation);
+
+                string sql = @"select c.company_name,location_code,location_code+' - '+location_name location_name,
+ (select d.department_name from Administrative.Department d where d.department_id=og.department_id)as department,
+ isnull(og.department_id,'0') as department_id,l.location_id,c.company_id,isnull(og.organogram_id,'0')organogram_id,
+ isnull(og.is_active,'false')is_active,isnull(og.sorting_priority,0)sorting_priority ,g.group_name
+ from Administrative.Location l 
+ left join Administrative.Company c on l.company_id=c.company_id
+left join Administrative.Organogram og on l.location_id=og.location_id 
+left join Administrative.Company_Group g on c.company_group_id=g.company_group_id
+where l.company_group_id=@company_group_id order by sorting_priority,organogram_id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@company_group_id", company_group_id);
                 dynamic data = await _dbConnection.QueryAsync<dynamic>(sql, parameters);
                 if (data != null)
                 {
-                    List<dynamic> dataList = data;
-                    result = (from dr in dataList select OrganogramViewModel.ConvertToModel(dr)).ToList();                    
+                    List<dynamic> dataListCompany = dataCompany;
+                    List<dynamic> dataListLocations = dataLocation;
+
+
+                    List<dynamic> dataList = data;                  
+                    List<Dtotree> comObj = new List<Dtotree>();                    
+                    List<treeLocations> locationtmpObj = new List<treeLocations>();
+                    List<Data> Dataobj = new List<Data>();
+                
+                    foreach (var item in dataList)
+                    {
+                        if (!string.IsNullOrEmpty(item.department))
+                        {
+                            Data dt = new Data();
+                        dt.location_id = item.location_id;
+                        dt.department = item.department;
+                        dt.company_id = item.company_id;
+                        dt.department_id = item.department_id;
+                        dt.location_name = item.location_name;
+                        dt.company_name = item.company_name;
+                        dt.Organogram_Id = item.organogram_id;
+                        dt.group_name = item.group_name;
+                        Dataobj.Add(dt);
+                        }
+
+                    }
+
+                    foreach (var item in dataListLocations)
+                    {
+                        var Locationsdata = Dataobj.FirstOrDefault(x => x.company_id == item.company_id && x.location_id == item.location_id);
+                        var department = Dataobj.Where(x => x.company_id == item.company_id && x.location_id == item.location_id).ToList();
+                        treeLocations obj = new treeLocations();
+
+                        Data ldata = new Data();//Locations
+                        if (Locationsdata!=null)
+                        {
+                            ldata.Node_Name = Locationsdata.location_name;
+                            ldata.location_name = Locationsdata.location_name;
+                            ldata.TreeLavel = 1;
+                            ldata.Organogram_Id = Locationsdata.Organogram_Id;
+                            ldata.company_id = Locationsdata.company_id;
+                            ldata.location_id = Locationsdata.location_id;
+                            ldata.company_name = Locationsdata.company_name;
+                            ldata.group_name = item.group_name;
+                        }
+                        else
+                        {
+                            ldata.Node_Name = item.location_name;
+                            ldata.location_name = item.location_name;
+                            ldata.TreeLavel = 1;
+                            ldata.group_name = item.group_name;
+                            ldata.company_name = item.company_name;
+                            ldata.location_id = item.location_id;
+                            ldata.company_id = item.company_id;
+                        }
+                        obj.data = ldata;
+                        List<Departmenttree> objdept = new List<Departmenttree>(); 
+                        foreach (var itemdp in department)
+                        {
+                            Departmenttree objd = new Departmenttree();
+                            Data ddata = new Data();//department
+                            ddata.Node_Name = itemdp.department;
+
+                            ddata.TreeLavel = 2;
+                            ddata.group_name = item.group_name;
+                            ddata.company_name = item.company_name;
+                            ddata.location_name = item.location_name;
+
+
+                            ddata.Organogram_Id = itemdp.Organogram_Id;
+                            ddata.company_id = itemdp.company_id;
+                            ddata.location_id = itemdp.location_id;
+                            ddata.department_id = itemdp.department_id;
+                            objd.data = ddata;
+                            objdept.Add(objd);
+                        }
+                        obj.children = objdept;
+                        locationtmpObj.Add(obj);
+                    }
+                   
+                    foreach (var item in dataListCompany)
+                    {       
+                        var locations= locationtmpObj.Where(x => x.data.company_id == item.company_id).ToList();
+                       
+                        Dtotree obj = new Dtotree();//Company                       
+                       
+                        Data cdata = new Data();
+                        cdata.Node_Name = item.company_name;
+                        cdata.Organogram_Id = 0;
+
+                        cdata.TreeLavel = 0;
+                        cdata.group_name = item.group_name;
+                        cdata.company_name = item.company_name;                        
+                        cdata.company_id = item.company_id;
+                        obj.data = cdata;
+                        obj.children = locations;
+                        comObj.Add(obj);
+                    }
+
+                    //Dtotree objtree = new Dtotree();
+                    //objtree.data = objCd;
+                    //objtree.children = comObj;
+
+
+                    //  mobj.data = objtree;
+                    //AllObj.Add(mobj);
+
+                    //Root objroot = new Root();
+                    //objroot.data = comObj;
+
+                    result = comObj;//BuildTrees(0, dtos);
                 }
             }
             catch (Exception ex)
@@ -176,7 +309,7 @@ left join Administrative.Organogram og on l.location_id=og.location_id where l.c
             }
             return (result);
         }
-
+       
         public async Task<dynamic> GetOrganogramById(long Organogram_id)
         {
             var result = (dynamic)null;
@@ -185,8 +318,8 @@ left join Administrative.Organogram og on l.location_id=og.location_id where l.c
 
             try
             {
-                string sql = @"select c.company_name,location_code,location_name,(select d.department_name from Administrative.Department d where d.department_id=og.department_id)as department,og.department_id,og.location_id,c.company_id,og.organogram_id from Administrative.Location l left join Administrative.Company c on l.company_id=c.company_id
-left join Administrative.Organogram og on l.location_id=og.location_id  WHERE og.organogram_id=@Organogram_id";
+                string sql = @"select c.company_name,location_code,location_code+' - '+location_name location_name,isnull((select d.department_name from Administrative.Department d where d.department_id=og.department_id),'')as department,isnull(og.department_id,'0') as department_id,l.location_id,c.company_id,isnull(og.organogram_id,'0')organogram_id,isnull(og.is_active,'false')is_active,isnull(og.sorting_priority,0)sorting_priority from Administrative.Location l left join Administrative.Company c on l.company_id=c.company_id
+left join Administrative.Organogram og on l.location_id=og.location_id where og.organogram_id=@Organogram_id";
               
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@Organogram_id", Organogram_id);
@@ -222,8 +355,8 @@ left join Administrative.Organogram og on l.location_id=og.location_id  WHERE og
 
             try
             {
-                var sql = @"select c.company_name,location_code,location_name,(select d.department_name from Administrative.Department d where d.department_id=og.department_id)as department,og.department_id,og.location_id,c.company_id,og.organogram_id from Administrative.Location l left join Administrative.Company c on l.company_id=c.company_id
-left join Administrative.Organogram og on l.location_id = og.location_id  WHERE l.company_group_id=@company_group_id and og.is_active =1 order by og.organogram_id";
+                var sql = @"select c.company_name,location_code,location_code+' - '+location_name location_name,isnull((select d.department_name from Administrative.Department d where d.department_id=og.department_id),'')as department,isnull(og.department_id,'0') as department_id,l.location_id,c.company_id,isnull(og.organogram_id,'0')organogram_id,isnull(og.is_active,'false')is_active,isnull(og.sorting_priority,0)sorting_priority from Administrative.Location l left join Administrative.Company c on l.company_id=c.company_id
+left join Administrative.Organogram og on l.location_id=og.location_id where l.company_group_id=@company_group_id and og.is_active =1 order by og.organogram_id";
 
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@company_group_id", company_group_id);

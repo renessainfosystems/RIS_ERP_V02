@@ -44,43 +44,34 @@ export class OrganogramService {
       return this.http.get(this.ipconfig.base_IP + 'Organogram/GetOrganogramById?OrganogramId=' + OrganogramId, httpOptions);
   }
 
-  //getOrganogramTittle(): Observable<any[]> {
-  //  return this.http.get<any[]>(this.ipconfig.base_IP + 'GlobalEnumOrganogram/OrganogramTittleEnum', httpOptions);
-  //}
-  //getOrganogramGender(): Observable<any[]> {
-  //  return this.http.get<any[]>(this.ipconfig.base_IP + 'GlobalEnumOrganogram/OrganogramGenderEnum', httpOptions);
-  //}
-  //getOrganogramReligion(): Observable<any[]> {
-  //  return this.http.get<any[]>(this.ipconfig.base_IP + 'GlobalEnumOrganogram/OrganogramReligionEnum', httpOptions);
-  //}
-  //getOrganogramBloodGroup(): Observable<any[]> {
-  //  return this.http.get<any[]>(this.ipconfig.base_IP + 'GlobalEnumOrganogram/OrganogramBloodGroupEnum', httpOptions);
-  //}
-  //getResidencialStatus(): Observable<any[]> {
-  //  return this.http.get<any[]>(this.ipconfig.base_IP + 'GlobalEnumOrganogram/ResidencialStatusEnum', httpOptions);
-  //}
-  //getMaritalStatus(): Observable<any[]> {
-  //  return this.http.get<any[]>(this.ipconfig.base_IP + 'GlobalEnumOrganogram/MaritalStatusEnum', httpOptions);
-  //}
-
-  //getAllCountry(): Observable<any[]> {
-  //  return this.http.get<any[]>(this.ipconfig.base_IP + 'Country/CountryCboList');
-  //}
+  GetSalaryHead(salary_head_type_id: Number): Observable<any> {
+        return this.http.get(this.ipconfig.base_IP + 'SalaryHead/GetSalaryHeadForDP?salary_head_type_id=' + salary_head_type_id, httpOptions);
+    }
   OrganogramActivity(Organogram_id: Number): Observable<any> {
 
     return this.http.post(this.ipconfig.base_IP + 'Organogram/OrganogramActivity?Organogram_id=' + Organogram_id, httpOptions);
-  }
-  //getAllDivision(): Observable<any[]> {
-  //  return this.http.get<any[]>(this.ipconfig.base_IP + 'Division/GetAllDivision');
-  //}
-  //getAllDistrict(): Observable<any[]> {
-  //  return this.http.get<any[]>(this.ipconfig.base_IP + 'District/GetAllDistrict');
-  //}
-  //getAllDivisionCboListByCountryId(country_id): Observable<any[]> {
-  //  return this.http.get<any[]>(this.ipconfig.base_IP + 'Division/DivisionCboListByCountryId?country_id=' + country_id, httpOptions);
-  //}
+    }
 
-  //getAllDistrictCboListByDivisionId(division_id): Observable<any[]> {
-  //  return this.http.get<any[]>(this.ipconfig.base_IP + 'District/DistrictCboListByDivisionId?division_id=' + division_id, httpOptions);
-  //}
+    getAllDepartment(): Observable<any[]> {
+
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'Department/GetDepartmentByTypes', httpOptions);
+    }
+    GetDepartmentByTypeId(Type_id: Number): Observable<any> {
+
+        return this.http.get(this.ipconfig.base_IP + 'Department/GetDepartmentByTypeId?Department_Type_id=' + Type_id, httpOptions);
+    }
+    GetAllOrganogramDetail(Organogram_Id: Number): Observable<any> {
+
+        return this.http.get(this.ipconfig.base_IP + 'OrganogramDetail/GetAllOrganogramDetail?Organogram_Id=' + Organogram_Id, httpOptions);
+    }
+
+    getPositionList(): Observable<any[]> {
+
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'Position/PositionCboList', httpOptions);
+    }
+    createOrganogramDetail(OrganogramDetail: any): Observable<any> {
+
+        return this.http.post<any>(this.ipconfig.base_IP + 'OrganogramDetail/Create', OrganogramDetail, httpOptions);
+
+    }
 }
