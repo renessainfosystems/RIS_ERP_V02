@@ -31,9 +31,9 @@ namespace Auth.Controllers.Party
        
         public async Task<dynamic> Create([FromForm] DealerCreditInfo dealerCreditInfo)
         {           
-            if (dealerCreditInfo.ImageUpload != null)
+            if (dealerCreditInfo.FileUpload != null)
             {
-                dealerCreditInfo.attachment = GetImagePath(dealerCreditInfo.ImageUpload);
+                dealerCreditInfo.attachment = GetDocumentPath(dealerCreditInfo.FileUpload);
             }
             return await _dealerCreditInfoRepository.IUD_DealerCreditInfo(dealerCreditInfo, (int)GlobalEnumList.DBOperation.Create);
         }
@@ -44,13 +44,13 @@ namespace Auth.Controllers.Party
         {
             var dealerCreditInfodata = _dealerCreditInfoRepository.GetDealerCreditInfoById(dealerCreditInfo.dealer_info_id).Result;            
             
-            if (dealerCreditInfo.ImageUpload != null)
+            if (dealerCreditInfo.FileUpload != null)
             {
-                if (!string.IsNullOrEmpty(dealerCreditInfodata.ImagePath))
+                if (!string.IsNullOrEmpty(dealerCreditInfodata.FileUpload))
                 {
-                    deleteImage(dealerCreditInfodata.ImagePath);
+                    deleteDocument(dealerCreditInfodata.FileUpload);
                 }                
-                dealerCreditInfo.attachment = GetImagePath(dealerCreditInfo.ImageUpload);
+                dealerCreditInfo.attachment = GetDocumentPath(dealerCreditInfo.FileUpload);
             }
            return await _dealerCreditInfoRepository.IUD_DealerCreditInfo(dealerCreditInfo, (int)GlobalEnumList.DBOperation.Update);
         }
@@ -80,12 +80,12 @@ namespace Auth.Controllers.Party
         {
             return await _dealerCreditInfoRepository.GetCreditInfoByDealerId(dealer_info_id);
         }
-
-        private string GetImagePath(IFormFile image)
+        private string GetDocumentPath(IFormFile image)
         {
-            var folderName = Path.Combine("UploadedResource", "DealerImage");
+            var folderName = Path.Combine("assets", "images", "party", "dealerdocument");
             var directoryName = Directory.GetCurrentDirectory();
-            var pathToSave = directoryName+"\\"+ folderName;
+
+            var pathToSave = directoryName.Replace("\\Auth", "\\WebApp\\src\\assets\\images\\party\\dealerdocument");
             if (image.Length > 0)
             {
                 var fileName = ContentDispositionHeaderValue.Parse(image.ContentDisposition).FileName.Trim('"');
@@ -99,28 +99,18 @@ namespace Auth.Controllers.Party
                 {
                     image.CopyTo(stream);
                 }
+
                 return dbPath = dbPath.Replace(@"\", @"/");
             }
             return "";
-
         }
-        
-        private void deleteImage(string imagepath)
+
+        private void deleteDocument(string imagepath)
         {
-            try
-            {
-                FileInfo file = new FileInfo(imagepath);
-                var directoryName = Directory.GetCurrentDirectory();
-                var folderName = Path.Combine("UploadedResource", "DealerImage");
-                //var pathToSave = directoryName + "\\" + folderName;
-                // var directoryPath = ("..\\WebApp\\src\\assets\\images\\dealerimage");
-                var path = directoryName + "\\"+ folderName + file.Name;
-                System.IO.File.Delete(path);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }        
+            FileInfo file = new FileInfo(imagepath);
+            var directoryPath = ("\\WebApp\\src\\assets\\images\\party\\dealerdocument");
+            var path = directoryPath + "\\" + file.Name;
+            System.IO.File.Delete(file.Name);
+        }
     }
 }

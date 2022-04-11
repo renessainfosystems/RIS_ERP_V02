@@ -360,7 +360,7 @@ export class DealerinfoComponent implements OnInit {
                 this.photourllink = event.target.result
             }
         }
-    }
+    }     
 
     constructor(private formbulider: FormBuilder, private confirmationService: ConfirmationService, private notifyService: NotificationService, private dealerinfoService: DealerInfoService) {
 
@@ -488,7 +488,6 @@ export class DealerinfoComponent implements OnInit {
             document_number: ['', [Validators.required]],
             issue_date: [null, [Validators.required]],
             expiry_date: [null, [Validators.required]],
-            //image_file: ['', [Validators.required]]
             FileUpload: new FormControl(''),
         });
 
@@ -498,7 +497,7 @@ export class DealerinfoComponent implements OnInit {
             amount: ['', [Validators.required]],
             expiry_date: ['', [Validators.required]],
             remarks: [''],
-            //FileUpload: new FormControl(''),
+            FileUpload: new FormControl(''),
         });
 
         //Load Dropdown
@@ -1635,12 +1634,12 @@ export class DealerinfoComponent implements OnInit {
             this.dealerdocumentForm.controls['expiry_date'].setValue(new Date(data.ExpiryDate));
             this.dealerdocumentForm.controls['status'].setValue(data.Status);
             this.dealerdocumentForm.controls['remarks'].setValue(data.Remarks);
-            this.dealerdocumentForm.controls['image_file'].setValue(data.ImageFile);
-            //this.photourllink = data.ImageFile;
+            this.dealerdocumentForm.controls['image_file'].setValue(data.FileUpload);
+            this.photourllink = data.FileUpload;
 
         });
-        this.gridDisplayDocument = true;
-        this.formDisplayDocument = false;
+        this.gridDisplayDocument = false;
+        this.formDisplayDocument = true;
     }
 
     deleteDealerDocumentinfo() {
@@ -1730,7 +1729,7 @@ export class DealerinfoComponent implements OnInit {
             else {
                 formData.append(key, value);
                 formData.append("dealer_info_id", this.rowData.DealerInfoId);
-                //formData.append("FileUpload", this.fileToUploadCreditForm);
+                formData.append("FileUpload", this.fileToUploadCreditForm);
             }
         }
 
@@ -1794,8 +1793,8 @@ export class DealerinfoComponent implements OnInit {
             this.dealercreditForm.controls['amount'].setValue(data.Amount);
             this.dealercreditForm.controls['expiry_date'].setValue(new Date(data.ExpiryDate));
             this.dealercreditForm.controls['remarks'].setValue(data.Remarks);
-            //this.dealercreditForm.controls['image_file'].setValue(data.ImageFile);
-            //this.photourllink = data.ImageFile;
+            this.dealercreditForm.controls['attachment'].setValue(data.FileUpload);
+            this.photourllink = data.FileUpload;
 
         });
         this.gridDisplayCredit = false;

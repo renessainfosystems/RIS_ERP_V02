@@ -15,7 +15,7 @@ namespace Auth.Model.Party.ViewModel
         public string SecurityDepositType { get; set; }
         public decimal Amount { get; set; }
         public DateTime ExpiryDate { get; set; }
-        public string Attachment { get; set; }
+        public string FileUpload { get; set; }
         public string Remarks { get; set; }
         public bool IsApproved { get; set; }
         public DateTime ApprovedDate { get; set; }
@@ -33,7 +33,7 @@ namespace Auth.Model.Party.ViewModel
             model.SecurityDepositType = dealerCredit.security_deposit_type ?? "";
             model.Amount = dealerCredit.amount ?? 0;
             model.ExpiryDate = dealerCredit.expiry_date;
-            model.Attachment = dealerCredit.attachment ?? "";
+            model.FileUpload = dealerCredit.attachment ?? "";
             model.Remarks = dealerCredit.remarks ?? "";
             model.IsApproved = dealerCredit.is_Approved ?? false;
             return model;
