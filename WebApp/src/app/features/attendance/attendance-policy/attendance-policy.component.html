@@ -21,7 +21,7 @@
                             </div>
                             <div class="field col-12 md:col-6 float-right">
                                 <label pTooltip="Attendance Policy Code" tooltipPosition="top">Code<span class="req">*</span></label>
-                                <input pInputText id="firstname2" type="text" formControlName="code" pInputText disabled />
+                                <input pInputText id="firstname2" type="text" formControlName="code" disabled="disabled" />
                             </div>
 
 
@@ -44,11 +44,11 @@
 
                             <div class="field col-12 md:col-6 ">
 
-                                <label pTooltip="Absenteeism policy" tooltipPosition="top">Absenteeism policy<span class="req">*</span></label>
+                                <label pTooltip="Absenteeism policy" tooltipPosition="top">Absenteeism policy<span class="req"></span></label>
 
                                 <div class="grid">
                                     <div class=" col-12 md:col-10">
-                                        <p-dropdown [options]="absenteeismDP" [(ngModel)]="selectedAbsenteeism" formControlName="absenteeism_policy_id" [ngClass]="{ 'is-invalid': submitted && f.absenteeism_policy_id.errors }" placeholder="Select Absenteeism Policy" optionLabel="absenteeism_policy_name"   optionValue="absenteeism_policy_id" [showClear]="true"></p-dropdown>
+                                        <p-dropdown [options]="absenteeismDP" [(ngModel)]="selectedAbsenteeism" formControlName="absenteeism_policy_id" [ngClass]="{ 'is-invalid': submitted && f.absenteeism_policy_id.errors }" placeholder="Select Absenteeism Policy" optionLabel="absenteeism_policy_name" optionValue="absenteeism_policy_id" [showClear]="true"></p-dropdown>
                                     </div>
                                     <div class=" col-12 md:col-1">
 
@@ -61,11 +61,11 @@
 
                             <div class="field col-12 md:col-6 ">
 
-                                <label pTooltip="Late Early Policy" tooltipPosition="top">Late Early Policy<span class="req">*</span></label>
+                                <label pTooltip="Late Early Policy" tooltipPosition="top">Late Early Policy<span class="req"></span></label>
                                 <div class="grid">
                                     <div class=" col-12 md:col-10">
                                         <p-dropdown [options]="lateEarlyDP" formControlName="late_early_policy_id" [ngClass]="{ 'is-invalid': submitted && f.late_early_policy_id.errors }" placeholder="Select Late Early Policy"
-                                                    optionLabel="late_early_policy_name" optionValue="late_early_policy_id"  [showClear]="true"></p-dropdown>
+                                                    optionLabel="late_early_policy_name" optionValue="late_early_policy_id" [showClear]="true"></p-dropdown>
 
                                     </div>
                                     <div class=" col-12 md:col-1">
@@ -79,11 +79,11 @@
 
                             <div class="field col-12 md:col-6 ">
 
-                                <label pTooltip="Roster Policy" tooltipPosition="top">Roster Policy<span class="req">*</span></label>
+                                <label pTooltip="Roster Policy" tooltipPosition="top">Roster Policy<span class="req"></span></label>
                                 <div class="grid">
                                     <div class=" col-12 md:col-10">
                                         <p-dropdown [options]="rosterPolicyDP" formControlName="roster_policy_id" [ngClass]="{ 'is-invalid': submitted && f.roster_policy_id.errors }" placeholder="Select Roster Policy"
-                                                    optionLabel="roster_policy_name"optionValue="roster_policy_id" [showClear]="true"></p-dropdown>
+                                                    optionLabel="roster_policy_name" optionValue="roster_policy_id" [showClear]="true"></p-dropdown>
 
                                     </div>
                                     <div class=" col-12 md:col-1">
@@ -99,7 +99,7 @@
                                     <div class=" col-12 md:col-10">
 
                                         <p-dropdown [options]="benefitPolicyDP" formControlName="abp_id" [ngClass]="{ 'is-invalid': submitted && f.abp_id.errors }" placeholder="Select Benefit Policy"
-                                                    optionLabel="abp_name"  [showClear]="true"></p-dropdown>
+                                                    optionLabel="abp_name" [showClear]="true"></p-dropdown>
 
                                     </div>
                                     <div class=" col-12 md:col-1">
@@ -112,7 +112,7 @@
                             </div>
                             <div class="field col-12 md:col-6 ">
 
-                                <label pTooltip="Shift" tooltipPosition="top">Shift<span class="req">*</span></label>
+                                <label pTooltip="Shift" tooltipPosition="top">Shift<span class="req"></span></label>
 
                                 <div class="grid">
                                     <div class=" col-12 md:col-10">
@@ -183,7 +183,7 @@
 
                             <div class="field col-12 md:col-6 ">
 
-                                <label pTooltip="Leave Policy" tooltipPosition="top">Leave Policy<span class="req">*</span></label>
+                                <label pTooltip="Leave Policy" tooltipPosition="top">Leave Policy<span class="req"></span></label>
 
                                 <div class="grid">
                                     <div class=" col-12 md:col-10">
@@ -263,26 +263,35 @@
                                     <div class="field col-12 md:col-5">
 
                                         <p-dropdown [options]="DayOffDP" formControlName="dayoff_type_id" [ngClass]="{ 'is-invalid': submitted && f.dayoff_type_id.errors }" placeholder="Select Day Off"
-                                                    optionLabel="dayoff_type_name" [showClear]="true"></p-dropdown>
+                                                    optionLabel="dayoff_type_name"  (onChange)="onDayOffTypeChange($event)" [showClear]="true"></p-dropdown>
 
                                     </div>
                                 </div>
                             </div>
-                            <div *ngIf="isShownDayOff" class="field col-12 md:col-6">
-                                <label pTooltip="Next Shift" tooltipPosition="top">Day Off Alternative<span class="req">*</span></label>
+                            <div *ngIf="isShowdayofftype" class="field col-12 md:col-5 mt-1">
+                                <label pTooltip="Next Shift" tooltipPosition="top">Day Off Alternative<span class="req"></span></label>
                                 <div class="grid">
                                     <div class="field col-12 md:col-10">
 
                                         <p-dropdown [options]="DayOffAlternativeDP" formControlName="dayoff_alternative_id" [ngClass]="{ 'is-invalid': submitted && f.dayoff_alternative_id.errors }" placeholder="Select Day Off Alternative"
                                                     optionLabel="dayoff_alternative_name" [showClear]="true"></p-dropdown>
                                     </div>
-                                    <div class="field col-12 md:col-2">
 
-                                        <button class=" pi pi-plus risBtn risAdd mr-2" (click)="addDayOffPolicy()" label="Add">Add</button>
-
-                                    </div>
                                 </div>
                             </div>
+                            <div *ngIf="isShownDayOff" class="field col-1 md:col-1 mr-10">
+                              
+                                <div class="grid">
+                                    <div class="field col-1 md:col-2">
+
+                                        <div class="field col-12 md:col-10">
+                                            <button class=" pi pi-plus risBtn risAdd ml-0 mt-4 mr-0" (click)="addDayOffPolicy()" label="Add">Add</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                       
                             <div *ngIf="isShownDayOff" class="field col-12 md:col-12 pl-0 pr-3">
                                 <p-table [value]="dayOffPolicyDetails" styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm" responsiveLayout="scroll">
 
@@ -432,16 +441,17 @@
 
             <p-dialog header="Absenteeism Policy Details" [(visible)]="absenteeismdisplay" modal="modal" showEffect="fade" [style]="{width: '50vw'}" [breakpoints]="{'960px': '75vw'}">
                 <form action="" [formGroup]="AbsenteeismPolicyForm">
+                   
                     <div class="p-fluid grid col-12 flex justify-content-start flex-wrap card-container">
-                      
+
                         <div class="col-12 p-fluid ">
-                            <p-checkbox name="group" formControlName="is_leave_adjustment" binary="true" pl-1></p-checkbox>
-                            <label for="" class=" d-md-inline-flex  pl-2">Leave Adjustment as per deduction priority.System will apply leave automatically</label>
+                            <p-checkbox name="group" formControlName="is_leave_adjustment" binary="true" pl-1 readonly="readonly"></p-checkbox>
+                            <label for="" style="font-weight: bold;" class=" d-md-inline-flex  pl-2">Leave Adjustment as per deduction priority.System will apply leave automatically</label>
                         </div>
 
                     </div>
                     <div class="p-fluid grid col-12 flex justify-content-start flex-wrap card-container">
-                        
+
                         <div class="col-12 p-fluid ">
                             <label for="" pl class=" d-md-inline-flex">
                                 If there is no sufficient leave balance or no leave adjustment is declared,system will deduct from salary if user configure "Salary Adjustment"
@@ -453,9 +463,9 @@
 
 
                     <div class="p-fluid grid col-12 flex justify-content-start flex-wrap card-container">
-         
+
                         <div class="col-12 p-fluid ">
-                            <p-checkbox name="group" formControlName="is_monetary_benefit" binary="true" pl-1></p-checkbox>
+                            <p-checkbox name="group" formControlName="is_monetary_benefit" binary="true" readonly="readonly" pl-1></p-checkbox>
                             <label for="" style="font-weight: bold;" class=" d-md-inline-flex  pl-2">Salary Adjustment(Deduction)</label>
                             <br />
                             <br />
@@ -464,9 +474,9 @@
                                 Daily 100 % of "Basic" will be deducted.
                             </label>
                         </div>
-                       
+
                     </div>
-                    </form>
+                </form>
                     <ng-template pTemplate="footer">
                         <button pButton icon="pi pi-check" (click)="absenteeismdisplay=false" label="Ok" class="p-button-outlined"></button>
                     </ng-template>
