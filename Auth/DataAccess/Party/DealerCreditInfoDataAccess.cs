@@ -58,7 +58,13 @@ namespace Auth.DataAccess.Party
             {
                 parameters.Add("@param_dealer_credit_info_id", dealerCreditInfo.dealer_credit_info_id, DbType.Int64);
                 parameters.Add("@param_DBOperation", GlobalEnumList.DBOperation.Delete);
-            }            
+            }
+            else if (operationType == (int)GlobalEnumList.DBOperation.Approve)
+            {
+                parameters.Add("@param_dealer_credit_info_id", dealerCreditInfo.dealer_credit_info_id, DbType.Int32);
+                parameters.Add("@param_created_user_info_id", currentUserInfoId ?? 0, DbType.Int32);
+                parameters.Add("@param_DBOperation", GlobalEnumList.DBOperation.Approve);
+            }
             return parameters;
         }
 
@@ -86,11 +92,17 @@ namespace Auth.DataAccess.Party
                     return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonUpdateMessage, result);
                 }
 
+                if (dbOperation == (int)GlobalEnumList.DBOperation.Approve)
+                {
+                    result = DealerCreditInfoViewModel.ConvertToModel(data);
+                    return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonApproveMessage, result);
+                }
+
                 if (dbOperation == (int)GlobalEnumList.DBOperation.Delete)
                 {
                     return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonDeleteMessage);
                 }
-               
+              
                 if (data.Count > 0)
                 {
                     result = DealerCreditInfoViewModel.ConvertToModel(data);
@@ -177,7 +189,11 @@ namespace Auth.DataAccess.Party
                 _dbConnection.Open();
             try
             {
-                var sql = @"SELECT * FROM [Party].[Dealer_Credit_Info] DCI WHERE DCI.dealer_info_id =@dealer_info_id";
+                var sql = @"SELECT SD.security_deposit_id,SD.security_deposit_name,SD.security_deposit_type,DCI.dealer_credit_info_id ,DCI.dealer_info_id,DCI.amount,
+                            DCI.expiry_date,DCI.remarks,DCI.is_Approved,DCI.attachment
+                            FROM Party.Dealer_Credit_Info as DCI
+                            left join Administrative.Security_Deposit as SD on SD.security_deposit_id=DCI.security_deposit_id
+                            WHERE DCI.dealer_info_id=@dealer_info_id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@dealer_info_id", dealer_info_id);
                 dynamic data = await _dbConnection.QueryAsync<dynamic>(sql, parameters);

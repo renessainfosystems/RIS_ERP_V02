@@ -263,5 +263,11 @@ export class DealerInfoService {
         return this.http.get<any[]>(this.ipconfig.base_IP + 'SecurityDeposit/SecurityDepositCboList', httpOptions);
     }
 
+    approve(dealer_credit_info_id: Number): Observable<any> {
+
+        return this.http.post<any>(this.ipconfig.base_IP + 'DealerCreditInfo/Approve', { dealer_credit_info_id }, httpOptions);
+
+    }
+
     // End Dealer Document Info ------***------
 }

@@ -183,6 +183,15 @@ namespace Auth.Service
             return await _supplierApplicationdataAccess.getAllBankCboListByBankTypeId(bank_type_id);
         }
 
+        // Assessment
+        public async Task<dynamic> getAllSupplierMasterAssessmentCriteria(int supplier_id)
+        {
+            return await _supplierApplicationdataAccess.getAllSupplierMasterAssessmentCriteria(supplier_id);
+        }
+
+
+        // Approver & Reject
+
         public async Task<dynamic> ApproveSupplier(SupplierInfoFeedbackDetail supplierInfoFeedbackDetail, int dbOperation)
         {
             return await _supplierApplicationdataAccess.ApproveSupplier(supplierInfoFeedbackDetail, dbOperation);
