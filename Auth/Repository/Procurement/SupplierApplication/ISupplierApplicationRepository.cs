@@ -63,6 +63,12 @@ namespace Auth.Service
         // Get Bank By Bank Type ID
         Task<dynamic> getAllBankCboListByBankTypeId(int supplier_id);
 
+
+        // Assessment
+        Task<dynamic> getAllSupplierMasterAssessmentCriteria(int supplier_id);
+
+        // Approver & Reject
+
         Task<dynamic> ApproveSupplier(SupplierInfoFeedbackDetail supplierInfoFeedbackDetail, int dbOperation);
 
         Task<dynamic> RejectSupplier(SupplierInfoFeedbackDetail supplierInfoFeedbackDetail, int dbOperation);

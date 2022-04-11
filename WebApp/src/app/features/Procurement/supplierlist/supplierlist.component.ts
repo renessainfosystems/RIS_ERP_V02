@@ -10,14 +10,8 @@ import { NotificationService } from '../../../service/CommonMessage/notification
 
 import { SelectItem } from 'primeng/api';
 import { MessageService } from 'primeng/api';
-import { Category } from './category';
+import { Criteria } from './criteria';
 
-
-//import { ReactiveFormsModule } from "@angular/forms";
-//import { DialogService, MessageService } from "primeng/api";
-//import { CalendarModule } from "primeng/calendar";
-//import { TableModule } from "primeng/table";
-//import { ToastModule } from "primeng/toast";
 
 
 
@@ -80,11 +74,11 @@ export class SupplierListComponent implements OnInit {
     }
     //end grid and form show hide ********************
 
-    categories: Category[];
+    categories: any[];
 
-    statuses: SelectItem[];
+    criterias: Criteria[];
 
-    clonedProducts: { [s: string]: Category; } = {};
+    clonedProducts: { [s: string]: Criteria; } = {};
 
 
     // for photo and signature upload
@@ -462,8 +456,6 @@ export class SupplierListComponent implements OnInit {
         this.loadAllEcommerceList();
 
         this.businessApplicationForm.controls['business_activities_enum_id'].disable();
-        this.businessApplicationForm.controls['industry_sector_id'].disable();
-        this.businessApplicationForm.controls['industry_sub_sector_id'].disable();
         this.businessApplicationForm.controls['management_staff_no'].disable();
         this.businessApplicationForm.controls['nonmanagement_staff_no'].disable();
         this.businessApplicationForm.controls['permanent_worker_no'].disable();
@@ -485,13 +477,7 @@ export class SupplierListComponent implements OnInit {
         this.loadAllAssociationCboList();
         this.loadAllOrganizationTypeEnum();
         this.loadAllMembershipEnum();
-        this.associationsApplicationForm.controls['association_id'].disable();
-        this.associationsApplicationForm.controls['abbreviation'].disable();
-        this.associationsApplicationForm.controls['country_id_association'].disable();
-        this.associationsApplicationForm.controls['organization_type_id_enum'].disable();
-        this.associationsApplicationForm.controls['membership_type_enum_id'].disable();
-        this.associationsApplicationForm.controls['association_number'].disable();
-        this.associationsApplicationForm.controls['start_date'].disable();
+
 
 
         //LegalDocument
@@ -504,13 +490,6 @@ export class SupplierListComponent implements OnInit {
             FileUpload: new FormControl('', [Validators.required]),
         });
         this.loadAllDocumentCboList();
-
-        this.legalDocumentApplicationForm.controls['document_type_id'].disable();
-        this.legalDocumentApplicationForm.controls['document_number'].disable();
-        this.legalDocumentApplicationForm.controls['issue_date'].disable();
-        this.legalDocumentApplicationForm.controls['expiry_date'].disable();
-
-
 
 
         ////Location
@@ -602,13 +581,15 @@ export class SupplierListComponent implements OnInit {
         this.LoadAllCurrencyCboList();
         this.LoadAllSecurityTypeCboList();
         this.LoadAllPaymentFrequencyCboList();
+        this.financialApplicationForm.controls['currency_id'].disable();
+        this.financialApplicationForm.controls['credit_days'].disable();
+        this.financialApplicationForm.controls['credit_limit'].disable();
+        this.financialApplicationForm.controls['payment_frequency_id'].disable();
 
         this.mobileBankingApplicationForm = this.formbulider.group({
-
             mfs_id: ['', [Validators.required]],
             account_number: ['', [Validators.required, Validators.pattern("^((\\+91-?)|0)?[0-9]{11}$")]],
             mfs_type_id: ['', [Validators.required]],
-
         });
         this.LoadAllMfsCboList();
         this.LoadAllMfsTypeCboList();
@@ -631,9 +612,7 @@ export class SupplierListComponent implements OnInit {
             comment: ['', [Validators.required]],
             suggestion: ['', [Validators.required]],
             category_id: [''],
-            category_name: [''],
-
-            
+            category_name: [''],           
         });
         this.LoadAllBankTypeCboList();
         this.AssesmentApplicationForm.controls['comment'].disable();
@@ -690,6 +669,7 @@ export class SupplierListComponent implements OnInit {
         let supplierId = row.SupplierId;
    /*     this.supplierId = row.SupplierId;*/
         this.SupplierListService.getSupplierBasicInfo(supplierId).subscribe(data => {
+            debugger
             this.supplierApplicationForm.reset();
             if (data != null) {
                 this.isSupplierinfoEdit = true;
@@ -720,26 +700,32 @@ export class SupplierListComponent implements OnInit {
             this.supplierApplicationForm.controls['mobile_no'].setValue(data.MobileNo);
             this.supplierApplicationForm.controls['phone_no'].setValue(data.PhoneNo);
             this.supplierApplicationForm.controls['pabx'].setValue(data.Pabx);
+
+            this.businessApplicationForm.controls['business_activities_enum_id'].setValue(data.BusinessActivityEnumId);
+            this.businessApplicationForm.controls['management_staff_no'].setValue(data.ManagementStaffNo);
+            this.businessApplicationForm.controls['nonmanagement_staff_no'].setValue(data.NonmanagementStaffNo);
+            this.businessApplicationForm.controls['permanent_worker_no'].setValue(data.PermanentWorkerNo);
+            this.businessApplicationForm.controls['casual_worker_no'].setValue(data.CasualWorkerNo);
         });
 
-        this.SupplierListService.getAllSupplierBusiness(supplierId).subscribe(data => {
-            debugger
-            this.businessApplicationForm.reset();
-            if (data != null) {
-                this.isSupplierinfoEdit = true;
-                this.businessApplicationForm.controls['business_activities_enum_id'].setValue(data.BusinessActivityEnumId);
-                this.businessApplicationForm.controls['management_staff_no'].setValue(data.ManagementStaffNo);
-                this.businessApplicationForm.controls['nonmanagement_staff_no'].setValue(data.NonmanagementStaffNo);
-                this.businessApplicationForm.controls['permanent_worker_no'].setValue(data.PermanentWorkerNo);
-                this.businessApplicationForm.controls['casual_worker_no'].setValue(data.CasualWorkerNo);
-            }
-        });
+        //this.SupplierListService.getAllSupplierBusiness(supplierId).subscribe(data => {
+        //    this.businessApplicationForm.reset();
+        //    if (data != null) {
+        //        this.isSupplierinfoEdit = true;
+        //        this.businessApplicationForm.controls['business_activities_enum_id'].setValue(data.BusinessActivityEnumId);
+        //        this.businessApplicationForm.controls['management_staff_no'].setValue(data.ManagementStaffNo);
+        //        this.businessApplicationForm.controls['nonmanagement_staff_no'].setValue(data.NonmanagementStaffNo);
+        //        this.businessApplicationForm.controls['permanent_worker_no'].setValue(data.PermanentWorkerNo);
+        //        this.businessApplicationForm.controls['casual_worker_no'].setValue(data.CasualWorkerNo);
+        //    }
+        //});
 
         this.SupplierListService.getAllSupplierBusinessSubSector(supplierId).subscribe(data => {
             this.subSectorDataSources = data;
         });
 
         this.SupplierListService.getAllSupplierBusinessEcommerce(supplierId).subscribe(data => {
+            this.categories = data;
         });
 
         this.SupplierListService.getAllSupplierAssociation(supplierId).subscribe(data => {
@@ -809,6 +795,11 @@ export class SupplierListComponent implements OnInit {
             }
         });
 
+        this.SupplierListService.getAllSupplierMasterAssessmentCriteria(supplierId).subscribe(data => {
+            debugger
+            this.criterias = data;
+        });
+
         //this.AssesmentApplicationForm.controls['comment'].enable();
         //this.AssesmentApplicationForm.controls['suggestion'].enable();
         this.toggleGridDisplay();
@@ -821,14 +812,6 @@ export class SupplierListComponent implements OnInit {
         });
     }
 
-
-
-    // All Supplier List 
-    //loadAllSupplierinfos() {
-    //    this.SupplierListService.getAllSupplierInfo().subscribe(data => {
-    //        this.supplierinfoList = data;
-    //    });
-    //}
 
     loadAllDomicileEnum() {
         this.SupplierListService.getAllDomicileEnum().subscribe(data => {
@@ -1169,13 +1152,6 @@ export class SupplierListComponent implements OnInit {
 
     }
 
-    //resetForm() {
-    //    this.supplierApplicationForm.reset();
-    //    this.isSupplierinfoEdit = false;
-    //    this.loadAllSupplierinfos();
-    //    //  this.dealerinfodataSource = [];
-    //}
-
 
     loadSupplierinfoToEdit() {
 
@@ -1235,6 +1211,7 @@ export class SupplierListComponent implements OnInit {
         });
 
         this.SupplierListService.getAllSupplierBusinessEcommerce(supplierId).subscribe(data => {
+            this.categories = data;
         });
 
         this.SupplierListService.getAllSupplierAssociation(supplierId).subscribe(data => {
@@ -1369,628 +1346,6 @@ export class SupplierListComponent implements OnInit {
         this.index = (this.index === 6) ? 0 : this.index + 1;
     }
 
-    // Association submit
-
-
-    //// Location submit
-
-    //onLegalDocumentFormSubmit() {
-    //    if (this.rowData == null) {
-    //        return this.notifyService.ShowNotification(3, 'Please select row');
-    //    }
-
-    //    //for validation message -----------
-    //    this.submittedLegalDocument = true;
-    //    if (this.legalDocumentApplicationForm.invalid) {
-    //        return;
-    //    }
-    //    //end validation messate -----------
-
-    //    this.dataSaved = false;
-
-    //    let supplierId = this.rowData.SupplierId;
-
-    //    let document_type_id = this.legalDocumentApplicationForm.get('document_type_id')?.value.document_type_id;
-    //    let document_type_name = this.legalDocumentApplicationForm.get('document_type_id')?.value.document_type_name;
-    //    if (this.dataExistDocument(document_type_name)) {
-    //        return this.notifyService.ShowNotification(2, "Selected Document already added")
-    //    }
-
-    //    else {
-    //        let formData = new FormData();
-
-    //        for (const key of Object.keys(this.legalDocumentApplicationForm.value)) {
-    //            const value = this.legalDocumentApplicationForm.value[key];
-    //            if (key == "issue_date") {
-    //                let date = new Date(value).toISOString();
-    //                formData.append("issue_date", date);
-    //            }
-    //            else if (key == "expiry_date") {
-    //                let date = new Date(value).toISOString();
-    //                formData.append("expiry_date", date);
-    //            }
-    //            else if (key == "document_type_id") {
-
-    //                formData.append("document_type_id", document_type_id);
-    //            }
-    //            else {
-    //                formData.append(key, value);
-    //                formData.append("supplier_id", supplierId);
-    //                formData.append("FileUpload", this.fileToUploadLegalForm);
-    //            }
-    //        }
-
-
-    //        this.SupplierListService.updateDocumentData((formData)).subscribe(data => {
-    //            this.dataSaved = true;
-    //            this.LoadAllLegalDocument();
-    //            this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage);
-    //            this.resetForm();
-    //        });
-    //    }
-
-    //}
-
-    //dataExistDocument(document_type_name) {
-    //    return this.documentDataSources.some(function (el) {
-    //        return el.document_type_name === document_type_name;
-    //    });
-    //}
-
-    //deleteDocumentinfo(a, row) {
-    //    let supplier_document_id = row.supplier_document_id;
-    //    if (this.loadSupplierinfoToEdit) {
-    //        let supplierId = this.rowData.SupplierId;
-    //        this.SupplierListService.deleteDocumentInfo(supplier_document_id).subscribe(data => {
-    //            this.SupplierListService.getAllLegalDocument(supplierId).subscribe(data => {
-    //                this.documentDataSources = data;
-    //            });
-    //            this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
-    //        });
-    //    }
-    //    else {
-    //        this.documentDataSources = this.documentDataSources.slice(0, a).concat(this.documentDataSources.slice(a + 1));
-    //    }
-    //}
-
-
-    //// Location submit
-
-    //onLocationFormSubmit() {
-
-    //    if (this.rowData == null) {
-    //        return this.notifyService.ShowNotification(3, 'Please select row');
-    //    }
-
-    //    //for validation message -----------
-    //    this.submittedLocation = true;
-    //    const locationData = this.locationApplicationForm.value;
-    //    if (this.locationApplicationForm.invalid) {
-    //        return;
-    //    }
-    //    //end validation messate -----------
-
-    //    this.dataSaved = false;
-
-
-    //    let location_type_id = this.locationApplicationForm.get('location_type_id')?.value.location_type_id;
-    //    let location_type_name = this.locationApplicationForm.get('location_type_id')?.value.location_type_name;
-    //    if (this.dataExistLocation(location_type_name)) {
-    //        return this.notifyService.ShowNotification(2, "Selected location name already added")
-    //    }
-
-
-    //    else {
-
-
-    //        locationData.supplier_id = this.rowData.SupplierId;
-    //        locationData.country_id = locationData.country_id_location;
-    //        locationData.division_id = locationData.division_id_location;
-    //        locationData.district_id = locationData.district_id_location;
-    //        locationData.location_type_id = location_type_id;
-
-    //        this.SupplierListService.updateLocationData(locationData).subscribe(data => {
-    //            this.dataSaved = true
-    //            this.loadAllSupplierLocation();
-    //            this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage);
-    //            this.resetForm();
-    //        });
-
-    //    }
-
-    //}
-
-    //dataExistLocation(location_type_name) {
-    //    return this.locationDataSources.some(function (el) {
-    //        return el.location_type_name === location_type_name;
-    //    });
-    //}
-
-    //deleteLocation(a, row) {
-    //    let supplier_location_id = row.supplier_location_id;
-    //    if (this.loadSupplierinfoToEdit) {
-    //        let supplierId = this.rowData.SupplierId;
-    //        this.SupplierListService.deleteLocationInfo(supplier_location_id).subscribe(data => {
-    //            this.SupplierListService.getAllSupplierLocation(supplierId).subscribe(data => {
-    //                this.locationDataSources = data;
-    //            });
-    //            this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
-    //        });
-    //    }
-    //    else {
-    //        this.locationDataSources = this.locationDataSources.slice(0, a).concat(this.locationDataSources.slice(a + 1));
-    //    }
-    //}
-
-    ////Warehouse
-
-
-    //onWarehouseFormSubmit() {
-
-    //    if (this.rowData == null) {
-    //        return this.notifyService.ShowNotification(3, 'Please select row');
-    //    }
-
-    //    //for validation message -----------
-    //    this.submittedWarehouse = true;
-    //    const warehouseData = this.warehouseApplicationForm.value;
-    //    if (this.warehouseApplicationForm.invalid) {
-    //        return;
-    //    }
-    //    //end validation messate -----------
-
-    //    this.dataSaved = false;
-
-    //    let supplier_warehouse_name = warehouseData.supplier_warehouse_name;
-    //    if (this.dataExistWarehouse(supplier_warehouse_name)) {
-    //        return this.notifyService.ShowNotification(2, "Selected Warehouse already added")
-    //    }
-    //    else {
-
-    //        let supplierId = this.rowData.SupplierId;
-    //        let locationObj = this.warehouseApplicationForm.get('supplier_location_id')?.value;
-    //        let supplier_location_id = locationObj.supplier_location_id;
-    //        let supplier_location_type_name = locationObj.supplier_location_type_name;
-    //        let supplier_warehouse_name = this.warehouseApplicationForm.get('supplier_warehouse_name')?.value;
-    //        let add_note = this.warehouseApplicationForm.get('add_note')?.value;
-
-
-    //        const warehouseSessionobj = {
-    //            supplier_id: supplierId,
-    //            supplier_location_id: supplier_location_id,
-    //            supplier_location_type_name: supplier_location_type_name,
-    //            supplier_warehouse_name: supplier_warehouse_name,
-    //            add_note: add_note
-    //        }
-    //        this.warehouseDataSources.push(warehouseSessionobj);
-    //        warehouseData.supplier_id = supplierId;
-    //        warehouseData.warehouseSession = this.warehouseDataSources;
-
-    //        this.SupplierListService.updateWarehouseData(warehouseData).subscribe(data => {
-    //            this.dataSaved = true;
-    //            this.loadAllSupplierWarehouse();
-    //            this.resetForm();
-    //            this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage);
-    //        });
-    //    }
-    //}
-
-    //dataExistWarehouse(supplier_warehouse_name) {
-    //    return this.warehouseDataSources.some(function (el) {
-    //        return el.supplier_warehouse_name === supplier_warehouse_name;
-    //    });
-    //}
-
-    //deleteWarehouseInfo(a, row) {
-    //    let supplier_warehouse_id = row.supplier_warehouse_id;
-    //    if (this.loadSupplierinfoToEdit) {
-    //        let supplierId = this.rowData.SupplierId;
-    //        this.SupplierListService.deleteWarehouseInfo(supplier_warehouse_id).subscribe(data => {
-    //            this.SupplierListService.getAllSupplierWarehouse(supplierId).subscribe(data => {
-    //                this.warehouseDataSources = data;
-    //            });
-    //            this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
-    //        });
-    //    }
-    //    else {
-    //        this.warehouseDataSources = this.warehouseDataSources.slice(0, a).concat(this.warehouseDataSources.slice(a + 1));
-    //    }
-    //}
-
-
-
-    ////Contacts
-
-    //onContactFormSubmit() {
-
-    //    if (this.rowData == null) {
-    //        return this.notifyService.ShowNotification(3, 'Please select row');
-    //    }
-
-    //    //for validation message -----------
-    //    this.submittedContact = true;
-    //    if (this.contactApplicationForm.invalid) {
-    //        return;
-    //    }
-    //    //end validation messate -----------
-
-    //    this.dataSaved = false;
-
-    //    let supplierId = this.rowData.SupplierId;
-
-    //    let contact_type_id = this.contactApplicationForm.get('contact_type_id')?.value.contact_type_id;
-    //    let contact_type_name = this.contactApplicationForm.get('contact_type_id')?.value.contact_type_name;
-    //    if (this.dataExistContact(contact_type_name)) {
-    //        return this.notifyService.ShowNotification(2, "Selected Contact Type already added")
-    //    }
-
-    //    else {
-    //        let formData = new FormData();
-    //        for (const key of Object.keys(this.contactApplicationForm.value)) {
-    //            const value = this.contactApplicationForm.value[key];
-    //            if (key == "date_of_birth") {
-    //                let date = new Date(value).toISOString();
-    //                formData.append("date_of_birth", date);
-    //            }
-    //            else if (key == "date_of_marriage") {
-    //                let date = new Date(value).toISOString();
-    //                formData.append("date_of_marriage", date);
-    //            }
-    //            else if (key == "contact_type_id") {
-
-    //                formData.append("contact_type_id", contact_type_id);
-    //            }
-    //            else {
-    //                formData.append(key, value);
-    //                formData.append("supplier_id", supplierId);
-    //                formData.append("FileUpload", this.fileToUploadNID);
-    //            }
-    //        } formData.append("designation_id", this.contactApplicationForm.value.designation_id);
-    //        formData.append("nationality_id", this.contactApplicationForm.value.nationality_id);
-    //        formData.append("religion_enum_id", this.contactApplicationForm.value.religion_enum_id);
-    //        formData.append("gender_enum_id", this.contactApplicationForm.value.gender_enum_id);
-    //        formData.append("marital_status_enum_id", this.contactApplicationForm.value.marital_status_enum_id);
-    //        formData.append("blood_group_enum_id", this.contactApplicationForm.value.blood_group_enum_id);
-
-
-    //        var arr = [];
-    //        var object = {};
-    //        formData.forEach(function (value, key) {
-    //            arr[key] = value;
-    //            //fd.append(key, value);
-    //        });
-
-    //        var json = JSON.stringify(arr);
-    //        console.log(object)
-
-    //        if (this.contactDataSources.length = 0) {
-    //            return this.notifyService.ShowNotification(2, "Please add at least one Contact")
-    //        }
-    //        else {
-    //            this.SupplierListService.updateContactData((formData)).subscribe(data => {
-    //                this.loadAllSupplierContact();
-    //                this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage);
-    //            });
-    //        }
-    //    }
-
-    //}
-
-    //dataExistContact(contact_type_name) {
-    //    return this.contactDataSources.some(function (el) {
-    //        return el.contact_type_name === contact_type_name;
-    //    });
-    //}
-
-    //DeleteContactInfo(a, row) {
-    //    let supplier_contact_id = row.supplier_contact_id;
-    //    if (this.loadSupplierinfoToEdit) {
-    //        let supplierId = this.rowData.SupplierId;
-    //        this.SupplierListService.deleteContactInfo(supplier_contact_id).subscribe(data => {
-    //            this.SupplierListService.getAllSupplierContact(supplierId).subscribe(data => {
-    //                this.contactDataSources = data;
-    //            });
-    //            this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
-    //        });
-    //    }
-    //    else {
-    //        this.contactDataSources = this.contactDataSources.slice(0, a).concat(this.contactDataSources.slice(a + 1));
-    //    }
-    //}
-
-
-    //onContactLocationFormSubmit() {
-
-    //    if (this.rowData == null) {
-    //        return this.notifyService.ShowNotification(3, 'Please select row');
-    //    }
-    //    let supplierId = this.rowData.SupplierId;
-
-    //    const contactLocationData = this.ContactLocationApplicationForm.value;
-
-    //    //for validation message -----------
-    //    this.submittedContactLocation = true;
-    //    if (this.ContactLocationApplicationForm.invalid) {
-    //        return;
-    //    }
-    //    //end validation messate -----------
-
-    //    this.dataSaved = false;
-
-    //    let supplier_contact_id = contactLocationData.supplier_contact_id;
-    //    if (this.dataExistContactLocation(supplier_contact_id)) {
-    //        return this.notifyService.ShowNotification(2, "Selected Contact Type already added")
-    //    }
-
-    //    else {
-
-
-    //        let supplier_location_id = contactLocationData.supplier_location_id;
-    //        let supplier_contact_id = contactLocationData.supplier_contact_id;
-    //        let add_note = this.ContactLocationApplicationForm.get('add_note')?.value;
-
-
-    //        const contactLocationSessionobj = {
-    //            supplier_id: supplierId,
-    //            supplier_location_id: supplier_location_id,
-    //            supplier_contact_id: supplier_contact_id,
-    //            add_note: add_note
-
-    //        }
-    //        this.SupplierListService.updateContactLocationData(contactLocationSessionobj).subscribe(data => {
-    //            this.dataSaved = true;
-    //            this.loadAllSupplierContactLocation();
-    //            this.resetForm();
-    //            this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage);
-    //        });
-    //    }
-    //}
-
-    //dataExistContactLocation(supplier_contact_id) {
-    //    return this.contactLocationDataSources.some(function (el) {
-    //        return el.supplier_contact_id === supplier_contact_id;
-    //    });
-    //}
-
-    //deleteContactLocationInfo(a, row) {
-    //    let supplier_contact_location_id = row.supplier_contact_location_id;
-    //    if (this.loadSupplierinfoToEdit) {
-    //        let supplierId = this.rowData.SupplierId;
-    //        this.SupplierListService.deleteLocationWiseContactInfo(supplier_contact_location_id).subscribe(data => {
-    //            this.SupplierListService.getAllSupplierLocationWiseContact(supplierId).subscribe(data => {
-    //                this.contactLocationDataSources = data;
-    //            });
-    //            this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
-    //        });
-    //    }
-    //    else {
-    //        this.contactLocationDataSources = this.contactLocationDataSources.slice(0, a).concat(this.contactLocationDataSources.slice(a + 1));
-    //    }
-    //}
-
-    ////Financial Info
-
-    //addSecurityDepositToTable(a) {
-
-    //    this.submittedFinancialSecurity = true;
-    //    const securityDepositData = this.financialApplicationForm.value;
-
-
-    //    if ((securityDepositData.security_deposit_id == "") || (securityDepositData.security_deposit_id == null) || (securityDepositData.security_deposit_id == undefined)) {
-    //        return;
-    //    }
-    //    if ((securityDepositData.security_amount == "") || (securityDepositData.security_amount == null) || (securityDepositData.security_amount == undefined)) {
-    //        return;
-    //    }
-    //    if ((securityDepositData.expiry_date == "") || (securityDepositData.expiry_date == null) || (securityDepositData.expiry_date == undefined)) {
-    //        return;
-    //    }
-
-
-    //    this.dataSaved = false;
-    //    let security_deposit_id = this.financialApplicationForm.get('security_deposit_id')?.value.security_deposit_id;
-    //    let security_deposit_name = this.financialApplicationForm.get('security_deposit_id')?.value.security_deposit_name;
-    //    if (this.dataExistSecurityDeposit(security_deposit_name)) {
-    //        return this.notifyService.ShowNotification(2, "Selected Security Deposit already added")
-    //    }
-
-    //    else {
-
-    //        let supplierId = this.rowData.SupplierId;
-    //        let securityDepositObj = this.financialApplicationForm.get('security_deposit_id')?.value;
-    //        let security_deposit_id = securityDepositObj.security_deposit_id;
-    //        let security_deposit_name = securityDepositObj.security_deposit_name;
-    //        let security_amount = this.financialApplicationForm.get('security_amount')?.value;
-    //        let expiry_date = this.financialApplicationForm.get('expiry_date')?.value;
-
-    //        const securityDepositSessionobj = {
-    //            supplier_id: supplierId,
-    //            security_deposit_id: security_deposit_id,
-    //            security_deposit_name: security_deposit_name,
-    //            security_amount: security_amount,
-    //            expiry_date_str: this.formatDate(expiry_date),
-    //            expiry_date: (expiry_date),
-
-    //        }
-    //        this.SecurityDepositDataSources.push(securityDepositSessionobj);
-
-
-    //    }
-    //}
-
-    //onSecurityDepositFormSubmit() {
-
-
-    //    if (this.rowData == null) {
-    //        return this.notifyService.ShowNotification(3, 'Please select row');
-    //    }
-
-    //    const financialInfoData = this.financialApplicationForm.value;
-
-    //    //for validation message -----------
-    //    this.submittedFinancial = true;
-    //    if ((financialInfoData.currency_id == "") || (financialInfoData.currency_id == null) || (financialInfoData.currency_id == undefined)) {
-    //        return;
-    //    }
-    //    if ((financialInfoData.credit_days == "") || (financialInfoData.credit_days == null) || (financialInfoData.credit_days == undefined)) {
-    //        return;
-    //    }
-    //    if ((financialInfoData.credit_limit == "") || (financialInfoData.credit_limit == null) || (financialInfoData.credit_limit == undefined)) {
-    //        return;
-    //    }
-    //    if ((financialInfoData.payment_frequency_id == "") || (financialInfoData.payment_frequency_id == null) || (financialInfoData.payment_frequency_id == undefined)) {
-    //        return;
-    //    }
-    //    else if (this.SecurityDepositDataSources.length == 0) {
-    //        return this.notifyService.ShowNotification(2, "Please add at least security first")
-    //    }
-    //    //end validation messate -----------
-
-    //    else {
-    //        let supplierId = this.rowData.SupplierId;
-    //        financialInfoData.securityDepositSession = this.SecurityDepositDataSources;
-    //        financialInfoData.supplier_id = supplierId;
-    //        this.SupplierListService.updateSupplierCreditDepositApplication(financialInfoData).subscribe(data => {
-    //            this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage);
-    //        });
-    //    }
-
-    //}
-
-    //dataExistSecurityDeposit(security_deposit_name) {
-    //    return this.SecurityDepositDataSources.some(function (el) {
-    //        return el.security_deposit_name === security_deposit_name;
-    //    });
-    //}
-
-    //removeSecurityDeposit(a, row) {
-    //    this.SecurityDepositDataSources = this.SecurityDepositDataSources.slice(0, a).concat(this.SecurityDepositDataSources.slice(a + 1));
-    //}
-
-
-
-    ///// Mobile
-
-
-    //onMobileBankingFormSubmit() {
-
-    //    if (this.rowData == null) {
-    //        return this.notifyService.ShowNotification(3, 'Please select row');
-    //    }
-    //    let supplierId = this.rowData.SupplierId;
-
-    //    //for validation message -----------
-    //    this.submittedMobileBanking = true;
-    //    const mobileBankingData = this.mobileBankingApplicationForm.value;
-    //    if (this.mobileBankingApplicationForm.invalid) {
-    //        return;
-    //    }
-    //    //end validation messate -----------
-
-    //    this.dataSaved = false;
-
-
-    //    let mfs_id = this.mobileBankingApplicationForm.get('mfs_id')?.value.mfs_id;
-    //    let mfs_name = this.mobileBankingApplicationForm.get('mfs_id')?.value.mfs_name;
-    //    if (this.dataExistMFS(mfs_name)) {
-    //        return this.notifyService.ShowNotification(2, "Selected MFS name already added")
-    //    }
-
-    //    else {
-    //        mobileBankingData.supplier_id = supplierId;
-    //        this.SupplierListService.updateMobileBankingData(mobileBankingData).subscribe(data => {
-    //            this.dataSaved = true;
-    //            this.loadAllSupplierMFS();
-    //            this.resetForm();
-    //            this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage);
-    //        });
-    //    }
-
-    //}
-
-    //dataExistMFS(mfs_name) {
-    //    return this.mobileBankingDataSources.some(function (el) {
-    //        return el.mfs_name === mfs_name;
-    //    });
-    //}
-
-    //deleteMFS(a, row) {
-    //    let supplier_mobile_bank_id = row.supplier_mobile_bank_id;
-    //    if (this.loadSupplierinfoToEdit) {
-    //        let supplierId = this.rowData.SupplierId;
-    //        this.SupplierListService.deleteMFSAccount(supplier_mobile_bank_id).subscribe(data => {
-    //            this.SupplierListService.getAllSupplierMFS(supplierId).subscribe(data => {
-    //                this.mobileBankingDataSources = data;
-    //            });
-    //            this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
-    //        });
-    //    }
-    //    else {
-    //        this.mobileBankingDataSources = this.mobileBankingDataSources.slice(0, a).concat(this.mobileBankingDataSources.slice(a + 1));
-    //    }
-    //}
-
-
-    //// Banking
-
-    //onBankingFormSubmit() {
-
-    //    if (this.rowData == null) {
-    //        return this.notifyService.ShowNotification(3, 'Please select row');
-    //    }
-    //    let supplierId = this.rowData.SupplierId;
-
-    //    //for validation message -----------
-    //    this.submittedBanking = true;
-    //    const bankingData = this.bankingApplicationForm.value;
-    //    if (this.bankingApplicationForm.invalid) {
-    //        return;
-    //    }
-    //    //end validation messate -----------
-
-    //    this.dataSaved = false;
-
-
-    //    let bank_id = this.mobileBankingApplicationForm.get('bank_id')?.value.bank_id;
-    //    let bank_name = this.mobileBankingApplicationForm.get('bank_id')?.value.bank_name;
-    //    if (this.dataExistBankAccount(bank_name)) {
-    //        return this.notifyService.ShowNotification(2, "Selected Bank name already added")
-    //    }
-
-    //    else {
-    //        bankingData.supplier_id = supplierId;
-    //        this.SupplierListService.UpdateBankAccountData(bankingData).subscribe(data => {
-    //            this.dataSaved = true;
-    //            this.loadAllSupplierBankAccount();
-    //            this.resetForm();
-    //            this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage);
-    //        });
-    //    }
-    //}
-
-    //dataExistBankAccount(bank_name) {
-    //    return this.bankingDataSources.some(function (el) {
-    //        return el.bank_name === bank_name;
-    //    });
-    //}
-
-    //deleteBankAccount(a, row) {
-    //    let supplier_bank_account_id = row.supplier_bank_account_id;
-    //    if (this.loadSupplierinfoToEdit) {
-    //        let supplierId = this.rowData.SupplierId;
-    //        this.SupplierListService.deleteBankAccount(supplier_bank_account_id).subscribe(data => {
-    //            this.SupplierListService.getAllSupplierBankAccount(supplierId).subscribe(data => {
-    //                this.bankingDataSources = data;
-    //            });
-    //            this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
-    //        });
-    //    }
-    //    else {
-    //        this.bankingDataSources = this.bankingDataSources.slice(0, a).concat(this.bankingDataSources.slice(a + 1));
-    //    }
-    //}
-
-
     // File Upload
 
     onSelectImage(event) {
@@ -2077,14 +1432,14 @@ export class SupplierListComponent implements OnInit {
         });
     }
 
-    onRowEditInit(category: Category) {
+    onRowEditInit(criteria: Criteria) {
         debugger
-        this.clonedProducts[category.id] = { ...category };
+        this.clonedProducts[criteria.supplier_master_information_id] = { ...criteria };
     }
 
-    onRowEditSave(category: Category) {
-        if (category.id > 0) {
-            delete this.clonedProducts[category.id];
+    onRowEditSave(criteria: Criteria) {
+        if (criteria.supplier_master_information_id > 0) {
+            delete this.clonedProducts[criteria.supplier_master_information_id];
             this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Product is updated' });
         }
         else {
@@ -2092,10 +1447,11 @@ export class SupplierListComponent implements OnInit {
         }
     }
 
-    onRowEditCancel(category: Category, index: number) {
-        this.categories[index] = this.clonedProducts[category.id];
-        delete this.categories[category.id];
+    onRowEditCancel(criteria: Criteria, index: number) {
+        this.criterias[index] = this.clonedProducts[criteria.supplier_master_information_id];
+        delete this.clonedProducts[criteria.supplier_master_information_id];
     }
+
 
 }
 

@@ -618,7 +618,7 @@ namespace DataAccess.Procurement
 
             try
             {
-                var sql = "select supplier_id,supplier_code,legal_name,short_name,name_in_local_language,address_in_local_language,year_established,domicile_enum_id,registry_authority_id,regulator_id,ownership_type_id,supplier_logo,country_id,division_id,district_id,city,ps_area,post_code,block,road_no,house_no,flat_no,email,mobile_no,phone_no,pabx " +
+                var sql = "select supplier_id,supplier_code,legal_name,short_name,name_in_local_language,address_in_local_language,year_established,domicile_enum_id,registry_authority_id,regulator_id,ownership_type_id,supplier_logo,country_id,division_id,district_id,city,ps_area,post_code,block,road_no,house_no,flat_no,email,mobile_no,phone_no,pabx,business_activities_enum_id, management_staff_no, nonmanagement_staff_no, permanent_worker_no, casual_worker_no " +
                     "From [Procurement].[Supplier_Application] WHERE supplier_id=@supplier_id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@supplier_id", supplier_id);
@@ -951,7 +951,6 @@ namespace DataAccess.Procurement
 
             return (message);
         }
-
         public async Task<dynamic> GetAssociationBySupplierId(int supplier_id)
         {
             var message = new CommonMessage();
@@ -1744,6 +1743,37 @@ namespace DataAccess.Procurement
             }
 
 
+            return (result);
+        }
+
+        //Assessment
+        public async Task<dynamic> getAllSupplierMasterAssessmentCriteria(int supplier_id)
+        {
+            var message = new CommonMessage();
+            var result = (dynamic)null;
+
+            if (_dbConnection.State == ConnectionState.Closed)
+                _dbConnection.Open();
+
+            try
+            {
+
+                var sql = "select * from Procurement.Supplier_Master_Information";
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@supplier_id", supplier_id);
+
+                result = await _dbConnection.QueryAsync<dynamic>(sql, parameters);
+
+            }
+            catch (Exception ex)
+            {
+                throw ex.InnerException;
+            }
+            finally
+            {
+
+                _dbConnection.Close();
+            }
             return (result);
         }
 

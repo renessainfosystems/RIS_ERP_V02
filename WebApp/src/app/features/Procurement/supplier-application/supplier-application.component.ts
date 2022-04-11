@@ -297,6 +297,8 @@ export class SupplierApplicationComponent implements OnInit {
     first = 0;
     rows = 10;
 
+    TotalCredit = 0;
+
     collapsedLocationInfo = true;
     collapsedWarehouseInfo = false;
 
@@ -323,9 +325,8 @@ export class SupplierApplicationComponent implements OnInit {
     }
 
     showBasicDialog() {
-        this.ngOnInit();
+        this.resetForm();
         this.toggleGridDisplay();
-
     }
 
     showSubmitDialog() {
@@ -334,6 +335,7 @@ export class SupplierApplicationComponent implements OnInit {
 
 
     onRowSelect(event) {
+        debugger
         this.nodeSelected = true;
         this.rowData = event.data;
 
@@ -358,9 +360,46 @@ export class SupplierApplicationComponent implements OnInit {
 
     }
 
+    ngOnInit() {
+        this.formInit();
+        this.loadAllSupplierinfos();
+        this.loadAllDomicileEnum();
+        this.loadAllRegistryAuthorityCboList();
+        this.loadAllRegulatorCboList();
+        this.loadAllOwnershipTypeCboList();
+        this.loadAllCountryCboList();
 
-    ngOnInit(): void {
-        //Basic
+        this.loadAllBusinessActivitiesEnum();
+        this.loadAllSectorCboList();
+        this.loadAllEcommerceList();
+
+        this.loadAllAssociationCboList();
+        this.loadAllOrganizationTypeEnum();
+        this.loadAllMembershipEnum();
+
+        this.loadAllDocumentCboList();
+
+        this.loadAllLocationTypeCboList();
+
+        this.loadAllContactTypeCboList();
+        this.LoadAllDesignationCboList();
+        this.loadGenderdrpdwn();
+        this.loadReligiondrpdwn();
+        this.loadBloodGroupdrpdwn();
+        this.loadNationalitydrpdwn();
+        this.loadMaritalStatusdrpdwn();
+
+        this.LoadAllCurrencyCboList();
+        this.LoadAllSecurityTypeCboList();
+        this.LoadAllPaymentFrequencyCboList();
+
+        this.LoadAllMfsCboList();
+        this.LoadAllMfsTypeCboList();
+
+        this.LoadAllBankTypeCboList();
+    }
+
+    formInit() {
         this.supplierApplicationForm = this.formbulider.group({
             supplier_code: [''],
             legal_name: ['', [Validators.required]],
@@ -382,7 +421,7 @@ export class SupplierApplicationComponent implements OnInit {
             ps_area: [''],
             post_code: [''],
             block: [''],
-            road_no: [''],
+            road_no: ['12'],
             house_no: [''],
             flat_no: [''],
             email: ['', [Validators.email, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
@@ -392,12 +431,7 @@ export class SupplierApplicationComponent implements OnInit {
 
         });
 
-        this.loadAllSupplierinfos();
-        this.loadAllDomicileEnum();
-        this.loadAllRegistryAuthorityCboList();
-        this.loadAllRegulatorCboList();
-        this.loadAllOwnershipTypeCboList();
-        this.loadAllCountryCboList();
+
         this.supplierApplicationForm.controls['supplier_code'].disable();
 
 
@@ -412,9 +446,7 @@ export class SupplierApplicationComponent implements OnInit {
             casual_worker_no: [''],
             ecommerce_platforms_id: [''],
         });
-        this.loadAllBusinessActivitiesEnum();
-        this.loadAllSectorCboList();
-        this.loadAllEcommerceList();
+
 
 
         //Association
@@ -427,9 +459,6 @@ export class SupplierApplicationComponent implements OnInit {
             association_number: ['', [Validators.required]],
             start_date: ['', [Validators.required]],
         });
-        this.loadAllAssociationCboList();
-        this.loadAllOrganizationTypeEnum();
-        this.loadAllMembershipEnum();
         this.associationsApplicationForm.controls['abbreviation'].disable();
         this.associationsApplicationForm.controls['country_id_association'].disable();
         this.associationsApplicationForm.controls['organization_type_id_enum'].disable();
@@ -443,9 +472,6 @@ export class SupplierApplicationComponent implements OnInit {
             file_path: [null],
             FileUpload: new FormControl('', [Validators.required]),
         });
-        this.loadAllDocumentCboList();
-
-
 
         ////Location
         this.locationApplicationForm = this.formbulider.group({
@@ -466,7 +492,7 @@ export class SupplierApplicationComponent implements OnInit {
             phone_no: ['', [Validators.pattern("^((\\+91-?)|0)?[0-9]{11}$")]],
             pabx: [''],
         });
-        this.loadAllLocationTypeCboList();
+
 
         ////Warehouse
         this.warehouseApplicationForm = this.formbulider.group({
@@ -502,15 +528,7 @@ export class SupplierApplicationComponent implements OnInit {
             birth_id: [''],
             driving_license_no: [''],
 
-
         });
-        this.loadAllContactTypeCboList();
-        this.LoadAllDesignationCboList();
-        this.loadGenderdrpdwn();
-        this.loadReligiondrpdwn();
-        this.loadBloodGroupdrpdwn();
-        this.loadNationalitydrpdwn();
-        this.loadMaritalStatusdrpdwn();
 
 
         this.ContactLocationApplicationForm = this.formbulider.group({
@@ -521,11 +539,10 @@ export class SupplierApplicationComponent implements OnInit {
 
 
         ////Financial Info
-
         this.financialApplicationForm = this.formbulider.group({
             currency_id: ['', [Validators.required]],
             credit_days: ['', [Validators.required]],
-            credit_limit: ['', [Validators.required]],
+            credit_limit: [0, [Validators.required]],
             payment_frequency_id: ['', [Validators.required]],
             security_deposit_id: ['', [Validators.required]],
             security_amount: ['', [Validators.required]],
@@ -533,9 +550,7 @@ export class SupplierApplicationComponent implements OnInit {
             //security_document_path: [null],
             //FileUpload: new FormControl('', [Validators.required]),
         });
-        this.LoadAllCurrencyCboList();
-        this.LoadAllSecurityTypeCboList();
-        this.LoadAllPaymentFrequencyCboList();
+    /*    this.financialApplicationForm.controls['credit_limit'].disable();*/
 
         this.mobileBankingApplicationForm = this.formbulider.group({
 
@@ -544,8 +559,6 @@ export class SupplierApplicationComponent implements OnInit {
             mfs_type_id: ['', [Validators.required]],
 
         });
-        this.LoadAllMfsCboList();
-        this.LoadAllMfsTypeCboList();
 
         this.bankingApplicationForm = this.formbulider.group({
             bank_type_id: ['', [Validators.required]],
@@ -557,7 +570,6 @@ export class SupplierApplicationComponent implements OnInit {
             bank_swift_code: [''],
             iban: [''],
         });
-        this.LoadAllBankTypeCboList();
         this.bankingApplicationForm.controls['bank_branch_routing'].disable();
         this.bankingApplicationForm.controls['bank_swift_code'].disable();
 
@@ -924,8 +936,6 @@ export class SupplierApplicationComponent implements OnInit {
 
 
     onSelectByBankTypeId(bankTypeId: Number) {
-        //let bankTypeObj = this.bankingApplicationForm.get('bank_type_id')?.value;
-        //let bankTypeId = bankTypeObj.bank_type_id;
         if (bankTypeId != null) {
             this.SupplierApplicationService.getAllBankCboListByBankTypeId(bankTypeId).subscribe(data => {
                 this.allBank = data;
@@ -955,13 +965,6 @@ export class SupplierApplicationComponent implements OnInit {
 
     }
 
-    //resetForm() {
-    //    this.supplierApplicationForm.reset();
-    //    this.isSupplierinfoEdit = false;
-    //    this.loadAllSupplierinfos();
-    //    //  this.dealerinfodataSource = [];
-    //}
-
 
     loadSupplierinfoToEdit() {
 
@@ -975,33 +978,34 @@ export class SupplierApplicationComponent implements OnInit {
             this.supplierApplicationForm.reset();
             if (data != null) {
                 this.isSupplierinfoEdit = true;
+
+                this.supplierApplicationForm.controls['supplier_code'].setValue(data.SupplierCode);
+                this.supplierApplicationForm.controls['legal_name'].setValue(data.LegalName);
+                this.supplierApplicationForm.controls['short_name'].setValue(data.ShortName);
+                this.supplierApplicationForm.controls['year_established'].setValue(new Date(data.YearEstablished));
+                this.supplierApplicationForm.controls['domicile_enum_id'].setValue(data.DomicileEnumId);
+                this.supplierApplicationForm.controls['registry_authority_id'].setValue(data.RegistryAuthorityId);
+                this.supplierApplicationForm.controls['regulator_id'].setValue(data.RegulatorId);
+                this.supplierApplicationForm.controls['ownership_type_id'].setValue(data.OwnershipTypeId);
+                this.supplierApplicationForm.controls['name_in_local_language'].setValue(data.NameInLocalLanguage);
+                this.supplierApplicationForm.controls['address_in_local_language'].setValue(data.AddressInLocalLanguage);
+                this.supplierApplicationForm.controls['country_id'].setValue(data.CountryId);
+                this.onSelectByCountryId(data.CountryId);
+                this.supplierApplicationForm.controls['division_id'].setValue(data.DivisionId);
+                this.onSelectByDivisionId(data.DivisionId);
+                this.supplierApplicationForm.controls['district_id'].setValue(data.DistrictId);
+                this.supplierApplicationForm.controls['city'].setValue(data.City);
+                this.supplierApplicationForm.controls['ps_area'].setValue(data.PsArea);
+                this.supplierApplicationForm.controls['post_code'].setValue(data.PostCode);
+                this.supplierApplicationForm.controls['block'].setValue(data.Block);
+                this.supplierApplicationForm.controls['road_no'].setValue(data.RoadNo);
+                this.supplierApplicationForm.controls['house_no'].setValue(data.HouseNo);
+                this.supplierApplicationForm.controls['flat_no'].setValue(data.FlatNo);
+                this.supplierApplicationForm.controls['email'].setValue(data.Email);
+                this.supplierApplicationForm.controls['mobile_no'].setValue(data.MobileNo);
+                this.supplierApplicationForm.controls['phone_no'].setValue(data.PhoneNo);
+                this.supplierApplicationForm.controls['pabx'].setValue(data.Pabx);
             }
-            this.supplierApplicationForm.controls['supplier_code'].setValue(data.SupplierCode);
-            this.supplierApplicationForm.controls['legal_name'].setValue(data.LegalName);
-            this.supplierApplicationForm.controls['short_name'].setValue(data.ShortName);
-            this.supplierApplicationForm.controls['year_established'].setValue(new Date(data.YearEstablished));
-            this.supplierApplicationForm.controls['domicile_enum_id'].setValue(data.DomicileEnumId);
-            this.supplierApplicationForm.controls['registry_authority_id'].setValue(data.RegistryAuthorityId);
-            this.supplierApplicationForm.controls['regulator_id'].setValue(data.RegulatorId);
-            this.supplierApplicationForm.controls['ownership_type_id'].setValue(data.OwnershipTypeId);
-            this.supplierApplicationForm.controls['name_in_local_language'].setValue(data.NameInLocalLanguage);
-            this.supplierApplicationForm.controls['address_in_local_language'].setValue(data.AddressInLocalLanguage);
-            this.supplierApplicationForm.controls['country_id'].setValue(data.CountryId);
-            this.onSelectByCountryId(data.CountryId);
-            this.supplierApplicationForm.controls['division_id'].setValue(data.DivisionId);
-            this.onSelectByDivisionId(data.DivisionId);
-            this.supplierApplicationForm.controls['district_id'].setValue(data.DistrictId);
-            this.supplierApplicationForm.controls['city'].setValue(data.City);
-            this.supplierApplicationForm.controls['ps_area'].setValue(data.PsArea);
-            this.supplierApplicationForm.controls['post_code'].setValue(data.PostCode);
-            this.supplierApplicationForm.controls['block'].setValue(data.Block);
-            this.supplierApplicationForm.controls['road_no'].setValue(data.RoadNo);
-            this.supplierApplicationForm.controls['house_no'].setValue(data.HouseNo);
-            this.supplierApplicationForm.controls['flat_no'].setValue(data.FlatNo);
-            this.supplierApplicationForm.controls['email'].setValue(data.Email);
-            this.supplierApplicationForm.controls['mobile_no'].setValue(data.MobileNo);
-            this.supplierApplicationForm.controls['phone_no'].setValue(data.PhoneNo);
-            this.supplierApplicationForm.controls['pabx'].setValue(data.Pabx);
         });
 
         this.SupplierApplicationService.getAllSupplierBusiness(supplierId).subscribe(data => {
@@ -1068,7 +1072,7 @@ export class SupplierApplicationComponent implements OnInit {
         });
 
         this.SupplierApplicationService.getAllSupplierMFS(supplierId).subscribe(data => {
-            this.financialApplicationForm.reset();
+
             if (data != null) {
                 this.isSupplierinfoEdit = true;
             }
@@ -1084,7 +1088,8 @@ export class SupplierApplicationComponent implements OnInit {
         });
 
         this.SupplierApplicationService.getAllSupplierCreditHistory(supplierId).subscribe(data => {
-            this.financialApplicationForm.reset();
+            debugger
+
             if (data != null) {
                 this.isSupplierinfoEdit = true;
                 this.financialApplicationForm.controls['currency_id'].setValue(data.currency_id);
@@ -1243,7 +1248,7 @@ export class SupplierApplicationComponent implements OnInit {
                 this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage);
                 this.displaySubmit = false;
                 this.loadAllSupplierinfos();
-                this.resetForm();
+             /*   this.resetForm();*/
                 //this.index = (this.index === 3) ? 0 : this.index + 1;
                 //this.index = 0;
 
@@ -1392,7 +1397,7 @@ export class SupplierApplicationComponent implements OnInit {
             this.SupplierApplicationService.updateAssociationData(associationData).subscribe(data => {
                 this.dataSaved = true;
                 this.loadAllSupplierAssociation();
-                this.resetForm();
+            /*    this.resetForm();*/
                 this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage);
             });
         }
@@ -1474,7 +1479,7 @@ export class SupplierApplicationComponent implements OnInit {
                 this.dataSaved = true;
                 this.LoadAllLegalDocument();
                 this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage);
-                this.resetForm();
+         /*       this.resetForm();*/
             });
         }
 
@@ -1604,7 +1609,7 @@ export class SupplierApplicationComponent implements OnInit {
                 this.dataSaved = true
                 this.loadAllSupplierLocation();
                 this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage);
-                this.resetForm();
+               /* this.resetForm();*/
             });
 
         }
@@ -1680,7 +1685,7 @@ export class SupplierApplicationComponent implements OnInit {
             this.SupplierApplicationService.updateWarehouseData(warehouseData).subscribe(data => {
                 this.dataSaved = true;
                 this.loadAllSupplierWarehouse();
-                this.resetForm();
+           /*     this.resetForm();*/
                 this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage);
             });
         }
@@ -1851,7 +1856,6 @@ export class SupplierApplicationComponent implements OnInit {
             this.SupplierApplicationService.updateContactLocationData(contactLocationSessionobj).subscribe(data => {
                 this.dataSaved = true;
                 this.loadAllSupplierContactLocation();
-                this.resetForm();
                 this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage);
             });
         }
@@ -1907,12 +1911,17 @@ export class SupplierApplicationComponent implements OnInit {
 
         else {
 
+
             let supplierId = this.rowData.SupplierId;
             let securityDepositObj = this.financialApplicationForm.get('security_deposit_id')?.value;
             let security_deposit_id = securityDepositObj.security_deposit_id;
             let security_deposit_name = securityDepositObj.security_deposit_name;
             let security_amount = this.financialApplicationForm.get('security_amount')?.value;
             let expiry_date = this.financialApplicationForm.get('expiry_date')?.value;
+
+            //var previous_credit = this.financialApplicationForm.value.credit_limit;
+            //var new_security = this.financialApplicationForm.value.security_amount;
+            //this.financialApplicationForm.controls['credit_limit'].setValue(previous_credit + new_security);
 
             const securityDepositSessionobj = {
                 supplier_id: supplierId,
@@ -1924,6 +1933,22 @@ export class SupplierApplicationComponent implements OnInit {
 
             }
             this.SecurityDepositDataSources.push(securityDepositSessionobj);
+
+
+
+            this.TotalCredit = 0;
+            for (let i = 0; i < this.SecurityDepositDataSources.length; i++) {
+                for (const key of Object.keys(this.SecurityDepositDataSources[i])) {
+                    const value = this.SecurityDepositDataSources[i][key];
+                    if (key == "security_amount") {
+                        this.TotalCredit = this.TotalCredit + value;
+                    }
+                }
+            }
+
+            this.financialApplicationForm.controls['credit_limit'].setValue(this.TotalCredit);
+
+            //this.credit_limit = totalCreditLimit;
 
 
         }
@@ -2012,7 +2037,7 @@ export class SupplierApplicationComponent implements OnInit {
             this.SupplierApplicationService.updateMobileBankingData(mobileBankingData).subscribe(data => {
                 this.dataSaved = true;
                 this.loadAllSupplierMFS();
-                this.resetForm();
+             /*   this.resetForm();*/
                 this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage);
             });
         }
@@ -2073,7 +2098,7 @@ export class SupplierApplicationComponent implements OnInit {
             this.SupplierApplicationService.UpdateBankAccountData(bankingData).subscribe(data => {
                 this.dataSaved = true;
                 this.loadAllSupplierBankAccount();
-                this.resetForm();
+           /*     this.resetForm();*/
                 this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage);
             });
         }
@@ -2152,14 +2177,15 @@ export class SupplierApplicationComponent implements OnInit {
         this.index = (this.index === 0) ? 6 : this.index - 1;
     }
 
+
     resetForm() {
         this.supplierApplicationForm.reset();
         this.isSupplierinfoEdit = false;
-        this.supplierinfoList = [];
+        this.formInit();
     }
 
     clear() {
-            this.resetForm();
+        this.resetForm();
     }
 
 
