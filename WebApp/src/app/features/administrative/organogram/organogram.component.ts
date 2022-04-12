@@ -78,6 +78,9 @@ export class OrganogramComponent implements OnInit {
 
 
     rowSelected: boolean = false;
+    isShowParrentDepartment: boolean = true;
+    isShowGroupCompany: boolean = true;
+    isShowCodeLocations: boolean = true;
     date1: Date;
 
     first = 0;
