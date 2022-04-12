@@ -66,6 +66,7 @@ export class OrganogramComponent implements OnInit {
     serverDate = null;    
     rowEvent: any;   
     massage = null;
+    DepartmentLabel = "Department";
   
     selectedDepartment: any;
     drpdwnDepartmentList: any[];
@@ -107,6 +108,12 @@ export class OrganogramComponent implements OnInit {
         if (this.rowData.TreeLavel==0) {
             return this.notifyService.ShowNotification(3, 'You can not Create Node Under Company');
         }
+        if (this.rowData.TreeLavel!=1) {
+            if (this.rowData.Department_Type_Id == 0) {
+                return this.notifyService.ShowNotification(3, 'You can not Create Node Under This Node');
+            }
+        }
+       
         this.loadLocationOrganogram();
         //if (this.rowData.Organogram_Id > 0) {
         //    this.loadOrganogramToEdit();
@@ -114,8 +121,17 @@ export class OrganogramComponent implements OnInit {
       //  if (this.rowData.TreeLavel == 1) {
             this.toggleGridDisplay();
        // }
-       
-        
+        if (this.rowData.TreeLavel == 1) {//1 means Locations
+            this.isShowParrentDepartment = true;//true means hide
+            this.isShowGroupCompany = false;
+            this.isShowCodeLocations = false;
+        }
+        if (this.rowData.TreeLavel == 2 || this.rowData.TreeLavel == 3) {//2 means Department
+
+            this.isShowParrentDepartment = false;//true means hide
+            this.isShowGroupCompany = true;
+            this.isShowCodeLocations = true;
+        }
     }
     generalIndex() {
         this.index = 0;
@@ -209,6 +225,16 @@ export class OrganogramComponent implements OnInit {
             this.drpdwnDepartmentList = data;
         });
     }
+    loadDepartmentbyTypeIddrpdwn(typeId) {
+        this.organogramService.GetDepartmentByTypeId(typeId).subscribe(data => {
+            this.drpdwnDepartmentList = data;
+        });
+    }
+    loadDepartmentbyIddrpdwn(typeId) {
+        this.organogramService.GetDepartmentById(typeId).subscribe(data => {
+            this.drpdwnDepartmentList = data;
+        });
+    }
     loadPositiondrpdwn() {
         this.organogramService.getPositionList().subscribe(data => {
             this.drpdwnPositionList = data;
@@ -279,11 +305,30 @@ export class OrganogramComponent implements OnInit {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
         debugger;       
-        this.organogramForm.controls['location_name'].setValue(this.rowData.location_name);
-        this.organogramForm.controls['Company'].setValue(this.rowData.company_name);
-        this.organogramForm.controls['Group'].setValue(this.rowData.group_name);
+       
         this.organogramForm.controls['location_id'].setValue(this.rowData.location_id);
-        this.organogramForm.controls['parent_id'].setValue(this.rowData.parent_id);
+       
+
+        if (this.rowData.TreeLavel == 1) {//Locations
+            this.organogramForm.controls['location_name'].setValue(this.rowData.location_name);
+            this.organogramForm.controls['Company'].setValue(this.rowData.company_name);
+            this.organogramForm.controls['Group'].setValue(this.rowData.group_name);
+        }
+        else {
+            //Department
+            this.organogramForm.controls['department'].setValue(this.rowData.Node_Name);
+            this.organogramForm.controls['parent_id'].setValue(this.rowData.Organogram_Id);
+            this.DepartmentLabel = this.rowData.department_type_name;
+            //Need to load Department by Category
+            if (this.rowData.Department_Type_Id>0) {
+                this.loadDepartmentbyTypeIddrpdwn(this.rowData.Department_Type_Id);
+            }
+          
+            //
+        }
+
+        
+
     }
 
     addtoGrid() {
@@ -296,7 +341,9 @@ export class OrganogramComponent implements OnInit {
         }
         const data = this.organogramForm.value;
         debugger
-        if (this.rowData.Organogram_Id > 0) {
+       
+        //if (this.rowData.Organogram_Id > 0) {
+        if (this.organogramDetailList.length > 0) {
 
             let data1 = {
                 organogram_id: this.rowData.Organogram_Id,
@@ -336,14 +383,14 @@ export class OrganogramComponent implements OnInit {
         }
        const data = this.organogramForm.value;
 
-        if (this.rowData.Organogram_Id>0) {
-            data.organogram_id = this.rowData.Organogram_Id;           
-            this.organogramService.updateOrganogram(data).subscribe(result => {
-                this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
-                this.loadAllOrganogram();                 
-            });           
-        }
-        else {
+        //if (this.rowData.Organogram_Id>0) {
+        //    data.organogram_id = this.rowData.Organogram_Id;           
+        //    this.organogramService.updateOrganogram(data).subscribe(result => {
+        //        this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
+        //        this.loadAllOrganogram();                 
+        //    });           
+        //}
+        //else {
             debugger
             let data1= {
                 organogram_id : 0,
@@ -375,7 +422,7 @@ export class OrganogramComponent implements OnInit {
                 }
             );
             //this.ngOnInit();
-        } 
+        //} 
     }
 
 
@@ -396,9 +443,35 @@ export class OrganogramComponent implements OnInit {
             debugger
             console.log(data)
             this.organogramForm.controls['organogram_code'].setValue(data.organogram_code);
+
+            this.loadDepartmentbyIddrpdwn(data.department_id);
             this.organogramForm.controls['department_id'].setValue(data.department_id);
+            
         });
+
+        if (this.rowData.TreeLavel == 1) {//1 means Locations
+            this.isShowParrentDepartment = true;//true means hide
+            this.isShowGroupCompany = false;
+            this.isShowCodeLocations = false;
+        }
+        else {
+            this.organogramForm.controls['department'].setValue(this.rowData.Node_Name);
+            //this.organogramForm.controls['parent_id'].setValue(this.rowData.parent_id);
+            this.DepartmentLabel = this.rowData.department_type_name;
+            //Need to load Department by Category
+            //if (this.rowData.Department_Type_Id > 0) {
+            //    this.loadDepartmentbyTypeIddrpdwn(this.rowData.Department_Type_Id);
+            //}
+        }
+        if (this.rowData.TreeLavel == 2 ||this.rowData.TreeLavel == 3) {//2 means Department
+
+            this.isShowParrentDepartment = false;//true means hide
+            this.isShowGroupCompany = true;
+            this.isShowCodeLocations = true;
+        }
+         
        
+
         this.toggleGridDisplay();
     }
     
