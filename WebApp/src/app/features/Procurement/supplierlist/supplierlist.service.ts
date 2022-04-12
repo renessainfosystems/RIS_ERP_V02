@@ -335,6 +335,10 @@ export class SupplierListService {
         return this.http.get<any>(this.ipconfig.base_IP + 'SupplierApplication/getAllSupplierCreditHistory?supplier_id=' + supplier_id, httpOptions);
     }
 
+    getAllSupplierMasterAssessmentCriteria(supplier_id: Number): Observable<any> {
+        return this.http.get<any>(this.ipconfig.base_IP + 'SupplierApplication/getAllSupplierMasterAssessmentCriteria?supplier_id=' + supplier_id, httpOptions);
+    }
+
     approveSupplier(approveFeedbackData: any): Observable<any> {
         return this.http.post<any>(this.ipconfig.base_IP + 'SupplierApplication/ApproveSupplier', approveFeedbackData, httpOptions);
     }

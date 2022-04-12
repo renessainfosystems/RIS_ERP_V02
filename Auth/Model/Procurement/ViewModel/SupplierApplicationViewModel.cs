@@ -46,15 +46,12 @@ namespace Auth.Model.Procurement.ViewModel
         public bool IsConfirm { get; set; }
 
         public int FeedbackStatus { get; set; }
+        public int BusinessActivityId { get; set; }
+        public int ManagementStaffNo { get; set; }
+        public int NonmanagementStaffNo { get; set; }
+        public int PermanentWorkerNo { get; set; }
+        public int CasualWorkerNo { get; set; }
 
-        
-
-
-        //public int BusinessActivityId { get; set; }
-        //public double ManagementStaffNo { get; set; }
-        //public double NonmanagementStaffNo { get; set; }
-        //public double PermanentWorkerNo { get; set; }
-        //public double CasualWorkerNo { get; set; }
         public static SupplierApplicationViewModel ConvertToSupplierApplicationAllModel(dynamic SupplierApplication)
         {
             var model = new SupplierApplicationViewModel();
@@ -92,11 +89,11 @@ namespace Auth.Model.Procurement.ViewModel
 
 
 
-            //model.BusinessActivityId = SupplierApplication.business_activity_id ?? "";
-            //model.ManagementStaffNo = SupplierApplication.management_staff_no ?? "";
-            //model.NonmanagementStaffNo = SupplierApplication.nonmanagement_staff_no ?? "";
-            //model.PermanentWorkerNo = SupplierApplication.permanent_worker_no ?? "";
-            //model.CasualWorkerNo = SupplierApplication.casual_worker_no ?? "";
+            model.BusinessActivityId = SupplierApplication.business_activity_id ?? 0;
+            model.ManagementStaffNo = SupplierApplication.management_staff_no ?? 0;
+            model.NonmanagementStaffNo = SupplierApplication.nonmanagement_staff_no ?? 0;
+            model.PermanentWorkerNo = SupplierApplication.permanent_worker_no ?? 0;
+            model.CasualWorkerNo = SupplierApplication.casual_worker_no ?? 0;
 
             return model;
 

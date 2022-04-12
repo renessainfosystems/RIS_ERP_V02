@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using Auth.Repository.Administrative;
 
 namespace Auth.DataAccess.Administrative
 { 
@@ -19,13 +20,14 @@ namespace Auth.DataAccess.Administrative
         private readonly IDbConnection _dbConnection;
 
         IHttpContextAccessor _httpContextAccessor = new HttpContextAccessor();
-
+        private IOrganogramDetailRepository _organogramDetailRepository;
         protected readonly ApplicationDBContext _context;
 
-        public OrganogramDataAccess(ApplicationDBContext context, IDbConnection dbConnection)
+        public OrganogramDataAccess(ApplicationDBContext context, IDbConnection dbConnection, IOrganogramDetailRepository organogramDetailRepository)
         {
             _dbConnection = dbConnection;
             _context = context;
+            _organogramDetailRepository = organogramDetailRepository;
         }
          
         //Parameter Binding
@@ -88,6 +90,15 @@ namespace Auth.DataAccess.Administrative
                 }
                 if (data.Count > 0)
                 {
+                    if (dbOperation == (int)GlobalEnumList.DBOperation.Create)
+                    {
+                        List<dynamic> dataList = data;
+                        foreach (var item in dataList)
+                        {
+                            Organogram.organogramDetails.organogram_id = item.organogram_id;
+                        }                      
+                      await _organogramDetailRepository.IUD_OrganogramDetail(Organogram.organogramDetails, dbOperation);
+                    }
                     message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage, data);
                 }
                 else
@@ -157,30 +168,30 @@ namespace Auth.DataAccess.Administrative
             try
             {
                 string sqlc = @"select c.company_name,c.company_id,g.group_name
-from Administrative.Location l left join Administrative.Company c on l.company_id=c.company_id
-left join Administrative.Company_Group g on c.company_group_id=g.company_group_id
- where l.company_group_id=@company_group_id group by  c.company_name,c.company_id,g.group_name";
+                                from Administrative.Location l left join Administrative.Company c on l.company_id=c.company_id
+                                left join Administrative.Company_Group g on c.company_group_id=g.company_group_id
+                                where l.company_group_id=@company_group_id group by  c.company_name,c.company_id,g.group_name";
                 DynamicParameters parametersCompany = new DynamicParameters();
                 parametersCompany.Add("@company_group_id", company_group_id);
                 dynamic dataCompany = await _dbConnection.QueryAsync<dynamic>(sqlc, parametersCompany);
                //
                 string sqlL = @"select l.location_name,l.location_id,c.company_id,c.company_name,g.group_name
-from Administrative.Location l left join Administrative.Company c on l.company_id=c.company_id
-left join Administrative.Company_Group g on c.company_group_id=g.company_group_id
- where l.company_group_id=@company_group_id group by  l.location_name,l.location_id,c.company_id,c.company_name,g.group_name";
+                                from Administrative.Location l left join Administrative.Company c on l.company_id=c.company_id
+                                left join Administrative.Company_Group g on c.company_group_id=g.company_group_id
+                                where l.company_group_id=@company_group_id group by  l.location_name,l.location_id,c.company_id,c.company_name,g.group_name";
                 DynamicParameters parametersLocation = new DynamicParameters();
                 parametersLocation.Add("@company_group_id", company_group_id);
                 dynamic dataLocation = await _dbConnection.QueryAsync<dynamic>(sqlL, parametersLocation);
 
-                string sql = @"select c.company_name,location_code,location_code+' - '+location_name location_name,
- (select d.department_name from Administrative.Department d where d.department_id=og.department_id)as department,
- isnull(og.department_id,'0') as department_id,l.location_id,c.company_id,isnull(og.organogram_id,'0')organogram_id,
- isnull(og.is_active,'false')is_active,isnull(og.sorting_priority,0)sorting_priority ,g.group_name
- from Administrative.Location l 
- left join Administrative.Company c on l.company_id=c.company_id
-left join Administrative.Organogram og on l.location_id=og.location_id 
-left join Administrative.Company_Group g on c.company_group_id=g.company_group_id
-where l.company_group_id=@company_group_id order by sorting_priority,organogram_id";
+                string sql = @"select og.organogram_code,c.company_name,location_code,location_code+' - '+location_name location_name,
+                                (select d.department_name from Administrative.Department d where d.department_id=og.department_id)as department,
+                                isnull(og.department_id,'0') as department_id,l.location_id,c.company_id,isnull(og.organogram_id,'0')organogram_id,
+                                isnull(og.is_active,'false')is_active,isnull(og.sorting_priority,0)sorting_priority ,g.group_name
+                                from Administrative.Location l 
+                                left join Administrative.Company c on l.company_id=c.company_id
+                                left join Administrative.Organogram og on l.location_id=og.location_id 
+                                left join Administrative.Company_Group g on c.company_group_id=g.company_group_id
+                                where l.company_group_id=@company_group_id order by sorting_priority,organogram_id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@company_group_id", company_group_id);
                 dynamic data = await _dbConnection.QueryAsync<dynamic>(sql, parameters);
@@ -318,7 +329,7 @@ where l.company_group_id=@company_group_id order by sorting_priority,organogram_
 
             try
             {
-                string sql = @"select c.company_name,location_code,location_code+' - '+location_name location_name,isnull((select d.department_name from Administrative.Department d where d.department_id=og.department_id),'')as department,isnull(og.department_id,'0') as department_id,l.location_id,c.company_id,isnull(og.organogram_id,'0')organogram_id,isnull(og.is_active,'false')is_active,isnull(og.sorting_priority,0)sorting_priority from Administrative.Location l left join Administrative.Company c on l.company_id=c.company_id
+                string sql = @"select og.organogram_code,c.company_name,location_code,location_code+' - '+location_name location_name,isnull((select d.department_name from Administrative.Department d where d.department_id=og.department_id),'')as department,isnull(og.department_id,'0') as department_id,l.location_id,c.company_id,isnull(og.organogram_id,'0')organogram_id,isnull(og.is_active,'false')is_active,isnull(og.sorting_priority,0)sorting_priority from Administrative.Location l left join Administrative.Company c on l.company_id=c.company_id
 left join Administrative.Organogram og on l.location_id=og.location_id where og.organogram_id=@Organogram_id";
               
                 DynamicParameters parameters = new DynamicParameters();
@@ -355,7 +366,7 @@ left join Administrative.Organogram og on l.location_id=og.location_id where og.
 
             try
             {
-                var sql = @"select c.company_name,location_code,location_code+' - '+location_name location_name,isnull((select d.department_name from Administrative.Department d where d.department_id=og.department_id),'')as department,isnull(og.department_id,'0') as department_id,l.location_id,c.company_id,isnull(og.organogram_id,'0')organogram_id,isnull(og.is_active,'false')is_active,isnull(og.sorting_priority,0)sorting_priority from Administrative.Location l left join Administrative.Company c on l.company_id=c.company_id
+                var sql = @"select og.organogram_code,c.company_name,location_code,location_code+' - '+location_name location_name,isnull((select d.department_name from Administrative.Department d where d.department_id=og.department_id),'')as department,isnull(og.department_id,'0') as department_id,l.location_id,c.company_id,isnull(og.organogram_id,'0')organogram_id,isnull(og.is_active,'false')is_active,isnull(og.sorting_priority,0)sorting_priority from Administrative.Location l left join Administrative.Company c on l.company_id=c.company_id
 left join Administrative.Organogram og on l.location_id=og.location_id where l.company_group_id=@company_group_id and og.is_active =1 order by og.organogram_id";
 
                 DynamicParameters parameters = new DynamicParameters();

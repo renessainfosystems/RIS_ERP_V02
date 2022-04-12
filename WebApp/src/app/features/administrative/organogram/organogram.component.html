@@ -33,10 +33,10 @@
                                 <!--<div class="field col-12 md:col-12">
 
 
-        </div>-->
+                                </div>-->
                                 <div class="field col-6 md:col-6">
                                     <div class="field col-12 md:col-12">
-                                        <label for="" class=" d-md-inline-flex" pTooltip="Department" tooltipPosition="top">Department</label>
+                                        <label for="" class=" d-md-inline-flex" pTooltip="Department" tooltipPosition="top">Department<span class="req">*:</span></label>
 
                                         <!--<input id="float-input p-fluid" type="text" formControlName="department" pInputText>-->
                                         <p-dropdown [options]="drpdwnDepartmentList" formControlName="department_id" placeholder="--Select--" [ngClass]="{ 'is-invalid': submitted && f.department_id.errors }"
@@ -57,17 +57,17 @@
                                         <input id="float-input p-fluid" type="text" formControlName="min_budget" pInputText>
                                     </div>
                                     <div class="field-radiobutton col-12 md:col-12">
-                                        <p-radioButton name="budget_type" formControlName="is_open" label="Open"></p-radioButton>
-                                        <p-radioButton name="budget_type" formControlName="budget_typedeferred" label="Deferred"></p-radioButton>
+                                        <p-radioButton name="is_open" value="0" binary="true" formControlName="is_open" label="Open"></p-radioButton>
+                                        <p-radioButton name="is_open" value="1" binary="true" formControlName="is_open" label="Deferred"></p-radioButton>
                                     </div>
-                                   
-                                   
-                                  
+
+
+
                                 </div>
                                 <div class="field col-6 md:col-6">
                                     <div class="field col-12 md:col-12">
-                                        <label for="" class=" d-md-inline-flex" pTooltip="Positions" tooltipPosition="top">Positions</label>
-                                        <p-dropdown [options]="drpdwnPositionList" formControlName="position_id" placeholder="--Select--" 
+                                        <label for="" class=" d-md-inline-flex" pTooltip="Positions" tooltipPosition="top">Positions<span class="req">*:</span></label>
+                                        <p-dropdown [options]="drpdwnPositionList" formControlName="position_id" placeholder="--Select--"
                                                     optionLabel="position_name" optionValue="position_id" [showClear]="true" [filter]="true" filterBy="position_name">
                                         </p-dropdown>
                                     </div>
@@ -80,7 +80,10 @@
                                         <input id="float-input p-fluid" type="text" formControlName="max_budget" pInputText>
                                     </div>
                                     <div class="field col-12 md:col-12">
-                                        <p-checkbox binary="true" label="Is Gross" inputId="binary"></p-checkbox>
+                                        <p-checkbox binary="true" formControlName="is_gross" label="Is Gross Or" inputId="binary"></p-checkbox>
+                                        <p-dropdown [options]="drpdwnSalaryHeadList" formControlName="salary_head_id" placeholder="--Select--"
+                                                    optionLabel="salary_head_name" optionValue="salary_head_id" [showClear]="true" [filter]="true" filterBy="position_name">
+                                        </p-dropdown>
                                     </div>
                                     
                                 </div>
@@ -107,17 +110,17 @@
                                     </div>
                                 </div>
                             </div>
-                            </div>
-                        <div class="flex justify-content-center pr-2">
-                            <button pButton pRipple type="button" (click)="toggleFormClose()" label="Add" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
+                        </div>
+                        <div class="flex justify-content-left pr-2">
+                            <button pButton pRipple type="button" (click)="addtoGrid()" label="Add" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
                             <button pButton pRipple type="button" (click)="toggleFormClose()" label="Remove" icon="pi pi-trash" class="risBtn risDelete mr-2 mb-2"></button>
                             <button pButton pRipple type="button" (click)="toggleFormClose()" label="Activity" icon="pi pi-box" class="risBtn risAll mr-2 mb-2"></button>
                         </div>
                         <div class="col-12">
                             <div class="p-fluid p-formgrid grid">
                                 <p-table #dt1 [value]="organogramDetailList" [paginator]="true" [rows]="10" selectionMode="single" [(selection)]="selectedorganogramDetail" dataKey="organogram_detail_id" [showCurrentPageReport]="true" responsiveLayout="scroll" styleClass="p-datatable-striped p-datatable-sm"
-                                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)" >
-                                   
+                                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
+
                                     <ng-template pTemplate="header">
                                         <tr>
                                             <th>Code</th>
@@ -125,28 +128,34 @@
                                             <th>No of Man</th>
                                             <th>Budget</th>
                                             <th>Increment (%)</th>
+                                            <th>Activity</th>
+                                            <th>Experience</th>
                                         </tr>
                                     </ng-template>
-                                    <ng-template pTemplate="body" let-organogramDetail let-rowDetailData let-columns="columns">
+                                    <ng-template pTemplate="body" let-organogramDetail let-rowDetailData="rowDetailData" let-columns="columns">
                                         <tr [pSelectableRow]="organogramDetail">
-                                            <td>{{organogramDetail.Code}}</td>
-                                            <td>{{organogramDetail.EmployeeName}}</td>
-                                            <td>{{organogramDetail.PersonalPhone}}</td>
-                                            <td>{{organogramDetail.PersonalEmail}}</td>
-                                            <td>{{organogramDetail.PresentAddressNote}}</td>
+                                            <td>{{organogramDetail.code}}</td>
+                                            <td>{{organogramDetail.position_name}}</td>
+                                            <td>{{organogramDetail.manpower}}</td>
+                                            <td>{{organogramDetail.budget}}</td>
+                                            <td>{{organogramDetail.increment_percentage_yearly}}</td>
+                                            <td>{{organogramDetail.Activity}}</td>
+                                            <td>{{organogramDetail.Experience}}</td>
                                             <!--<td *ngIf="employee.IsActive===true">{{"Active"}}</td>
                                             <td *ngIf="employee.IsActive===false">{{"InActive"}}</td>-->
                                         </tr>
                                     </ng-template>
+                                     
                                 </p-table>
                             </div>
-                            </div>
-                            <div class="flex justify-content-end pr-2">
-                                <button pButton pRipple type="button" (click)="toggleFormClose()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
-
-                            </div>
                         </div>
-</form>
+                        <div class="flex justify-content-end pr-2">
+                            <button pButton pRipple type="button" (click)="onGeneral()" label="Save" class="risBtn risSave mr-2 mb-2" icon="pi pi-check"></button>
+                            <button pButton pRipple type="button" (click)="toggleFormClose()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
+
+                        </div>
+                    </div>
+                </form>
             </div>
 
             <div [hidden]="gridDisplay">

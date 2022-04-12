@@ -17,7 +17,7 @@ namespace Auth.Model.Party.Model
         public int dealer_info_id { get; set; }
         public int security_deposit_id { get; set; }
         public decimal amount { get; set; }
-        public DateTime expiery_date { get; set; }
+        public DateTime expiry_date { get; set; }
         public string attachment { get; set; }
         public string remarks { get; set; }
         public bool is_Approved { get; set; }
@@ -25,7 +25,7 @@ namespace Auth.Model.Party.Model
         public long approved_by_id { get; set; }
         public DateTime created_datetime { get; set; }
         public long created_user_info_id { get; set; }
-        public IFormFile ImageUpload { get; set; }
+        public IFormFile AttachmentFile { get; set; }
 
 
     }

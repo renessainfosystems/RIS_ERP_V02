@@ -15,7 +15,7 @@ namespace Auth.Model.Party.ViewModel
         public string DocumentNumber { get; set; }
         public DateTime? IssueDate { get; set; }
         public DateTime? ExpiryDate { get; set; }
-        public string ImageFile { get; set; }
+        public string FileUpload { get; set; }
         public bool IsVerified { get; set; }
         public bool IsComplete { get; set; }
         public string Status { get; set; }
@@ -34,7 +34,7 @@ namespace Auth.Model.Party.ViewModel
             model.DocumentNumber = dealerDocument.document_number ?? "";
             model.IssueDate = dealerDocument.issue_date;
             model.ExpiryDate = dealerDocument.expiry_date;
-            model.ImageFile = dealerDocument.image_file ?? "";
+            model.FileUpload = dealerDocument.image_file ?? "";
             model.IsVerified = dealerDocument.is_verified ?? false;
             model.IsComplete = dealerDocument.is_complete ?? false;
             model.Status = dealerDocument.status ?? "";

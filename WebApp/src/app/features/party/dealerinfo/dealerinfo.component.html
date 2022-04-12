@@ -839,7 +839,7 @@
                             <div class="col-12">
                                 <div class="p-fluid p-formgrid grid">
                                     <div class="field col-12 md:col-3">
-                                        <label pTooltip="Document Type" tooltipPosition="top">Document Type</label>
+                                        <label pTooltip="Document Type" tooltipPosition="top">Document Type<span class="req">*</span></label>
                                         <p-dropdown [options]="allDocument" formControlName="document_type_id" [ngClass]="{ 'is-invalid': submittedDocument && d.document_type_id.errors }" placeholder="---Select---"
                                                     optionLabel="document_type_name" optionValue="document_type_id" [showClear]="true" [filter]="true" filterBy="document_type_name"></p-dropdown>
 
@@ -849,21 +849,21 @@
 
                                     </div>
                                     <div class="field col-12 md:col-3">
-                                        <label pTooltip="Document Number" tooltipPosition="top">Document Number</label>
+                                        <label pTooltip="Document Number" tooltipPosition="top">Document Number<span class="req">*</span></label>
                                         <input type="text" formControlName="document_number" [ngClass]="{ 'is-invalid': submittedDocument && d.document_number.errors }" placeholder="" pInputText />
                                         <div *ngIf="submittedDocument && d.document_number.errors" class="invalid-feedback">
                                             <small *ngIf="d.document_number.errors.required" class="p-error">Document Number is required</small>
                                         </div>
                                     </div>
                                     <div class="field col-12 md:col-3">
-                                        <label pTooltip="Issue Date" tooltipPosition="top">Issue Date</label>
+                                        <label pTooltip="Issue Date" tooltipPosition="top">Issue Date<span class="req">*</span></label>
                                         <p-calendar formControlName="issue_date" [ngClass]="{ 'is-invalid': submittedDocument && d.issue_date.errors }" placeholder="" [showIcon]="true" [showButtonBar]="true"></p-calendar>
                                         <div *ngIf="submittedDocument && d.issue_date.errors" class="invalid-feedback">
                                             <small *ngIf="d.issue_date.errors.required" class="p-error">Issue date is required</small>
                                         </div>
                                     </div>
                                     <div class="field col-12 md:col-3">
-                                        <label pTooltip="Expiry Date" tooltipPosition="top">Expiry Date</label>
+                                        <label pTooltip="Expiry Date" tooltipPosition="top">Expiry Date<span class="req">*</span></label>
                                         <p-calendar formControlName="expiry_date" [ngClass]="{ 'is-invalid': submittedDocument && d.expiry_date.errors }" placeholder="" [showIcon]="true" [showButtonBar]="true"></p-calendar>
                                         <div *ngIf="submittedDocument && d.expiry_date.errors" class="invalid-feedback">
                                             <small *ngIf="d.expiry_date.errors.required" class="p-error">Expiry date is required</small>
@@ -917,7 +917,7 @@
                                         <td>{{dealerdocumentinfo.DocumentNumber}}</td>
                                         <td>{{dealerdocumentinfo.IssueDate | date: 'dd/MMM/yyyy'}}</td>
                                         <td>{{dealerdocumentinfo.ExpiryDate | date: 'dd/MMM/yyyy'}}</td>
-                                        <td>{{dealerdocumentinfo.ImageFile}}</td>
+                                        <td>{{dealerdocumentinfo.FileUpload}}</td>
                                     </tr>
                                 </ng-template>
                             </p-table>
@@ -926,59 +926,58 @@
                     </p-tabPanel>
                     <p-tabPanel header="Credit Info">
                         <form action="" [formGroup]="dealercreditForm">
-                            <!--<div class="col-12">
+                            <div class="col-12">
                                 <div class="p-fluid p-formgrid grid">
                                     <div class="field col-12 md:col-3">
-                                        <label pTooltip="Document Type" tooltipPosition="top">Document Type</label>
-                                        <p-dropdown [options]="allDocument" formControlName="document_type_id" [ngClass]="{ 'is-invalid': submittedDocument && d.document_type_id.errors }" placeholder="---Select---"
-                                                    optionLabel="document_type_name" optionValue="document_type_id" [showClear]="true" [filter]="true" filterBy="document_type_name"></p-dropdown>
+                                        <label pTooltip="Security Deposit" tooltipPosition="top">Security Deposit<span class="req">*</span></label>
+                                        <p-dropdown [options]="allSecurityDeposit" formControlName="security_deposit_id"
+                                                    [ngClass]="{ 'is-invalid': submittedCredit && e.security_deposit_id.errors }" placeholder="---Select---"
+                                                    optionLabel="security_deposit_name" optionValue="security_deposit_id" [showClear]="true" [filter]="true" filterBy="security_deposit_name"></p-dropdown>
 
-                                        <div *ngIf="submittedDocument && d.document_type_id.errors" class="invalid-feedback">
-                                            <small *ngIf="d.document_type_id.errors.required" class="p-error">Document Type is required</small>
+                                        <div *ngIf="submittedCredit && e.security_deposit_id.errors" class="invalid-feedback">
+                                            <small *ngIf="e.security_deposit_id.errors.required" class="p-error">Security deposit is required</small>
                                         </div>
 
                                     </div>
                                     <div class="field col-12 md:col-3">
-                                        <label pTooltip="Document Number" tooltipPosition="top">Document Number</label>
-                                        <input type="text" formControlName="document_number" [ngClass]="{ 'is-invalid': submittedDocument && d.document_number.errors }" placeholder="" pInputText />
-                                        <div *ngIf="submittedDocument && d.document_number.errors" class="invalid-feedback">
-                                            <small *ngIf="d.document_number.errors.required" class="p-error">Document Number is required</small>
+                                        <label pTooltip="Amount" tooltipPosition="top">Amount<span class="req">*</span></label>
+                                        <input type="text" formControlName="amount" [ngClass]="{ 'is-invalid': submittedCredit && e.amount.errors }" placeholder="" pInputText />
+                                        <div *ngIf="submittedCredit && e.amount.errors" class="invalid-feedback">
+                                            <small *ngIf="e.amount.errors.required" class="p-error">Amount is required</small>
+                                        </div>
+                                    </div>
+
+                                    <div class="field col-12 md:col-3">
+                                        <label pTooltip="Expiry Date" tooltipPosition="top">Expiry Date<span class="req">*</span></label>
+                                        <p-calendar formControlName="expiry_date" [ngClass]="{ 'is-invalid': submittedCredit && e.expiry_date.errors }" placeholder="" [showIcon]="true" [showButtonBar]="true"></p-calendar>
+                                        <div *ngIf="submittedCredit && e.expiry_date.errors" class="invalid-feedback">
+                                            <small *ngIf="e.expiry_date.errors.required" class="p-error">Expiry date is required</small>
                                         </div>
                                     </div>
                                     <div class="field col-12 md:col-3">
-                                        <label pTooltip="Issue Date" tooltipPosition="top">Issue Date</label>
-                                        <p-calendar formControlName="issue_date" [ngClass]="{ 'is-invalid': submittedDocument && d.issue_date.errors }" placeholder="" [showIcon]="true" [showButtonBar]="true"></p-calendar>
-                                        <div *ngIf="submittedDocument && d.issue_date.errors" class="invalid-feedback">
-                                            <small *ngIf="d.issue_date.errors.required" class="p-error">Issue date is required</small>
-                                        </div>
+                                        <label pTooltip="Remarks" tooltipPosition="top">Remarks</label>
+                                        <input type="text" formControlName="remarks" placeholder="" pInputText />
+
                                     </div>
                                     <div class="field col-12 md:col-3">
-                                        <label pTooltip="Expiry Date" tooltipPosition="top">Expiry Date</label>
-                                        <p-calendar formControlName="expiry_date" [ngClass]="{ 'is-invalid': submittedDocument && d.expiry_date.errors }" placeholder="" [showIcon]="true" [showButtonBar]="true"></p-calendar>
-                                        <div *ngIf="submittedDocument && d.expiry_date.errors" class="invalid-feedback">
-                                            <small *ngIf="d.expiry_date.errors.required" class="p-error">Expiry date is required</small>
-                                        </div>
-                                    </div>
-                                    <div class="field col-12 md:col-3">
-                                        <input type="file" class="from-control" formControlName="FileUpload" (change)="documnetFormFileInput($event.target.files)"
-                                               [ngClass]="{ 'is-invalid': submittedDocument && d.FileUpload.errors }"
-                                               placeholder="" pInputText required />
-                                        <div *ngIf="submittedDocument && d.FileUpload.errors" class="invalid-feedback">
-                                            <small *ngIf="d.FileUpload.errors.required" class="p-error">Attach File is required</small>
-                                        </div>
+                                        <input type="file" class="from-control" formControlName="AttachmentFile" (change)="creditFormFileInput($event.target.files)" placeholder="" pInputText required />
                                     </div>
                                     <div class="field col-12 md:col-1">
-                                        <button pButton pRipple type="button" (click)="SaveDealerDocumentInfo()" label="Add" class=" risBtn risAdd mr-2 mb-2" icon="pi pi-plus"></button>
+                                        <button pButton pRipple type="button" (click)="SaveDealerCreditInfo()" label="Add" class=" risBtn risAdd mr-2 mb-2" icon="pi pi-plus"></button>
                                     </div>
                                     <div class="field col-12 md:col-1">
-                                        <button pButton pRipple type="button" (click)="loadDealerDocumentinfoToEdit()" label="Edit" class="risBtn risEdit mr-2 mb-2" icon="pi pi-pencil"></button>
+                                        <button pButton pRipple type="button" (click)="loadDealerCreditinfoToEdit()" label="Edit" class="risBtn risEdit mr-2 mb-2" icon="pi pi-pencil"></button>
                                     </div>
                                     <div class="field col-12 md:col-1">
-                                        <button pButton pRipple type="button" (click)="deleteDocument($event)" label="Delete" class="risBtn risDelete mr-2 mb-2" icon="pi pi-trash"></button>
+                                        <button pButton pRipple type="button" (click)="approveModal($event)" label="Approve" class="risBtn risAll mr-2 mb-2"></button>
+                                    </div>
+                                    <div class="field col-12 md:col-1">
+                                        <button pButton pRipple type="button" (click)="deleteCredit($event)" label="Delete" class="risBtn risDelete mr-2 mb-2" icon="pi pi-trash"></button>
                                         <p-confirmPopup key="delete"></p-confirmPopup>
+                                        <p-confirmPopup key="approve"></p-confirmPopup>
                                     </div>
                                 </div>
-                            </div>-->
+                            </div>
                         </form>
                         <div class="flex justify-content-end pr-2">
                             <button pButton pRipple type="button" (click)="openPrev()" label="Previous" class="risBtn  mr-2 mb-2" icon="pi pi-step-backward"></button>
@@ -986,29 +985,34 @@
                         </div>
 
                         <div [hidden]="gridDisplayCredit">
-                            <p-table [value]="dealerdocumentinfoList" styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm" selectionMode="single"
-                                     [(selection)]="selecteddealerdocumentinfo" dataKey="DealerDocumentInfoId" (onRowSelect)="onRowSelectDocument($event)" (onRowUnselect)="onRowUnselectDocument($event)">
+                            <p-table [value]="dealercreditinfoList" styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm" selectionMode="single"
+                                     [(selection)]="selecteddealercreditinfo" dataKey="DealerCreditInfoId" (onRowSelect)="onRowSelectCredit($event)" (onRowUnselect)="onRowUnselectCredit($event)">
                                 <ng-template pTemplate="header">
                                     <tr>
-                                        <th>Document Type</th>
-                                        <th>Document Number</th>
-                                        <th>Issue Date</th>
+                                        <th>Security Deposit</th>
+                                        <th>Security Type</th>
+                                        <th>Amount</th>
                                         <th>Expiry Date</th>
-                                        <th>Uploaded File</th>
+                                        <th>Remarks</th>
+                                        <th>Attachment</th>
+                                        <th>Status</th>
                                     </tr>
                                 </ng-template>
 
-                                <ng-template pTemplate="body" let-dealerdocumentinfo let-rowDataDocument let-columns="columns">
+                                <ng-template pTemplate="body" let-dealercreditinfo let-rowDataCredit let-columns="columns">
 
-                                    <!--<tr [pSelectableRow]="dealerdocumentinfo">
-                                        <td hidden>{{dealerdocumentinfo.DealerInfoId}}</td>
-                                        <td hidden>{{dealerdocumentinfo.DealerDocumentInfoId}}</td>
-                                        <td>{{dealerdocumentinfo.DocumentTypeName}}</td>
-                                        <td>{{dealerdocumentinfo.DocumentNumber}}</td>
-                                        <td>{{dealerdocumentinfo.IssueDate | date: 'dd/MMM/yyyy'}}</td>
-                                        <td>{{dealerdocumentinfo.ExpiryDate | date: 'dd/MMM/yyyy'}}</td>
-                                        <td>{{dealerdocumentinfo.ImageFile}}</td>
-                                    </tr>-->
+                                    <tr [pSelectableRow]="dealercreditinfo">
+                                        <td hidden>{{dealercreditinfo.DealerInfoId}}</td>
+                                        <td hidden>{{dealercreditinfo.DealerCreditInfoId}}</td>
+                                        <td>{{dealercreditinfo.SecurityDepositName}}</td>
+                                        <td>{{dealercreditinfo.SecurityDepositType}}</td>
+                                        <td>{{dealercreditinfo.Amount}}</td>
+                                        <td>{{dealercreditinfo.ExpiryDate | date: 'dd/MMM/yyyy'}}</td>
+                                        <td>{{dealercreditinfo.Remarks}}</td>
+                                        <td>{{dealercreditinfo.FileUpload}}</td>
+                                        <td *ngIf="dealercreditinfo.IsApproved===true">{{"Approved"}}</td>
+                                        <td *ngIf="dealercreditinfo.IsApproved===false">{{"Pending"}}</td>
+                                    </tr>
                                 </ng-template>
                             </p-table>
                             <!--end grid display -------------->

@@ -9,14 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="UploadedResource\CommonImages\**" />
-    <Compile Remove="UploadedResource\RetailerImage\**" />
-    <Content Remove="UploadedResource\CommonImages\**" />
-    <Content Remove="UploadedResource\RetailerImage\**" />
-    <EmbeddedResource Remove="UploadedResource\CommonImages\**" />
-    <EmbeddedResource Remove="UploadedResource\RetailerImage\**" />
-    <None Remove="UploadedResource\CommonImages\**" />
-    <None Remove="UploadedResource\RetailerImage\**" />
+    <Compile Remove="UploadedResource\**" />
+    <Content Remove="UploadedResource\**" />
+    <EmbeddedResource Remove="UploadedResource\**" />
+    <None Remove="UploadedResource\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -50,10 +46,6 @@
     <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
 
 
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="UploadedResource\DealerImage\" />
   </ItemGroup>
 
 

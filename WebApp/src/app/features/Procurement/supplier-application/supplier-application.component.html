@@ -484,7 +484,7 @@
                                     <div class="field col-12 md:col-6 float-right">
                                         <label pTooltip="Industry Sub Sector" tooltipPosition="top">Attach File<span class="req">*</span></label>
                                         <div class="grid">
-                                            <div class=" col-12 md:col-10">
+                                            <div class=" col-12 md:col-9">
                                                 <input type="file" class="from-control" formControlName="FileUpload" (change)="handleLegalFormFileInput($event.target.files)"
                                                        [ngClass]="{ 'is-invalid': submittedLegalDocument && d.FileUpload.errors }"
                                                        placeholder="" pInputText required />
@@ -493,23 +493,29 @@
                                                 </div>
 
                                             </div>
-                                            <div class=" col-12 md:col-2 float-right">
-                                                <button type="submit" class="pi pi-plus risBtn risAdd" (click)="onLegalDocumentFormSubmit()"> Add</button>
+                                            <div class=" col-12 md:col-2">
+                                                <!--<button type="submit" class="pi pi-plus risBtn risAdd" (click)="onLegalDocumentFormSubmit()"> Add</button>-->
+                                                <button class=" pi pi-plus risBtn risAdd " label="Add" (click)="onLegalDocumentFormSubmit()">Add</button>
                                             </div>
                                         </div>
                                     </div>
 
+                                    <!--<div class="field col-12 md:col-6 float-right">
+                                        <label pTooltip="Start Date" tooltipPosition="top">Start Date<span class="req">*</span></label>
+                                        <div class="grid">
+                                            <div class=" col-12 md:col-10">
+                                                <p-calendar [showIcon]="true" formControlName="start_date" placeholder="" selectOtherMonths="true" inputId="navigators" showButtonBar="true" [monthNavigator]="true"
+                                                            [yearNavigator]="true" yearRange="2000:2030" dateFormat="dd/mm/yy"></p-calendar>
+                                                <div *ngIf="submittedAssociation && c.start_date.errors" class="invalid-feedback">
+                                                    <small *ngIf="c.start_date.errors.required" class="p-error">Start Date is required</small>
 
-                                    <!--<div class="field col-12 md:col-3">
-                                        <label pTooltip="Attach File" tooltipPosition="top">Attach File<span class="req">*</span> </label>
-                                    
-                                    </div>
+                                                </div>
 
-
-
-
-                                    <div class="field col-2 md:col-3">
-                                       
+                                            </div>
+                                            <div class=" col-12 md:col-2">
+                                                <button class=" pi pi-plus risBtn risAdd " label="Add" (click)="onAssociationFormSubmit()">Add</button>
+                                            </div>
+                                        </div>
                                     </div>-->
 
                                     <div class="field col-12 md:col-12 pl-0 pr-3">
@@ -1119,6 +1125,7 @@
                         </div>
                     </p-tabPanel>
                     <p-tabPanel header="Financial Info">
+
                         <p-fieldset legend="Security Deposit" [collapsed]="collapsedSecurityDepositInfo" (onBeforeToggle)="toggleFinancialInfo()" [toggleable]="true">
                             <p-dialog header="Delete Record" [(visible)]="display" [style]="{width: '35vw'}">
                                 <p>Do you want to delete this record?</p>
@@ -1144,7 +1151,7 @@
 
                                         <div class="field form-group col-12 md:col-6">
                                             <label pTooltip="Credit Days" tooltipPosition="top">Credit Days<span class="req">*</span> </label>
-                                            <input type="text" class="from-control" formControlName="credit_days"
+                                            <input type="number" min="0" class="from-control" formControlName="credit_days"
                                                    [ngClass]="{ 'is-invalid': submittedFinancial && i.credit_days.errors }"
                                                    placeholder="" pInputText required />
 
@@ -1156,7 +1163,7 @@
 
                                         <div class="field form-group col-12 md:col-6">
                                             <label pTooltip="Credit Limit" tooltipPosition="top">Credit Limit<span class="req">*</span> </label>
-                                            <input type="text" class="from-control" formControlName="credit_limit"
+                                            <input type="number" min="0" class="from-control" formControlName="credit_limit"
                                                    [ngClass]="{ 'is-invalid': submittedFinancial && i.credit_limit.errors }"
                                                    placeholder="" pInputText required />
 
@@ -1165,6 +1172,7 @@
 
                                             </div>
                                         </div>
+
 
                                         <div class="field col-12 md:col-6">
                                             <label pTooltip="Payment Frequency" tooltipPosition="top">Payment Frequency<span class="req">*</span></label>
@@ -1193,13 +1201,12 @@
 
                                         <div class="field form-group col-12 md:col-6">
                                             <label pTooltip="Security Amount" tooltipPosition="top">Security Amount<span class="req">*</span> </label>
-                                            <input type="text" class="from-control" formControlName="security_amount"
+                                            <input type="number" class="from-control" formControlName="security_amount"
                                                    [ngClass]="{ 'is-invalid': submittedFinancialSecurity && i.security_amount.errors }"
                                                    placeholder="" pInputText required />
 
                                             <div *ngIf="submittedFinancialSecurity && i.security_amount.errors" class="invalid-feedback">
                                                 <small *ngIf="i.security_amount.errors.required" class="p-error">Security Amount is required</small>
-
                                             </div>
                                         </div>
 
@@ -1216,13 +1223,10 @@
                                         <div class="field col-12 md:col-6">
                                             <label pTooltip="Attach File" tooltipPosition="top"><span class="req"></span></label>
                                             <div class="grid">
-                                                <!--<div class=" col-12 md:col-5">
-                                                    <input type="file" id="file" (change)="handleSecurityFileInput($event.target.files)">
-                                                </div>-->
-                                                <div class=" col-12 md:col-4">
+                                                <div class=" col-12 md:col-6">
                                                     <button class=" pi pi-plus risBtn risAdd " label="Add" (click)="addSecurityDepositToTable(selectedSecurityDepositTable)">Add</button>
                                                 </div>
-                                                <div class=" col-12 md:col-4 float-right">
+                                                <div class=" col-12 md:col-6 float-right">
                                                     <button pButton pRipple type="button" (click)="onSecurityDepositFormSubmit()" label="Save as Draft" class="risBtn risSave mr-2 mb-2" icon="pi pi-check"></button>
                                                 </div>
                                             </div>
@@ -1472,7 +1476,6 @@
 
                             <button pButton pRipple type="button" (click)="openPrev()" label="Previous" class="risBtn  mr-2 mb-2" icon="pi pi-step-backward"></button>
                             <button pButton pRipple type="button" (click)="showSubmitDialog()" label="Submit" class="risBtn risView mr-2 mb-2" icon="pi pi-send"></button>
-                            <!--<button type="submit" class="pi pi-send risBtn risView mr-2" (click)="showSubmitDialog()"> Submit</button>-->
                             <button pButton pRipple type="button" (click)="toggleFormClose()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
 
                         </div>
@@ -1484,7 +1487,7 @@
 
             <div [hidden]="gridDisplay">
                 <button pButton pRipple type="button" (click)="showBasicDialog()" label="New" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
-                <button pButton pRipple type="button" label="Edit" (click)="loadSupplierinfoToEdit()" icon="pi pi-pencil" class="risBtn risEdit mr-2 mb-2"></button>
+                <button pButton pRipple type="button" (click)="loadSupplierinfoToEdit()" label="Edit" icon="pi pi-pencil" class="risBtn risEdit mr-2 mb-2"></button>
                 <button pButton pRipple type="button" (click)="showDialog()" label="Delete" icon="pi pi-trash" class="risBtn risDelete mr-2 mb-2"></button>
                 <p-dialog header="Delete Record" [(visible)]="display" [style]="{width: '35vw'}">
                     <p>Do you want to delete this record?</p>

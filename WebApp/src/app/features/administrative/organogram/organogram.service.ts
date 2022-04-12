@@ -17,9 +17,9 @@ const httpOptions = {
 export class OrganogramService {
 
   constructor(private http: HttpClient, private ipconfig: IPConfiguration) { }
-  createOrganogram(Organogram: any): Observable<any> {
+    createOrganogram(Organogram: any): Observable<any> {
 
-      return this.http.post<any>(this.ipconfig.base_IP + 'Organogram/Create', Organogram, httpOptions);
+        return this.http.post<any>(this.ipconfig.base_IP + 'Organogram/Create', Organogram, httpOptions);
 
   }
     updateOrganogram(Organogram: any): Observable<any> {
@@ -44,7 +44,7 @@ export class OrganogramService {
       return this.http.get(this.ipconfig.base_IP + 'Organogram/GetOrganogramById?OrganogramId=' + OrganogramId, httpOptions);
   }
 
-  GetSalaryHeadForDP(salary_head_type_id: Number): Observable<any> {
+  GetSalaryHead(salary_head_type_id: Number): Observable<any> {
         return this.http.get(this.ipconfig.base_IP + 'SalaryHead/GetSalaryHeadForDP?salary_head_type_id=' + salary_head_type_id, httpOptions);
     }
   OrganogramActivity(Organogram_id: Number): Observable<any> {
@@ -58,24 +58,20 @@ export class OrganogramService {
     }
     GetDepartmentByTypeId(Type_id: Number): Observable<any> {
 
-        return this.http.post(this.ipconfig.base_IP + 'Department/GetDepartmentByTypeId?Department_Type_id=' + Type_id, httpOptions);
+        return this.http.get(this.ipconfig.base_IP + 'Department/GetDepartmentByTypeId?Department_Type_id=' + Type_id, httpOptions);
+    }
+    GetAllOrganogramDetail(Organogram_Id: Number): Observable<any> {
+
+        return this.http.get(this.ipconfig.base_IP + 'OrganogramDetail/GetAllOrganogramDetail?Organogram_Id=' + Organogram_Id, httpOptions);
     }
 
     getPositionList(): Observable<any[]> {
 
         return this.http.get<any[]>(this.ipconfig.base_IP + 'Position/PositionCboList', httpOptions);
     }
-  //getAllDivision(): Observable<any[]> {
-  //  return this.http.get<any[]>(this.ipconfig.base_IP + 'Division/GetAllDivision');
-  //}
-  //getAllDistrict(): Observable<any[]> {
-  //  return this.http.get<any[]>(this.ipconfig.base_IP + 'District/GetAllDistrict');
-  //}
-  //getAllDivisionCboListByCountryId(country_id): Observable<any[]> {
-  //  return this.http.get<any[]>(this.ipconfig.base_IP + 'Division/DivisionCboListByCountryId?country_id=' + country_id, httpOptions);
-  //}
+    createOrganogramDetail(OrganogramDetail: any): Observable<any> {
 
-  //getAllDistrictCboListByDivisionId(division_id): Observable<any[]> {
-  //  return this.http.get<any[]>(this.ipconfig.base_IP + 'District/DistrictCboListByDivisionId?division_id=' + division_id, httpOptions);
-  //}
+        return this.http.post<any>(this.ipconfig.base_IP + 'OrganogramDetail/Create', OrganogramDetail, httpOptions);
+
+    }
 }

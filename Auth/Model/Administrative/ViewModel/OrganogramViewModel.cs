@@ -9,6 +9,7 @@ namespace Auth.Model.Administrative.ViewModel
     {
         public string company_name { get; set; }
         public string location_code { get; set; }
+        public string organogram_code { get; set; }
         public string location_name { get; set; }
         public string department { get; set; }
         public int department_id { get; set; }
@@ -23,6 +24,7 @@ namespace Auth.Model.Administrative.ViewModel
             model.organogram_id = user.organogram_id ?? 0;           
             model.company_name = user.company_name ?? "";
             model.location_code = user.location_code ?? "";
+            model.organogram_code = user.organogram_code ?? "";
             model.location_name = user.location_name ?? "";
             model.department = user.department ?? "";
             model.department_id = user.department_id ?? 0;

@@ -407,7 +407,15 @@ namespace Auth.Controllers.Procurement
             System.IO.File.Delete(path);
         }
 
-        
+        // Assessment
+        [HttpGet]
+        public async Task<dynamic> getAllSupplierMasterAssessmentCriteria(int supplier_id)
+        {
+            return await _supplierApplicationRepository.getAllSupplierMasterAssessmentCriteria(supplier_id);
+        }
+
+
+
         // Approve & Reject
         [HttpPost]
         public async Task<dynamic> ApproveSupplier([FromBody] SupplierInfoFeedbackDetail supplierInfoFeedbackDetail)

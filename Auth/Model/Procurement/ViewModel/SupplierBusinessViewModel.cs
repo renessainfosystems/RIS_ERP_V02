@@ -14,20 +14,20 @@ namespace Auth.Model.Procurement.ViewModel
         public int BusinessActivityEnumId { get; set; }
         public string BusinessActivityEnumName { get; set; }
 
-        public string ManagementStaffNo { get; set; }
-        public string NonmanagementStaffNo { get; set; }
-        public string PermanentWorkerNo { get; set; }
-        public string CasualWorkerNo { get; set; }
+        public int ManagementStaffNo { get; set; }
+        public int NonmanagementStaffNo { get; set; }
+        public int PermanentWorkerNo { get; set; }
+        public int CasualWorkerNo { get; set; }
 
         public static SupplierBusinessViewModel ConvertToSupplierBusinessAllModel(dynamic SupplierBusiness)
         {
             var model = new SupplierBusinessViewModel();
             model.BusinessActivityEnumId = SupplierBusiness.business_activities_enum_id ?? 0;
             model.BusinessActivityEnumName = EnumDisplayBusinessActivity.GetDisplayBusinessActivity((EnumBusinessActivities)SupplierBusiness.business_activities_enum_id);
-            model.ManagementStaffNo = SupplierBusiness.management_staff_no ?? "";
-            model.NonmanagementStaffNo = SupplierBusiness.nonmanagement_staff_no ?? "";
-            model.PermanentWorkerNo = SupplierBusiness.permanent_worker_no ?? "";
-            model.CasualWorkerNo = SupplierBusiness.casual_worker_no ?? "";
+            model.ManagementStaffNo = SupplierBusiness.management_staff_no ?? 0;
+            model.NonmanagementStaffNo = SupplierBusiness.nonmanagement_staff_no ?? 0;
+            model.PermanentWorkerNo = SupplierBusiness.permanent_worker_no ?? 0;
+            model.CasualWorkerNo = SupplierBusiness.casual_worker_no ?? 0;
 
 
             return model;
