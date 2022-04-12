@@ -1,0 +1,131 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+
+            <h4>Attendance Policy Assignment for Organogram</h4>
+            <div [hidden]="formDisplay">
+
+                <form action="" [formGroup]="AttPolicyAssignmentForm">
+
+                    <div class="col-12">
+                        <div class="p-fluid p-formgrid grid md:pl-5 md:pr-5">
+                            <div class="field form-group col-12 md:col-6">
+                                <label pTooltip="Roster Name" tooltipPosition="top">Group<span class="req"></span> </label>
+                                <input id="lastname2" type="text" class="from-control" formControlName="roster_policy_name"
+                                       [ngClass]="{ 'is-invalid': submitted && f.roster_policy_name.errors }"
+                                       pInputText required />
+
+                                <div *ngIf="submitted && f.roster_policy_name.errors" class="invalid-feedback">
+                                    <small *ngIf="f.roster_policy_name.errors.required" class="p-error">Group is required</small>
+
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label pTooltip="Roster Cycle" tooltipPosition="top">Company<span class="req"></span></label>
+                                <p-dropdown [options]="allRosterCycle" [(ngModel)]="selectedRostercycle" formControlName="roster_cycle" [ngClass]="{ 'is-invalid': submitted && f.roster_cycle.errors }" placeholder="Select Company"
+                                            optionLabel="name" optionValue="roster_cycle" [showClear]="true"></p-dropdown>
+
+                                <div *ngIf="submitted && f.roster_cycle.errors" class="invalid-feedback">
+                                    <small *ngIf="f.roster_cycle.errors.required" class="p-error">Company is required</small>
+                                </div>
+                            </div>
+
+                            <div class="field col-12 md:col-6">
+
+                                <label pTooltip="Shift" tooltipPosition="top">Location/Branch<span class="req"></span></label>
+                                <p-dropdown [options]="allShifts" [(ngModel)]="selectedShift" formControlName="shift_id" [ngClass]="{ 'is-invalid': submitted && f.shift_id.errors }" placeholder="Select Location"
+                                            optionLabel="shift_name" [showClear]="true"></p-dropdown>
+
+
+                            </div>
+                            <div class="field col-12 md:col-6 ">
+
+                                <label pTooltip="Next Shift" tooltipPosition="top">Department<span class="req"></span></label>
+                                <p-dropdown [options]="allShifts" [(ngModel)]="selectedNextShift" formControlName="next_shift_id" [ngClass]="{ 'is-invalid': submitted && f.next_shift_id.errors }" placeholder="Select Department"
+                                            optionLabel="shift_name" [showClear]="true"></p-dropdown>
+
+
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label pTooltip="Calendar" tooltipPosition="top">Position<span class="req"></span></label>
+                                <p-dropdown [options]="allShifts"  formControlName="position_id" [ngClass]="{ 'is-invalid': submitted && f.position_id.errors }" placeholder="Select Position"
+                                            optionLabel="AttendanceCalendarName" optionValue="position_id" [showClear]="true"></p-dropdown>
+
+                                <div *ngIf="submitted && f.position_id.errors" class="invalid-feedback">
+                                    <small *ngIf="f.position_id.errors.required" class="p-error">position_id is required</small>
+                                </div>
+                            </div>
+
+
+                            <div class="field col-12 md:col-6 ">
+
+                                <label pTooltip="Absenteeism policy" tooltipPosition="top">Attendance policy<span class="req"></span></label>
+
+                                <div class="grid">
+                                    <div class=" col-12 md:col-10">
+                                        <p-dropdown [options]="allShifts"  formControlName="attendance_policy_id" [ngClass]="{ 'is-invalid': submitted && f.attendance_policy_id.errors }" placeholder="Select Attendance Policy" optionLabel="absenteeism_policy_name" optionValue="attendance_policy_id" [showClear]="true"></p-dropdown>
+                                    </div>
+                                    <div class=" col-12 md:col-1">
+
+                                        <button class=" pi pi-eye risBtn risAll mr-2"  label="Add">View</button>
+
+                                    </div>
+                                </div>
+                            </div>
+        
+
+                           
+                        </div>
+                        <div class="flex justify-content-end md:pl-5 md:pr-5">
+                            <button pButton pRipple type="button" label="Save" (click)="saveRosterPolicy()" class="risBtn risSave mr-2 mb-2" icon="pi pi-check"></button>
+                            <button pButton pRipple type="button" (click)="toggleFormClose()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
+                        </div>
+                    </div>
+
+
+                </form>
+
+            </div>
+
+            <!--end form display------------->
+
+            <div [hidden]="gridDisplay">
+                <button pButton pRipple type="button" label="New" (click)="showBasicDialog()" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
+                <button pButton pRipple type="button" label="Edit" (click)="loadRosterPolicyToEdit()" icon="pi pi-pencil" class="risBtn risEdit mr-2 mb-2"></button>
+                <button pButton pRipple type="button" label="Delete" icon="pi pi-trash" class="risBtn risDelete mr-2 mb-2" (click)="deleteModal($event)"> </button>
+                <button pButton pRipple type="button" label="Activity" icon="pi pi-box" class="risBtn risAll mr-2 mb-2"> </button>
+                <button pButton pRipple type="button" label="Approve" icon="pi pi-box" class="risBtn risAll mr-2 mb-2" (click)="approveModal($event)"> </button>
+                <p-confirmPopup key="approve"></p-confirmPopup>
+                <p-confirmPopup key="delete"></p-confirmPopup>
+
+                <p-table [value]="rosterPolicies" styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm" [paginator]="true" [rows]="10" selectionMode="single" [showCurrentPageReport]="true" responsiveLayout="scroll"
+                         [(selection)]="selectedPolicy" dataKey="roster_policy_id" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Position</th>
+                            <th>Policy</th>
+                            <th>Approve By</th>
+                            <th>Activity</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-roster>
+                        <tr [pSelectableRow]="roster">
+
+                            <td>{{roster.roster_policy_name}}</td>
+                            <td>{{roster.roster_cycle}}</td>
+                            <td>{{roster.approvedBy}}</td>
+                            <td *ngIf="roster.is_active===true">{{"Active"}}</td>
+                            <td *ngIf="roster.is_active===false">{{"InActive"}}</td>
+
+                        </tr>
+                    </ng-template>
+
+                </p-table>
+                <!--end grid display -------------->
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
