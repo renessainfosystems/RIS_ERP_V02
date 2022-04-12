@@ -110,7 +110,8 @@ export class SalaryHeadComponent implements OnInit {
     }
 
    
-    this.resetForm();
+      this.resetForm();
+     
     this.salaryHeadService.getSalaryHeadById(this.rowData.salary_head_id).subscribe(data => {
 
    
