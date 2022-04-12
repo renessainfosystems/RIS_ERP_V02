@@ -778,8 +778,17 @@
                 <button pButton pRipple type="button" (click)="loadRetailerinfoLocationGrid()" label="Location Info" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
                 <p-confirmPopup key="delete"></p-confirmPopup>
 
-                <p-table [value]="retailerinfoList" styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm" [paginator]="true" [rows]="10" selectionMode="single" [showCurrentPageReport]="true" responsiveLayout="scroll"
-                         [(selection)]="selectedretailerinfo" dataKey="RetailerInfoId" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
+                <p-table #dt [value]="retailerinfoList" styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm" [paginator]="true" [rows]="10" selectionMode="single" [showCurrentPageReport]="true" responsiveLayout="scroll"
+                         [(selection)]="selectedretailerinfo" dataKey="RetailerInfoId" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]"
+                         (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)" [globalFilterFields]="['RetailerInfoCode','RetailerInfoName']">
+                    <ng-template pTemplate="caption">
+                        <div class="flex">
+                            <span class="p-input-icon-left ml-auto">
+                                <i class="pi pi-search"></i>
+                                <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search by any" />
+                            </span>
+                        </div>
+                    </ng-template>
                     <ng-template pTemplate="header">
                         <tr>
                             <th pSortableColumn="Code">
