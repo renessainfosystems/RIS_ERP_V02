@@ -25,7 +25,7 @@ namespace Auth.Model.Party.Model
         public long approved_by_id { get; set; }
         public DateTime created_datetime { get; set; }
         public long created_user_info_id { get; set; }
-        public IFormFile FileUpload { get; set; }
+        public IFormFile AttachmentFile { get; set; }
 
 
     }

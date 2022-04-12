@@ -1729,7 +1729,7 @@ export class DealerinfoComponent implements OnInit {
             else {
                 formData.append(key, value);
                 formData.append("dealer_info_id", this.rowData.DealerInfoId);
-                formData.append("FileUpload", this.fileToUploadCreditForm);
+                formData.append("AttachmentFile", this.fileToUploadCreditForm);
             }
         }
 
@@ -1746,6 +1746,7 @@ export class DealerinfoComponent implements OnInit {
                     this.dealercreditinfoList.unshift(result.Data);
                     this.selecteddealercreditinfo = result.Data;
                     this.rowDataCredit = result.Data;
+                    this.onRowUnselectCredit(event);
                     this.dealerCreditIndex();
                     this.isDealerCreditinfoEdit = false;
                     this.submittedCredit = false;
@@ -1763,6 +1764,7 @@ export class DealerinfoComponent implements OnInit {
                         this.dealercreditinfoList.unshift(result.Data);
                         this.selecteddealercreditinfo = result.Data;
                         this.rowDataCredit = result.Data;
+                        this.onRowUnselectCredit(event);
                         this.dealerCreditIndex();
                         this.isDealerCreditinfoEdit = false;
                         this.submittedCredit = false;
@@ -1783,6 +1785,10 @@ export class DealerinfoComponent implements OnInit {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
 
+        if (this.rowDataCredit.IsApproved == true) {
+            return this.notifyService.ShowNotification(3, "Already approved! You can't update.");
+        }
+
         let dealerCreditinfoId = this.rowDataCredit.DealerCreditInfoId;
         this.dealerinfoService.getDealerCreditInfoById(dealerCreditinfoId).subscribe(data => {
             if (data != null) {
@@ -1793,8 +1799,8 @@ export class DealerinfoComponent implements OnInit {
             this.dealercreditForm.controls['amount'].setValue(data.Amount);
             this.dealercreditForm.controls['expiry_date'].setValue(new Date(data.ExpiryDate));
             this.dealercreditForm.controls['remarks'].setValue(data.Remarks);
-            this.dealercreditForm.controls['attachment'].setValue(data.FileUpload);
-            this.photourllink = data.FileUpload;
+            this.dealercreditForm.controls['attachment'].setValue(data.AttachmentFile);
+            this.photourllink = data.AttachmentFile;
 
         });
         this.gridDisplayCredit = false;
@@ -1804,6 +1810,9 @@ export class DealerinfoComponent implements OnInit {
     deleteDealerCreditinfo() {
         if (this.rowDataCredit == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+        if (this.rowDataCredit.IsApproved == true) {
+            return this.notifyService.ShowNotification(3, "Already approved! You can't delete.");
         }
 
         this.rowSelected = true;
@@ -1820,6 +1829,9 @@ export class DealerinfoComponent implements OnInit {
     deleteCredit(event: Event) {
         if (this.rowDataCredit == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+        if (this.rowDataCredit.IsApproved == true) {
+            return this.notifyService.ShowNotification(3, "Already approved! You can't delete.");
         }
 
         this.confirmationService.confirm({
@@ -1841,7 +1853,7 @@ export class DealerinfoComponent implements OnInit {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
         if (this.rowDataCredit.IsApproved == true) {
-            return this.notifyService.ShowNotification(3, "This credit info already approved");
+            return this.notifyService.ShowNotification(3, "This credit info already approved!");
         }
         this.confirmationService.confirm({
             key: 'approve',
@@ -1858,46 +1870,50 @@ export class DealerinfoComponent implements OnInit {
     }
 
     creditApprove() {
+        
         if (this.rowDataCredit == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
         if (this.rowDataCredit.IsApproved==true) {
-            return this.notifyService.ShowNotification(3, "This creidt info already approved.");
+            return this.notifyService.ShowNotification(3, "This creidt info already approved!");
         }
         let dealerCreditinfoId = this.rowDataCredit.DealerCreditInfoId;
-        this.dealerinfoService.approve(dealerCreditinfoId).subscribe(data => {
-            if (data.MessageType == 1) {
-                this.dealercreditinfoList.splice(this.dealercreditinfoList.findIndex(item => item.DealerCreditInfoId === data.dealerCreditinfoId), 1);
-                this.dealercreditinfoList.unshift(data.Data);
-                this.selecteddealercreditinfo = data.Data;
-                this.rowDataCredit = data.Data;
+        this.dealerinfoService.approve(dealerCreditinfoId).subscribe(result => {            
+            this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
+            if (result.MessageType == 1) {
+                this.dealercreditinfoList.splice(this.dealercreditinfoList.findIndex(item => item.DealerCreditInfoId === dealerCreditinfoId), 1);
+                this.dealercreditinfoList.unshift(result.Data);
+                this.selecteddealercreditinfo = result.Data;
+                this.rowDataCredit = result.Data;
+                this.onRowUnselectCredit(event);
                 this.dealerCreditIndex();
                 this.isDealerCreditinfoEdit = false;
                 this.submittedCredit = false;
+                this.dealercreditForm.reset();
             }
-            this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
+            
         });
         this.gridDisplayCredit = false;
         this.formDisplayCredit = true;
     }
 
-    onSelectCreditImage(event) {
-        if (event.target.files) {
-            var reader = new FileReader()
-            reader.readAsDataURL(event.target.files[0])
-            reader.onload = (event: any) => {
-                this.photourllink = event.target.result
-            }
-            alert(this.photourllink)
-            if (event.target.files.length > 0) {
-                const file = event.target.files[0];
-                this.dealerCreditImageFile.nativeElement.innerText = file.name;
-                this.dealercreditForm.patchValue({
-                    FileUpload: file,
-                });
-            }
-        }
-    }
+    //onSelectCreditImage(event) {
+    //    if (event.target.files) {
+    //        var reader = new FileReader()
+    //        reader.readAsDataURL(event.target.files[0])
+    //        reader.onload = (event: any) => {
+    //            this.photourllink = event.target.result
+    //        }
+    //        alert(this.photourllink)
+    //        if (event.target.files.length > 0) {
+    //            const file = event.target.files[0];
+    //            this.dealerCreditImageFile.nativeElement.innerText = file.name;
+    //            this.dealercreditForm.patchValue({
+    //                FileUpload: file,
+    //            });
+    //        }
+    //    }
+    //}
 
     creditFormFileInput(files: FileList) {
         this.fileToUploadCreditForm = files.item(0);

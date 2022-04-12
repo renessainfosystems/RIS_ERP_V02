@@ -31,9 +31,9 @@ namespace Auth.Controllers.Party
        
         public async Task<dynamic> Create([FromForm] DealerCreditInfo dealerCreditInfo)
         {           
-            if (dealerCreditInfo.FileUpload != null)
+            if (dealerCreditInfo.AttachmentFile != null)
             {
-                dealerCreditInfo.attachment = GetDocumentPath(dealerCreditInfo.FileUpload);
+                dealerCreditInfo.attachment = GetDocumentPath(dealerCreditInfo.AttachmentFile);
             }
             return await _dealerCreditInfoRepository.IUD_DealerCreditInfo(dealerCreditInfo, (int)GlobalEnumList.DBOperation.Create);
         }
@@ -44,13 +44,13 @@ namespace Auth.Controllers.Party
         {
             var dealerCreditInfodata = _dealerCreditInfoRepository.GetDealerCreditInfoById(dealerCreditInfo.dealer_info_id).Result;            
             
-            if (dealerCreditInfo.FileUpload != null)
+            if (dealerCreditInfo.AttachmentFile != null)
             {
                 if (!string.IsNullOrEmpty(dealerCreditInfodata.FileUpload))
                 {
                     deleteDocument(dealerCreditInfodata.FileUpload);
                 }                
-                dealerCreditInfo.attachment = GetDocumentPath(dealerCreditInfo.FileUpload);
+                dealerCreditInfo.attachment = GetDocumentPath(dealerCreditInfo.AttachmentFile);
             }
            return await _dealerCreditInfoRepository.IUD_DealerCreditInfo(dealerCreditInfo, (int)GlobalEnumList.DBOperation.Update);
         }
