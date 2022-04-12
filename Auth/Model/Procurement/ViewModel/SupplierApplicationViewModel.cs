@@ -46,7 +46,7 @@ namespace Auth.Model.Procurement.ViewModel
         public bool IsConfirm { get; set; }
 
         public int FeedbackStatus { get; set; }
-        public int BusinessActivityId { get; set; }
+        public int BusinessActivityEnumId { get; set; }
         public int ManagementStaffNo { get; set; }
         public int NonmanagementStaffNo { get; set; }
         public int PermanentWorkerNo { get; set; }
@@ -89,7 +89,7 @@ namespace Auth.Model.Procurement.ViewModel
 
 
 
-            model.BusinessActivityId = SupplierApplication.business_activity_id ?? 0;
+            model.BusinessActivityEnumId = SupplierApplication.business_activities_enum_id ?? 0;
             model.ManagementStaffNo = SupplierApplication.management_staff_no ?? 0;
             model.NonmanagementStaffNo = SupplierApplication.nonmanagement_staff_no ?? 0;
             model.PermanentWorkerNo = SupplierApplication.permanent_worker_no ?? 0;

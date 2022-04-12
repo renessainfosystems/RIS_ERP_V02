@@ -3,6 +3,14 @@
     <div class="col-12">
         <div class="card">
             <h4>Supplier Application</h4>
+            <!--<div class="p-fluid grid col-12">
+
+
+                <div *ngFor="let category of categories;let i = index" class="p-field-checkbox text-start row flex flex-row flex-nowrap">
+                    <p-checkbox name="group[i]" value="category" binary="true" [value]="category" (onChange)="onCheckboxChange($event,category.id,category.name)" formControlName="ecommerce_platforms_id" [inputId]="category.id"></p-checkbox>
+                    <label [for]="category.id" class="ml-1" style="margin-right: 40px!important;">{{category.name}}</label>
+                </div>
+            </div>-->
             <div [hidden]="formDisplay">
                 <p-tabView [activeIndex]="index" (onChange)="function($event)">
                     <p-tabPanel header="Basic Info">
@@ -284,19 +292,19 @@
 
                                     <div class="field col-12 md:col-6">
                                         <label pTooltip="Management Staff" tooltipPosition="top">Management Staff </label>
-                                        <input  type="text" formControlName="management_staff_no" placeholder="" pInputText />
+                                        <input type="text" formControlName="management_staff_no" placeholder="" pInputText />
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label pTooltip="Non Management Staff" tooltipPosition="top">Non Management Staff </label>
-                                        <input  type="text" formControlName="nonmanagement_staff_no" placeholder="" pInputText />
+                                        <input type="text" formControlName="nonmanagement_staff_no" placeholder="" pInputText />
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label pTooltip="Permanent Worker" tooltipPosition="top">Permanent Worker </label>
-                                        <input  type="text" formControlName="permanent_worker_no" placeholder="" pInputText />
+                                        <input type="text" formControlName="permanent_worker_no" placeholder="" pInputText />
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label pTooltip="Casual Worker" tooltipPosition="top">Casual Worker </label>
-                                        <input  type="text" formControlName="casual_worker_no" placeholder="" pInputText />
+                                        <input type="text" formControlName="casual_worker_no" placeholder="" pInputText />
                                     </div>
 
                                     <div class="field col-12 md:col-12">
@@ -438,7 +446,7 @@
                                         <label pTooltip="Document Name" tooltipPosition="top">Document Name<span class="req">*</span></label>
                                         <p-dropdown [options]="allDocument" formControlName="document_type_id"
                                                     [ngClass]="{ 'is-invalid': submittedLegalDocument && d.document_type_id.errors }" placeholder="---Select---"
-                                                    optionLabel="document_type_name"  [showClear]="true" [filter]="true" filterBy="document_type_name"></p-dropdown>
+                                                    optionLabel="document_type_name" [showClear]="true" [filter]="true" filterBy="document_type_name"></p-dropdown>
 
                                         <div *ngIf="submittedLegalDocument && d.document_type_id.errors" class="invalid-feedback">
                                             <small *ngIf="d.document_type_id.errors.required" class="p-error">Document Name is required</small>
@@ -447,7 +455,7 @@
 
                                     <div class="field form-group col-12 md:col-6">
                                         <label pTooltip="Document Number" tooltipPosition="top">Document Number<span class="req">*</span> </label>
-                                        <input  type="text" class="from-control" formControlName="document_number"
+                                        <input type="text" class="from-control" formControlName="document_number"
                                                [ngClass]="{ 'is-invalid': submittedLegalDocument && d.document_number.errors }"
                                                placeholder="" pInputText required />
                                         <div *ngIf="submittedLegalDocument && d.document_number.errors" class="invalid-feedback">
@@ -501,22 +509,22 @@
                                     </div>
 
                                     <!--<div class="field col-12 md:col-6 float-right">
-                                        <label pTooltip="Start Date" tooltipPosition="top">Start Date<span class="req">*</span></label>
-                                        <div class="grid">
-                                            <div class=" col-12 md:col-10">
-                                                <p-calendar [showIcon]="true" formControlName="start_date" placeholder="" selectOtherMonths="true" inputId="navigators" showButtonBar="true" [monthNavigator]="true"
-                                                            [yearNavigator]="true" yearRange="2000:2030" dateFormat="dd/mm/yy"></p-calendar>
-                                                <div *ngIf="submittedAssociation && c.start_date.errors" class="invalid-feedback">
-                                                    <small *ngIf="c.start_date.errors.required" class="p-error">Start Date is required</small>
+                                <label pTooltip="Start Date" tooltipPosition="top">Start Date<span class="req">*</span></label>
+                                <div class="grid">
+                                    <div class=" col-12 md:col-10">
+                                        <p-calendar [showIcon]="true" formControlName="start_date" placeholder="" selectOtherMonths="true" inputId="navigators" showButtonBar="true" [monthNavigator]="true"
+                                                    [yearNavigator]="true" yearRange="2000:2030" dateFormat="dd/mm/yy"></p-calendar>
+                                        <div *ngIf="submittedAssociation && c.start_date.errors" class="invalid-feedback">
+                                            <small *ngIf="c.start_date.errors.required" class="p-error">Start Date is required</small>
 
-                                                </div>
-
-                                            </div>
-                                            <div class=" col-12 md:col-2">
-                                                <button class=" pi pi-plus risBtn risAdd " label="Add" (click)="onAssociationFormSubmit()">Add</button>
-                                            </div>
                                         </div>
-                                    </div>-->
+
+                                    </div>
+                                    <div class=" col-12 md:col-2">
+                                        <button class=" pi pi-plus risBtn risAdd " label="Add" (click)="onAssociationFormSubmit()">Add</button>
+                                    </div>
+                                </div>
+                            </div>-->
 
                                     <div class="field col-12 md:col-12 pl-0 pr-3">
                                         <p-table [value]="documentDataSources" styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm" responsiveLayout="scroll">
@@ -745,7 +753,7 @@
 
                                         <div class="field form-group col-12 md:col-6">
                                             <label pTooltip="Warehouse" tooltipPosition="top">Warehouse<span class="req">*</span> </label>
-                                            <input  type="text" class="from-control" formControlName="supplier_warehouse_name"
+                                            <input type="text" class="from-control" formControlName="supplier_warehouse_name"
                                                    [ngClass]="{ 'is-invalid': submittedWarehouse && f.supplier_warehouse_name.errors }"
                                                    placeholder="" pInputText required />
 
@@ -1284,7 +1292,7 @@
 
                                         <div class="field form-group col-12 md:col-6">
                                             <label pTooltip="Account Number" tooltipPosition="top">Account Number<span class="req">*</span> </label>
-                                            <input  type="text" class="from-control" formControlName="account_number"
+                                            <input type="text" class="from-control" formControlName="account_number"
                                                    [ngClass]="{ 'is-invalid': submittedMobileBanking && j.account_number.errors }"
                                                    placeholder="" pInputText required />
                                             <div *ngIf="submittedMobileBanking && j.account_number.errors" class="invalid-feedback">
@@ -1293,9 +1301,9 @@
                                         </div>
 
                                         <!--<div class="field col-12 md:col-6">
-                                            <label pTooltip="MFS Type" tooltipPosition="top">MFS Type<span class="req">*</span></label>
-         
-                                        </div>-->
+                                    <label pTooltip="MFS Type" tooltipPosition="top">MFS Type<span class="req">*</span></label>
+
+                                </div>-->
 
                                         <div class="field col-12 md:col-6 float-right">
                                             <label pTooltip="MFS Type" tooltipPosition="top">MFS Type<span class="req"></span></label>
@@ -1316,8 +1324,8 @@
                                         </div>
 
                                         <!--<div class="field col-12 md:col-3">
-                                          
-                                        </div>-->
+
+                                </div>-->
 
                                         <div class="field col-12 md:col-12 pl-0 pr-3">
                                             <p-table [value]="mobileBankingDataSources" styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm" responsiveLayout="scroll">
@@ -1394,7 +1402,7 @@
 
                                         <div class="field form-group col-12 md:col-6">
                                             <label pTooltip="Account Name" tooltipPosition="top">Account Name<span class="req">*</span> </label>
-                                            <input  type="text" class="from-control" formControlName="account_name"
+                                            <input type="text" class="from-control" formControlName="account_name"
                                                    [ngClass]="{ 'is-invalid': submittedBanking && k.account_name.errors }"
                                                    placeholder="" pInputText required />
                                             <div *ngIf="submittedBanking && k.account_name.errors" class="invalid-feedback">
@@ -1404,7 +1412,7 @@
 
                                         <div class="field form-group col-12 md:col-6">
                                             <label pTooltip="Account Number" tooltipPosition="top">Account Number<span class="req">*</span> </label>
-                                            <input  type="text" class="from-control" formControlName="account_number"
+                                            <input type="text" class="from-control" formControlName="account_number"
                                                    [ngClass]="{ 'is-invalid': submittedBanking && k.account_number.errors }"
                                                    placeholder="" pInputText required />
                                             <div *ngIf="submittedBanking && k.account_number.errors" class="invalid-feedback">

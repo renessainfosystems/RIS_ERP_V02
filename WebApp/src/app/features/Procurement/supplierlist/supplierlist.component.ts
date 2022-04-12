@@ -328,19 +328,6 @@ export class SupplierListComponent implements OnInit {
     displaySubmit: boolean = false;
     displayBasic: boolean = false;
 
-    showDialog() {
-        if (this.rowData == null) {
-            return this.notifyService.ShowNotification(3, 'Please select row');
-        }
-        else
-            this.display = true;
-    }
-
-    showBasicDialog() {
-        this.ngOnInit();
-        this.toggleGridDisplay();
-
-    }
 
     showSubmitDialog() {
         this.displaySubmit = true;
@@ -768,6 +755,11 @@ export class SupplierListComponent implements OnInit {
             this.allContactPerson = data;
         });
 
+        this.SupplierListService.getAllSupplierLocationWiseContact(supplierId).subscribe(data => {
+            debugger
+            this.contactLocationDataSources = data;
+        });
+
         this.SupplierListService.getAllSupplierMFS(supplierId).subscribe(data => {
             this.financialApplicationForm.reset();
             if (data != null) {
@@ -1153,140 +1145,141 @@ export class SupplierListComponent implements OnInit {
     }
 
 
-    loadSupplierinfoToEdit() {
+    //loadSupplierinfoToEdit() {
 
-        if (this.rowData == null) {
-            return this.notifyService.ShowNotification(3, 'Please select row');
-        }
+    //    if (this.rowData == null) {
+    //        return this.notifyService.ShowNotification(3, 'Please select row');
+    //    }
 
-        let supplierId = this.rowData.SupplierId;
+    //    let supplierId = this.rowData.SupplierId;
 
-        this.SupplierListService.getSupplierBasicInfo(supplierId).subscribe(data => {
-            this.supplierApplicationForm.reset();
-            if (data != null) {
-                this.isSupplierinfoEdit = true;
-            }
-            this.supplierApplicationForm.controls['supplier_code'].setValue(data.SupplierCode);
-            this.supplierApplicationForm.controls['legal_name'].setValue(data.LegalName);
-            this.supplierApplicationForm.controls['short_name'].setValue(data.ShortName);
-            this.supplierApplicationForm.controls['year_established'].setValue(new Date(data.YearEstablished));
-            this.supplierApplicationForm.controls['domicile_enum_id'].setValue(data.DomicileEnumId);
-            this.supplierApplicationForm.controls['registry_authority_id'].setValue(data.RegistryAuthorityId);
-            this.supplierApplicationForm.controls['regulator_id'].setValue(data.RegulatorId);
-            this.supplierApplicationForm.controls['ownership_type_id'].setValue(data.OwnershipTypeId);
-            this.supplierApplicationForm.controls['name_in_local_language'].setValue(data.NameInLocalLanguage);
-            this.supplierApplicationForm.controls['address_in_local_language'].setValue(data.AddressInLocalLanguage);
-            this.supplierApplicationForm.controls['country_id'].setValue(data.CountryId);
-            this.onSelectByCountryId(data.CountryId);
-            this.supplierApplicationForm.controls['division_id'].setValue(data.DivisionId);
-            this.onSelectByDivisionId(data.DivisionId);
-            this.supplierApplicationForm.controls['district_id'].setValue(data.DistrictId);
-            this.supplierApplicationForm.controls['city'].setValue(data.City);
-            this.supplierApplicationForm.controls['ps_area'].setValue(data.PsArea);
-            this.supplierApplicationForm.controls['post_code'].setValue(data.PostCode);
-            this.supplierApplicationForm.controls['block'].setValue(data.Block);
-            this.supplierApplicationForm.controls['road_no'].setValue(data.RoadNo);
-            this.supplierApplicationForm.controls['house_no'].setValue(data.HouseNo);
-            this.supplierApplicationForm.controls['flat_no'].setValue(data.FlatNo);
-            this.supplierApplicationForm.controls['email'].setValue(data.Email);
-            this.supplierApplicationForm.controls['mobile_no'].setValue(data.MobileNo);
-            this.supplierApplicationForm.controls['phone_no'].setValue(data.PhoneNo);
-            this.supplierApplicationForm.controls['pabx'].setValue(data.Pabx);
-        });
+    //    this.SupplierListService.getSupplierBasicInfo(supplierId).subscribe(data => {
+    //        this.supplierApplicationForm.reset();
+    //        if (data != null) {
+    //            this.isSupplierinfoEdit = true;
+    //        }
+    //        this.supplierApplicationForm.controls['supplier_code'].setValue(data.SupplierCode);
+    //        this.supplierApplicationForm.controls['legal_name'].setValue(data.LegalName);
+    //        this.supplierApplicationForm.controls['short_name'].setValue(data.ShortName);
+    //        this.supplierApplicationForm.controls['year_established'].setValue(new Date(data.YearEstablished));
+    //        this.supplierApplicationForm.controls['domicile_enum_id'].setValue(data.DomicileEnumId);
+    //        this.supplierApplicationForm.controls['registry_authority_id'].setValue(data.RegistryAuthorityId);
+    //        this.supplierApplicationForm.controls['regulator_id'].setValue(data.RegulatorId);
+    //        this.supplierApplicationForm.controls['ownership_type_id'].setValue(data.OwnershipTypeId);
+    //        this.supplierApplicationForm.controls['name_in_local_language'].setValue(data.NameInLocalLanguage);
+    //        this.supplierApplicationForm.controls['address_in_local_language'].setValue(data.AddressInLocalLanguage);
+    //        this.supplierApplicationForm.controls['country_id'].setValue(data.CountryId);
+    //        this.onSelectByCountryId(data.CountryId);
+    //        this.supplierApplicationForm.controls['division_id'].setValue(data.DivisionId);
+    //        this.onSelectByDivisionId(data.DivisionId);
+    //        this.supplierApplicationForm.controls['district_id'].setValue(data.DistrictId);
+    //        this.supplierApplicationForm.controls['city'].setValue(data.City);
+    //        this.supplierApplicationForm.controls['ps_area'].setValue(data.PsArea);
+    //        this.supplierApplicationForm.controls['post_code'].setValue(data.PostCode);
+    //        this.supplierApplicationForm.controls['block'].setValue(data.Block);
+    //        this.supplierApplicationForm.controls['road_no'].setValue(data.RoadNo);
+    //        this.supplierApplicationForm.controls['house_no'].setValue(data.HouseNo);
+    //        this.supplierApplicationForm.controls['flat_no'].setValue(data.FlatNo);
+    //        this.supplierApplicationForm.controls['email'].setValue(data.Email);
+    //        this.supplierApplicationForm.controls['mobile_no'].setValue(data.MobileNo);
+    //        this.supplierApplicationForm.controls['phone_no'].setValue(data.PhoneNo);
+    //        this.supplierApplicationForm.controls['pabx'].setValue(data.Pabx);
+    //    });
 
-        this.SupplierListService.getAllSupplierBusiness(supplierId).subscribe(data => {
-            this.businessApplicationForm.reset();
-            if (data != null) {
-                this.isSupplierinfoEdit = true;
-                this.businessApplicationForm.controls['business_activities_enum_id'].setValue(data.BusinessActivityEnumId);
-                this.businessApplicationForm.controls['management_staff_no'].setValue(data.ManagementStaffNo);
-                this.businessApplicationForm.controls['nonmanagement_staff_no'].setValue(data.NonmanagementStaffNo);
-                this.businessApplicationForm.controls['permanent_worker_no'].setValue(data.PermanentWorkerNo);
-                this.businessApplicationForm.controls['casual_worker_no'].setValue(data.CasualWorkerNo);
-            }
-        });
+    //    this.SupplierListService.getAllSupplierBusiness(supplierId).subscribe(data => {
+    //        this.businessApplicationForm.reset();
+    //        if (data != null) {
+    //            this.isSupplierinfoEdit = true;
+    //            this.businessApplicationForm.controls['business_activities_enum_id'].setValue(data.BusinessActivityEnumId);
+    //            this.businessApplicationForm.controls['management_staff_no'].setValue(data.ManagementStaffNo);
+    //            this.businessApplicationForm.controls['nonmanagement_staff_no'].setValue(data.NonmanagementStaffNo);
+    //            this.businessApplicationForm.controls['permanent_worker_no'].setValue(data.PermanentWorkerNo);
+    //            this.businessApplicationForm.controls['casual_worker_no'].setValue(data.CasualWorkerNo);
+    //        }
+    //    });
 
-        this.SupplierListService.getAllSupplierBusinessSubSector(supplierId).subscribe(data => {
-            this.subSectorDataSources = data;
-        });
+    //    this.SupplierListService.getAllSupplierBusinessSubSector(supplierId).subscribe(data => {
+    //        this.subSectorDataSources = data;
+    //    });
 
-        this.SupplierListService.getAllSupplierBusinessEcommerce(supplierId).subscribe(data => {
-            this.categories = data;
-        });
+    //    this.SupplierListService.getAllSupplierBusinessEcommerce(supplierId).subscribe(data => {
+    //        this.categories = data;
+    //    });
 
-        this.SupplierListService.getAllSupplierAssociation(supplierId).subscribe(data => {
-            this.associationsApplicationForm.reset();
-            if (data != null) {
-                this.isSupplierinfoEdit = true;
-            }
-            this.associationDataSources = data;
-        });
+    //    this.SupplierListService.getAllSupplierAssociation(supplierId).subscribe(data => {
+    //        this.associationsApplicationForm.reset();
+    //        if (data != null) {
+    //            this.isSupplierinfoEdit = true;
+    //        }
+    //        this.associationDataSources = data;
+    //    });
 
-        this.SupplierListService.getAllLegalDocument(supplierId).subscribe(data => {
-            this.legalDocumentApplicationForm.reset();
-            if (data != null) {
-                this.isSupplierinfoEdit = true;
-            }
-            this.documentDataSources = data;
-        });
+    //    this.SupplierListService.getAllLegalDocument(supplierId).subscribe(data => {
+    //        this.legalDocumentApplicationForm.reset();
+    //        if (data != null) {
+    //            this.isSupplierinfoEdit = true;
+    //        }
+    //        this.documentDataSources = data;
+    //    });
 
-        this.SupplierListService.getAllSupplierLocation(supplierId).subscribe(data => {
-            this.locationApplicationForm.reset();
-            if (data != null) {
-                this.isSupplierinfoEdit = true;
-            }
-            this.locationDataSources = data;
-            this.allLocation = data;
-            this.allContactLocation = data;
+    //    this.SupplierListService.getAllSupplierLocation(supplierId).subscribe(data => {
+    //        this.locationApplicationForm.reset();
+    //        if (data != null) {
+    //            this.isSupplierinfoEdit = true;
+    //        }
+    //        this.locationDataSources = data;
+    //        this.allLocation = data;
+    //        this.allContactLocation = data;
 
-        });
+    //    });
 
-        this.SupplierListService.getAllSupplierWarehouse(supplierId).subscribe(data => {
-            this.warehouseDataSources = data;
-        });
+    //    this.SupplierListService.getAllSupplierWarehouse(supplierId).subscribe(data => {
+    //        this.warehouseDataSources = data;
+    //    });
 
-        this.SupplierListService.getAllSupplierContact(supplierId).subscribe(data => {
-            this.ContactLocationApplicationForm.reset();
-            if (data != null) {
-                this.isSupplierinfoEdit = true;
-            }
-            this.contactDataSources = data;
-            this.allContactPerson = data;
-        });
+    //    this.SupplierListService.getAllSupplierContact(supplierId).subscribe(data => {
+    //        this.ContactLocationApplicationForm.reset();
+    //        if (data != null) {
+    //            this.isSupplierinfoEdit = true;
+    //        }
+    //        this.contactDataSources = data;
+    //        this.allContactPerson = data;
+    //    });
 
-        this.SupplierListService.getAllSupplierLocationWiseContact(supplierId).subscribe(data => {
-            this.contactLocationDataSources = data;
-        });
+    //    this.SupplierListService.getAllSupplierLocationWiseContact(supplierId).subscribe(data => {
+    //        debugger
+    //        this.contactLocationDataSources = data;
+    //    });
 
-        this.SupplierListService.getAllSupplierMFS(supplierId).subscribe(data => {
-            this.financialApplicationForm.reset();
-            if (data != null) {
-                this.isSupplierinfoEdit = true;
-            }
-            this.mobileBankingDataSources = data;
-        });
+    //    this.SupplierListService.getAllSupplierMFS(supplierId).subscribe(data => {
+    //        this.financialApplicationForm.reset();
+    //        if (data != null) {
+    //            this.isSupplierinfoEdit = true;
+    //        }
+    //        this.mobileBankingDataSources = data;
+    //    });
 
-        this.SupplierListService.getAllSupplierBankAccount(supplierId).subscribe(data => {
-            this.bankingDataSources = data;
-        });
+    //    this.SupplierListService.getAllSupplierBankAccount(supplierId).subscribe(data => {
+    //        this.bankingDataSources = data;
+    //    });
 
-        this.SupplierListService.getAllSupplierCreditDeposit(supplierId).subscribe(data => {
-            this.SecurityDepositDataSources = data;
-        });
+    //    this.SupplierListService.getAllSupplierCreditDeposit(supplierId).subscribe(data => {
+    //        this.SecurityDepositDataSources = data;
+    //    });
 
-        this.SupplierListService.getAllSupplierCreditHistory(supplierId).subscribe(data => {
-            this.financialApplicationForm.reset();
-            if (data != null) {
-                this.isSupplierinfoEdit = true;
-                this.financialApplicationForm.controls['currency_id'].setValue(data.currency_id);
-                this.financialApplicationForm.controls['credit_days'].setValue(data.credit_days);
-                this.financialApplicationForm.controls['credit_limit'].setValue(data.credit_limit);
-                this.financialApplicationForm.controls['payment_frequency_id'].setValue(data.payment_frequency_id);
-            }
-        });
+    //    this.SupplierListService.getAllSupplierCreditHistory(supplierId).subscribe(data => {
+    //        this.financialApplicationForm.reset();
+    //        if (data != null) {
+    //            this.isSupplierinfoEdit = true;
+    //            this.financialApplicationForm.controls['currency_id'].setValue(data.currency_id);
+    //            this.financialApplicationForm.controls['credit_days'].setValue(data.credit_days);
+    //            this.financialApplicationForm.controls['credit_limit'].setValue(data.credit_limit);
+    //            this.financialApplicationForm.controls['payment_frequency_id'].setValue(data.payment_frequency_id);
+    //        }
+    //    });
 
-        this.toggleGridDisplay();
-    }
+    //    this.toggleGridDisplay();
+    //}
 
     //for validation messate -----------
     get a(): { [key: string]: AbstractControl } {

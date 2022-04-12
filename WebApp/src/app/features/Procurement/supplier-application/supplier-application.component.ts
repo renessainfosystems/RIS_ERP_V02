@@ -1025,7 +1025,16 @@ export class SupplierApplicationComponent implements OnInit {
         });
 
         this.SupplierApplicationService.getAllSupplierBusinessEcommerce(supplierId).subscribe(data => {
+
+            this.categories = data;
         });
+
+        //loadMenuAndRoleWiseEvent() {
+        //    this.MenuAuthorizationService.GetMenuAndRoleWiseEvent(this.rowEvent.MenuId, this.AuthorizationRoleId).subscribe(data => {
+        //        this.events = data;
+
+        //    });
+        //}
 
         this.SupplierApplicationService.getAllSupplierAssociation(supplierId).subscribe(data => {
             this.associationsApplicationForm.reset();
@@ -1088,7 +1097,6 @@ export class SupplierApplicationComponent implements OnInit {
         });
 
         this.SupplierApplicationService.getAllSupplierCreditHistory(supplierId).subscribe(data => {
-            debugger
 
             if (data != null) {
                 this.isSupplierinfoEdit = true;
