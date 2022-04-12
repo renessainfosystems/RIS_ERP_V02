@@ -93,7 +93,7 @@ namespace Auth.DataAccess.Attendance
             }
             else if (operationType == (int)GlobalEnumList.DBOperation.Delete)
             {
-                parameters.Add("@param_roster_policy_detail_id", attendance_Policy_Benefit.attendance_policy_benefit_id, DbType.Int32);
+                parameters.Add("@param_attendance_policy_benefit_id", attendance_Policy_Benefit.attendance_policy_benefit_id, DbType.Int32);
                 parameters.Add("@param_created_user_id", currentUserInfoId ?? 0, DbType.Int32);
                 parameters.Add("@param_DBOperation", GlobalEnumList.DBOperation.Delete);
             }
