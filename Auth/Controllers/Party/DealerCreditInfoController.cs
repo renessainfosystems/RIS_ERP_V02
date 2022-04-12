@@ -46,9 +46,9 @@ namespace Auth.Controllers.Party
             
             if (dealerCreditInfo.AttachmentFile != null)
             {
-                if (!string.IsNullOrEmpty(dealerCreditInfodata.FileUpload))
+                if (!string.IsNullOrEmpty(dealerCreditInfodata.AttachmentFile))
                 {
-                    deleteDocument(dealerCreditInfodata.FileUpload);
+                    deleteDocument(dealerCreditInfodata.AttachmentFile);
                 }                
                 dealerCreditInfo.attachment = GetDocumentPath(dealerCreditInfo.AttachmentFile);
             }
