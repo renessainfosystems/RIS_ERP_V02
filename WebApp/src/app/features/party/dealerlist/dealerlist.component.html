@@ -2,7 +2,7 @@
     <div class="col-12">
         <div class="card">
             <h4>Dealer Information</h4>
-            
+
             <!--end form display------------->
             <div [hidden]="gridDisplay">
                 <p-table #dt [value]="dealerinfoList" styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" responsiveLayout="scroll"
@@ -55,6 +55,24 @@
                 </p-table>
                 <!--end grid display -------------->
             </div>
+
+            <form action="" [formGroup]="">
+                <div class="col-12">
+                    <div class="p-fluid p-formgrid grid">
+                        <div class="field md:col-3">
+                            <label pTooltip="Remarks" tooltipPosition="top">Department<span class="req">*</span></label>
+                            <input type="text" formControlName="remarks" placeholder="" pInputText />
+                        </div>                       
+                        <div class="field md:col-3">
+                            <label pTooltip="Remarks" tooltipPosition="top">Employee<span class="req">*</span></label>
+                            <input type="text" formControlName="remarks" placeholder="" pInputText />
+                        </div>
+                        <div class="field md:col-1">
+                            <button pButton pRipple type="button" label="Assign" class="risBtnAssign risAssign mr-2 mb-2" icon="pi pi-plus"></button>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>
