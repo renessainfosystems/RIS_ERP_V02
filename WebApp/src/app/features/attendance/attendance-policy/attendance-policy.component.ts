@@ -37,8 +37,9 @@ export class AttendancePolicyComponent implements OnInit {
     latEarlySlabDataSources: any[] = [];
     rosterDetails: any[] = [];
     selectedNextShift: any;
-    allShifts: any[];
+    allShifts: any[]=[];
     rowData: any;
+    isShowdayofftype: boolean = false;
     rowSelected: boolean = false;
     isAttendancePolicyEdit: boolean = false;
     displayApprove: boolean = false;
@@ -68,26 +69,8 @@ export class AttendancePolicyComponent implements OnInit {
     absenteeismdisplay: boolean = false;
     constructor(private formbulider: FormBuilder, private confirmationService: ConfirmationService, private AttendancePolicyService: AttendancePolicyService, private notifyService: NotificationService, private LateEarlyPolicyService: LateEarlyPolicyService, private RosterPolicyService: RosterPolicyService, private absenteeismPolicyService: AbsenteeismPolicyService) { }
 
-    ngOnInit(): void {
-        this.AttendancePolicyForm = this.formbulider.group({
-
-            policy_name: [null, [Validators.required]],
-            attendance_policy_id: [0],
-            shift_id: [0],
-            code: [''],
-            remarks:[null],
-            attendance_calendar_id: [0, [Validators.required]],
-            absenteeism_policy_id: [0],
-            late_early_policy_id: [0],
-            leave_policy_id:[0],
-            dayoff_alternative_id: [0],
-            dayoff_type_id: [0],
-            week_day: [''],
-            is_random_dayoff: false,
-            no_of_random_dayoff: 0,
-            abp_id: [0, [Validators.required]],
-            roster_policy_id:0,
-        });
+    ngOnInit() {
+        this.formInit();
         this.AbsenteeismPolicyForm = this.formbulider.group({
 
             absenteeism_policy_name: [null, [Validators.required]],
@@ -112,6 +95,28 @@ export class AttendancePolicyComponent implements OnInit {
         this.loadAllDayOffType();
         this.loadAllDayOffAlternative();
         this.getPolicyCode();
+    }
+
+    formInit() {
+        this.AttendancePolicyForm = this.formbulider.group({
+
+            policy_name: [null, [Validators.required]],
+            attendance_policy_id: [0],
+            shift_id: [0],
+            code: [''],
+            remarks: [null],
+            attendance_calendar_id: [0, [Validators.required]],
+            absenteeism_policy_id: [0],
+            late_early_policy_id: [0],
+            leave_policy_id: [0],
+            dayoff_alternative_id: [0],
+            dayoff_type_id: [0],
+            week_day: [''],
+            is_random_dayoff: false,
+            no_of_random_dayoff: 0,
+            abp_id: [0],
+            roster_policy_id: 0,
+        });
     }
     onRowSelect(event) {
         this.rowSelected = true;
@@ -208,7 +213,6 @@ export class AttendancePolicyComponent implements OnInit {
 
             this.AttendancePolicyForm.controls['code'].setValue(data.code);
 
-            console.log(data.code)
         });
     }
     loadRosterPolicyToEdit() {
@@ -274,7 +278,7 @@ export class AttendancePolicyComponent implements OnInit {
             }
             this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
         });
-
+        this.rowData = null;
 
     }
     policyApprove() {
@@ -309,13 +313,11 @@ export class AttendancePolicyComponent implements OnInit {
 
             return;
         }
-        data.absenteeism_policy_id = data.absenteeism_policy_id;
-        console.log(data)
         data.attendance_Policy_Dayoffs = this.dayOffPolicyDetails;
         data.attendance_Policy_Benefits = this.attBenefitDetails;
         data.attendance_Policy_Leaves = this.leavePolicyDetails;
         data.attendance_Policy_Shifts = this.shiftDetails;
-
+ 
         if (this.isAttendancePolicyEdit) {
 
             data.attendance_policy_id = this.rowData.attendance_policy_id;
@@ -443,17 +445,14 @@ export class AttendancePolicyComponent implements OnInit {
 
 
     addAttendanceBenefit() {
-        //this.submitted = true;
-
-        //if (this.AttendancePolicyForm.invalid) {
-        //    return;
-        //}
-        //let roster_policy_name = this.AttendancePolicyForm.get('roster_policy_name')?.value;
-        debugger
+       
         let abp_id = this.AttendancePolicyForm.get('abp_id')?.value.abp_id;
 
         let abp_name = (this.AttendancePolicyForm.get('abp_id')?.value.abp_name);
 
+        if (!abp_id) {
+            return this.notifyService.ShowNotification(2, "Please select attendance benefit");
+        }
         if (this.attBenifitdataExist(abp_id)) {
             return this.notifyService.ShowNotification(2, "Selected benefit already added")
         }
@@ -500,7 +499,7 @@ export class AttendancePolicyComponent implements OnInit {
             let attendance_policy_id = this.rowData.attendance_policy_id;
 
 
-            this.AttendancePolicyService.deletePolicyBenefit(row.roster_policy_detail_id).subscribe(data => {
+            this.AttendancePolicyService.deletePolicyBenefit(row.attendance_policy_benefit_id).subscribe(data => {
 
                 if (data.MessageType == 1) {
                     this.attBenefitDetails.splice(this.attBenefitDetails.findIndex(item => item.attendance_policy_benefit_id === row.attendance_policy_benefit_id), 1);
@@ -517,19 +516,15 @@ export class AttendancePolicyComponent implements OnInit {
     }
 
     addShift() {
-        //this.submitted = true;
-
-        //if (this.AttendancePolicyForm.invalid) {
-        //    return;
-        //}
-        //let roster_policy_name = this.AttendancePolicyForm.get('roster_policy_name')?.value;
-
+      
         let shift_id = this.AttendancePolicyForm.get('shift_id')?.value.shift_id;
 
         let shift_name = (this.AttendancePolicyForm.get('shift_id')?.value.shift_name);
-
+        if (!shift_id) {
+            return this.notifyService.ShowNotification(2, "Please select shift");
+        }
         if (this.shiftdataExist(shift_id)) {
-            return this.notifyService.ShowNotification(2, "Selected benefit already added")
+            return this.notifyService.ShowNotification(2, "Selected shift already added")
         }
 
         const shiftObj = {
@@ -591,19 +586,15 @@ export class AttendancePolicyComponent implements OnInit {
     }
 
     addLeavePolicy() {
-        //this.submitted = true;
-
-        //if (this.AttendancePolicyForm.invalid) {
-        //    return;
-        //}
-        //let roster_policy_name = this.AttendancePolicyForm.get('roster_policy_name')?.value;
-
+       
         let leave_policy_id = this.AttendancePolicyForm.get('leave_policy_id')?.value.leave_policy_id;
 
         let leave_policy_name = (this.AttendancePolicyForm.get('leave_policy_id')?.value.leave_policy_name);
-
+        if (!leave_policy_id) {
+            return this.notifyService.ShowNotification(2, "Please select leave policy");
+        }
         if (this.leavePolicydataExist(leave_policy_id)) {
-            return this.notifyService.ShowNotification(2, "Selected benefit already added")
+            return this.notifyService.ShowNotification(2, "Selected leave policy already added")
         }
         let data = this.leavePolicyDP.filter(
             leave => leave.leave_policy_id === leave_policy_id);
@@ -669,23 +660,24 @@ export class AttendancePolicyComponent implements OnInit {
     }
 
     addDayOffPolicy() {
-        //this.submitted = true;
-
-        //if (this.AttendancePolicyForm.invalid) {
-        //    return;
-        //}
-        //let roster_policy_name = this.AttendancePolicyForm.get('roster_policy_name')?.value;
-
+       
         let dayoff_type_id = this.AttendancePolicyForm.get('dayoff_type_id')?.value.dayoff_type_id;
 
         let dayoff_type_name = (this.AttendancePolicyForm.get('dayoff_type_id')?.value.dayoff_type_name);
-
         let week_day = (this.AttendancePolicyForm.get('week_day')?.value.week_day);
-
+        
+        if (!dayoff_type_id || !week_day) {
+            
+            return this.notifyService.ShowNotification(2, "Please select week day and day off type");
+        }
         let dayoff_alternative_id = this.AttendancePolicyForm.get('dayoff_alternative_id')?.value.dayoff_alternative_id;
 
         let dayoff_alternative_name = (this.AttendancePolicyForm.get('dayoff_alternative_id')?.value.dayoff_alternative_name);
 
+        if ((dayoff_type_id == 3 || dayoff_type_id == 4) && !dayoff_alternative_id) {
+
+            return this.notifyService.ShowNotification(2, "Please select alternative day off");
+        }
         if (this.dayOffPolicydataExist(week_day)) {
             return this.notifyService.ShowNotification(2, "Selected day off already added")
         }
@@ -770,7 +762,7 @@ export class AttendancePolicyComponent implements OnInit {
     }
     viewLateEarlyPolicy() {
         this.lateearlydisplay = true;
-        let late_early_policy_id = this.AttendancePolicyForm.get('late_early_policy_id')?.value.late_early_policy_id;
+        let late_early_policy_id = this.AttendancePolicyForm.get('late_early_policy_id')?.value;
         this.LateEarlyPolicyService.getLateEarlyPolicyDetailsById(late_early_policy_id).subscribe(res => {
 
             this.setLateEarlyDataSource(res);
@@ -780,7 +772,7 @@ export class AttendancePolicyComponent implements OnInit {
   
     viewRosterPolicy() {
         this.rosterPolicydisplay = true;
-        let roster_policy_id = this.AttendancePolicyForm.get('roster_policy_id')?.value.roster_policy_id;
+        let roster_policy_id = this.AttendancePolicyForm.get('roster_policy_id')?.value;
         this.RosterPolicyService.getRosterDetailsById(roster_policy_id).subscribe(res => {
 
             this.rosterDetails = res;
@@ -789,7 +781,7 @@ export class AttendancePolicyComponent implements OnInit {
     }
     viewAbsenteeismPolicy() {
         this.absenteeismdisplay = true;
-        let absenteeism_policy_id = this.AttendancePolicyForm.get('absenteeism_policy_id')?.value.absenteeism_policy_id;
+        let absenteeism_policy_id = this.AttendancePolicyForm.get('absenteeism_policy_id')?.value;
         this.absenteeismPolicyService.getPolicyById(absenteeism_policy_id).subscribe(data => {
             this.AbsenteeismPolicyForm.controls['absenteeism_policy_name'].setValue(data.absenteeism_policy_name);
             this.AbsenteeismPolicyForm.controls['code'].setValue(data.code);
@@ -846,10 +838,31 @@ export class AttendancePolicyComponent implements OnInit {
         }
         this.latEarlySlabDataSources = res;
     }
+
+    onDayOffTypeChange(event)
+    {
+        let dayOffTypeId = this.AttendancePolicyForm.get('dayoff_type_id')?.value.dayoff_type_id;
+
+        if (dayOffTypeId == 3 || dayOffTypeId == 4) {
+            this.isShowdayofftype = true;
+
+        } else {
+            this.isShowdayofftype = false;
+            this.AttendancePolicyForm.controls['dayoff_alternative_id'].setValue(0);
+        }
+    } 
+
     resetForm() {
-       // this.AttendancePolicyForm.reset();
+        //this.AttendancePolicyForm.reset();
+        this.formInit();
         this.attBenefitDetails = [];
+        this.rosterDetails = [];
+        this.shiftDetails = [];
+        this.leavePolicyDetails = [];
+        this.dayOffPolicyDetails = [];
         this.submitted = false;
         this.isAttendancePolicyEdit = false;
+        this.getPolicyCode();
+
     }
 }
