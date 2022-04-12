@@ -37,7 +37,7 @@ export class SalaryHeadService {
 
   getSalaryHeadById(salary_head_id: Number): Observable<any> {
 
-    return this.http.get(this.ipconfig.base_IP + 'SalaryHead/GetSalaryHeadById?salary_head_id=' + salary_head_id, httpOptions);
+      return this.http.get(this.ipconfig.base_IP + 'SalaryHead/GetSalaryHeadById?primary_salary_head_id=' + salary_head_id, httpOptions);
   }
   getSalaryHeadTypeForDP(): Observable<any[]> {
 
