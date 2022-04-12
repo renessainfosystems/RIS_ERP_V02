@@ -480,7 +480,7 @@
                 <p-confirmPopup key="approve"></p-confirmPopup>
                 <p-confirmPopup key="delete"></p-confirmPopup>
                 <p-confirmPopup key="copy"></p-confirmPopup>
-                <p-table [value]="leavePolicies" styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm" [paginator]="true" [rows]="10" selectionMode="single" [showCurrentPageReport]="true" responsiveLayout="scroll"
+                <p-table #dt1 [value]="leavePolicies" styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm" [paginator]="true" [rows]="10" selectionMode="single" [showCurrentPageReport]="true" responsiveLayout="scroll"
                          [(selection)]="selectedPolicy" dataKey="leave_policy_id" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)" [globalFilterFields]="['leave_policy_name','leave']">
 
                     <ng-template pTemplate="caption">
