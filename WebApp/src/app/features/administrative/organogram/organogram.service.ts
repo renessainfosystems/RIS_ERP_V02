@@ -60,6 +60,10 @@ export class OrganogramService {
 
         return this.http.get(this.ipconfig.base_IP + 'Department/GetDepartmentByTypeId?Department_Type_id=' + Type_id, httpOptions);
     }
+    GetDepartmentById(Department_id: Number): Observable<any> {
+
+        return this.http.get(this.ipconfig.base_IP + 'Department/GetDepartmentById?Department_id=' + Department_id, httpOptions);
+    }
     GetAllOrganogramDetail(Organogram_Id: Number): Observable<any> {
 
         return this.http.get(this.ipconfig.base_IP + 'OrganogramDetail/GetAllOrganogramDetail?Organogram_Id=' + Organogram_Id, httpOptions);

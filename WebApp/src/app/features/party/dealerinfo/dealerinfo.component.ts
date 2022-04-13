@@ -899,7 +899,8 @@ export class DealerinfoComponent implements OnInit {
                     this.dealerIndex();
                     this.isDealerinfoEdit = false;
                     this.toggleFormDisplay();
-                    this.submitted = false;                   
+                    this.submitted = false;
+                    this.ngOnInit();
                 }                
             });
         }
@@ -915,7 +916,8 @@ export class DealerinfoComponent implements OnInit {
                         this.toggleFormDisplay();
                         this.dealerIndex();
                         this.isDealerinfoEdit = false;
-                        this.submitted = false;                        
+                        this.submitted = false;
+                        this.ngOnInit();
                     }
                 }
             );
@@ -1219,6 +1221,7 @@ export class DealerinfoComponent implements OnInit {
                     this.dealerContactIndex();
                     this.isDealerContactinfoEdit = false;
                     this.submittedContact = false;
+                    this.ngOnInit();
                 }
 
             });
@@ -1238,6 +1241,7 @@ export class DealerinfoComponent implements OnInit {
                         this.dealerContactIndex();
                         this.isDealerContactinfoEdit = false;
                         this.submittedContact = false;
+                        this.ngOnInit();
                     }
                 }
             );
@@ -1434,6 +1438,7 @@ export class DealerinfoComponent implements OnInit {
                     this.dealerLocationIndex();
                     this.isDealerLocationinfoEdit = false;
                     this.submittedLocation = false;
+                    this.ngOnInit();
                 }
             });
             this.gridDisplayLocation = false;
@@ -1451,6 +1456,8 @@ export class DealerinfoComponent implements OnInit {
                         this.dealerLocationIndex();
                         this.isDealerLocationinfoEdit = false;
                         this.submittedLocation = false;
+                        this.ngOnInit();
+
                     }
                 }
             );
@@ -1589,6 +1596,7 @@ export class DealerinfoComponent implements OnInit {
                     this.isDealerDocumentinfoEdit = false;
                     this.submittedDocument = false;
                     this.dealerdocumentForm.reset();
+                    this.ngOnInit();
                 }
             });
             this.gridDisplayDocument = false;
@@ -1606,6 +1614,7 @@ export class DealerinfoComponent implements OnInit {
                         this.isDealerDocumentinfoEdit = false;
                         this.submittedDocument = false;
                         this.dealerdocumentForm.reset();
+                        this.ngOnInit();
                     }
                 }
             );
@@ -1751,6 +1760,7 @@ export class DealerinfoComponent implements OnInit {
                     this.isDealerCreditinfoEdit = false;
                     this.submittedCredit = false;
                     this.dealercreditForm.reset();
+                    this.ngOnInit();
                 }
             });
             this.gridDisplayCredit = false;
@@ -1769,6 +1779,7 @@ export class DealerinfoComponent implements OnInit {
                         this.isDealerCreditinfoEdit = false;
                         this.submittedCredit = false;
                         this.dealercreditForm.reset();
+                        this.ngOnInit();
                     }
                 }
             );
@@ -1819,7 +1830,7 @@ export class DealerinfoComponent implements OnInit {
         let dealerCreditinfoId = this.rowDataCredit.DealerCreditInfoId;
         this.dealerinfoService.deleteDealerCreditInfo(dealerCreditinfoId).subscribe(data => {
             if (data.MessageType == 1) {
-                this.dealercreditinfoList.splice(this.dealercreditinfoList.findIndex(item => item.DealerCreditInfoId === data.dealerCreditinfoId), 1);
+                this.dealercreditinfoList.splice(this.dealercreditinfoList.findIndex(item => item.DealerCreditInfoId === dealerCreditinfoId), 1);
             }
             this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
         });
@@ -1895,25 +1906,7 @@ export class DealerinfoComponent implements OnInit {
         });
         this.gridDisplayCredit = false;
         this.formDisplayCredit = true;
-    }
-
-    //onSelectCreditImage(event) {
-    //    if (event.target.files) {
-    //        var reader = new FileReader()
-    //        reader.readAsDataURL(event.target.files[0])
-    //        reader.onload = (event: any) => {
-    //            this.photourllink = event.target.result
-    //        }
-    //        alert(this.photourllink)
-    //        if (event.target.files.length > 0) {
-    //            const file = event.target.files[0];
-    //            this.dealerCreditImageFile.nativeElement.innerText = file.name;
-    //            this.dealercreditForm.patchValue({
-    //                FileUpload: file,
-    //            });
-    //        }
-    //    }
-    //}
+    }       
 
     creditFormFileInput(files: FileList) {
         this.fileToUploadCreditForm = files.item(0);

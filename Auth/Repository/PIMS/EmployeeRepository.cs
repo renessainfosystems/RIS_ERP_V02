@@ -34,5 +34,9 @@ namespace Auth.Repository.PIMS
         {
             return await _EmployeeDataAccess.EmployeeActivity(Employee_id);
         }
+        public async Task<dynamic> GetEmployeeCboList()
+        {
+            return await _EmployeeDataAccess.GetEmployeeCboList();
+        }
     }
 }

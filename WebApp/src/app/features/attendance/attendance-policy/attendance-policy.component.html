@@ -333,20 +333,21 @@
             <!--end form display------------->
 
             <div [hidden]="gridDisplay">
-                <button pButton pRipple type="button" label="New" (click)="showBasicDialog()" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
-                <button pButton pRipple type="button" label="Edit" (click)="loadRosterPolicyToEdit()" icon="pi pi-pencil" class="risBtn risEdit mr-2 mb-2"></button>
-                <button pButton pRipple type="button" label="Delete" icon="pi pi-trash" class="risBtn risDelete mr-2 mb-2" (click)="deleteModal($event)"> </button>
-                <button pButton pRipple type="button" label="Activity" icon="pi pi-box" class="risBtn risAll mr-2 mb-2"> </button>
-                <button pButton pRipple type="button" label="Approve" icon="pi pi-box" class="risBtn risAll mr-2 mb-2" (click)="approveModal($event)"> </button>
-                <button pButton pRipple type="button" label="Copy" icon="pi pi-copy" class="risBtn risAll mr-2 mb-2" (click)="copyModal($event)"> </button>
-                <p-confirmPopup key="approve"></p-confirmPopup>
-                <p-confirmPopup key="delete"></p-confirmPopup>
-                <p-confirmPopup key="copy"></p-confirmPopup>
+           
                 <p-table #dt1 [value]="AttendancePolicies" styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm" [paginator]="true" [rows]="10" selectionMode="single" [showCurrentPageReport]="true" responsiveLayout="scroll"
                          [(selection)]="selectedPolicy" dataKey="attendance_policy_id" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)" [globalFilterFields]="['policy_name']">
+                    
                     <ng-template pTemplate="caption">
                         <div class="flex">
-
+                            <button pButton pRipple type="button" label="New" (click)="showBasicDialog()" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
+                            <button pButton pRipple type="button" label="Edit" (click)="loadRosterPolicyToEdit()" icon="pi pi-pencil" class="risBtn risEdit mr-2 mb-2"></button>
+                            <button pButton pRipple type="button" label="Delete" icon="pi pi-trash" class="risBtn risDelete mr-2 mb-2" (click)="deleteModal($event)"> </button>
+                            <button pButton pRipple type="button" label="Activity" icon="pi pi-box" class="risBtn risAll mr-2 mb-2"> </button>
+                            <button pButton pRipple type="button" label="Approve" icon="pi pi-box" class="risBtn risAll mr-2 mb-2" (click)="approveModal($event)"> </button>
+                            <button pButton pRipple type="button" label="Copy" icon="pi pi-copy" class="risBtn risAll mr-2 mb-2" (click)="copyModal($event)"> </button>
+                            <p-confirmPopup key="approve"></p-confirmPopup>
+                            <p-confirmPopup key="delete"></p-confirmPopup>
+                            <p-confirmPopup key="copy"></p-confirmPopup>
                             <span class="p-input-icon-left ml-auto">
                                 <i class="pi pi-search"></i>
                                 <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Search By Policy" />

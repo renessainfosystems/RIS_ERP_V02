@@ -186,5 +186,12 @@ namespace Auth.Controllers.PIMS
             var path = directoryPath + "\\" + file.Name;
             System.IO.File.Delete(path);
         }
+
+        [HttpGet]
+        public async Task<dynamic> GetEmployeeCboList()
+        {
+
+            return await _EmployeeRepository.GetEmployeeCboList();
+        }
     }
 }
