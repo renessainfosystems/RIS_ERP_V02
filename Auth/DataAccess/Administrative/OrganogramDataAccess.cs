@@ -183,7 +183,7 @@ namespace Auth.DataAccess.Administrative
                 parametersLocation.Add("@company_group_id", company_group_id);
                 dynamic dataLocation = await _dbConnection.QueryAsync<dynamic>(sqlL, parametersLocation);
 
-                string sql = @"select tt.*,dt.department_type_name from (select og.organogram_code,c.company_name,location_code,location_code+' - '+location_name location_name,                               
+                string sql = @"select tt.*,isnull(dt.department_type_name,dpt.department_type_name)department_type_name from (select og.organogram_code,c.company_name,location_code,location_code+' - '+location_name location_name,                               
 								 dep.department_name as department,
                                 isnull(og.department_id,'0') as department_id,isnull(og.parent_id,0)parent_id,isnull(og.organogram_id,'0')organogram_id,l.location_id,c.company_id,
                                 isnull(og.is_active,'false')is_active,isnull(og.sorting_priority,0)sorting_priority ,g.group_name,
@@ -202,6 +202,7 @@ namespace Auth.DataAccess.Administrative
 								left join Administrative.Department dep on og.department_id=dep.department_id								
                                 where l.company_group_id=@company_group_id)tt 
 								left join DBEnum.Department_Type dt on dt.department_type_id=tt.department_type_id
+                                left join DBEnum.Department_Type dpt on dpt.department_type_id=tt.dept_type_id
 								order by sorting_priority,organogram_id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@company_group_id", company_group_id);

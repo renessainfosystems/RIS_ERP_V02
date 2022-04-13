@@ -261,6 +261,8 @@ namespace Auth
             services.AddScoped<IAttendancePolicyRepository, AttendancePolicyRepository>();
             services.AddScoped<IDBEnumRepository, DBEnumRepository>();
             services.AddScoped<DBEnumDataAcess, DBEnumDataAcess>();
+            services.AddScoped<IAttendancePolicyAssignmentRepository, AttendancePolicyAssignmentRepository>();
+            services.AddScoped<AttendancePolicyAssignmentDataAccess, AttendancePolicyAssignmentDataAccess>();
 
             #endregion
 
@@ -283,6 +285,8 @@ namespace Auth
             services.AddScoped<DealerDocumentInfoDataAccess, DealerDocumentInfoDataAccess>();
             services.AddScoped<IDealerCreditInfoRepository, DealerCreditInfoRepository>();
             services.AddScoped<DealerCreditInfoDataAccess, DealerCreditInfoDataAccess>();
+            services.AddScoped<IDealerVerificationRepository, DealerVerificationRepository>();
+            services.AddScoped<DealerVerificationDataAccess, DealerVerificationDataAccess>();
             #endregion
             #region Retailer Part
             services.AddScoped<IRetailerInfoRepository, RetailerInfoRepository>();
