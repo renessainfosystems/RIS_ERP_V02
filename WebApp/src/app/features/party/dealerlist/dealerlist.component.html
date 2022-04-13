@@ -56,16 +56,26 @@
                 <!--end grid display -------------->
             </div>
 
-            <form action="" [formGroup]="">
+            <form action="" [formGroup]="dealerassignForm">
                 <div class="col-12">
                     <div class="p-fluid p-formgrid grid">
                         <div class="field md:col-3">
-                            <label pTooltip="Remarks" tooltipPosition="top">Department<span class="req">*</span></label>
-                            <input type="text" formControlName="remarks" placeholder="" pInputText />
+                            <label pTooltip="Department" tooltipPosition="top">Department<span class="req">*</span></label>
+                            <p-dropdown [options]="allDepartment" formControlName="department_id" [ngClass]="{ 'is-invalid': submitted && d.department_id.errors }" placeholder="---Select---"
+                                        optionLabel="department_name" optionValue="department_id" [showClear]="true" [filter]="true" filterBy="department_name"></p-dropdown>
+
+                            <div *ngIf="submitted && d.department_id.errors" class="invalid-feedback">
+                                <small *ngIf="d.department_id.errors.required" class="p-error">Department is required</small>
+                            </div>
                         </div>                       
                         <div class="field md:col-3">
-                            <label pTooltip="Remarks" tooltipPosition="top">Employee<span class="req">*</span></label>
-                            <input type="text" formControlName="remarks" placeholder="" pInputText />
+                            <label pTooltip="Employee" tooltipPosition="top">Employee<span class="req">*</span></label>
+                            <p-dropdown [options]="allEmployee" formControlName="employee_id" [ngClass]="{ 'is-invalid': submitted && d.employee_id.errors }" placeholder="---Select---"
+                                        optionLabel="employee_name" optionValue="employee_id" [showClear]="true" [filter]="true" filterBy="employee_name"></p-dropdown>
+
+                            <div *ngIf="submitted && d.employee_id.errors" class="invalid-feedback">
+                                <small *ngIf="d.employee_id.errors.required" class="p-error">Employee is required</small>
+                            </div>
                         </div>
                         <div class="field md:col-1">
                             <button pButton pRipple type="button" label="Assign" class="risBtnAssign risAssign mr-2 mb-2" icon="pi pi-plus"></button>
