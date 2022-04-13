@@ -19,13 +19,43 @@ export class DealerListService {
     constructor(private http: HttpClient, private ipconfig: IPConfiguration) {
 
     }
+
+    createDealerVerification(dealerVerification: FormData): Observable<any> {
+
+        return this.http.post<any>(this.ipconfig.base_IP + 'DealerVerification/Create', dealerVerification, httpOptionsForFileUpload);
+
+    }
+    updateDealerVerification(dealerVerification: FormData): Observable<any> {
+
+        return this.http.post<any>(this.ipconfig.base_IP + 'DealerVerification/Update', dealerVerification, httpOptionsForFileUpload);
+
+    }
+    deleteDealerVerification(dealer_verification_id: number): Observable<any> {
+
+        return this.http.post(this.ipconfig.base_IP + 'DealerVerification/Delete?dealer_verification_id=' + dealer_verification_id, httpOptions);
+
+    }
+    getAllDealerVerification(): Observable<any[]> {
+
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'DealerVerification/GetAllDealerVerification', httpOptions);
+
+    }
+    getDealerVerificationById(dealer_verification_id: number): Observable<any> {
+        return this.http.get(this.ipconfig.base_IP + 'DealerInfo/GetDealerVerificationById?dealer_verification_id=' + dealer_verification_id, httpOptions);
+    }
        
-    getAllDealerInfoList(): Observable<any[]> {
+    getAllDealerVerificationList(): Observable<any[]> {
         return this.http.get<any[]>(this.ipconfig.base_IP + 'DealerInfo/GetAllDealerInfo', httpOptions);
     }
 
-    getDealerInfoListById(dealer_info_id: number): Observable<any> {
-        return this.http.get(this.ipconfig.base_IP + 'DealerInfo/GetDealerInfoById?dealer_info_id=' + dealer_info_id, httpOptions);
+    getDealerVerificationByDealerId(dealer_info_id: number): Observable<any> {
+        return this.http.get(this.ipconfig.base_IP + 'DealerInfo/GetDealerVerificationByDealerId?dealer_info_id=' + dealer_info_id, httpOptions);
+    }
+
+    getAllDealerInfo(): Observable<any[]> {
+
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'DealerInfo/GetAllDealerInfo', httpOptions);
+
     }
 
     getAllDepartmentCboList(): Observable<any[]> {

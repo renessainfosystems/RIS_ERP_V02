@@ -22,9 +22,9 @@ namespace Auth.Repository.Party
             return await _dealerVarificationDataAccess.GetDealerVerificationById(dealer_verification_id);
         }
 
-        public async Task<dynamic> GetCreditInfoByDealerId(int dealer_info_id)
+        public async Task<dynamic> GetDealerVerificationByDealerId(int dealer_info_id)
         {
-            return await _dealerVarificationDataAccess.GetCreditInfoByDealerId(dealer_info_id);
+            return await _dealerVarificationDataAccess.GetDealerVerificationByDealerId(dealer_info_id);
         }
         public async Task<dynamic> IUD_DealerVerification(DealerVerification dealerVarification,int dbOperation)
         {

@@ -46,8 +46,8 @@ namespace Auth.DataAccess.Party
                 parameters.Add("@param_employee_id", dealerVerification.employee_id, DbType.Int32);
                 parameters.Add("@param_remarks", dealerVerification.remarks, DbType.String);
                 parameters.Add("@param_is_varified", false, DbType.Boolean);
-                parameters.Add("@param_varified_date", DateTime.Now, DbType.DateTime);
-                parameters.Add("@param_varified_user_id", currentUserInfoId ?? 0, DbType.Int64);
+                parameters.Add("@param_varified_date", dealerVerification.varified_date, DbType.DateTime);
+                parameters.Add("@param_varified_user_id", dealerVerification.varified_user_id, DbType.Int64);
                 parameters.Add("@param_created_datetime", DateTime.Now, DbType.DateTime);
                 parameters.Add("@param_created_user_info_id", currentUserInfoId ?? 0, DbType.Int64);
                 parameters.Add("@param_DBOperation", operationType == (int)GlobalEnumList.DBOperation.Create ? GlobalEnumList.DBOperation.Create : GlobalEnumList.DBOperation.Update);
@@ -74,52 +74,53 @@ namespace Auth.DataAccess.Party
 
             if (_dbConnection.State == ConnectionState.Closed)
                 _dbConnection.Open();
+           
+                try
+                {                    
+                    dynamic data = await _dbConnection.QueryFirstOrDefaultAsync("[Party].[SP_Dealer_Verification_IUD]", parameters, commandType: CommandType.StoredProcedure);
 
-            try
-            {
-                dynamic data = await _dbConnection.QueryFirstOrDefaultAsync("[Party].[SP_Dealer_Credit_Info_IUD]", parameters, commandType: CommandType.StoredProcedure);
+                    if (dbOperation == (int)GlobalEnumList.DBOperation.Create)
+                    {
+                        result = DealerVerificationViewModel.ConvertToModel(data);
+                        return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage, result);
+                    }
+                    if (dbOperation == (int)GlobalEnumList.DBOperation.Update)
+                    {
+                        result = DealerVerificationViewModel.ConvertToModel(data);
+                        return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonUpdateMessage, result);
+                    }
 
-                if (dbOperation == (int)GlobalEnumList.DBOperation.Create)
-                {
-                    result = DealerVerificationViewModel.ConvertToModel(data);
-                    return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage, result);
-                }
-                if (dbOperation == (int)GlobalEnumList.DBOperation.Update)
-                {
-                    result = DealerVerificationViewModel.ConvertToModel(data);
-                    return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonUpdateMessage, result);
-                }
+                    if (dbOperation == (int)GlobalEnumList.DBOperation.Approve)
+                    {
+                        result = DealerVerificationViewModel.ConvertToModel(data);
+                        return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonApproveMessage, result);
+                    }
 
-                if (dbOperation == (int)GlobalEnumList.DBOperation.Approve)
-                {
-                    result = DealerVerificationViewModel.ConvertToModel(data);
-                    return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonApproveMessage, result);
-                }
+                    if (dbOperation == (int)GlobalEnumList.DBOperation.Delete)
+                    {
+                        return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonDeleteMessage);
+                    }
 
-                if (dbOperation == (int)GlobalEnumList.DBOperation.Delete)
-                {
-                    return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonDeleteMessage);
+                    if (data.Count > 0)
+                    {
+                        result = DealerVerificationViewModel.ConvertToModel(data);
+                        message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage, result);
+                    }
+                    else
+                    {
+                        message = CommonMessage.SetErrorMessage(CommonMessage.CommonErrorMessage);
+                    }
                 }
-              
-                if (data.Count > 0)
+                catch (Exception ex)
                 {
-                    result = DealerVerificationViewModel.ConvertToModel(data);
-                    message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage, result);
+                    message = CommonMessage.SetErrorMessage(ex.Message);
                 }
-                else
+                finally
                 {
-                    message = CommonMessage.SetErrorMessage(CommonMessage.CommonErrorMessage);
+                    //DB connection dispose with db connection close
+                    _dbConnection.Dispose();
                 }
-            }
-            catch (Exception ex)
-            {
-                message = CommonMessage.SetErrorMessage(ex.Message);
-            }
-            finally
-            {
-                //DB connection dispose with db connection close
-                _dbConnection.Dispose();
-            }
+            
             return (message);
         }
 
@@ -133,7 +134,7 @@ namespace Auth.DataAccess.Party
 
             try
             {
-                string sql = @"SELECT * FROM [Party].[Dealer_Credit_Info]";
+                string sql = @"SELECT * FROM [Party].[Dealer_Verification]";
                 dynamic data = await _dbConnection.QueryAsync<dynamic>(sql);
                 if (data != null)
                 {
@@ -160,9 +161,9 @@ namespace Auth.DataAccess.Party
                 _dbConnection.Open();
             try
             {
-                var sql = @"SELECT * FROM [Party].[Dealer_Credit_Info] DCI WHERE DCI.dealer_Credit_info_id =@dealer_Credit_info_id";
+                var sql = @"SELECT * FROM [Party].[Dealer_Verification] DCI WHERE DCI.dealer_verification_id =@dealer_verification_id";
                 DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@dealer_Credit_info_id", dealer_Credit_info_id);
+                parameters.Add("@dealer_verification_id", dealer_Credit_info_id);
                 dynamic data = await _dbConnection.QuerySingleOrDefaultAsync<dynamic>(sql, parameters);
                 if (data != null)
                 {
@@ -180,7 +181,7 @@ namespace Auth.DataAccess.Party
             return result;
         }
 
-        public async Task<dynamic> GetCreditInfoByDealerId(int dealer_info_id)
+        public async Task<dynamic> GetDealerVerificationByDealerId(int dealer_info_id)
         {
             var result = (dynamic)null;
             if (_dbConnection.State == ConnectionState.Closed)
