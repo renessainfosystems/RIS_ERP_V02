@@ -1758,7 +1758,7 @@ namespace DataAccess.Procurement
             try
             {
 
-                var sql = "select * from Procurement.Supplier_Master_Information";
+                var sql = "select * from Administrative.Assessment_Criteria";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@supplier_id", supplier_id);
 

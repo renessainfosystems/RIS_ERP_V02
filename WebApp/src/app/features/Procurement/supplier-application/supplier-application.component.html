@@ -2,7 +2,7 @@
 <div class="grid">
     <div class="col-12">
         <div class="card">
-            <h4>Supplier Application</h4>
+            <h4>Supplier Information</h4>
 
             <div [hidden]="formDisplay">
                 <p-tabView [activeIndex]="index" (onChange)="function($event)">
@@ -1496,7 +1496,7 @@
             <!--end form display------------->
 
             <div [hidden]="gridDisplay">
-                <button pButton pRipple type="button" (click)="showBasicDialog()" label="New" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
+                <!--<button pButton pRipple type="button" (click)="showBasicDialog()" label="New" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
                 <button pButton pRipple type="button" (click)="loadSupplierinfoToEdit()" label="Edit" icon="pi pi-pencil" class="risBtn risEdit mr-2 mb-2"></button>
                 <button pButton pRipple type="button" (click)="showDialog()" label="Delete" icon="pi pi-trash" class="risBtn risDelete mr-2 mb-2"></button>
                 <p-dialog header="Delete Record" [(visible)]="display" [style]="{width: '35vw'}">
@@ -1505,16 +1505,20 @@
                         <button class="pi pi-times risBtn risClose" (click)="display=false"> No</button>
                         <button class="pi pi-check risBtn risSave" (click)="deleteSupplierinfo()"> Yes</button>
                     </ng-template>
-                </p-dialog>
+                </p-dialog>-->
 
                 <p-table #dt1 [value]="supplierinfoList" styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm" [paginator]="true" [rows]="10" selectionMode="single" [showCurrentPageReport]="true" responsiveLayout="scroll"
                          [(selection)]="selectedsupplierinfo" dataKey="SupplierId" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)"
                          [globalFilterFields]="['SupplierCode','LegalName']">
                     <ng-template pTemplate="caption">
                         <div class="flex">
+                            <button pButton pRipple type="button" (click)="showBasicDialog()" label="New" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
+                            <button pButton pRipple type="button" (click)="loadSupplierinfoToEdit()" label="Edit" icon="pi pi-pencil" class="risBtn risEdit mr-2 mb-2"></button>
+                            <button pButton pRipple type="button" label="Delete" icon="pi pi-trash" class="risBtn risDelete mr-2 mb-2" (click)="deleteModal($event)"> </button>
+                            <p-confirmPopup key="delete"></p-confirmPopup>
                             <span class="p-input-icon-left ml-auto">
                                 <i class="pi pi-search"></i>
-                                <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Search by Any" />
+                                <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search by any" />
                             </span>
                         </div>
                     </ng-template>

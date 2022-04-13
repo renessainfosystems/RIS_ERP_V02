@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FormControl, FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { Observable } from 'rxjs';
+import { ConfirmationService } from 'primeng/api';
 import { SelectionModel } from '@angular/cdk/collections';
 import { ToastrService } from 'ngx-toastr';
 import SupplierApplication from './supplier-application.model';
@@ -360,7 +361,7 @@ export class SupplierApplicationComponent implements OnInit {
 
 
 
-    constructor(private formbulider: FormBuilder, private router: Router, private SupplierApplicationService: SupplierApplicationService, private toastr: ToastrService, private notifyService: NotificationService, private sanitizer: DomSanitizer, private route: ActivatedRoute) {
+    constructor(private formbulider: FormBuilder, private confirmationService: ConfirmationService, private router: Router, private SupplierApplicationService: SupplierApplicationService, private toastr: ToastrService, private notifyService: NotificationService, private sanitizer: DomSanitizer, private route: ActivatedRoute) {
 
     }
 
@@ -1224,7 +1225,29 @@ export class SupplierApplicationComponent implements OnInit {
         this.index = (this.index === 6) ? 0 : this.index + 1;
     }
 
-    deleteSupplierinfo(a, row) {
+
+    deleteModal(event: Event) {
+        if (this.rowData == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+        if (this.rowData.approvedBy) {
+            return this.notifyService.ShowNotification(3, "This Supplier already approved");
+        }
+        this.confirmationService.confirm({
+            key: 'delete',
+            target: event.target,
+            message: 'Are you sure that you want to delete?',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                this.deleteSupplierinfo();
+            },
+            reject: () => {
+
+            }
+        });
+    }
+
+    deleteSupplierinfo() {
         if (this.rowData == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
