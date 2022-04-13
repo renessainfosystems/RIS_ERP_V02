@@ -4,22 +4,24 @@ import { FormControl, FormGroup, FormBuilder, Validators, AbstractControl } from
 import { Observable } from 'rxjs';
 import { SelectionModel } from '@angular/cdk/collections';
 import { ToastrService } from 'ngx-toastr';
-import { SupplierListService } from './supplierlist.service';
+import { SupplierAssessmentService } from './supplierassessment.service';
 import { NotificationService } from '../../../service/CommonMessage/notification.service';
+
+import { ActivatedRoute, Router } from '@angular/router';
+
 import { MessageService } from 'primeng/api';
-
-
+import { Criteria } from './criteria';
 
 
 
 @Component({
-    selector: 'app-supplierlist',
-    templateUrl: './supplierlist.component.html',
-    styleUrls: ['./supplierlist.component.css']
+    selector: 'app-supplierassessment',
+    templateUrl: './supplierassessment.component.html',
+    styleUrls: ['./supplierassessment.component.css']
 })
 
 
-export class SupplierListComponent implements OnInit {
+export class SupplierAssessmentComponent implements OnInit {
 
     @ViewChild('supplierImage', {
         static: true
@@ -37,7 +39,6 @@ export class SupplierListComponent implements OnInit {
     mobileBankingApplicationForm: FormGroup;
     bankingApplicationForm: FormGroup;
     AssesmentApplicationForm: FormGroup;
-    supplierassignForm: FormGroup;
 
 
 
@@ -73,6 +74,10 @@ export class SupplierListComponent implements OnInit {
     //end grid and form show hide ********************
 
     categories: any[];
+
+    criterias: Criteria[];
+
+    clonedProducts: { [s: string]: Criteria; } = {};
 
 
     // for photo and signature upload
@@ -181,9 +186,6 @@ export class SupplierListComponent implements OnInit {
     selectedZone: any;
     allZone: any[];
 
-    allDepartment: any[];
-    allEmployee: any[];
-
 
     //Business Info
 
@@ -196,9 +198,9 @@ export class SupplierListComponent implements OnInit {
     selectedSubSector: any;
     allSubSector: any[];
 
- 
 
-  /*  products2: Product[];*/
+
+    /*  products2: Product[];*/
     selectedItemsList = [];
     checkedIDs = [];
 
@@ -331,7 +333,28 @@ export class SupplierListComponent implements OnInit {
     }
 
 
-    constructor(private formbulider: FormBuilder, private SupplierListService: SupplierListService, private toastr: ToastrService, private notifyService: NotificationService, private sanitizer: DomSanitizer, private messageService: MessageService) {
+    onRowSelect(event) {
+        this.nodeSelected = true;
+        this.rowData = event.data;
+
+        let confirmStatus = this.rowData.IsConfirm;
+        let feedbackStatus = this.rowData.FeedbackStatus;
+
+        if (confirmStatus == true && feedbackStatus == '1') {
+            this.showBasicEdit = false;
+        }
+        else {
+            this.showBasicEdit = true;
+        }
+    }
+    onRowUnselect(event) {
+        this.nodeSelected = false;
+        this.rowData = null;
+    }
+
+
+
+    constructor(private formbulider: FormBuilder, private SupplierAssessmentService: SupplierAssessmentService, private toastr: ToastrService, private notifyService: NotificationService, private sanitizer: DomSanitizer, private messageService: MessageService, private route: ActivatedRoute) {
 
     }
 
@@ -575,7 +598,7 @@ export class SupplierListComponent implements OnInit {
             comment: ['', [Validators.required]],
             suggestion: ['', [Validators.required]],
             category_id: [''],
-            category_name: [''],           
+            category_name: [''],
         });
         this.LoadAllBankTypeCboList();
         this.AssesmentApplicationForm.controls['comment'].disable();
@@ -630,8 +653,8 @@ export class SupplierListComponent implements OnInit {
 
     viewDocumentinfo(a, row) {
         let supplierId = row.SupplierId;
-   /*     this.supplierId = row.SupplierId;*/
-        this.SupplierListService.getSupplierBasicInfo(supplierId).subscribe(data => {
+        /*     this.supplierId = row.SupplierId;*/
+        this.SupplierAssessmentService.getSupplierBasicInfo(supplierId).subscribe(data => {
             debugger
             this.supplierApplicationForm.reset();
             if (data != null) {
@@ -671,7 +694,7 @@ export class SupplierListComponent implements OnInit {
             this.businessApplicationForm.controls['casual_worker_no'].setValue(data.CasualWorkerNo);
         });
 
-        //this.SupplierListService.getAllSupplierBusiness(supplierId).subscribe(data => {
+        //this.SupplierAssessmentService.getAllSupplierBusiness(supplierId).subscribe(data => {
         //    this.businessApplicationForm.reset();
         //    if (data != null) {
         //        this.isSupplierinfoEdit = true;
@@ -683,15 +706,15 @@ export class SupplierListComponent implements OnInit {
         //    }
         //});
 
-        this.SupplierListService.getAllSupplierBusinessSubSector(supplierId).subscribe(data => {
+        this.SupplierAssessmentService.getAllSupplierBusinessSubSector(supplierId).subscribe(data => {
             this.subSectorDataSources = data;
         });
 
-        this.SupplierListService.getAllSupplierBusinessEcommerce(supplierId).subscribe(data => {
+        this.SupplierAssessmentService.getAllSupplierBusinessEcommerce(supplierId).subscribe(data => {
             this.categories = data;
         });
 
-        this.SupplierListService.getAllSupplierAssociation(supplierId).subscribe(data => {
+        this.SupplierAssessmentService.getAllSupplierAssociation(supplierId).subscribe(data => {
             this.associationsApplicationForm.reset();
             if (data != null) {
                 this.isSupplierinfoEdit = true;
@@ -699,7 +722,7 @@ export class SupplierListComponent implements OnInit {
             this.associationDataSources = data;
         });
 
-        this.SupplierListService.getAllLegalDocument(supplierId).subscribe(data => {
+        this.SupplierAssessmentService.getAllLegalDocument(supplierId).subscribe(data => {
             this.legalDocumentApplicationForm.reset();
             if (data != null) {
                 this.isSupplierinfoEdit = true;
@@ -707,7 +730,7 @@ export class SupplierListComponent implements OnInit {
             this.documentDataSources = data;
         });
 
-        this.SupplierListService.getAllSupplierLocation(supplierId).subscribe(data => {
+        this.SupplierAssessmentService.getAllSupplierLocation(supplierId).subscribe(data => {
             this.locationApplicationForm.reset();
             if (data != null) {
                 this.isSupplierinfoEdit = true;
@@ -718,11 +741,11 @@ export class SupplierListComponent implements OnInit {
 
         });
 
-        this.SupplierListService.getAllSupplierWarehouse(supplierId).subscribe(data => {
+        this.SupplierAssessmentService.getAllSupplierWarehouse(supplierId).subscribe(data => {
             this.warehouseDataSources = data;
         });
 
-        this.SupplierListService.getAllSupplierContact(supplierId).subscribe(data => {
+        this.SupplierAssessmentService.getAllSupplierContact(supplierId).subscribe(data => {
             this.ContactLocationApplicationForm.reset();
             if (data != null) {
                 this.isSupplierinfoEdit = true;
@@ -731,12 +754,12 @@ export class SupplierListComponent implements OnInit {
             this.allContactPerson = data;
         });
 
-        this.SupplierListService.getAllSupplierLocationWiseContact(supplierId).subscribe(data => {
+        this.SupplierAssessmentService.getAllSupplierLocationWiseContact(supplierId).subscribe(data => {
             debugger
             this.contactLocationDataSources = data;
         });
 
-        this.SupplierListService.getAllSupplierMFS(supplierId).subscribe(data => {
+        this.SupplierAssessmentService.getAllSupplierMFS(supplierId).subscribe(data => {
             this.financialApplicationForm.reset();
             if (data != null) {
                 this.isSupplierinfoEdit = true;
@@ -744,15 +767,15 @@ export class SupplierListComponent implements OnInit {
             this.mobileBankingDataSources = data;
         });
 
-        this.SupplierListService.getAllSupplierBankAccount(supplierId).subscribe(data => {
+        this.SupplierAssessmentService.getAllSupplierBankAccount(supplierId).subscribe(data => {
             this.bankingDataSources = data;
         });
 
-        this.SupplierListService.getAllSupplierCreditDeposit(supplierId).subscribe(data => {
+        this.SupplierAssessmentService.getAllSupplierCreditDeposit(supplierId).subscribe(data => {
             this.SecurityDepositDataSources = data;
         });
 
-        this.SupplierListService.getAllSupplierCreditHistory(supplierId).subscribe(data => {
+        this.SupplierAssessmentService.getAllSupplierCreditHistory(supplierId).subscribe(data => {
             this.financialApplicationForm.reset();
             if (data != null) {
                 this.isSupplierinfoEdit = true;
@@ -763,13 +786,18 @@ export class SupplierListComponent implements OnInit {
             }
         });
 
+        this.SupplierAssessmentService.getAllSupplierMasterAssessmentCriteria(supplierId).subscribe(data => {
+            debugger
+            this.criterias = data;
+        });
+
         //this.AssesmentApplicationForm.controls['comment'].enable();
         //this.AssesmentApplicationForm.controls['suggestion'].enable();
         this.toggleGridDisplay();
     }
 
     loadAllConfirmSupplierinfos() {
-        this.SupplierListService.getAllConfirmSupplierInfo().subscribe(data => {
+        this.SupplierAssessmentService.getAllConfirmSupplierInfo().subscribe(data => {
             debugger
             this.supplierinfoList = data;
         });
@@ -777,31 +805,31 @@ export class SupplierListComponent implements OnInit {
 
 
     loadAllDomicileEnum() {
-        this.SupplierListService.getAllDomicileEnum().subscribe(data => {
+        this.SupplierAssessmentService.getAllDomicileEnum().subscribe(data => {
             this.allDomicile = data;
         });
     }
 
     loadAllRegistryAuthorityCboList() {
-        this.SupplierListService.getAllRegistryAuthorityCboList().subscribe(data => {
+        this.SupplierAssessmentService.getAllRegistryAuthorityCboList().subscribe(data => {
             this.allRegistryAuthority = data;
         });
     }
 
     loadAllRegulatorCboList() {
-        this.SupplierListService.getAllRegulatorCboList().subscribe(data => {
+        this.SupplierAssessmentService.getAllRegulatorCboList().subscribe(data => {
             this.allRegulator = data;
         });
     }
 
     loadAllOwnershipTypeCboList() {
-        this.SupplierListService.getAllOwnershipTypeCboList().subscribe(data => {
+        this.SupplierAssessmentService.getAllOwnershipTypeCboList().subscribe(data => {
             this.allOwnershipType = data;
         });
     }
 
     loadAllCountryCboList() {
-        this.SupplierListService.getAllCountryCboList().subscribe(data => {
+        this.SupplierAssessmentService.getAllCountryCboList().subscribe(data => {
             this.allCountry = data;
             this.allCountryAssociation = data;
             this.allCountryLocation = data;
@@ -810,7 +838,7 @@ export class SupplierListComponent implements OnInit {
 
     onSelectByCountryId(countryId: Number) {
         if (countryId != null) {
-            this.SupplierListService.getAllDivisionCboListByCountryId(countryId).subscribe(data => {
+            this.SupplierAssessmentService.getAllDivisionCboListByCountryId(countryId).subscribe(data => {
                 this.allDivision = data;
             });
         }
@@ -820,7 +848,7 @@ export class SupplierListComponent implements OnInit {
 
     onSelectByCountryIdLocation(countryId: Number) {
         if (countryId != null) {
-            this.SupplierListService.getAllDivisionCboListByCountryId(countryId).subscribe(data => {
+            this.SupplierAssessmentService.getAllDivisionCboListByCountryId(countryId).subscribe(data => {
                 this.allDivisionLocation = data;
             });
         }
@@ -830,7 +858,7 @@ export class SupplierListComponent implements OnInit {
 
     onSelectByDivisionId(divisionId: Number) {
         if (divisionId != null) {
-            this.SupplierListService.getAllDistrictCboListByDivisionId(divisionId).subscribe(data => {
+            this.SupplierAssessmentService.getAllDistrictCboListByDivisionId(divisionId).subscribe(data => {
                 this.allDistrict = data;
             });
         }
@@ -841,7 +869,7 @@ export class SupplierListComponent implements OnInit {
 
     onSelectByDivisionIdLocation(divisionId: Number) {
         if (divisionId != null) {
-            this.SupplierListService.getAllDistrictCboListByDivisionId(divisionId).subscribe(data => {
+            this.SupplierAssessmentService.getAllDistrictCboListByDivisionId(divisionId).subscribe(data => {
                 this.allDistrictLocation = data;
             });
         }
@@ -853,13 +881,13 @@ export class SupplierListComponent implements OnInit {
     //Business dd load
 
     loadAllBusinessActivitiesEnum() {
-        this.SupplierListService.getAllBusinessActivitiesEnum().subscribe(data => {
+        this.SupplierAssessmentService.getAllBusinessActivitiesEnum().subscribe(data => {
             this.allBusinessActivities = data;
         });
     }
 
     loadAllSectorCboList() {
-        this.SupplierListService.getAllIndustrySectorCboList().subscribe(data => {
+        this.SupplierAssessmentService.getAllIndustrySectorCboList().subscribe(data => {
             this.allSector = data;
         });
     }
@@ -868,7 +896,7 @@ export class SupplierListComponent implements OnInit {
         let IndustrysectorObj = this.businessApplicationForm.get('industry_sector_id')?.value;
         let IndustrySectorId = IndustrysectorObj.industry_sector_id;
         if (IndustrySectorId != null) {
-            this.SupplierListService.getAllIndustrySubSectorCboList(IndustrySectorId).subscribe(data => {
+            this.SupplierAssessmentService.getAllIndustrySubSectorCboList(IndustrySectorId).subscribe(data => {
                 this.allSubSector = data;
             });
         }
@@ -877,7 +905,7 @@ export class SupplierListComponent implements OnInit {
     }
 
     loadAllEcommerceList() {
-        this.SupplierListService.getAllEcommerceList().subscribe(data => {
+        this.SupplierAssessmentService.getAllEcommerceList().subscribe(data => {
             this.categories = data;
         });
     }
@@ -885,7 +913,7 @@ export class SupplierListComponent implements OnInit {
     //Association dd load
 
     loadAllAssociationCboList() {
-        this.SupplierListService.getAllAssociationCboList().subscribe(data => {
+        this.SupplierAssessmentService.getAllAssociationCboList().subscribe(data => {
             this.allAssociation = data;
         });
     }
@@ -895,12 +923,12 @@ export class SupplierListComponent implements OnInit {
         let associationObj = this.associationsApplicationForm.get('association_id')?.value;
         let associationId = associationObj.association_id;
         //if (associationId != null) {
-        this.SupplierListService.getAllDataByAssociationId(associationId).subscribe(data => {
+        this.SupplierAssessmentService.getAllDataByAssociationId(associationId).subscribe(data => {
             this.associationsApplicationForm.controls['organization_type_id_enum'].setValue(data.organization_type_id_enum);
             this.associationsApplicationForm.controls['abbreviation'].setValue(data.abbreviation);
             let countryAssociationId = data.country_id;
             if (countryAssociationId != null) {
-                this.SupplierListService.GetByCountryId(countryAssociationId).subscribe(data => {
+                this.SupplierAssessmentService.GetByCountryId(countryAssociationId).subscribe(data => {
                     this.associationsApplicationForm.controls['country_id_association'].setValue(data.country_id);
                 });
             }
@@ -909,20 +937,20 @@ export class SupplierListComponent implements OnInit {
 
 
     loadAllOrganizationTypeEnum() {
-        this.SupplierListService.getAllOrganizationTypeEnum().subscribe(data => {
+        this.SupplierAssessmentService.getAllOrganizationTypeEnum().subscribe(data => {
             this.allOrganizationType = data;
         });
     }
 
     loadAllMembershipEnum() {
-        this.SupplierListService.getAllMembershipEnum().subscribe(data => {
+        this.SupplierAssessmentService.getAllMembershipEnum().subscribe(data => {
             this.allMembershipType = data;
         });
     }
 
     loadAllSupplierAssociation() {
         let supplierId = this.rowData.SupplierId;
-        this.SupplierListService.getAllSupplierAssociation(supplierId).subscribe(data => {
+        this.SupplierAssessmentService.getAllSupplierAssociation(supplierId).subscribe(data => {
             this.associationDataSources = data;
         });
     }
@@ -930,28 +958,28 @@ export class SupplierListComponent implements OnInit {
 
     ////Legal dd load
     loadAllDocumentCboList() {
-        this.SupplierListService.getAllDocumentCboList().subscribe(data => {
+        this.SupplierAssessmentService.getAllDocumentCboList().subscribe(data => {
             this.allDocument = data;
         });
     }
 
     LoadAllLegalDocument() {
         let supplierId = this.rowData.SupplierId;
-        this.SupplierListService.getAllLegalDocument(supplierId).subscribe(data => {
+        this.SupplierAssessmentService.getAllLegalDocument(supplierId).subscribe(data => {
             this.documentDataSources = data;
         });
     }
 
     //Location dd load
     loadAllLocationTypeCboList() {
-        this.SupplierListService.getAllLocationTypeCboList().subscribe(data => {
+        this.SupplierAssessmentService.getAllLocationTypeCboList().subscribe(data => {
             this.allLocationType = data;
         });
     }
 
     loadAllSupplierLocation() {
         let supplierId = this.rowData.SupplierId;
-        this.SupplierListService.getAllSupplierLocation(supplierId).subscribe(data => {
+        this.SupplierAssessmentService.getAllSupplierLocation(supplierId).subscribe(data => {
             this.locationDataSources = data;
             this.allLocation = data;
             this.allContactLocation = data;
@@ -963,57 +991,57 @@ export class SupplierListComponent implements OnInit {
     ////Warehouse dd load
     loadAllSupplierWarehouse() {
         let supplierId = this.rowData.SupplierId;
-        this.SupplierListService.getAllSupplierWarehouse(supplierId).subscribe(data => {
+        this.SupplierAssessmentService.getAllSupplierWarehouse(supplierId).subscribe(data => {
             this.warehouseDataSources = data;
         });
     }
 
     ////Contact dd load
     loadAllContactTypeCboList() {
-        this.SupplierListService.getAllContactTypeCboList().subscribe(data => {
+        this.SupplierAssessmentService.getAllContactTypeCboList().subscribe(data => {
             this.allContactType = data;
         });
     }
 
     LoadAllDesignationCboList() {
-        this.SupplierListService.getAllDesignationCboList().subscribe(data => {
+        this.SupplierAssessmentService.getAllDesignationCboList().subscribe(data => {
             this.allDesignation = data;
         });
     }
 
     loadGenderdrpdwn() {
-        this.SupplierListService.getGenderCboList().subscribe(data => {
+        this.SupplierAssessmentService.getGenderCboList().subscribe(data => {
             this.allGenderList = data;
         });
     }
 
     loadReligiondrpdwn() {
-        this.SupplierListService.getReligionCboList().subscribe(data => {
+        this.SupplierAssessmentService.getReligionCboList().subscribe(data => {
             this.allReligionList = data;
         });
     }
 
     loadBloodGroupdrpdwn() {
-        this.SupplierListService.getBloodGroupCboList().subscribe(data => {
+        this.SupplierAssessmentService.getBloodGroupCboList().subscribe(data => {
             this.allBloodGroupList = data;
         });
     }
 
     loadNationalitydrpdwn() {
-        this.SupplierListService.getAllCountryCboList().subscribe(data => {
+        this.SupplierAssessmentService.getAllCountryCboList().subscribe(data => {
             this.allNationality = data;
         });
     }
 
     loadMaritalStatusdrpdwn() {
-        this.SupplierListService.getMaritalStatusCboList().subscribe(data => {
+        this.SupplierAssessmentService.getMaritalStatusCboList().subscribe(data => {
             this.allMaritalStatusList = data;
         });
     }
 
     loadAllSupplierContact() {
         let supplierId = this.rowData.SupplierId;
-        this.SupplierListService.getAllSupplierContact(supplierId).subscribe(data => {
+        this.SupplierAssessmentService.getAllSupplierContact(supplierId).subscribe(data => {
             this.contactDataSources = data;
             this.allContactPerson = data;
         });
@@ -1021,7 +1049,7 @@ export class SupplierListComponent implements OnInit {
 
     loadAllSupplierContactLocation() {
         let supplierId = this.rowData.SupplierId;
-        this.SupplierListService.getAllSupplierLocationWiseContact(supplierId).subscribe(data => {
+        this.SupplierAssessmentService.getAllSupplierLocationWiseContact(supplierId).subscribe(data => {
             this.contactLocationDataSources = data;
         });
     }
@@ -1030,38 +1058,38 @@ export class SupplierListComponent implements OnInit {
 
 
     LoadAllCurrencyCboList() {
-        this.SupplierListService.getAllCurrencyCboList().subscribe(data => {
+        this.SupplierAssessmentService.getAllCurrencyCboList().subscribe(data => {
             this.allCurrency = data;
         });
     }
 
     LoadAllSecurityTypeCboList() {
-        this.SupplierListService.getAllSecurityTypeCboList().subscribe(data => {
+        this.SupplierAssessmentService.getAllSecurityTypeCboList().subscribe(data => {
             this.allSecurityType = data;
         });
     }
 
     LoadAllPaymentFrequencyCboList() {
-        this.SupplierListService.getAllPaymentFrequencyCboList().subscribe(data => {
+        this.SupplierAssessmentService.getAllPaymentFrequencyCboList().subscribe(data => {
             this.allPaymentFrequency = data;
         });
     }
 
 
     LoadAllMfsCboList() {
-        this.SupplierListService.getAllMfsCboList().subscribe(data => {
+        this.SupplierAssessmentService.getAllMfsCboList().subscribe(data => {
             this.allMFS = data;
         });
     }
 
     LoadAllMfsTypeCboList() {
-        this.SupplierListService.getAllMfsTypeCboList().subscribe(data => {
+        this.SupplierAssessmentService.getAllMfsTypeCboList().subscribe(data => {
             this.allMFSType = data;
         });
     }
 
     LoadAllBankTypeCboList() {
-        this.SupplierListService.getAllBankTypeCboList().subscribe(data => {
+        this.SupplierAssessmentService.getAllBankTypeCboList().subscribe(data => {
             this.allBankType = data;
         });
     }
@@ -1070,14 +1098,14 @@ export class SupplierListComponent implements OnInit {
 
     loadAllSupplierMFS() {
         let supplierId = this.rowData.SupplierId;
-        this.SupplierListService.getAllSupplierMFS(supplierId).subscribe(data => {
+        this.SupplierAssessmentService.getAllSupplierMFS(supplierId).subscribe(data => {
             this.mobileBankingDataSources = data;
         });
     }
 
     loadAllSupplierBankAccount() {
         let supplierId = this.rowData.SupplierId;
-        this.SupplierListService.getAllSupplierBankAccount(supplierId).subscribe(data => {
+        this.SupplierAssessmentService.getAllSupplierBankAccount(supplierId).subscribe(data => {
             this.bankingDataSources = data;
         });
     }
@@ -1087,7 +1115,7 @@ export class SupplierListComponent implements OnInit {
         //let bankTypeObj = this.bankingApplicationForm.get('bank_type_id')?.value;
         //let bankTypeId = bankTypeObj.bank_type_id;
         if (bankTypeId != null) {
-            this.SupplierListService.getAllBankCboListByBankTypeId(bankTypeId).subscribe(data => {
+            this.SupplierAssessmentService.getAllBankCboListByBankTypeId(bankTypeId).subscribe(data => {
                 this.allBank = data;
             });
         }
@@ -1098,18 +1126,18 @@ export class SupplierListComponent implements OnInit {
 
     onSelectByBankId(bankId: Number) {
 
-        this.SupplierListService.getAllBankBranchCboListByBankId(bankId).subscribe(data => {
+        this.SupplierAssessmentService.getAllBankBranchCboListByBankId(bankId).subscribe(data => {
             this.allBankBranch = data;
         });
 
-        this.SupplierListService.GetBankById(bankId).subscribe(data => {
+        this.SupplierAssessmentService.GetBankById(bankId).subscribe(data => {
             this.bankingApplicationForm.controls['bank_swift_code'].setValue(data.BankSwiftCode);
         });
 
     }
 
     onSelectByBankBranchId(bankBranchId: Number) {
-        this.SupplierListService.GetAllBankBranchByBankBranchId(bankBranchId).subscribe(data => {
+        this.SupplierAssessmentService.GetAllBankBranchByBankBranchId(bankBranchId).subscribe(data => {
             this.bankingApplicationForm.controls['bank_branch_routing'].setValue(data.BankBranchRouting);
         });
 
@@ -1124,7 +1152,7 @@ export class SupplierListComponent implements OnInit {
 
     //    let supplierId = this.rowData.SupplierId;
 
-    //    this.SupplierListService.getSupplierBasicInfo(supplierId).subscribe(data => {
+    //    this.SupplierAssessmentService.getSupplierBasicInfo(supplierId).subscribe(data => {
     //        this.supplierApplicationForm.reset();
     //        if (data != null) {
     //            this.isSupplierinfoEdit = true;
@@ -1157,7 +1185,7 @@ export class SupplierListComponent implements OnInit {
     //        this.supplierApplicationForm.controls['pabx'].setValue(data.Pabx);
     //    });
 
-    //    this.SupplierListService.getAllSupplierBusiness(supplierId).subscribe(data => {
+    //    this.SupplierAssessmentService.getAllSupplierBusiness(supplierId).subscribe(data => {
     //        this.businessApplicationForm.reset();
     //        if (data != null) {
     //            this.isSupplierinfoEdit = true;
@@ -1169,15 +1197,15 @@ export class SupplierListComponent implements OnInit {
     //        }
     //    });
 
-    //    this.SupplierListService.getAllSupplierBusinessSubSector(supplierId).subscribe(data => {
+    //    this.SupplierAssessmentService.getAllSupplierBusinessSubSector(supplierId).subscribe(data => {
     //        this.subSectorDataSources = data;
     //    });
 
-    //    this.SupplierListService.getAllSupplierBusinessEcommerce(supplierId).subscribe(data => {
+    //    this.SupplierAssessmentService.getAllSupplierBusinessEcommerce(supplierId).subscribe(data => {
     //        this.categories = data;
     //    });
 
-    //    this.SupplierListService.getAllSupplierAssociation(supplierId).subscribe(data => {
+    //    this.SupplierAssessmentService.getAllSupplierAssociation(supplierId).subscribe(data => {
     //        this.associationsApplicationForm.reset();
     //        if (data != null) {
     //            this.isSupplierinfoEdit = true;
@@ -1185,7 +1213,7 @@ export class SupplierListComponent implements OnInit {
     //        this.associationDataSources = data;
     //    });
 
-    //    this.SupplierListService.getAllLegalDocument(supplierId).subscribe(data => {
+    //    this.SupplierAssessmentService.getAllLegalDocument(supplierId).subscribe(data => {
     //        this.legalDocumentApplicationForm.reset();
     //        if (data != null) {
     //            this.isSupplierinfoEdit = true;
@@ -1193,7 +1221,7 @@ export class SupplierListComponent implements OnInit {
     //        this.documentDataSources = data;
     //    });
 
-    //    this.SupplierListService.getAllSupplierLocation(supplierId).subscribe(data => {
+    //    this.SupplierAssessmentService.getAllSupplierLocation(supplierId).subscribe(data => {
     //        this.locationApplicationForm.reset();
     //        if (data != null) {
     //            this.isSupplierinfoEdit = true;
@@ -1204,11 +1232,11 @@ export class SupplierListComponent implements OnInit {
 
     //    });
 
-    //    this.SupplierListService.getAllSupplierWarehouse(supplierId).subscribe(data => {
+    //    this.SupplierAssessmentService.getAllSupplierWarehouse(supplierId).subscribe(data => {
     //        this.warehouseDataSources = data;
     //    });
 
-    //    this.SupplierListService.getAllSupplierContact(supplierId).subscribe(data => {
+    //    this.SupplierAssessmentService.getAllSupplierContact(supplierId).subscribe(data => {
     //        this.ContactLocationApplicationForm.reset();
     //        if (data != null) {
     //            this.isSupplierinfoEdit = true;
@@ -1217,12 +1245,12 @@ export class SupplierListComponent implements OnInit {
     //        this.allContactPerson = data;
     //    });
 
-    //    this.SupplierListService.getAllSupplierLocationWiseContact(supplierId).subscribe(data => {
+    //    this.SupplierAssessmentService.getAllSupplierLocationWiseContact(supplierId).subscribe(data => {
     //        debugger
     //        this.contactLocationDataSources = data;
     //    });
 
-    //    this.SupplierListService.getAllSupplierMFS(supplierId).subscribe(data => {
+    //    this.SupplierAssessmentService.getAllSupplierMFS(supplierId).subscribe(data => {
     //        this.financialApplicationForm.reset();
     //        if (data != null) {
     //            this.isSupplierinfoEdit = true;
@@ -1230,15 +1258,15 @@ export class SupplierListComponent implements OnInit {
     //        this.mobileBankingDataSources = data;
     //    });
 
-    //    this.SupplierListService.getAllSupplierBankAccount(supplierId).subscribe(data => {
+    //    this.SupplierAssessmentService.getAllSupplierBankAccount(supplierId).subscribe(data => {
     //        this.bankingDataSources = data;
     //    });
 
-    //    this.SupplierListService.getAllSupplierCreditDeposit(supplierId).subscribe(data => {
+    //    this.SupplierAssessmentService.getAllSupplierCreditDeposit(supplierId).subscribe(data => {
     //        this.SecurityDepositDataSources = data;
     //    });
 
-    //    this.SupplierListService.getAllSupplierCreditHistory(supplierId).subscribe(data => {
+    //    this.SupplierAssessmentService.getAllSupplierCreditHistory(supplierId).subscribe(data => {
     //        this.financialApplicationForm.reset();
     //        if (data != null) {
     //            this.isSupplierinfoEdit = true;
@@ -1295,11 +1323,6 @@ export class SupplierListComponent implements OnInit {
 
     get k(): { [key: string]: AbstractControl } {
         return this.bankingApplicationForm.controls;
-    }
-
-    get l(): { [key: string]: AbstractControl } {
-        return this.supplierassignForm.controls;
-
     }
 
 
@@ -1382,7 +1405,7 @@ export class SupplierListComponent implements OnInit {
         }
         const approveFeedbackData = this.AssesmentApplicationForm.value;
         approveFeedbackData.supplier_id = supplierId;
-        this.SupplierListService.approveSupplier(approveFeedbackData).subscribe(data => {
+        this.SupplierAssessmentService.approveSupplier(approveFeedbackData).subscribe(data => {
             this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage);
             this.loadAllConfirmSupplierinfos();
         });
@@ -1395,13 +1418,35 @@ export class SupplierListComponent implements OnInit {
         }
         const rejectFeedbackData = this.AssesmentApplicationForm.value;
         rejectFeedbackData.supplier_id = supplierId;
-        this.SupplierListService.rejectSupplier(rejectFeedbackData).subscribe(data => {
+        this.SupplierAssessmentService.rejectSupplier(rejectFeedbackData).subscribe(data => {
             this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage);
             this.loadAllConfirmSupplierinfos();
         });
     }
 
+    onRowEditInit(criteria: Criteria) {
+        debugger
+        this.clonedProducts[criteria.assessment_criteria_id] = { ...criteria };
+    }
+
+    onRowEditSave(criteria: Criteria) {
+        if (criteria.assessment_criteria_id > 0) {
+            delete this.clonedProducts[criteria.assessment_criteria_id];
+            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Product is updated' });
+        }
+        else {
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Invalid Price' });
+        }
+    }
+
+    onRowEditCancel(criteria: Criteria, index: number) {
+        this.criterias[index] = this.clonedProducts[criteria.assessment_criteria_id];
+        delete this.clonedProducts[criteria.assessment_criteria_id];
+    }
+
+
 }
+
 
 
 

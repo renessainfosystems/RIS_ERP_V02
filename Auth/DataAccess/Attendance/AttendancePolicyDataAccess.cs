@@ -547,13 +547,7 @@ namespace Auth.DataAccess.Attendance
                     result.attendance_Policy_Leaves = leavePolicy;
                     result.attendance_Policy_Dayoffs = dayoffPolicy;
       
-                    
                 }
-
-             
-
-
-
 
             }
             catch (Exception ex)

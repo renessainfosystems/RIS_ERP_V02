@@ -1,7 +1,7 @@
 export interface Criteria {
-    supplier_master_information_id?: number;
+    assessment_criteria_id?: number;
 /*    code?: number;*/
-    supplier_master_information_name?: string;
+    assessment_criteria_name?: string;
     manual_weight?: number;
     actual_weight?: number;
     comments?: string;
