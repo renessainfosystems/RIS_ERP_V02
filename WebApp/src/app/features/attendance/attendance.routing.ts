@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { AbsenteeismPolicyComponent } from './absenteeism-policy/absenteeism-policy.component';
 import { AttendanceCalendarComponent } from './attendance-calendar/attendance-calendar.component';
+import { AttendancePolicyAssignmentComponent } from './attendance-policy-assignment/attendance-policy-assignment.component';
 import { AttendancePolicyComponent } from './attendance-policy/attendance-policy.component';
 import { AttendancebenefitpolicyComponent } from './attendancebenefitpolicy/attendancebenefitpolicy.component';
 import { HolidayComponent } from './holiday/holiday.component';
@@ -61,6 +62,10 @@ export const AttendanceRoutes: Routes = [
     {
         path: 'attendance-policy',
         component: AttendancePolicyComponent
+    },
+    {
+        path: 'attendance-policy-assignment',
+        component: AttendancePolicyAssignmentComponent
     }
 
 ];
