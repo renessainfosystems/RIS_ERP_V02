@@ -1021,18 +1021,26 @@
                 </p-tabView>
             </div>
             <!--end form display------------->
-            <div [hidden]="gridDisplay">
-                <button pButton pRipple type="button" (click)="showBasicDialog()" label="New" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
-                <button pButton pRipple type="button" (click)="loadDealerinfoToEdit()" label="Edit" icon="pi pi-pencil" class="risBtn risEdit mr-2 mb-2"></button>
-                <button pButton pRipple type="button" (click)="deleteDealer($event)" label="Delete" icon="pi pi-trash" class="risBtn risDelete mr-2 mb-2"></button>
-                <button pButton pRipple type="button" (click)="loadDealerinfoContactGrid()" label="Contact Info" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
-                <button pButton pRipple type="button" (click)="loadDealerinfoLocationGrid()" label="Location Info" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
-                <button pButton pRipple type="button" (click)="loadDealerinfoDocumentGrid()" label="Document Info" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
-                <button pButton pRipple type="button" (click)="loadDealerinfoCreditGrid()" label="Credit Info" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
-                <p-confirmPopup key="delete"></p-confirmPopup>
-
-                <p-table [value]="dealerinfoList" styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm" [paginator]="true" [rows]="10" selectionMode="single" [showCurrentPageReport]="true" responsiveLayout="scroll"
-                         [(selection)]="selecteddealerinfo" dataKey="DealerInfoId" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
+            <div [hidden]="gridDisplay"> 
+                <p-table #dt [value]="dealerinfoList" styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm" [paginator]="true" [rows]="10" selectionMode="single" [showCurrentPageReport]="true" responsiveLayout="scroll"
+                         [(selection)]="selecteddealerinfo" dataKey="DealerInfoId" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]"
+                         (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)" [globalFilterFields]="['DealerInfoCode','DealerInfoName']">
+                    <ng-template pTemplate="caption">
+                        <div class="flex">
+                            <button pButton pRipple type="button" (click)="showBasicDialog()" label="New" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
+                            <button pButton pRipple type="button" (click)="loadDealerinfoToEdit()" label="Edit" icon="pi pi-pencil" class="risBtn risEdit mr-2 mb-2"></button>
+                            <button pButton pRipple type="button" (click)="deleteDealer($event)" label="Delete" icon="pi pi-trash" class="risBtn risDelete mr-2 mb-2"></button>
+                            <button pButton pRipple type="button" (click)="loadDealerinfoContactGrid()" label="Contact Info" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
+                            <button pButton pRipple type="button" (click)="loadDealerinfoLocationGrid()" label="Location Info" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
+                            <button pButton pRipple type="button" (click)="loadDealerinfoDocumentGrid()" label="Document Info" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
+                            <button pButton pRipple type="button" (click)="loadDealerinfoCreditGrid()" label="Credit Info" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
+                            <p-confirmPopup key="delete"></p-confirmPopup>
+                            <span class="p-input-icon-left ml-auto">
+                                <i class="pi pi-search"></i>
+                                <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search by any" />
+                            </span>
+                        </div>
+                    </ng-template>
                     <ng-template pTemplate="header">
                         <tr>
                             <th pSortableColumn="Code">

@@ -6,6 +6,7 @@ import { PartyRoutes } from './party.routing';
 import { CheckboxModule } from 'primeng/checkbox';
 import { RetailerinfoComponent } from './retailerinfo/retailerinfo.component';
 import { PrimeNGModule } from '../../root/primengreference.module';
+import { DealerlistComponent } from './dealerlist/dealerlist.component';
 
 
 
@@ -13,7 +14,8 @@ import { PrimeNGModule } from '../../root/primengreference.module';
 @NgModule({
   declarations: [
     DealerinfoComponent,
-    RetailerinfoComponent
+    RetailerinfoComponent,
+    DealerlistComponent
   ],
   imports: [
     CommonModule,

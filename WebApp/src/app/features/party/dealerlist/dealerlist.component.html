@@ -1,0 +1,78 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <h4>Dealer Information</h4>
+
+            <!--end form display------------->
+            <div [hidden]="gridDisplay">
+                <p-table #dt [value]="dealerinfoList" styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" responsiveLayout="scroll"
+                         [(selection)]="selecteddealerinfo" dataKey="DealerInfoId" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                         [rowsPerPageOptions]="[10,25,50]" [globalFilterFields]="['DealerInfoCode','DealerInfoName']">
+                    <ng-template pTemplate="caption">
+                        <div class="flex">
+                            <span class="p-input-icon-left ml-auto">
+                                <i class="pi pi-search"></i>
+                                <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search by any" />
+                            </span>
+                        </div>
+                    </ng-template>
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th style="width: 3rem">
+                                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                            </th>
+                            <th pSortableColumn="Code">
+                                Dealer Code
+                                <p-columnFilter type="text" field="DealerInfoCode" display="menu"></p-columnFilter>
+                                <p-sortIcon field="Code"></p-sortIcon>
+                            </th>
+                            <th pSortableColumn="DealerinfoName">
+                                Dealer Name
+                                <p-columnFilter type="text" field="DealerinfoName" display="menu"></p-columnFilter>
+                            </th>
+                            <th pSortableColumn="PersonalPhone">Mobile</th>
+                            <th pSortableColumn="PersonalEmail">Email</th>
+                            <th pSortableColumn="PresentAddressNote">Address</th>
+                            <th>Status</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-dealerinfo let-rowData let-columns="columns">
+                        <tr [pSelectableRow]="dealerinfo">
+                            <td hidden>{{dealerinfo.DealerInfoId}}</td>
+                            <td>
+                                <p-tableCheckbox [value]="dealerinfo"></p-tableCheckbox>
+                            </td>
+                            <td>{{dealerinfo.DealerInfoCode}}</td>
+                            <td>{{dealerinfo.DealerInfoName}}</td>
+                            <td>{{dealerinfo.Mobile}}</td>
+                            <td>{{dealerinfo.Email}}</td>
+                            <td>{{dealerinfo.AddressNote}}</td>
+                            <td *ngIf="dealerinfo.IsActive===true">{{"Active"}}</td>
+                            <td *ngIf="dealerinfo.IsActive===false">{{"In Active"}}</td>
+                        </tr>
+                    </ng-template>
+
+                </p-table>
+                <!--end grid display -------------->
+            </div>
+
+            <form action="" [formGroup]="">
+                <div class="col-12">
+                    <div class="p-fluid p-formgrid grid">
+                        <div class="field md:col-3">
+                            <label pTooltip="Remarks" tooltipPosition="top">Department<span class="req">*</span></label>
+                            <input type="text" formControlName="remarks" placeholder="" pInputText />
+                        </div>                       
+                        <div class="field md:col-3">
+                            <label pTooltip="Remarks" tooltipPosition="top">Employee<span class="req">*</span></label>
+                            <input type="text" formControlName="remarks" placeholder="" pInputText />
+                        </div>
+                        <div class="field md:col-1">
+                            <button pButton pRipple type="button" label="Assign" class="risBtnAssign risAssign mr-2 mb-2" icon="pi pi-plus"></button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
