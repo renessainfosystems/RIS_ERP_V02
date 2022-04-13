@@ -18,10 +18,10 @@ namespace Auth.Model.Procurement.Model
         [Key]
         public int supplier_id { get; set; }
         public int business_activities_enum_id { get; set; }
-        public string management_staff_no { get; set; }
-        public string nonmanagement_staff_no { get; set; }
-        public string permanent_worker_no { get; set; }
-        public string casual_worker_no { get; set; }
+        public int management_staff_no { get; set; }
+        public int nonmanagement_staff_no { get; set; }
+        public int permanent_worker_no { get; set; }
+        public int casual_worker_no { get; set; }
 
         public List<SubSectorSession> subSectorSession { get; set; }
 
