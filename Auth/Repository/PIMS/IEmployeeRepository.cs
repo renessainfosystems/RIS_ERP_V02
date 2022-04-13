@@ -11,6 +11,7 @@ namespace Auth.Repository.PIMS
         Task<dynamic> GetAllEmployee();
         Task<dynamic> GetAllActiveEmployee();
         Task<dynamic> GetEmployeeById(long Employee_id);
+        Task<dynamic> GetEmployeeCboList();
         Task<dynamic> EmployeeActivity(long Employee_id);
         Task<dynamic> IUD_Employee(Employee Employee, int dbOperation);
 

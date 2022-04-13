@@ -345,5 +345,36 @@ namespace Auth.DataAccess.PIMS
             return (result);
         }
 
+        public async Task<dynamic> GetEmployeeCboList()
+        {
+            var result = (dynamic)null;
+            var company_group_id = _httpContextAccessor.HttpContext.Items["company_group_id"];
+            if (_dbConnection.State == ConnectionState.Closed)
+                _dbConnection.Open();
+
+            try
+            {
+                string sql = @"SELECT e.employee_id,(e.code+' - '+ e.employee_name)employee_name
+FROM PIMS.Employee e where e.is_active=1 and e.company_group_id=@company_group_id order by  e.employee_name";
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@company_group_id", company_group_id);
+                dynamic data = await _dbConnection.QueryAsync<dynamic>(sql, parameters);
+                if (data != null)
+                {
+                    List<dynamic> dataList = data;
+                    result = dataList;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw ex.InnerException;
+            }
+            finally
+            {
+                _dbConnection.Close();
+            }
+            return (result);
+        }
     }
 }

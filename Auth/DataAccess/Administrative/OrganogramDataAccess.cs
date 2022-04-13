@@ -442,6 +442,7 @@ left join Administrative.Organogram og on l.location_id=og.location_id where l.c
 
             return (result);
         }
+
         
     }
 }
