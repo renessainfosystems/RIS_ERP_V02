@@ -19,6 +19,10 @@ namespace Auth.Model.Procurement.ViewModel
         public int PermanentWorkerNo { get; set; }
         public int CasualWorkerNo { get; set; }
 
+        public int id { get; set; }
+        public string name { get; set; }
+        public bool status { get; set; }
+
         public static SupplierBusinessViewModel ConvertToSupplierBusinessAllModel(dynamic SupplierBusiness)
         {
             var model = new SupplierBusinessViewModel();
@@ -30,6 +34,17 @@ namespace Auth.Model.Procurement.ViewModel
             model.CasualWorkerNo = SupplierBusiness.casual_worker_no ?? 0;
 
 
+            return model;
+
+        }
+
+        public static SupplierBusinessViewModel ConvertToSupplierBusinessEcommerceAllModel(dynamic SupplierBusiness)
+        {
+
+            var model = new SupplierBusinessViewModel();
+            model.id = SupplierBusiness.id ?? 0;
+            model.name = SupplierBusiness.name;
+            model.status = Convert.ToBoolean(SupplierBusiness.status) ?? false;
             return model;
 
         }

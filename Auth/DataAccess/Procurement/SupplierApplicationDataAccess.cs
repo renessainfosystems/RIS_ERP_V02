@@ -115,10 +115,10 @@ namespace DataAccess.Procurement
             {
                 parameters.Add("@supplier_id", supplierBusiness.supplier_id, DbType.Int32);
                 parameters.Add("@business_activities_enum_id", supplierBusiness.business_activities_enum_id, DbType.Int32);
-                parameters.Add("@management_staff_no", supplierBusiness.management_staff_no, DbType.String);
-                parameters.Add("@nonmanagement_staff_no", supplierBusiness.nonmanagement_staff_no, DbType.String);
-                parameters.Add("@permanent_worker_no", supplierBusiness.permanent_worker_no, DbType.String);
-                parameters.Add("@casual_worker_no", supplierBusiness.casual_worker_no, DbType.String);
+                parameters.Add("@management_staff_no", supplierBusiness.management_staff_no, DbType.Int32);
+                parameters.Add("@nonmanagement_staff_no", supplierBusiness.nonmanagement_staff_no, DbType.Int32);
+                parameters.Add("@permanent_worker_no", supplierBusiness.permanent_worker_no, DbType.Int32);
+                parameters.Add("@casual_worker_no", supplierBusiness.casual_worker_no, DbType.Int32);
 
 
                 parameters.Add("@DBOperation", operationType == (int)GlobalEnumList.DBOperation.Create ? GlobalEnumList.DBOperation.Create : GlobalEnumList.DBOperation.Update);
@@ -884,14 +884,14 @@ namespace DataAccess.Procurement
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@supplier_id", supplier_id);
 
-                result = await _dbConnection.QueryAsync<dynamic>(sql, parameters);
+                // result = await _dbConnection.QueryAsync<dynamic>(sql, parameters);
 
-                //dynamic data = await _dbConnection.QueryAsync<dynamic>(sql, parameters);
-                //if (data != null)
-                //{
-                //    List<dynamic> dataList = data;
-                //    result = (from dr in dataList select SupplierAssociationViewModel.ConvertToModelForAssociation(dr)).ToList();
-                //}
+                dynamic data = await _dbConnection.QueryAsync<dynamic>(sql, parameters);
+                if (data != null)
+                {
+                    List<dynamic> dataList = data;
+                    result = (from dr in dataList select SupplierBusinessViewModel.ConvertToSupplierBusinessEcommerceAllModel(dr)).ToList();
+                }
 
             }
             catch (Exception ex)

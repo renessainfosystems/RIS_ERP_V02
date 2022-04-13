@@ -9,6 +9,10 @@ import { SupplierApplicationService } from './supplier-application.service';
 import { NotificationService } from '../../../service/CommonMessage/notification.service';
 
 
+import { ActivatedRoute, Router } from '@angular/router';
+import { take } from 'rxjs/operators';
+
+
 
 @Component({
     selector: 'app-supplier-application',
@@ -335,7 +339,7 @@ export class SupplierApplicationComponent implements OnInit {
 
 
     onRowSelect(event) {
-        debugger
+
         this.nodeSelected = true;
         this.rowData = event.data;
 
@@ -356,7 +360,7 @@ export class SupplierApplicationComponent implements OnInit {
 
 
 
-    constructor(private formbulider: FormBuilder, private SupplierApplicationService: SupplierApplicationService, private toastr: ToastrService, private notifyService: NotificationService, private sanitizer: DomSanitizer) {
+    constructor(private formbulider: FormBuilder, private router: Router, private SupplierApplicationService: SupplierApplicationService, private toastr: ToastrService, private notifyService: NotificationService, private sanitizer: DomSanitizer, private route: ActivatedRoute) {
 
     }
 
@@ -421,7 +425,7 @@ export class SupplierApplicationComponent implements OnInit {
             ps_area: [''],
             post_code: [''],
             block: [''],
-            road_no: ['12'],
+            road_no: [''],
             house_no: [''],
             flat_no: [''],
             email: ['', [Validators.email, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
@@ -430,8 +434,6 @@ export class SupplierApplicationComponent implements OnInit {
             pabx: [''],
 
         });
-
-
         this.supplierApplicationForm.controls['supplier_code'].disable();
 
 
@@ -440,11 +442,11 @@ export class SupplierApplicationComponent implements OnInit {
             business_activities_enum_id: ['', [Validators.required]],
             industry_sector_id: ['', [Validators.required]],
             industry_sub_sector_id: ['', [Validators.required]],
-            management_staff_no: [''],
-            nonmanagement_staff_no: [''],
-            permanent_worker_no: [''],
-            casual_worker_no: [''],
-            ecommerce_platforms_id: [''],
+            management_staff_no: [0],
+            nonmanagement_staff_no: [0],
+            permanent_worker_no: [0],
+            casual_worker_no: [0],
+            status: [''],
         });
 
 
@@ -550,14 +552,12 @@ export class SupplierApplicationComponent implements OnInit {
             //security_document_path: [null],
             //FileUpload: new FormControl('', [Validators.required]),
         });
-    /*    this.financialApplicationForm.controls['credit_limit'].disable();*/
+       /* this.financialApplicationForm.controls['credit_limit'].disable();*/
 
         this.mobileBankingApplicationForm = this.formbulider.group({
-
             mfs_id: ['', [Validators.required]],
             account_number: ['', [Validators.required, Validators.pattern("^((\\+91-?)|0)?[0-9]{11}$")]],
             mfs_type_id: ['', [Validators.required]],
-
         });
 
         this.bankingApplicationForm = this.formbulider.group({
@@ -730,7 +730,9 @@ export class SupplierApplicationComponent implements OnInit {
 
     loadAllEcommerceList() {
         this.SupplierApplicationService.getAllEcommerceList().subscribe(data => {
+
             this.categories = data;
+
         });
     }
 
@@ -1009,7 +1011,7 @@ export class SupplierApplicationComponent implements OnInit {
         });
 
         this.SupplierApplicationService.getAllSupplierBusiness(supplierId).subscribe(data => {
-            this.businessApplicationForm.reset();
+            /*            this.businessApplicationForm.reset();*/
             if (data != null) {
                 this.isSupplierinfoEdit = true;
                 this.businessApplicationForm.controls['business_activities_enum_id'].setValue(data.BusinessActivityEnumId);
@@ -1025,16 +1027,18 @@ export class SupplierApplicationComponent implements OnInit {
         });
 
         this.SupplierApplicationService.getAllSupplierBusinessEcommerce(supplierId).subscribe(data => {
-
             this.categories = data;
+            for (let i = 0; i < data.length; i++) {
+                const id = data[i].id;
+                const name = data[i].name;
+                const status = data[i].status;
+                if (status == true) {
+                    let supplierId = this.rowData.SupplierId;
+                    const ecommerceobj = { supplier_id: supplierId, ecommerce_platforms_id: id, ecommerce_paltforms_name: name }
+                    this.checkedIDs.push(ecommerceobj);
+                }
+            }
         });
-
-        //loadMenuAndRoleWiseEvent() {
-        //    this.MenuAuthorizationService.GetMenuAndRoleWiseEvent(this.rowEvent.MenuId, this.AuthorizationRoleId).subscribe(data => {
-        //        this.events = data;
-
-        //    });
-        //}
 
         this.SupplierApplicationService.getAllSupplierAssociation(supplierId).subscribe(data => {
             this.associationsApplicationForm.reset();
@@ -1060,7 +1064,6 @@ export class SupplierApplicationComponent implements OnInit {
             this.locationDataSources = data;
             this.allLocation = data;
             this.allContactLocation = data;
-
         });
 
         this.SupplierApplicationService.getAllSupplierWarehouse(supplierId).subscribe(data => {
@@ -1081,7 +1084,6 @@ export class SupplierApplicationComponent implements OnInit {
         });
 
         this.SupplierApplicationService.getAllSupplierMFS(supplierId).subscribe(data => {
-
             if (data != null) {
                 this.isSupplierinfoEdit = true;
             }
@@ -1192,7 +1194,6 @@ export class SupplierApplicationComponent implements OnInit {
             data.supplierId = this.rowData.SupplierId;
             formData.append("supplier_id", this.rowData.SupplierId);
             this.SupplierApplicationService.updateSupplierApplication(formData).subscribe(result => {
-                debugger
                 this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
                 if (result.MessageType == 1) {
                     this.supplierinfoList.splice(this.supplierinfoList.findIndex(item => item.SupplierId === data.SupplierId), 1);
@@ -1252,11 +1253,10 @@ export class SupplierApplicationComponent implements OnInit {
         }
         else {
             this.SupplierApplicationService.SubmitSupplierInfoData(supplierId).subscribe(data => {
-                debugger
                 this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage);
                 this.displaySubmit = false;
                 this.loadAllSupplierinfos();
-             /*   this.resetForm();*/
+                /*   this.resetForm();*/
                 //this.index = (this.index === 3) ? 0 : this.index + 1;
                 //this.index = 0;
 
@@ -1319,12 +1319,9 @@ export class SupplierApplicationComponent implements OnInit {
     }
 
     onCheckboxChange(category, id, name) {
-
         if (this.rowData == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
-
-        /*let supplierId = this.rowData.SupplierId;*/
 
         if (category.checked) {
             let supplierId = this.rowData.SupplierId;
@@ -1354,6 +1351,7 @@ export class SupplierApplicationComponent implements OnInit {
         else {
             let supplierId = this.rowData.SupplierId;
             businessData.subSectorSession = this.subSectorDataSources;
+
             businessData.ecommerceSession = this.checkedIDs;
             businessData.supplier_id = supplierId;
 
@@ -1405,7 +1403,7 @@ export class SupplierApplicationComponent implements OnInit {
             this.SupplierApplicationService.updateAssociationData(associationData).subscribe(data => {
                 this.dataSaved = true;
                 this.loadAllSupplierAssociation();
-            /*    this.resetForm();*/
+                /*    this.resetForm();*/
                 this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage);
             });
         }
@@ -1487,7 +1485,7 @@ export class SupplierApplicationComponent implements OnInit {
                 this.dataSaved = true;
                 this.LoadAllLegalDocument();
                 this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage);
-         /*       this.resetForm();*/
+                /*       this.resetForm();*/
             });
         }
 
@@ -1617,7 +1615,7 @@ export class SupplierApplicationComponent implements OnInit {
                 this.dataSaved = true
                 this.loadAllSupplierLocation();
                 this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage);
-               /* this.resetForm();*/
+                /* this.resetForm();*/
             });
 
         }
@@ -1693,7 +1691,7 @@ export class SupplierApplicationComponent implements OnInit {
             this.SupplierApplicationService.updateWarehouseData(warehouseData).subscribe(data => {
                 this.dataSaved = true;
                 this.loadAllSupplierWarehouse();
-           /*     this.resetForm();*/
+                /*     this.resetForm();*/
                 this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage);
             });
         }
@@ -1953,7 +1951,6 @@ export class SupplierApplicationComponent implements OnInit {
                     }
                 }
             }
-
             this.financialApplicationForm.controls['credit_limit'].setValue(this.TotalCredit);
 
             //this.credit_limit = totalCreditLimit;
@@ -1963,7 +1960,6 @@ export class SupplierApplicationComponent implements OnInit {
     }
 
     onSecurityDepositFormSubmit() {
-
 
         if (this.rowData == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
@@ -2009,6 +2005,17 @@ export class SupplierApplicationComponent implements OnInit {
 
     removeSecurityDeposit(a, row) {
         this.SecurityDepositDataSources = this.SecurityDepositDataSources.slice(0, a).concat(this.SecurityDepositDataSources.slice(a + 1));
+
+        this.TotalCredit = 0;
+        for (let i = 0; i < this.SecurityDepositDataSources.length; i++) {
+            for (const key of Object.keys(this.SecurityDepositDataSources[i])) {
+                const value = this.SecurityDepositDataSources[i][key];
+                if (key == "security_amount") {
+                    this.TotalCredit = this.TotalCredit + value;
+                }
+            }
+        }
+        this.financialApplicationForm.controls['credit_limit'].setValue(this.TotalCredit);
     }
 
 
@@ -2045,7 +2052,7 @@ export class SupplierApplicationComponent implements OnInit {
             this.SupplierApplicationService.updateMobileBankingData(mobileBankingData).subscribe(data => {
                 this.dataSaved = true;
                 this.loadAllSupplierMFS();
-             /*   this.resetForm();*/
+                /*   this.resetForm();*/
                 this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage);
             });
         }
@@ -2106,7 +2113,7 @@ export class SupplierApplicationComponent implements OnInit {
             this.SupplierApplicationService.UpdateBankAccountData(bankingData).subscribe(data => {
                 this.dataSaved = true;
                 this.loadAllSupplierBankAccount();
-           /*     this.resetForm();*/
+                /*     this.resetForm();*/
                 this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage);
             });
         }
@@ -2188,6 +2195,33 @@ export class SupplierApplicationComponent implements OnInit {
 
     resetForm() {
         this.supplierApplicationForm.reset();
+        this.businessApplicationForm.reset();
+        this.associationsApplicationForm.reset();
+        this.legalDocumentApplicationForm.reset();
+        this.locationApplicationForm.reset();
+
+        this.warehouseApplicationForm.reset();
+        this.contactApplicationForm.reset();
+        this.ContactLocationApplicationForm.reset();
+        this.financialApplicationForm.reset();
+        this.mobileBankingApplicationForm.reset();
+        this.bankingApplicationForm.reset();
+
+
+        this.subSectorDataSources = null;
+        this.associationDataSources = null;
+        this.documentDataSources = null;
+        this.locationDataSources = null;
+        this.warehouseDataSources = null;
+        this.contactDataSources = null;
+        this.contactLocationDataSources = null;
+        this.SecurityDepositDataSources = null;
+        this.mobileBankingDataSources = null;
+        this.bankingDataSources = null;
+        this.categories = null;
+
+        this.loadAllEcommerceList();
+
         this.isSupplierinfoEdit = false;
         this.formInit();
     }
