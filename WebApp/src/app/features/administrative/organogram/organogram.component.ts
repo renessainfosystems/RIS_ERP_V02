@@ -88,6 +88,7 @@ export class OrganogramComponent implements OnInit {
     rows = 10;
     // for delete data modal
     display: boolean = false;
+    displaychild: boolean = false;
     showDialog() {
         debugger
         if (this.rowData == null) {
@@ -104,7 +105,7 @@ export class OrganogramComponent implements OnInit {
         if (this.rowData == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
-      //  this.organogramForm.reset();
+        this.ngOnInit();
         if (this.rowData.TreeLavel==0) {
             return this.notifyService.ShowNotification(3, 'You can not Create Node Under Company');
         }
@@ -142,7 +143,7 @@ export class OrganogramComponent implements OnInit {
     get f(): { [key: string]: AbstractControl } {
         return this.organogramForm.controls;
     }
-
+     
     onGeneral(): void {
         debugger
         this.submitted = true;
@@ -183,12 +184,13 @@ export class OrganogramComponent implements OnInit {
             sorting_priority: [0],
 
             position_id: [0],
+           // min_no_of_manpower: [0, [Validators.pattern("/^-?(0|[1-9]\d*)?$/")]],
             min_no_of_manpower: [0],
             max_no_of_manpower: [0],
             min_budget: [0],
             max_budget: [0],
             min_year_of_experience: [0],
-            max_year_of_experience: [0],           
+            max_year_of_experience: [0],
             is_open: ['0'],
             is_gross: ['0'],
             increment_percentage_yearly: [0],
@@ -345,6 +347,10 @@ export class OrganogramComponent implements OnInit {
         //if (this.rowData.Organogram_Id > 0) {
         if (this.organogramDetailList.length > 0) {
 
+            if (data.position_id == null || data.position_id == 0) {
+                debugger
+                return this.notifyService.ShowNotification(3, 'Please select Position.');
+            }
             let data1 = {
                 organogram_id: this.rowData.Organogram_Id,
                 code: '001',
@@ -449,13 +455,13 @@ export class OrganogramComponent implements OnInit {
             
         });
 
-        if (this.rowData.TreeLavel == 1) {//1 means Locations
+        if (this.rowData.TreeLavel == 1 || this.rowData.TreeLavel == 2 ) {//1 means Locations
             this.isShowParrentDepartment = true;//true means hide
             this.isShowGroupCompany = false;
             this.isShowCodeLocations = false;
         }
         else {
-            this.organogramForm.controls['department'].setValue(this.rowData.Node_Name);
+            this.organogramForm.controls['department'].setValue(this.rowData.parent_dept);
             //this.organogramForm.controls['parent_id'].setValue(this.rowData.parent_id);
             this.DepartmentLabel = this.rowData.department_type_name;
             //Need to load Department by Category
@@ -463,7 +469,7 @@ export class OrganogramComponent implements OnInit {
             //    this.loadDepartmentbyTypeIddrpdwn(this.rowData.Department_Type_Id);
             //}
         }
-        if (this.rowData.TreeLavel == 2 ||this.rowData.TreeLavel == 3) {//2 means Department
+        if (this.rowData.TreeLavel == 3 || this.rowData.TreeLavel == 4) {//2 means Department
 
             this.isShowParrentDepartment = false;//true means hide
             this.isShowGroupCompany = true;
@@ -476,13 +482,15 @@ export class OrganogramComponent implements OnInit {
     }
     
     organogramActiveInactive() {
+
+        return this.notifyService.ShowNotification(3, 'Develop Soon');
         if (this.rowData == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
         //if (this.rowData.IsActive) {
         //  return this.notifyService.ShowNotification(3, "This policy already approved,you can't edit this policy");
         //}
-        let organogramId = this.rowData.organogram_id;
+        let organogramId = this.rowData.Organogram_Id;
         this.organogramService.OrganogramActivity(organogramId).subscribe(
             result => {
                 this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
@@ -492,17 +500,59 @@ export class OrganogramComponent implements OnInit {
 
     }
     deleteOrganogram() {
-        this.showDialog();
+       
         if (this.rowData == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
+        if (this.rowData.TreeLavel > 1) {
 
-        let organogramId = this.rowData.organogram_id;
-        this.organogramService.deleteOrganogram(organogramId).subscribe(data => {
+            let organogramId = this.rowData.Organogram_Id;
+            this.organogramService.deleteOrganogram(organogramId).subscribe(data => {
 
-            this.loadAllOrganogram();
+                this.loadAllOrganogram();
+                this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
+            });
+        }
+        else {
+            if (this.rowData.TreeLavel == 0) {
+                return this.notifyService.ShowNotification(3, 'You can not delete company');
+            }
+            if (this.rowData.TreeLavel == 1) {
+                return this.notifyService.ShowNotification(3, 'You can not delete location');
+            }
+        }
+        
+        this.display = false;
+    }
+    deleteConfirmation() {
+        this.displaychild = true;
+    }
+
+    deleteOrganogramConfirmation() {
+        this.display = true;
+    }
+
+    organogramdetailActivity() {
+        return this.notifyService.ShowNotification(3, 'Develop soon');
+    }
+    organogramActivity() {
+        return this.notifyService.ShowNotification(3, 'Develop soon');
+    }
+    deleteOrganogramDetail() {
+       
+        if (this.rowDetailData == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+        if (this.rowData.Organogram_Id==0) {
+            return this.notifyService.ShowNotification(3, 'Please select Organogram row');
+        }
+
+        let organogramdetailId = this.rowDetailData.organogram_detail_id;
+        this.organogramService.deleteOrganogramDetail(organogramdetailId).subscribe(data => {
+
+            this.loadAllOrganogramDetail(this.rowData.Organogram_Id);
             this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
         });
-        this.display = false;
+        this.displaychild = false;
     }
 }

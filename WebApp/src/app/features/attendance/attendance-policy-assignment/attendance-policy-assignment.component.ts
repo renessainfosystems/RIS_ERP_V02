@@ -2,21 +2,24 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
 import { NotificationService } from '../../../service/CommonMessage/notification.service';
-import { RosterPolicyService } from '../roster-policy/roster-policy.service';
+import { AttendancePolicyAssignmentService } from './attendance-policy-assignment.service';
 
 @Component({
-  selector: 'app-attendance-policy-assignment',
-  templateUrl: './attendance-policy-assignment.component.html',
-  styleUrls: ['./attendance-policy-assignment.component.scss']
+    selector: 'app-attendance-policy-assignment',
+    templateUrl: './attendance-policy-assignment.component.html',
+    styleUrls: ['./attendance-policy-assignment.component.scss']
 })
 export class AttendancePolicyAssignmentComponent implements OnInit {
 
     AttPolicyAssignmentForm: FormGroup;
     submitted = false;
     selectedPolicy: any;
-    rosterPolicies: any[];
+    policyAssigmentList: any[];
     selectedRostercycle: any;
-    allRosterCycle: any[];
+    companyList: any[];
+    locationList: any[];
+    departmentList: any[];
+    positionList: any[];
     rosterDetails: any[] = [];
     selectedShift: any;
     selectedNextShift: any;
@@ -44,8 +47,8 @@ export class AttendancePolicyAssignmentComponent implements OnInit {
     //end grid and form show hide ********************
     // for delete data modal
     display: boolean = false;
-
-    constructor(private formbulider: FormBuilder, private confirmationService: ConfirmationService, private RosterPolicyService: RosterPolicyService, private notifyService: NotificationService) { }
+    company_group_id: number = 0;
+    constructor(private formbulider: FormBuilder, private confirmationService: ConfirmationService, private policyAssigmentService: AttendancePolicyAssignmentService, private notifyService: NotificationService) { }
 
     ngOnInit(): void {
         this.AttPolicyAssignmentForm = this.formbulider.group({
@@ -61,11 +64,11 @@ export class AttendancePolicyAssignmentComponent implements OnInit {
             company_id: [0, [Validators.required]],
             department_id: [0, [Validators.required]],
             position_id: [0, [Validators.required]],
-            groupname: [null, [Validators.required]],
+            group_name: [null, [Validators.required]],
         });
-        this.loadAllRosterPolicy();
-        this.loadAllShift();
-        this.loadAllRosterCycle();
+        this.loadAllPolicyAssigment();
+        this.getGroupName();
+        this.loadCompanyByOrganogram();
     }
     onRowSelect(event) {
         this.rowSelected = true;
@@ -83,7 +86,7 @@ export class AttendancePolicyAssignmentComponent implements OnInit {
     showBasicDialog() {
         // this.displayBasic = true;
         this.toggleGridDisplay();
-        this.AttPolicyAssignmentForm.reset();
+        //this.AttPolicyAssignmentForm.reset();
         this.AttPolicyAssignmentForm.valid;
     }
     //for validation messate -----------
@@ -91,106 +94,27 @@ export class AttendancePolicyAssignmentComponent implements OnInit {
     get f(): { [key: string]: AbstractControl } {
         return this.AttPolicyAssignmentForm.controls;
     }
-    loadAllRosterPolicy() {
-        this.RosterPolicyService.getAllRosterPolicy().subscribe(data => {
-            this.rosterPolicies = [];
+    loadAllPolicyAssigment() {
+        this.policyAssigmentService.getAllAttPolicyAssignment().subscribe(data => {
+            this.policyAssigmentList = [];
         });
     }
-    loadAllShift() {
-        this.RosterPolicyService.getShiftForDP().subscribe(data => {
-            this.allShifts = data;
+    loadCompanyByOrganogram() {
+        this.policyAssigmentService.getCompanyByOrganogram(1).subscribe(data => {
+            this.companyList = data;
+            console.log(this.companyList)
         });
     }
-    loadAllRosterCycle() {
-
-        this.allRosterCycle = [
-            { name: '7', roster_cycle: 7 },
-            { name: '10', roster_cycle: 10 },
-            { name: '15', roster_cycle: 15 },
-            { name: '30', roster_cycle: 30 }
-        ];
-    }
-    addRosterDetails() {
-        this.submitted = true;
-
-        if (this.AttPolicyAssignmentForm.invalid) {
-            return;
-        }
-        let roster_policy_name = this.AttPolicyAssignmentForm.get('roster_policy_name')?.value;
-        let shift_id = this.AttPolicyAssignmentForm.get('shift_id')?.value.shift_id;
-
-        let shift_name = (this.AttPolicyAssignmentForm.get('shift_id')?.value.shift_name);
-        let next_shift_id = this.AttPolicyAssignmentForm.get('next_shift_id')?.value.shift_id;
-
-        let next_shift_name = (this.AttPolicyAssignmentForm.get('next_shift_id')?.value.shift_name)
-
-        if (shift_id === next_shift_id) {
-            return this.notifyService.ShowNotification(2, "Shift and Next Shift can't be same");
-        }
-        if (this.dataExist(shift_id, next_shift_id)) {
-            return this.notifyService.ShowNotification(2, "Selected shift already added")
-        }
-
-        const rosterDetailsObj = {
-            shift_id: shift_id,
-            next_shift_id: next_shift_id,
-            roster_policy_id: 0,
-            roster_policy_detail_id: 0,
-            shift_name: shift_name,
-            next_shift_name: next_shift_name
-        }
-
-
-        if (this.AttPolicyAssignmentEdit) {
-
-            let roster_policy_id = this.rowData.roster_policy_id;
-            rosterDetailsObj.roster_policy_id = roster_policy_id;
-            this.RosterPolicyService.createRosterDetails(rosterDetailsObj).subscribe(data => {
-
-                if (data.MessageType == 1) {
-                    this.rosterDetails.unshift(data.Data[0]);
-                }
-                this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
-            });
-        }
-        else {
-
-
-
-            this.rosterDetails.push(rosterDetailsObj);
-        }
-    }
-
-    // ...
-
-    dataExist(shift_id, next_shift_id) {
-
-        return this.rosterDetails.some(function (el) {
-            return el.shift_id === shift_id && el.next_shift_id === next_shift_id;
-        });
-    }
-    removeEvent(a, row) {
-        if (this.AttPolicyAssignmentEdit) {
-            let roster_policy_id = this.rowData.roster_policy_id;
-
-
-            this.RosterPolicyService.deleteRosterDetails(row.roster_policy_detail_id).subscribe(data => {
-
-                if (data.MessageType == 1) {
-                    this.rosterDetails.splice(this.rosterDetails.findIndex(item => item.roster_policy_detail_id === row.roster_policy_detail_id), 1);
-
-                }
-                this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
-            });
-        }
-        else {
-            this.rosterDetails = this.rosterDetails.slice(0, a).concat(this.rosterDetails.slice(a + 1));
-        }
-
+    loadLocationByOrganogram() {
 
     }
+    loadDepartmentByOrganogram() {
 
-    loadRosterPolicyToEdit() {
+    }
+    loadPositionByOrganogram() {
+
+    }
+    loadPolicyAssignmentToEdit() {
 
 
         if (this.rowData == null) {
@@ -201,15 +125,11 @@ export class AttendancePolicyAssignmentComponent implements OnInit {
             return this.notifyService.ShowNotification(3, "This policy already approved, you can't edit this.");
         }
         this.resetForm();
-        let roster_policy_id = this.rowData.roster_policy_id;
+        let attendance_policy_organogram_id = this.rowData.attendance_policy_organogram_id;
 
-        this.RosterPolicyService.getRosterDetailsById(roster_policy_id).subscribe(res => {
 
-            this.rosterDetails = res;
 
-        });
-
-        this.RosterPolicyService.getRosterPolicyById(roster_policy_id).subscribe(data => {
+        this.policyAssigmentService.getAttendancePolicyOrganogramById(attendance_policy_organogram_id).subscribe(data => {
 
             this.AttPolicyAssignmentForm.controls['roster_policy_name'].setValue(data.roster_policy_name);
             this.AttPolicyAssignmentForm.controls['roster_cycle'].setValue(data.roster_cycle);
@@ -229,12 +149,12 @@ export class AttendancePolicyAssignmentComponent implements OnInit {
             return this.notifyService.ShowNotification(3, "This policy already approved, you can't delete this.");
         }
 
-        let roster_policy_id = this.rowData.roster_policy_id;
-        this.RosterPolicyService.delete(roster_policy_id).subscribe(data => {
+        let attendance_policy_organogram_id = this.rowData.attendance_policy_organogram_id;
+        this.policyAssigmentService.delete(attendance_policy_organogram_id).subscribe(data => {
 
 
             if (data.MessageType == 1) {
-                this.rosterPolicies.splice(this.rosterPolicies.findIndex(item => item.roster_policy_id === roster_policy_id), 1);
+                this.policyAssigmentList.splice(this.policyAssigmentList.findIndex(item => item.attendance_policy_organogram_id === attendance_policy_organogram_id), 1);
             }
             this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
         });
@@ -247,13 +167,13 @@ export class AttendancePolicyAssignmentComponent implements OnInit {
         if (this.rowData.approvedBy) {
             return this.notifyService.ShowNotification(3, "This policy already approved.");
         }
-        let roster_policy_id = this.rowData.roster_policy_id;
-        this.RosterPolicyService.approve(roster_policy_id).subscribe(
+        let attendance_policy_organogram_id = this.rowData.attendance_policy_organogram_id;
+        this.policyAssigmentService.approve(attendance_policy_organogram_id).subscribe(
             result => {
                 this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
                 if (result.MessageType == 1) {
-                    this.rosterPolicies.splice(this.rosterPolicies.findIndex(item => item.roster_policy_id === roster_policy_id), 1);
-                    this.rosterPolicies.unshift(result.Data[0]);
+                    this.policyAssigmentList.splice(this.policyAssigmentList.findIndex(item => item.attendance_policy_organogram_id === attendance_policy_organogram_id), 1);
+                    this.policyAssigmentList.unshift(result.Data[0]);
                     this.selectedPolicy = result.Data[0];
                     this.rowSelected = true;
                     this.rowData = result.Data[0];
@@ -263,7 +183,7 @@ export class AttendancePolicyAssignmentComponent implements OnInit {
         );
     }
 
-    saveRosterPolicy() {
+    saveAttendancePolicyAssignment() {
         const data = this.AttPolicyAssignmentForm.value;
 
         this.submitted = true;
@@ -274,14 +194,14 @@ export class AttendancePolicyAssignmentComponent implements OnInit {
         }
         if (this.AttPolicyAssignmentEdit) {
 
-            data.roster_policy_id = this.rowData.roster_policy_id;
-            this.RosterPolicyService.update(data).subscribe(result => {
+            data.attendance_policy_organogram_id = this.rowData.attendance_policy_organogram_id;
+            this.policyAssigmentService.update(data).subscribe(result => {
 
                 this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
                 if (result.MessageType == 1) {
                     this.resetForm();
-                    this.rosterPolicies.splice(this.rosterPolicies.findIndex(item => item.roster_policy_id === data.roster_policy_id), 1);
-                    this.rosterPolicies.unshift(result.Data[0]);
+                    this.policyAssigmentList.splice(this.policyAssigmentList.findIndex(item => item.attendance_policy_organogram_id === data.attendance_policy_organogram_id), 1);
+                    this.policyAssigmentList.unshift(result.Data[0]);
                     this.selectedPolicy = result.Data[0];
                     this.rowSelected = true;
                     this.rowData = result.Data[0];
@@ -294,11 +214,11 @@ export class AttendancePolicyAssignmentComponent implements OnInit {
         else {
 
             data.rosterDetails = this.rosterDetails;
-            this.RosterPolicyService.create(JSON.stringify(data)).subscribe(
+            this.policyAssigmentService.create(JSON.stringify(data)).subscribe(
                 result => {
                     if (result.MessageType == 1) {
                         this.resetForm();
-                        this.rosterPolicies.unshift(result.Data[0]);
+                        this.policyAssigmentList.unshift(result.Data[0]);
                         this.selectedPolicy = result.Data[0];
                         this.rowSelected = true;
                         this.rowData = result.Data[0];
@@ -353,8 +273,16 @@ export class AttendancePolicyAssignmentComponent implements OnInit {
             }
         });
     }
+    getGroupName() {
+
+        this.policyAssigmentService.getGroupNameById().subscribe(data => {
+
+            this.AttPolicyAssignmentForm.controls['group_name'].setValue(data.group_name);
+            this.company_group_id = data.company_group_id;
+        });
+    }
     resetForm() {
-        this.AttPolicyAssignmentForm.reset();
+       // this.AttPolicyAssignmentForm.reset();
         this.rosterDetails = [];
         this.submitted = false;
         this.AttPolicyAssignmentEdit = false;

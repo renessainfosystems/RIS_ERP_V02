@@ -78,4 +78,9 @@ export class OrganogramService {
         return this.http.post<any>(this.ipconfig.base_IP + 'OrganogramDetail/Create', OrganogramDetail, httpOptions);
 
     }
+    deleteOrganogramDetail(Organogram_detail_Id: number): Observable<any> {
+
+        return this.http.post(this.ipconfig.base_IP + 'OrganogramDetail/Delete?OrganogramDetailId=' + Organogram_detail_Id, httpOptions);
+
+    }
 }

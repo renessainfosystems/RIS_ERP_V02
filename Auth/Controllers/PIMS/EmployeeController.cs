@@ -34,14 +34,14 @@ namespace Auth.Controllers.PIMS
         [HttpPost]
         public async Task<dynamic> Create([FromForm] Employee Employee)
         {
-            //if (Employee.ImageUpload != null)
-            //{
-            //    Employee.employee_image_path = GetImagePath(Employee.ImageUpload);
-            //}
-            //if (Employee.SignatureUpload != null)
-            //{
-            //    Employee.signature_image_path = GetSignaturePath(Employee.SignatureUpload);
-            //}
+            if (Employee.ImageUpload != null)
+            {
+                Employee.employee_image_path = GetImagePath(Employee.ImageUpload);
+            }
+            if (Employee.SignatureUpload != null)
+            {
+                Employee.signature_image_path = GetSignaturePath(Employee.SignatureUpload);
+            }
 
             return await _EmployeeRepository.IUD_Employee(Employee, (int)GlobalEnumList.DBOperation.Create);
         }
@@ -116,13 +116,14 @@ namespace Auth.Controllers.PIMS
 
         }
         private string GetImagePath(IFormFile image)
-        {
-            var folderName = Path.Combine("assets", "images", "employeeimage");
+        {           
+            var folderName = Path.Combine("assets", "images", "pims", "employeeimage");
             var directoryName = Directory.GetCurrentDirectory();
 
             //var pathToSave1 = Path.Combine(Directory.GetCurrentDirectory().Trim(), folderName);
 
-            var pathToSave = directoryName.Replace("\\Auth", "\\WebApp\\src\\assets\\images\\employeeimage");
+            //var pathToSave = directoryName.Replace("\\Auth", "\\WebApp\\src\\assets\\images\\employeeimage");
+            var pathToSave = directoryName.Replace("\\Auth", "\\WebApp\\src\\assets\\images\\pims\\employeeimage");
             if (image.Length > 0)
             {
                 var fileName = ContentDispositionHeaderValue.Parse(image.ContentDisposition).FileName.Trim('"');
@@ -146,12 +147,12 @@ namespace Auth.Controllers.PIMS
         private string GetSignaturePath(IFormFile signature)
         {
 
-            var folderName = Path.Combine("assets", "images", "employeesignature");
+            var folderName = Path.Combine("assets", "images", "pims", "employeesignature");
             var directoryName = Directory.GetCurrentDirectory();
 
             // var pathToSave = Path.Combine(Directory.GetCurrentDirectory().Trim(), folderName);
 
-            var pathToSave = directoryName.Replace("\\Auth", "\\WebApp\\src\\assets\\images\\employeesignature");
+            var pathToSave = directoryName.Replace("\\Auth", "\\WebApp\\src\\assets\\images\\pims\\employeesignature");
             if (signature.Length > 0)
             {
                 var fileName = ContentDispositionHeaderValue.Parse(signature.ContentDisposition).FileName.Trim('"');
@@ -174,7 +175,8 @@ namespace Auth.Controllers.PIMS
         {
             FileInfo file = new FileInfo(imagepath);
 
-            var directoryPath = ("\\WebApp\\src\\assets\\images\\employeeimage");
+            //var directoryPath = ("\\WebApp\\src\\assets\\images\\employeeimage");
+            var directoryPath = ("\\WebApp\\src\\assets\\images\\pims\\employeeimage");
             var path = directoryPath + "\\" + file.Name;
             System.IO.File.Delete(path);
         }
@@ -182,7 +184,7 @@ namespace Auth.Controllers.PIMS
         {
             FileInfo file = new FileInfo(sigpath);
 
-            var directoryPath = ("\\WebApp\\src\\assets\\images\\employeesignature");
+            var directoryPath = ("\\WebApp\\src\\assets\\images\\pims\\employeesignature");
             var path = directoryPath + "\\" + file.Name;
             System.IO.File.Delete(path);
         }

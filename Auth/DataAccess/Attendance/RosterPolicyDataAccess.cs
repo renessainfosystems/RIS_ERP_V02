@@ -107,7 +107,7 @@ namespace Auth.DataAccess.Attendance
             try
             {
 
-                dynamic data = await _dbConnection.QueryAsync("[Attendance].[Roster_Policy_IUD]", parameters, commandType: CommandType.StoredProcedure);
+                dynamic data = await _dbConnection.QueryAsync("[Attendance].[SP_Roster_Policy_IUD]", parameters, commandType: CommandType.StoredProcedure);
 
                 if (dbOperation == (int)DBOperation.Create && rosterPolicy.rosterDetails != null)
                 {
