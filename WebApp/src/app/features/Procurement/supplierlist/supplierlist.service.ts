@@ -347,6 +347,14 @@ export class SupplierListService {
         return this.http.post<any>(this.ipconfig.base_IP + 'SupplierApplication/RejectSupplier', rejectFeedbackData, httpOptions);
     }
 
+    getAllDepartmentCboList(): Observable<any[]> {
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'Department/DepartmentCboList', httpOptions);
+    }
+
+    getAllEmployeeCboList(): Observable<any[]> {
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'Employee/GetEmployeeCboList', httpOptions);
+    }
+
 
 
 

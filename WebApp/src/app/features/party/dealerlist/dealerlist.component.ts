@@ -50,7 +50,6 @@ export class DealerlistComponent implements OnInit {
     }
 
     onRowSelect(event) {
-        debugger;
         this.rowSelected = true;
         this.rowData = event.data;
 
@@ -78,6 +77,7 @@ export class DealerlistComponent implements OnInit {
     }
 
     SaveDealerVerification() {
+        debugger
         this.submitted = true;
         const data = this.dealerassignForm.value;
 
@@ -96,6 +96,17 @@ export class DealerlistComponent implements OnInit {
                 formData.append(key, value);
             }
         }
+
+
+        var arr = [];
+        var object = {};
+        formData.forEach(function (value, key) {
+            arr[key] = value;
+            //fd.append(key, value);
+        });
+
+        var json = JSON.stringify(arr);
+        console.log(object)
 
         if (this.isDealerVerificationEdit) {
             data.dealerinfoId = this.rowData.DealerInfoId;
