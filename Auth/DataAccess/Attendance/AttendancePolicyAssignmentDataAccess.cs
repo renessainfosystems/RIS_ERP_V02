@@ -124,7 +124,7 @@ namespace Auth.DataAccess.Attendance
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@param_company_group_id", company_group_id);
                 parameters.Add("@param_company_id", company_id);
-                var sql = " [Attendance].[View_Attendance_Policy_Organogram] s ORDER BY s.Attendance_Policy_Organogram_id DESC";
+                var sql = " Select * from [Attendance].[View_Attendance_Policy_Organogram] s ORDER BY s.Attendance_Policy_Organogram_id DESC";
                 result = await _dbConnection.QueryAsync<dynamic>(sql, parameters);
 
             }
@@ -178,7 +178,7 @@ namespace Auth.DataAccess.Attendance
             var company_group_id = _httpContextAccessor.HttpContext.Items["company_group_id"];
             try
             {
-                var sql = "Select group_name from Administrative.Company_Group WHERE company_group_id=@company_group_id";
+                var sql = "Select company_group_id,group_name from Administrative.Company_Group WHERE company_group_id=@company_group_id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@company_group_id", company_group_id);
 
@@ -209,7 +209,7 @@ namespace Auth.DataAccess.Attendance
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@company_group_id", organogramFilter.company_group_id);
 
-                result = await _dbConnection.QueryFirstOrDefaultAsync<dynamic>(sql, parameters);
+                result = await _dbConnection.QueryAsync<dynamic>(sql, parameters);
 
             }
             catch (Exception ex)
@@ -239,7 +239,7 @@ namespace Auth.DataAccess.Attendance
                 parameters.Add("@company_group_id", organogramFilter.company_group_id);
                 parameters.Add("@company_id", organogramFilter.company_id);
 
-                result = await _dbConnection.QueryFirstOrDefaultAsync<dynamic>(sql, parameters);
+                result = await _dbConnection.QueryAsync<dynamic>(sql, parameters);
 
             }
             catch (Exception ex)
@@ -269,7 +269,7 @@ namespace Auth.DataAccess.Attendance
                 parameters.Add("@company_group_id", organogramFilter.company_group_id);
                 parameters.Add("@company_id", organogramFilter.company_id);
                 parameters.Add("@location_id", organogramFilter.location_id);
-                result = await _dbConnection.QueryFirstOrDefaultAsync<dynamic>(sql, parameters);
+                result = await _dbConnection.QueryAsync<dynamic>(sql, parameters);
 
             }
             catch (Exception ex)
@@ -301,7 +301,7 @@ namespace Auth.DataAccess.Attendance
                 parameters.Add("@company_id", organogramFilter.company_id);
                 parameters.Add("@location_id", organogramFilter.location_id);
                 parameters.Add("@department_id", organogramFilter.department_id);
-                result = await _dbConnection.QueryFirstOrDefaultAsync<dynamic>(sql, parameters);
+                result = await _dbConnection.QueryAsync<dynamic>(sql, parameters);
 
             }
             catch (Exception ex)

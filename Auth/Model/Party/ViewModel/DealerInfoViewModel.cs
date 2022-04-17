@@ -64,6 +64,8 @@ namespace Auth.Model.Party.ViewModel
         public string FlatNo { get; set; }
         public string AddressNote { get; set; }
         public bool IsActive { get; set; }
+        public bool IsVerified { get; set; }
+        public bool IsApproved { get; set; }
         public DateTime CreatedDateTime { get; set; }
         public DateTime? UpdatedDateTime { get; set; }
         public DateTime DBServerDateTime { get; set; }
@@ -120,6 +122,8 @@ namespace Auth.Model.Party.ViewModel
             model.FlatNo = dealer.flat_no ?? "";
             model.AddressNote = dealer.address_note ?? "";
             model.IsActive = dealer.is_active ?? false;
+            model.IsVerified = dealer.is_verified ?? false;
+            model.IsApproved = dealer.is_approved ?? false;
 
             return model;
         }

@@ -12,30 +12,30 @@ namespace Auth.Controllers.Party
     {
         //Intialize
         #region Constructor
-        private IDealerVerificationRepository _dealerCreditInfoRepository;
+        private IDealerVerificationRepository _dealerVerificationRepository;
 
         public DealerVerificationController(
-            IDealerVerificationRepository dealerCreditInfoRepository
+            IDealerVerificationRepository dealerVerificationRepository
             )
         {
-            _dealerCreditInfoRepository = dealerCreditInfoRepository;
+            _dealerVerificationRepository = dealerVerificationRepository;
         }
 
         #endregion
 
         [HttpPost]
        
-        public async Task<dynamic> Create([FromForm] DealerVerification dealerCreditInfo)
+        public async Task<dynamic> Create([FromForm] DealerVerification dealerVerification)
         {           
             
-            return await _dealerCreditInfoRepository.IUD_DealerVerification(dealerCreditInfo, (int)GlobalEnumList.DBOperation.Create);
+            return await _dealerVerificationRepository.IUD_DealerVerification(dealerVerification, (int)GlobalEnumList.DBOperation.Create);
         }     
 
         [HttpPost]
-        public async Task<dynamic> Update([FromForm] DealerVerification dealerCreditInfo)
+        public async Task<dynamic> Update([FromForm] DealerVerification dealerVerification)
         {
             
-           return await _dealerCreditInfoRepository.IUD_DealerVerification(dealerCreditInfo, (int)GlobalEnumList.DBOperation.Update);
+           return await _dealerVerificationRepository.IUD_DealerVerification(dealerVerification, (int)GlobalEnumList.DBOperation.Update);
         }
    
         [HttpPost]
@@ -43,32 +43,32 @@ namespace Auth.Controllers.Party
         {
             DealerVerification oDealerVerification = new DealerVerification();
             oDealerVerification.dealer_verification_id = dealer_verification_id;            
-            return await _dealerCreditInfoRepository.IUD_DealerVerification(oDealerVerification, (int)GlobalEnumList.DBOperation.Delete);
+            return await _dealerVerificationRepository.IUD_DealerVerification(oDealerVerification, (int)GlobalEnumList.DBOperation.Delete);
         }
 
         [HttpPost]
-        public async Task<dynamic> Approve(DealerVerification dealerCreditInfo)
+        public async Task<dynamic> Approve(DealerVerification dealerVerification)
         {
 
-            return await _dealerCreditInfoRepository.IUD_DealerVerification(dealerCreditInfo, (int)GlobalEnumList.DBOperation.Approve);
+            return await _dealerVerificationRepository.IUD_DealerVerification(dealerVerification, (int)GlobalEnumList.DBOperation.Approve);
         }
 
         [HttpGet]
         public async Task<dynamic> GetAllDealerVerification()
         {
-            return await _dealerCreditInfoRepository.GetAllDealerVerification();
+            return await _dealerVerificationRepository.GetAllDealerVerification();
         }
 
         [HttpGet]
         public async Task<dynamic> GetDealerVerificationById(int dealer_verification_id)
         {
-            return await _dealerCreditInfoRepository.GetDealerVerificationById(dealer_verification_id);
+            return await _dealerVerificationRepository.GetDealerVerificationById(dealer_verification_id);
         }
 
         [HttpGet]
-        public async Task<dynamic> GetCreditInfoByDealerId(int dealer_info_id)
+        public async Task<dynamic> GetDealerVerificationByDealerId(int dealer_info_id)
         {
-            return await _dealerCreditInfoRepository.GetCreditInfoByDealerId(dealer_info_id);
+            return await _dealerVerificationRepository.GetDealerVerificationByDealerId(dealer_info_id);
         }        
     }
 }
