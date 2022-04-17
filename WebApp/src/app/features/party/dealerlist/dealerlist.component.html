@@ -3,11 +3,13 @@
         <div class="card">
             <h4>Dealer Information</h4>
 
+            <!--selectionMode="single"-->
+
             <!--end form display------------->
             <div [hidden]="gridDisplay">
-                <p-table #dt [value]="dealerinfoList" styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm" selectionMode="single" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" responsiveLayout="scroll"
+                <p-table #dt [value]="dealerinfoList" styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" responsiveLayout="scroll"
                          [(selection)]="selecteddealerinfo" dataKey="DealerInfoId" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-                         [rowsPerPageOptions]="[10,25,50]" [globalFilterFields]="['DealerInfoCode','DealerInfoName']"(onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
+                         [rowsPerPageOptions]="[10,25,50]" [globalFilterFields]="['DealerInfoCode','DealerInfoName']" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
                     <ng-template pTemplate="caption">
                         <div class="flex">
                             <span class="p-input-icon-left ml-auto">
@@ -67,7 +69,7 @@
                             <div *ngIf="submitted && d.department_id.errors" class="invalid-feedback">
                                 <small *ngIf="d.department_id.errors.required" class="p-error">Department is required</small>
                             </div>
-                        </div>                       
+                        </div>
                         <div class="field md:col-3">
                             <label pTooltip="Employee" tooltipPosition="top">Employee<span class="req">*</span></label>
                             <p-dropdown [options]="allEmployee" formControlName="employee_id" [ngClass]="{ 'is-invalid': submitted && d.employee_id.errors }" placeholder="---Select---"
