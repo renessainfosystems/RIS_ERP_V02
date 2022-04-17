@@ -89,6 +89,8 @@ namespace Auth.DataAccess.Party
                 parameters.Add("@param_flat_no", dealerInfo.flat_no, DbType.String);
                 parameters.Add("@param_address_note", dealerInfo.address_note, DbType.String);
                 parameters.Add("@param_is_active", true, DbType.Boolean);
+                parameters.Add("@param_is_verified", false, DbType.Boolean);
+                parameters.Add("@param_is_approved", false, DbType.Boolean);
                 parameters.Add("@param_created_datetime", DateTime.Now, DbType.DateTime);
                 parameters.Add("@param_updated_datetime", DateTime.Now, DbType.DateTime);
                 parameters.Add("@param_created_user_info_id", currentUserInfoId ?? 0, DbType.Int64);
