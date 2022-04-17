@@ -27,13 +27,35 @@ namespace Auth.Utility.PIMS
             Data = (dynamic)null;
         }
 
-
-
         public static string CommonDeleteMessage = "Data has been deleted successfully";
-        public static string CommonErrorMessage = "An error Occurred";
+        public static string CommonErrorMessage = "Ops, An error occurred. Please contact with vendor.";
         public static string CommonSaveMessage = "Data has been saved successfully";
         public static string CommonUpdateMessage = "Data has been updated successfully";
         public static string CommonMailMessage = "Email Sent successfully";
+        public static string CommonApproveMessage = "Approved successfully";
+        public static string CommonCopyMessage = "Copied successfully";
+
+        public static CommonMessage Message(int nDBOperation, dynamic data = null)
+        {
+            var sMsg = new CommonMessage();
+            sMsg.MessageType = MessageTypes.Success;
+            if (nDBOperation == 1/*Insert*/) sMsg.CurrentMessage = CommonSaveMessage;
+            else if (nDBOperation == 2/*Update*/) sMsg.CurrentMessage = CommonUpdateMessage;
+            else if (nDBOperation == 3/*Delete*/) sMsg.CurrentMessage = CommonDeleteMessage;
+            else if (nDBOperation == 4/*Approve*/) sMsg.CurrentMessage = CommonApproveMessage;
+            else sMsg.CurrentMessage = CommonCopyMessage;/*DBOperation=5; Copy*/
+
+            if (data != null) sMsg.Data = data;
+            else
+            {
+                if (nDBOperation != 3/*Delete*/)
+                {
+                    sMsg.MessageType = MessageTypes.Error;
+                    sMsg.CurrentMessage = CommonErrorMessage;
+                }
+            }
+            return sMsg;
+        }
 
         public static CommonMessage SetSuccessMessage(string message, dynamic data = null)
         {

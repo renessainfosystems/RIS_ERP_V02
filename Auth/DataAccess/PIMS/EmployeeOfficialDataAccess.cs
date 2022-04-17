@@ -1,6 +1,6 @@
 ﻿using Auth.Model.PIMS.Model;
 using Auth.Model.PIMS.ViewModel;
-using Auth.Utility;
+using Auth.Utility.PIMS;
 using Auth.Utility.PIMS.Enum;
 using Dapper;
 using DataAccess;
@@ -27,39 +27,87 @@ namespace Auth.DataAccess.PIMS
         public DynamicParameters EmployeeOfficialParameterBinding(EmployeeOfficial oEmployeeOfficial, int nOperationType)
         {
             var currentUserInfoId = _httpContextAccessor.HttpContext.Items["User_Info_Id"];
-            var company_id = _httpContextAccessor.HttpContext.Items["company_id"];
-            var company_corporate_id = _httpContextAccessor.HttpContext.Items["company_corporate_id"];
-            var company_group_id = _httpContextAccessor.HttpContext.Items["company_group_id"];
-
             DynamicParameters parameters = new DynamicParameters();
 
             if (nOperationType == (int)GlobalEnumList.DBOperation.Create || nOperationType == (int)GlobalEnumList.DBOperation.Update)
             {
-                parameters.Add("@param_employee_id", oEmployeeOfficial.employee_id, DbType.Int64);
-                parameters.Add("@param_organogram_detail_id", oEmployeeOfficial.organogram_detail_id, DbType.Int32);
-                parameters.Add("@param_company_id", oEmployeeOfficial.company_id, DbType.Int32);
-                parameters.Add("@param_location_id", oEmployeeOfficial.location_id, DbType.Int32);
-                parameters.Add("@param_department_id", oEmployeeOfficial.department_id, DbType.Int32);
-                parameters.Add("@param_position_id", oEmployeeOfficial.position_id, DbType.Int32);
-                parameters.Add("@param_designation_id", oEmployeeOfficial.designation_id, DbType.Int32);
-                parameters.Add("@param_job_domicile_id", oEmployeeOfficial.job_domicile_id, DbType.Int32);
-                parameters.Add("@param_service_type_id", oEmployeeOfficial.service_type_id, DbType.Int32);
-                parameters.Add("@param_confirmation_status_id", oEmployeeOfficial.confirmation_status_id, DbType.Int32);
-                parameters.Add("@param_working_action_id", oEmployeeOfficial.working_action_id, DbType.Int32);
-                parameters.Add("@param_job_location_id", oEmployeeOfficial.job_location_id, DbType.Int32);
+                parameters.Add("@param_employee_id", oEmployeeOfficial.employee_id ?? 0, DbType.Int64);
+                parameters.Add("@param_organogram_detail_id", oEmployeeOfficial.organogram_detail_id ?? 0, DbType.Int32);
+                parameters.Add("@param_company_id", oEmployeeOfficial.company_id ?? 0, DbType.Int32);
+                parameters.Add("@param_location_id", oEmployeeOfficial.location_id ?? 0, DbType.Int32);
+                parameters.Add("@param_department_id", oEmployeeOfficial.department_id ?? 0, DbType.Int32);
+                parameters.Add("@param_position_id", oEmployeeOfficial.position_id ?? 0, DbType.Int32);
+                parameters.Add("@param_designation_id", oEmployeeOfficial.designation_id ?? 0, DbType.Int32);
+                parameters.Add("@param_job_domicile_id", oEmployeeOfficial.job_domicile_id ?? 0, DbType.Int32);
+                parameters.Add("@param_service_type_id", oEmployeeOfficial.service_type_id ?? 0, DbType.Int32);
+                parameters.Add("@param_confirmation_status_id", oEmployeeOfficial.confirmation_status_id ?? 0, DbType.Int32);
+                parameters.Add("@param_working_action_id", oEmployeeOfficial.working_action_id ?? 0, DbType.Int32);
+                parameters.Add("@param_job_location_id", oEmployeeOfficial.job_location_id ?? 0, DbType.Int32);
                 parameters.Add("@param_date_of_join", oEmployeeOfficial.date_of_join, DbType.DateTime);
                 parameters.Add("@param_date_of_confirmation", oEmployeeOfficial.date_of_confirmation, DbType.DateTime);
-                parameters.Add("@param_created_user_id", oEmployeeOfficial.created_user_id, DbType.Int32);
+                parameters.Add("@param_created_user_id", currentUserInfoId ?? 0, DbType.Int32);
+                //parameters.Add("@param_created_user_id", oEmployeeOfficial.created_user_id ?? 0, DbType.Int32);
                 parameters.Add("@param_DBOperation", nOperationType == (int)GlobalEnumList.DBOperation.Create ? GlobalEnumList.DBOperation.Create : GlobalEnumList.DBOperation.Update);
             }
             else if (nOperationType == (int)GlobalEnumList.DBOperation.Delete)
             {
-                parameters.Add("@param_employee_id", oEmployeeOfficial.employee_id, DbType.Int64);
+                parameters.Add("@param_employee_id", oEmployeeOfficial.employee_id ?? 0, DbType.Int64);
                 parameters.Add("@param_DBOperation", GlobalEnumList.DBOperation.Delete);
             }
 
             return parameters;
         }
 
+        //Insert, Update and Delete record
+        public async Task<dynamic> IUD_EmployeeOfficial(EmployeeOfficial oEmployeeOfficial, int nDBOperation)
+        {            
+            var oMessage = new CommonMessage();
+            var parameters = EmployeeOfficialParameterBinding(oEmployeeOfficial,nDBOperation);
+
+            try
+            {
+                _dbConnection.Open();
+                dynamic data = await _dbConnection.QueryFirstOrDefaultAsync("[PIMS].[SP_Employee_Official_IUD]", parameters, commandType: CommandType.StoredProcedure);
+                oMessage = CommonMessage.Message(nDBOperation, data);
+            }
+            catch(Exception ex)
+            {
+                _dbConnection.Dispose();
+                oMessage = CommonMessage.SetErrorMessage(ex.Message);
+            }
+            finally
+            {
+                _dbConnection.Dispose();
+            }
+            return oMessage;            
+        }
+
+        //Get employee official by employee id
+        public async Task<dynamic> GetEmployeeOfficialById(long nEmployeeId)
+        {
+            var result = (dynamic)null;
+            try
+            {
+                var sql = "SELECT [employee_id],[organogram_detail_id],[company_id],[location_id],[department_id],[position_id],[designation_id],[job_domicile_id]" +
+                            ",[service_type_id],[confirmation_status_id],[working_action_id],[job_location_id],[date_of_join],[date_of_confirmation],[created_user_id]" +
+                            " FROM [PIMS].[Employee_Official]" +
+                            " WHERE [employee_id] = @param_employee_id";
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@param_employee_id", nEmployeeId);
+
+                _dbConnection.Open();
+                result = await _dbConnection.QueryFirstOrDefaultAsync<dynamic>(sql, parameters);
+            }
+            catch (Exception ex)
+            {
+                _dbConnection.Dispose();
+                throw ex.InnerException;                
+            }
+            finally
+            {
+                _dbConnection.Dispose();
+            }
+            return result;
+        }
     }
 }
