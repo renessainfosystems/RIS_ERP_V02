@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
 import { NotificationService } from '../../../service/CommonMessage/notification.service';
+import { AttendancePolicyService } from '../attendance-policy/attendance-policy.service';
 import { AttendancePolicyAssignmentService } from './attendance-policy-assignment.service';
 
 @Component({
@@ -23,7 +24,8 @@ export class AttendancePolicyAssignmentComponent implements OnInit {
     rosterDetails: any[] = [];
     selectedShift: any;
     selectedNextShift: any;
-    allShifts: any[];
+    attendancePolicyList: any[];
+    AttendancePolicies: any[];
     rowData: any;
     rowSelected: boolean = false;
     AttPolicyAssignmentEdit: boolean = false;
@@ -31,7 +33,7 @@ export class AttendancePolicyAssignmentComponent implements OnInit {
     //start grid and form show hide ********************
     gridDisplay = false;
     formDisplay = true;
-
+    company_group_id: number = 0;
     toggleFormDisplay() {
         this.gridDisplay = false;
         this.formDisplay = true;
@@ -47,20 +49,14 @@ export class AttendancePolicyAssignmentComponent implements OnInit {
     //end grid and form show hide ********************
     // for delete data modal
     display: boolean = false;
-    company_group_id: number = 0;
-    constructor(private formbulider: FormBuilder, private confirmationService: ConfirmationService, private policyAssigmentService: AttendancePolicyAssignmentService, private notifyService: NotificationService) { }
+    attendancePolicyDisplay: boolean = false;
+    constructor(private formbulider: FormBuilder, private confirmationService: ConfirmationService, private policyAssigmentService: AttendancePolicyAssignmentService, private notifyService: NotificationService, private attendancePolicyService: AttendancePolicyService) { }
 
     ngOnInit(): void {
         this.AttPolicyAssignmentForm = this.formbulider.group({
-
-            roster_policy_name: [null, [Validators.required]],
-            next_shift_id: [null],
-            shift_id: [null],
-            roster_cycle: [null, [Validators.required]],
-            position: 0,
             attendance_policy_id: [0, [Validators.required]],
             location_id: [0, [Validators.required]],
-            company_group_id: [0, [Validators.required]],
+            company_group_id: [0],
             company_id: [0, [Validators.required]],
             department_id: [0, [Validators.required]],
             position_id: [0, [Validators.required]],
@@ -68,7 +64,7 @@ export class AttendancePolicyAssignmentComponent implements OnInit {
         });
         this.loadAllPolicyAssigment();
         this.getGroupName();
-        this.loadCompanyByOrganogram();
+        this.loadAttendancePolicy()
     }
     onRowSelect(event) {
         this.rowSelected = true;
@@ -96,24 +92,61 @@ export class AttendancePolicyAssignmentComponent implements OnInit {
     }
     loadAllPolicyAssigment() {
         this.policyAssigmentService.getAllAttPolicyAssignment().subscribe(data => {
-            this.policyAssigmentList = [];
+            this.policyAssigmentList = data;
         });
     }
     loadCompanyByOrganogram() {
-        this.policyAssigmentService.getCompanyByOrganogram(1).subscribe(data => {
+
+        this.policyAssigmentService.getCompanyByOrganogram(this.company_group_id).subscribe(data => {
             this.companyList = data;
-            console.log(this.companyList)
+           
         });
     }
-    loadLocationByOrganogram() {
-
+    loadAttendancePolicy() {
+     
+        this.attendancePolicyService.getAllAttendancePolicy().subscribe(data => {
+            this.attendancePolicyList = data.filter(
+                policy => policy.is_active === true);
+           
+        });
     }
-    loadDepartmentByOrganogram() {
-
+    onSelectCompany(company_id:number) {
+        if (company_id != null) {
+            
+            this.policyAssigmentService.getLocationByOrganogram(this.company_group_id, company_id).subscribe(data => {
+                this.locationList = data;
+            });
+        }
+        else
+            this.locationList = null;
     }
-    loadPositionByOrganogram() {
+    onSelectLocation(location_id:number) {
+        let company_id = this.AttPolicyAssignmentForm.get('company_id')?.value;
+        
+        if (location_id != null) {
 
+            this.policyAssigmentService.getDepartmentByOrganogram(this.company_group_id, company_id,location_id).subscribe(data => {
+                this.departmentList = data;
+            });
+        }
+        else
+            this.departmentList = null;
     }
+    onSelectDepartment(department_id: number) {
+     
+        let company_id = this.AttPolicyAssignmentForm.get('company_id')?.value;
+        let location_id = this.AttPolicyAssignmentForm.get('location_id')?.value;
+        
+        if (department_id != null) {
+
+            this.policyAssigmentService.getPositionByOrganogram(this.company_group_id, company_id, location_id,department_id).subscribe(data => {
+                this.positionList = data;
+            });
+        }
+        else
+            this.positionList = null;
+    }
+    
     loadPolicyAssignmentToEdit() {
 
 
@@ -130,16 +163,24 @@ export class AttendancePolicyAssignmentComponent implements OnInit {
 
 
         this.policyAssigmentService.getAttendancePolicyOrganogramById(attendance_policy_organogram_id).subscribe(data => {
-
-            this.AttPolicyAssignmentForm.controls['roster_policy_name'].setValue(data.roster_policy_name);
-            this.AttPolicyAssignmentForm.controls['roster_cycle'].setValue(data.roster_cycle);
+            
+            this.AttPolicyAssignmentForm.controls['company_id'].setValue(data.company_id);
+            this.AttPolicyAssignmentForm.controls['group_name'].setValue(data.group_name);
+            this.AttPolicyAssignmentForm.controls['company_group_id'].setValue(data.company_group_id);
+            this.onSelectCompany(data.company_id);
+            this.AttPolicyAssignmentForm.controls['location_id'].setValue(data.location_id);
+            this.onSelectLocation(data.location_id);
+            this.AttPolicyAssignmentForm.controls['department_id'].setValue(data.department_id);
+            this.onSelectDepartment(data.department_id);
+            this.AttPolicyAssignmentForm.controls['position_id'].setValue(data.position_id);
+            this.AttPolicyAssignmentForm.controls['attendance_policy_id'].setValue(data.attendance_policy_id);
             this.AttPolicyAssignmentEdit = true;
         });
 
         this.toggleGridDisplay();
     }
 
-    deleteRoster() {
+    deletePolicyAssignment() {
         if (this.rowData == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
@@ -173,10 +214,10 @@ export class AttendancePolicyAssignmentComponent implements OnInit {
                 this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
                 if (result.MessageType == 1) {
                     this.policyAssigmentList.splice(this.policyAssigmentList.findIndex(item => item.attendance_policy_organogram_id === attendance_policy_organogram_id), 1);
-                    this.policyAssigmentList.unshift(result.Data[0]);
-                    this.selectedPolicy = result.Data[0];
+                    this.policyAssigmentList.unshift(result.Data);
+                    this.selectedPolicy = result.Data;
                     this.rowSelected = true;
-                    this.rowData = result.Data[0];
+                    this.rowData = result.Data;
                     this.displayApprove = false;
                 }
             }
@@ -184,6 +225,7 @@ export class AttendancePolicyAssignmentComponent implements OnInit {
     }
 
     saveAttendancePolicyAssignment() {
+
         const data = this.AttPolicyAssignmentForm.value;
 
         this.submitted = true;
@@ -192,6 +234,12 @@ export class AttendancePolicyAssignmentComponent implements OnInit {
 
             return;
         }
+        let position_id = this.AttPolicyAssignmentForm.get('position_id')?.value;
+
+       let dd= this.positionList.filter(
+            policy => policy.position_id === position_id);
+        data.organogram_detail_id = dd[0].organogram_detail_id;
+        
         if (this.AttPolicyAssignmentEdit) {
 
             data.attendance_policy_organogram_id = this.rowData.attendance_policy_organogram_id;
@@ -201,10 +249,10 @@ export class AttendancePolicyAssignmentComponent implements OnInit {
                 if (result.MessageType == 1) {
                     this.resetForm();
                     this.policyAssigmentList.splice(this.policyAssigmentList.findIndex(item => item.attendance_policy_organogram_id === data.attendance_policy_organogram_id), 1);
-                    this.policyAssigmentList.unshift(result.Data[0]);
-                    this.selectedPolicy = result.Data[0];
+                    this.policyAssigmentList.unshift(result.Data);
+                    this.selectedPolicy = result.Data;
                     this.rowSelected = true;
-                    this.rowData = result.Data[0];
+                    this.rowData = result.Data;
                     this.toggleFormDisplay();
                 }
 
@@ -218,10 +266,10 @@ export class AttendancePolicyAssignmentComponent implements OnInit {
                 result => {
                     if (result.MessageType == 1) {
                         this.resetForm();
-                        this.policyAssigmentList.unshift(result.Data[0]);
-                        this.selectedPolicy = result.Data[0];
+                        this.policyAssigmentList.unshift(result.Data);
+                        this.selectedPolicy = result.Data;
                         this.rowSelected = true;
-                        this.rowData = result.Data[0];
+                        this.rowData = result.Data;
                         this.toggleFormDisplay();
                     }
                     this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
@@ -266,7 +314,7 @@ export class AttendancePolicyAssignmentComponent implements OnInit {
             message: 'Are you sure that you want to delete?',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
-                this.deleteRoster();
+                this.deletePolicyAssignment();
             },
             reject: () => {
 
@@ -279,7 +327,14 @@ export class AttendancePolicyAssignmentComponent implements OnInit {
 
             this.AttPolicyAssignmentForm.controls['group_name'].setValue(data.group_name);
             this.company_group_id = data.company_group_id;
+            this.loadCompanyByOrganogram();
         });
+    }
+    viewAttendancePolicy() {
+        this.attendancePolicyDisplay = true;
+        let attendance_policy_id = this.AttPolicyAssignmentForm.get('attendance_policy_id')?.value;
+        this.AttendancePolicies = this.attendancePolicyList.filter(
+            policy => policy.attendance_policy_id === attendance_policy_id);
     }
     resetForm() {
        // this.AttPolicyAssignmentForm.reset();

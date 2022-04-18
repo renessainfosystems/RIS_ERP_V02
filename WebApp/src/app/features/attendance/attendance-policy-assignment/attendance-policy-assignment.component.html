@@ -22,8 +22,8 @@
                             </div>
                             <div class="field col-12 md:col-6">
                                 <label pTooltip="Company" tooltipPosition="top">Company<span class="req"></span></label>
-                                <p-dropdown [options]="companyList"  formControlName="company_id" [ngClass]="{ 'is-invalid': submitted && f.company_id.errors }" placeholder="Select Company"
-                                            optionLabel="company_name" optionValue="company_id" [showClear]="true"></p-dropdown>
+                                <p-dropdown [options]="companyList" formControlName="company_id" [ngClass]="{ 'is-invalid': submitted && f.company_id.errors }" placeholder="Select Company"
+                                            optionLabel="company_name" optionValue="company_id" (onChange)="onSelectCompany($event.value)" [showClear]="true"></p-dropdown>
 
                                 <div *ngIf="submitted && f.company_id.errors" class="invalid-feedback">
                                     <small *ngIf="f.company_id.errors.required" class="p-error">Company is required</small>
@@ -33,48 +33,55 @@
                             <div class="field col-12 md:col-6">
 
                                 <label pTooltip="Shift" tooltipPosition="top">Location/Branch<span class="req"></span></label>
-                                <p-dropdown [options]="locationList" [(ngModel)]="selectedShift" formControlName="location_id" [ngClass]="{ 'is-invalid': submitted && f.location_id.errors }" placeholder="Select Location"
-                                            optionLabel="location_name" [showClear]="true"></p-dropdown>
-
+                                <p-dropdown [options]="locationList" formControlName="location_id" (onChange)="onSelectLocation($event.value)" [ngClass]="{ 'is-invalid': submitted && f.location_id.errors }" placeholder="Select Location"
+                                            optionLabel="location_name" optionValue="location_id" [showClear]="true"></p-dropdown>
+                                <div *ngIf="submitted && f.location_id.errors" class="invalid-feedback">
+                                    <small *ngIf="f.location_id.errors.required" class="p-error">Location is required</small>
+                                </div>
 
                             </div>
                             <div class="field col-12 md:col-6 ">
 
-                                <label pTooltip="Next Shift" tooltipPosition="top">Department<span class="req"></span></label>
-                                <p-dropdown [options]="departmentList" [(ngModel)]="selectedNextShift" formControlName="department_id" [ngClass]="{ 'is-invalid': submitted && f.next_shift_id.errors }" placeholder="Select Department"
-                                            optionLabel="department_name" [showClear]="true"></p-dropdown>
-
+                                <label pTooltip="Department" tooltipPosition="top">Department<span class="req"></span></label>
+                                <p-dropdown [options]="departmentList" formControlName="department_id" (onChange)="onSelectDepartment($event.value)" [ngClass]="{ 'is-invalid': submitted && f.department_id.errors }" placeholder="Select Department"
+                                            optionLabel="department_name" optionValue="department_id" [showClear]="true"></p-dropdown>
+                                <div *ngIf="submitted && f.department_id.errors" class="invalid-feedback">
+                                    <small *ngIf="f.department_id.errors.required" class="p-error">Department is required</small>
+                                </div>
 
                             </div>
                             <div class="field col-12 md:col-6">
-                                <label pTooltip="Calendar" tooltipPosition="top">Position<span class="req"></span></label>
-                                <p-dropdown [options]="positionList"  formControlName="position_id" [ngClass]="{ 'is-invalid': submitted && f.position_id.errors }" placeholder="Select Position"
+                                <label pTooltip="Position" tooltipPosition="top">Position<span class="req"></span></label>
+                                <p-dropdown [options]="positionList" formControlName="position_id" [ngClass]="{ 'is-invalid': submitted && f.position_id.errors }" placeholder="Select Position"
                                             optionLabel="position_name" optionValue="position_id" [showClear]="true"></p-dropdown>
 
                                 <div *ngIf="submitted && f.position_id.errors" class="invalid-feedback">
-                                    <small *ngIf="f.position_id.errors.required" class="p-error">position_id is required</small>
+                                    <small *ngIf="f.position_id.errors.required" class="p-error">Position is required</small>
                                 </div>
                             </div>
 
 
                             <div class="field col-12 md:col-6 ">
 
-                                <label pTooltip="Absenteeism policy" tooltipPosition="top">Attendance policy<span class="req"></span></label>
+                                <label pTooltip="Attendance policy" tooltipPosition="top">Attendance policy<span class="req"></span></label>
 
                                 <div class="grid">
                                     <div class=" col-12 md:col-10">
-                                        <p-dropdown [options]="allShifts"  formControlName="attendance_policy_id" [ngClass]="{ 'is-invalid': submitted && f.attendance_policy_id.errors }" placeholder="Select Attendance Policy" optionLabel="absenteeism_policy_name" optionValue="attendance_policy_id" [showClear]="true"></p-dropdown>
+                                        <p-dropdown [options]="attendancePolicyList" formControlName="attendance_policy_id" [ngClass]="{ 'is-invalid': submitted && f.attendance_policy_id.errors }" placeholder="Select Attendance Policy" optionLabel="policy_name" optionValue="attendance_policy_id" [showClear]="true"></p-dropdown>
+                                        <div *ngIf="submitted && f.attendance_policy_id.errors" class="invalid-feedback">
+                                            <small *ngIf="f.attendance_policy_id.errors.required" class="p-error">Attendance Policy is required</small>
+                                        </div>
                                     </div>
                                     <div class=" col-12 md:col-1">
 
-                                        <button class=" pi pi-eye risBtn risAll mr-2"  label="Add">View</button>
+                                        <button class=" pi pi-eye risBtn risAll mr-2" label="Add" (click)="viewAttendancePolicy()" >View</button>
 
                                     </div>
                                 </div>
                             </div>
-        
 
-                           
+
+
                         </div>
                         <div class="flex justify-content-end md:pl-5 md:pr-5">
                             <button pButton pRipple type="button" label="Save" (click)="saveAttendancePolicyAssignment()" class="risBtn risSave mr-2 mb-2" icon="pi pi-check"></button>
@@ -99,7 +106,7 @@
                 <p-confirmPopup key="delete"></p-confirmPopup>
 
                 <p-table [value]="policyAssigmentList" styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm" [paginator]="true" [rows]="10" selectionMode="single" [showCurrentPageReport]="true" responsiveLayout="scroll"
-                         [(selection)]="selectedPolicy" dataKey="roster_policy_id" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
+                         [(selection)]="selectedPolicy" dataKey="attendance_policy_organogram_id" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
                     <ng-template pTemplate="header">
                         <tr>
                             <th>Position</th>
@@ -108,14 +115,14 @@
                             <th>Activity</th>
                         </tr>
                     </ng-template>
-                    <ng-template pTemplate="body" let-roster>
-                        <tr [pSelectableRow]="roster">
+                    <ng-template pTemplate="body" let-policy>
+                        <tr [pSelectableRow]="policy">
 
-                            <td>{{roster.roster_policy_name}}</td>
-                            <td>{{roster.roster_cycle}}</td>
-                            <td>{{roster.approvedBy}}</td>
-                            <td *ngIf="roster.is_active===true">{{"Active"}}</td>
-                            <td *ngIf="roster.is_active===false">{{"InActive"}}</td>
+                            <td>{{policy.position_name}}</td>
+                            <td>{{policy.attendance_policy_name}}</td>
+                            <td>{{policy.approvedBy}}</td>
+                            <td *ngIf="policy.is_active===true">{{"Active"}}</td>
+                            <td *ngIf="policy.is_active===false">{{"InActive"}}</td>
 
                         </tr>
                     </ng-template>
@@ -124,7 +131,41 @@
                 <!--end grid display -------------->
             </div>
 
+            <p-dialog header="Attendance Policy" [(visible)]="attendancePolicyDisplay" modal="modal" showEffect="fade" [style]="{width: '50vw'}" [breakpoints]="{'960px': '75vw'}">
+                <div class="col-12 ">
+                    <p-table [value]="AttendancePolicies" styleClass="p-datatable-sm" class="p-0" responsiveLayout="scroll">
 
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>Policy Name</th>
+                                <th>Calendar</th>
+                                <th>Late Early Policy</th>
+                                <th>Absenteeism Policy</th>
+                                <th>Roster Policy</th>
+                                <th>Approve</th>
+                                <th>Activity</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-attPolicy>
+                            <tr [pSelectableRow]="attPolicy">
+
+                                <td>{{attPolicy.policy_name}}</td>
+                                <td>{{attPolicy.attendance_calendar_name}}</td>
+                                <td>{{attPolicy.late_early_policy_name}}</td>
+                                <td>{{attPolicy.absenteeism_policy_name}}</td>
+                                <td>{{attPolicy.roster_policy_name}}</td>
+                                <td>{{attPolicy.approvedBy}}</td>
+                                <td *ngIf="attPolicy.is_active===true">{{"Active"}}</td>
+                                <td *ngIf="attPolicy.is_active===false">{{"InActive"}}</td>
+
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+                <ng-template pTemplate="footer">
+                    <button pButton icon="pi pi-check" (click)="attendancePolicyDisplay=false" label="Ok" class="p-button-outlined"></button>
+                </ng-template>
+            </p-dialog>
 
         </div>
     </div>
