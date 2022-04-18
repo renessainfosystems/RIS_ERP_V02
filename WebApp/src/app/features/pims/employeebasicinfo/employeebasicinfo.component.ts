@@ -144,7 +144,7 @@ export class EmployeebasicinfoComponent implements OnInit {
     }
   // for photo and signature upload
 
-    photourllink: string = "assets/images/defaultimg.jpeg";
+    photourllink: string = "assets/images/defaultimg.jpeg";  
   selectFile(event) {
     if (event.target.files) {
       var reader = new FileReader()

@@ -266,10 +266,14 @@ namespace Auth
 
             #endregion
 
-            #region Employee
+            #region PIMS
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddScoped<EmployeeDataAccess, EmployeeDataAccess>();
+            services.AddScoped<IEmployeeOfficialRepository, EmployeeOfficialRepository>();
+            services.AddScoped<EmployeeOfficialDataAccess, EmployeeOfficialDataAccess>();
             services.AddScoped<IEmployeeCategoryTypeRepository, EmployeeCategoryTypeRepository>();
+            services.AddScoped<IPIMSDBEnumRepository, PIMSDBEnumRepository>();
+            services.AddScoped<PIMSDBEnumDataAcess, PIMSDBEnumDataAcess>();
             #endregion
 
             #region Party

@@ -581,6 +581,10 @@ export class SupplierListComponent implements OnInit {
         this.AssesmentApplicationForm.controls['comment'].disable();
         this.AssesmentApplicationForm.controls['suggestion'].disable();
 
+        //Load Dropdown
+        this.loadAllDepartmentCboList();
+        this.loadAllEmployeeCboList();
+
 
     }
 
@@ -1297,10 +1301,10 @@ export class SupplierListComponent implements OnInit {
         return this.bankingApplicationForm.controls;
     }
 
-    get l(): { [key: string]: AbstractControl } {
-        return this.supplierassignForm.controls;
+    //get l(): { [key: string]: AbstractControl } {
+    //    return this.supplierassignForm.controls;
 
-    }
+    //}
 
 
 
@@ -1375,31 +1379,52 @@ export class SupplierListComponent implements OnInit {
         this.resetForm();
     }
 
-    onFormApprove() {
-        let supplierId = this.rowData.supplierId;
-        if (supplierId == null) {
-            return this.notifyService.ShowNotification(3, 'Please click view on specific supplier');
-        }
-        const approveFeedbackData = this.AssesmentApplicationForm.value;
-        approveFeedbackData.supplier_id = supplierId;
-        this.SupplierListService.approveSupplier(approveFeedbackData).subscribe(data => {
-            this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage);
-            this.loadAllConfirmSupplierinfos();
+    loadAllDepartmentCboList() {
+        this.SupplierListService.getAllDepartmentCboList().subscribe(data => {
+            this.allDepartment = data;
         });
     }
 
-    onFormReject() {
-        let supplierId = this.rowData.supplierId;
-        if (supplierId == null) {
-            return this.notifyService.ShowNotification(3, 'Please click view on specific supplier');
-        }
-        const rejectFeedbackData = this.AssesmentApplicationForm.value;
-        rejectFeedbackData.supplier_id = supplierId;
-        this.SupplierListService.rejectSupplier(rejectFeedbackData).subscribe(data => {
-            this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage);
-            this.loadAllConfirmSupplierinfos();
+    loadAllEmployeeCboList() {
+        this.SupplierListService.getAllEmployeeCboList().subscribe(data => {
+            this.allEmployee = data;
         });
     }
+
+    get l(): { [key: string]: AbstractControl } {
+        return this.supplierassignForm.controls;
+
+    }
+
+    onSaveDealerInfoAssign(): void {
+        this.submitted = true;
+    }
+
+    //onFormApprove() {
+    //    let supplierId = this.rowData.supplierId;
+    //    if (supplierId == null) {
+    //        return this.notifyService.ShowNotification(3, 'Please click view on specific supplier');
+    //    }
+    //    const approveFeedbackData = this.AssesmentApplicationForm.value;
+    //    approveFeedbackData.supplier_id = supplierId;
+    //    this.SupplierListService.approveSupplier(approveFeedbackData).subscribe(data => {
+    //        this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage);
+    //        this.loadAllConfirmSupplierinfos();
+    //    });
+    //}
+
+    //onFormReject() {
+    //    let supplierId = this.rowData.supplierId;
+    //    if (supplierId == null) {
+    //        return this.notifyService.ShowNotification(3, 'Please click view on specific supplier');
+    //    }
+    //    const rejectFeedbackData = this.AssesmentApplicationForm.value;
+    //    rejectFeedbackData.supplier_id = supplierId;
+    //    this.SupplierListService.rejectSupplier(rejectFeedbackData).subscribe(data => {
+    //        this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage);
+    //        this.loadAllConfirmSupplierinfos();
+    //    });
+    //}
 
 }
 

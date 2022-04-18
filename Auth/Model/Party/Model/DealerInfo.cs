@@ -59,6 +59,8 @@ namespace Auth.Model.Party.Model
         public string flat_no { get; set; }
         public string address_note { get; set; }        
         public bool is_active { get; set; }
+        public bool is_verified { get; set; }
+        public bool is_approved { get; set; }
         public DateTime created_datetime { get; set; }
         public DateTime? updated_datetime { get; set; }
         public DateTime db_server_date_time { get; set; }

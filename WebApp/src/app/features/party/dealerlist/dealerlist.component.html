@@ -3,11 +3,13 @@
         <div class="card">
             <h4>Dealer Information</h4>
 
+            <!--selectionMode="single"-->
+
             <!--end form display------------->
             <div [hidden]="gridDisplay">
                 <p-table #dt [value]="dealerinfoList" styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" responsiveLayout="scroll"
                          [(selection)]="selecteddealerinfo" dataKey="DealerInfoId" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-                         [rowsPerPageOptions]="[10,25,50]" [globalFilterFields]="['DealerInfoCode','DealerInfoName']">
+                         [rowsPerPageOptions]="[10,25,50]" [globalFilterFields]="['DealerInfoCode','DealerInfoName']" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
                     <ng-template pTemplate="caption">
                         <div class="flex">
                             <span class="p-input-icon-left ml-auto">
@@ -36,11 +38,11 @@
                             <th>Status</th>
                         </tr>
                     </ng-template>
-                    <ng-template pTemplate="body" let-dealerinfo let-rowData let-columns="columns">
+                    <ng-template pTemplate="body" let-dealerinfo let-rowData>
                         <tr [pSelectableRow]="dealerinfo">
                             <td hidden>{{dealerinfo.DealerInfoId}}</td>
                             <td>
-                                <p-tableCheckbox [value]="dealerinfo"></p-tableCheckbox>
+                                <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
                             </td>
                             <td>{{dealerinfo.DealerInfoCode}}</td>
                             <td>{{dealerinfo.DealerInfoName}}</td>
@@ -67,7 +69,7 @@
                             <div *ngIf="submitted && d.department_id.errors" class="invalid-feedback">
                                 <small *ngIf="d.department_id.errors.required" class="p-error">Department is required</small>
                             </div>
-                        </div>                       
+                        </div>
                         <div class="field md:col-3">
                             <label pTooltip="Employee" tooltipPosition="top">Employee<span class="req">*</span></label>
                             <p-dropdown [options]="allEmployee" formControlName="employee_id" [ngClass]="{ 'is-invalid': submitted && d.employee_id.errors }" placeholder="---Select---"
@@ -78,7 +80,7 @@
                             </div>
                         </div>
                         <div class="field md:col-1">
-                            <button pButton pRipple type="button" label="Assign" class="risBtnAssign risAssign mr-2 mb-2" icon="pi pi-plus"></button>
+                            <button pButton pRipple type="button" (click)="SaveDealerVerification()" label="Assign" class="risBtnAssign risAssign mr-2 mb-2" icon="pi pi-plus"></button>
                         </div>
                     </div>
                 </div>
