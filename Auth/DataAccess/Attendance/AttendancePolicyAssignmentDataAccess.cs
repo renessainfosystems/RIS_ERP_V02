@@ -70,7 +70,7 @@ namespace Auth.DataAccess.Attendance
             try
             {
 
-                result = await _dbConnection.QueryFirstOrDefaultAsync("[Attendance].[Attendance_Policy_Organogram_IUD]", parameters, commandType: CommandType.StoredProcedure);
+                result = await _dbConnection.QueryFirstOrDefaultAsync("[Attendance].[SP_Attendance_Policy_Organogram_IUD]", parameters, commandType: CommandType.StoredProcedure);
 
                 if (dbOperation == (int)GlobalEnumList.DBOperation.Delete)
                 {

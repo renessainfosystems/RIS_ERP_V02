@@ -72,9 +72,9 @@
                                             <small *ngIf="f.attendance_policy_id.errors.required" class="p-error">Attendance Policy is required</small>
                                         </div>
                                     </div>
-                                    <div class=" col-12 md:col-1">
+                                    <div class=" col-12 md:col-1  md:pl-0">
 
-                                        <button class=" pi pi-eye risBtn risAll mr-2" label="Add" (click)="viewAttendancePolicy()" >View</button>
+                                        <button class=" pi pi-eye risBtn risAll " label="Add" (click)="viewAttendancePolicy()" >View</button>
 
                                     </div>
                                 </div>
@@ -83,7 +83,7 @@
 
 
                         </div>
-                        <div class="flex justify-content-end md:pl-5 md:pr-5">
+                        <div class="flex justify-content-end md:pl-5 md:pr-5 md:pt-4">
                             <button pButton pRipple type="button" label="Save" (click)="saveAttendancePolicyAssignment()" class="risBtn risSave mr-2 mb-2" icon="pi pi-check"></button>
                             <button pButton pRipple type="button" (click)="toggleFormClose()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
                         </div>

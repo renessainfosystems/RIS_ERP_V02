@@ -54,12 +54,12 @@ export class AttendancePolicyAssignmentComponent implements OnInit {
 
     ngOnInit(): void {
         this.AttPolicyAssignmentForm = this.formbulider.group({
-            attendance_policy_id: [0, [Validators.required]],
-            location_id: [0, [Validators.required]],
+            attendance_policy_id: [null, [Validators.required]],
+            location_id: [null, [Validators.required]],
             company_group_id: [0],
-            company_id: [0, [Validators.required]],
-            department_id: [0, [Validators.required]],
-            position_id: [0, [Validators.required]],
+            company_id: [null, [Validators.required]],
+            department_id: [null, [Validators.required]],
+            position_id: [null, [Validators.required]],
             group_name: [null, [Validators.required]],
         });
         this.loadAllPolicyAssigment();
@@ -200,6 +200,7 @@ export class AttendancePolicyAssignmentComponent implements OnInit {
             this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
         });
         this.display = false;
+        this.rowData = null;
     }
     policyApprove() {
         if (this.rowData == null) {
@@ -225,7 +226,7 @@ export class AttendancePolicyAssignmentComponent implements OnInit {
     }
 
     saveAttendancePolicyAssignment() {
-
+        
         const data = this.AttPolicyAssignmentForm.value;
 
         this.submitted = true;
@@ -234,6 +235,7 @@ export class AttendancePolicyAssignmentComponent implements OnInit {
 
             return;
         }
+   
         let position_id = this.AttPolicyAssignmentForm.get('position_id')?.value;
 
        let dd= this.positionList.filter(
@@ -337,9 +339,9 @@ export class AttendancePolicyAssignmentComponent implements OnInit {
             policy => policy.attendance_policy_id === attendance_policy_id);
     }
     resetForm() {
-       // this.AttPolicyAssignmentForm.reset();
-        this.rosterDetails = [];
+        this.AttPolicyAssignmentForm.reset();
         this.submitted = false;
         this.AttPolicyAssignmentEdit = false;
+        this.getGroupName();
     }
 }
