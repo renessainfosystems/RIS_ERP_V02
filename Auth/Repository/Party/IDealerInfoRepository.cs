@@ -8,6 +8,7 @@ namespace Auth.Repository.Party
     {
         Task<dynamic> GetDealerInfoCboList();
         Task<dynamic> GetAllDealerInfo();
+        Task<dynamic> GetAllDealerInfoForVerification();
         Task<dynamic> GetDealerInfoById(int dealer_info_id);
         Task<dynamic> IUD_DealerInfo(DealerInfo dealerInfo, int dbOperation);
 

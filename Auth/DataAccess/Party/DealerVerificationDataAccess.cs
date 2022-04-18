@@ -45,9 +45,9 @@ namespace Auth.DataAccess.Party
                 parameters.Add("@param_department_id", dealerVerification.department_id, DbType.Int32);
                 parameters.Add("@param_employee_id", dealerVerification.employee_id, DbType.Int32);
                 parameters.Add("@param_remarks", dealerVerification.remarks, DbType.String);
-                parameters.Add("@param_is_varified", false, DbType.Boolean);
-                parameters.Add("@param_varified_date", dealerVerification.varified_date, DbType.DateTime);
-                parameters.Add("@param_varified_user_id", dealerVerification.varified_user_id, DbType.Int64);
+                parameters.Add("@param_is_verified", false, DbType.Boolean);
+                parameters.Add("@param_verified_date", dealerVerification.verified_date, DbType.DateTime);
+                parameters.Add("@param_verified_user_id", dealerVerification.verified_user_id, DbType.Int64);
                 parameters.Add("@param_created_datetime", DateTime.Now, DbType.DateTime);
                 parameters.Add("@param_created_user_info_id", currentUserInfoId ?? 0, DbType.Int64);
                 parameters.Add("@param_DBOperation", operationType == (int)GlobalEnumList.DBOperation.Create ? GlobalEnumList.DBOperation.Create : GlobalEnumList.DBOperation.Update);

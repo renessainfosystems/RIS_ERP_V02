@@ -18,9 +18,9 @@ namespace Auth.Model.Party.Model
         public int department_id { get; set; }
         public int employee_id { get; set; }
         public string remarks { get; set; }
-        public bool is_varified { get; set; }
-        public DateTime? varified_date { get; set; }
-        public long varified_user_id { get; set; }
+        public bool is_verified { get; set; }
+        public DateTime? verified_date { get; set; }
+        public long verified_user_id { get; set; }
         public DateTime created_datetime { get; set; }
         public long created_user_info_id { get; set; }
 

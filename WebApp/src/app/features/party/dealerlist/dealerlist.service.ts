@@ -54,7 +54,7 @@ export class DealerListService {
 
     getAllDealerInfo(): Observable<any[]> {
 
-        return this.http.get<any[]>(this.ipconfig.base_IP + 'DealerInfo/GetAllDealerInfo', httpOptions);
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'DealerInfo/GetAllDealerInfoForVerification', httpOptions);
 
     }
 

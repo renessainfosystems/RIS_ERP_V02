@@ -13,9 +13,9 @@ namespace Auth.Model.Party.ViewModel
         public int DepartmentId { get; set; }
         public int EmployeeId { get; set; }
         public string Remarks { get; set; }
-        public bool IsVarified { get; set; }
-        public DateTime VarifiedDate { get; set; }
-        public long VarifiedById { get; set; }
+        public bool IsVerified { get; set; }
+        public DateTime VerifiedDate { get; set; }
+        public long VerifiedById { get; set; }
         public DateTime CreatedDateTime { get; set; }
         public long CreatedUserInfoId { get; set; }
         public static DealerVerificationViewModel ConvertToModel(dynamic dealerCredit)
@@ -26,7 +26,7 @@ namespace Auth.Model.Party.ViewModel
             model.DepartmentId = dealerCredit.department_id ?? 0;
             model.EmployeeId = dealerCredit.employee_id ?? 0;
             model.Remarks = dealerCredit.remarks ?? "";
-            model.IsVarified = dealerCredit.is_varified ?? false;
+            model.IsVerified = dealerCredit.is_verified ?? false;
             return model;
         }
     }     

@@ -71,6 +71,12 @@ namespace Auth.Controllers.Party
         }
 
         [HttpGet]
+        public async Task<dynamic> GetAllDealerInfoForVerification()
+        {
+            return await _dealerInfoRepository.GetAllDealerInfoForVerification();
+        }
+
+        [HttpGet]
         public async Task<dynamic> GetDealerInfoById(int dealer_info_id)
         {
             return await _dealerInfoRepository.GetDealerInfoById(dealer_info_id);

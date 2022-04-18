@@ -20,7 +20,12 @@ namespace Auth.Repository.Party
         public async Task<dynamic> GetAllDealerInfo()
         {
             return await _dealerInfoDataAccess.GetAllDealerInfo();
-        }       
+        }
+
+        public async Task<dynamic> GetAllDealerInfoForVerification()
+        {
+            return await _dealerInfoDataAccess.GetAllDealerInfoForVerification();
+        }
         public async Task<dynamic> GetDealerInfoById(int dealer_info_id)
         {
             return await _dealerInfoDataAccess.GetDealerInfoById(dealer_info_id);

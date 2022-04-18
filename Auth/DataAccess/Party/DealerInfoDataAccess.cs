@@ -192,6 +192,41 @@ namespace Auth.DataAccess.Party
             return (result);
         }
 
+        public async Task<dynamic> GetAllDealerInfoForVerification()
+        {
+            var message = new CommonMessage();
+            var company_id = _httpContextAccessor.HttpContext.Items["company_id"];
+            var result = (dynamic)null;
+
+            if (_dbConnection.State == ConnectionState.Closed)
+                _dbConnection.Open();
+
+            try
+            {
+                string sql = @"SELECT * FROM [Party].[Dealer_Info] DI WHERE DI.is_verified=0 and DI.company_id =@company_id";
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@company_id", company_id);
+                dynamic data = await _dbConnection.QueryAsync<dynamic>(sql, parameters);
+                if (data != null)
+                {
+                    List<dynamic> dataList = data;
+                    result = (from dr in dataList select DealerInfoViewModel.ConvertToModel(dr)).ToList();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw ex.InnerException;
+            }
+            finally
+            {
+                _dbConnection.Close();
+            }
+
+
+            return (result);
+        }
+
         public async Task<dynamic> GetDealerInfoById(int dealer_info_id)
         {
             var result = (dynamic)null;
