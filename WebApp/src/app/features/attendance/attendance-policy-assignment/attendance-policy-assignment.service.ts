@@ -53,16 +53,16 @@ export class AttendancePolicyAssignmentService {
     }
 
     getCompanyByOrganogram(company_group_id: number): Observable<any[]> {
-        return this.http.post<any[]>(this.ipconfig.base_IP + 'AttendancePolicyAssignment/GetCompanyByOrganogram', { company_group_id }, httpOptions);
+        return this.http.post<any[]>(this.ipconfig.base_IP + 'Organogram/GetCompanyByOrganogram', { company_group_id }, httpOptions);
     }
 
     getLocationByOrganogram(company_group_id: number, company_id: number): Observable<any[]> {
-        return this.http.post<any[]>(this.ipconfig.base_IP + 'AttendancePolicyAssignment/GetLocationByOrganogram', { company_group_id, company_id }, httpOptions);
+        return this.http.post<any[]>(this.ipconfig.base_IP + 'Organogram/GetLocationByOrganogram', { company_group_id, company_id }, httpOptions);
     }
     getDepartmentByOrganogram(company_group_id: number, company_id: number, location_id: number): Observable<any[]> {
-        return this.http.post<any[]>(this.ipconfig.base_IP + 'AttendancePolicyAssignment/GetDepartmentByOrganogram', { company_group_id, company_id, location_id }, httpOptions);
+        return this.http.post<any[]>(this.ipconfig.base_IP + 'Organogram/GetDepartmentByOrganogram', { company_group_id, company_id, location_id }, httpOptions);
     }
     getPositionByOrganogram(company_group_id: number, company_id: number, location_id: number, department_id:number): Observable<any[]> {
-        return this.http.post<any[]>(this.ipconfig.base_IP + 'AttendancePolicyAssignment/GetPositionByOrganogram', { company_group_id, company_id, location_id, department_id }, httpOptions);
+        return this.http.post<any[]>(this.ipconfig.base_IP + 'Organogram/GetPositionByOrganogram', { company_group_id, company_id, location_id, department_id }, httpOptions);
     }
 }
