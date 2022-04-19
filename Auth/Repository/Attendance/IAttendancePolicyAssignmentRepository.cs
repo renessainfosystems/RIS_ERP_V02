@@ -12,9 +12,6 @@ namespace Auth.Repository.Attendance
         Task<dynamic> GetAllAttendancePolicyOrganogram();
         Task<dynamic> GetAttendancePolicyOrganogramById(int attendance_policy_organogram_id);
         Task<dynamic> GetGroupNameById();
-        Task<dynamic> GetCompanyByOrganogram(OrganogramFilter organogramFilter);
-        Task<dynamic> GetLocationByOrganogram(OrganogramFilter organogramFilter);
-        Task<dynamic> GetDepartmentByOrganogram(OrganogramFilter organogramFilter);
-        Task<dynamic> GetPositionByOrganogram(OrganogramFilter organogramFilter);
+        
     }
 }

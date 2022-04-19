@@ -63,26 +63,6 @@ namespace Auth.Controllers.Attendance
             return await _attendancePolicyAssignmentRepository.GetGroupNameById();
         }
 
-        [HttpPost]
-        public async Task<dynamic> GetCompanyByOrganogram(OrganogramFilter organogramFilter)
-        {
-            return await _attendancePolicyAssignmentRepository.GetCompanyByOrganogram(organogramFilter);
-        }
-        [HttpPost]
-        public async Task<dynamic> GetLocationByOrganogram(OrganogramFilter organogramFilter)
-        {
-            return await _attendancePolicyAssignmentRepository.GetLocationByOrganogram(organogramFilter);
-        }
-        [HttpPost]
-        public async Task<dynamic> GetDepartmentByOrganogram(OrganogramFilter organogramFilter)
-        {
-            return await _attendancePolicyAssignmentRepository.GetDepartmentByOrganogram(organogramFilter);
-
-        }
-        [HttpPost]
-        public async Task<dynamic> GetPositionByOrganogram(OrganogramFilter organogramFilter)
-        {
-            return await _attendancePolicyAssignmentRepository.GetPositionByOrganogram(organogramFilter);
-        }
+       
     }
 }

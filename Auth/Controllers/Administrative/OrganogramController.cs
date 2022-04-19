@@ -89,6 +89,28 @@ namespace Auth.Controllers.Administrative
             return await _organogramRepository.OrganogramActivity(Organogram_id);
 
         }
+
+        [HttpPost]
+        public async Task<dynamic> GetCompanyByOrganogram(OrganogramFilter organogramFilter)
+        {
+            return await _organogramRepository.GetCompanyByOrganogram(organogramFilter);
+        }
+        [HttpPost]
+        public async Task<dynamic> GetLocationByOrganogram(OrganogramFilter organogramFilter)
+        {
+            return await _organogramRepository.GetLocationByOrganogram(organogramFilter);
+        }
+        [HttpPost]
+        public async Task<dynamic> GetDepartmentByOrganogram(OrganogramFilter organogramFilter)
+        {
+            return await _organogramRepository.GetDepartmentByOrganogram(organogramFilter);
+
+        }
+        [HttpPost]
+        public async Task<dynamic> GetPositionByOrganogram(OrganogramFilter organogramFilter)
+        {
+            return await _organogramRepository.GetPositionByOrganogram(organogramFilter);
+        }
         //[HttpGet]
         //public dynamic GetAllOrganogram()
         //{
