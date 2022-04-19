@@ -20,9 +20,9 @@ export class DealerListService {
 
     }
 
-    createDealerVerification(dealerVerification: FormData): Observable<any> {
+    createDealerVerification(dealerVerification: any): Observable<any> {
 
-        return this.http.post<any>(this.ipconfig.base_IP + 'DealerVerification/Create', dealerVerification, httpOptionsForFileUpload);
+        return this.http.post<any>(this.ipconfig.base_IP + 'DealerVerification/Create', dealerVerification, httpOptions);
 
     }
     updateDealerVerification(dealerVerification: FormData): Observable<any> {

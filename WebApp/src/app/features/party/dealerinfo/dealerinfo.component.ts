@@ -1797,7 +1797,7 @@ export class DealerinfoComponent implements OnInit {
         }
 
         if (this.rowDataCredit.IsApproved == true) {
-            return this.notifyService.ShowNotification(3, "Already approved! You can't update.");
+            return this.notifyService.ShowNotification(3, "Already approved! You can't edit.");
         }
 
         let dealerCreditinfoId = this.rowDataCredit.DealerCreditInfoId;
