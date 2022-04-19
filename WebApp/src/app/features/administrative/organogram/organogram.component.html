@@ -81,10 +81,9 @@
                                         <input id="float-input p-fluid" type="text" formControlName="max_budget" pInputText>
                                     </div>
                                     <div class="field col-12 md:col-12">
-                                        <p-checkbox binary="true" formControlName="is_gross" label="Is Gross Or" inputId="binary"></p-checkbox>
-                                        <p-dropdown [options]="drpdwnSalaryHeadList" formControlName="salary_head_id" placeholder="--Select--"
-                                                    optionLabel="salary_head_name" optionValue="salary_head_id" [showClear]="true" [filter]="true" filterBy="position_name">
-                                        </p-dropdown>
+                                        <label for="" class=" d-md-inline-flex" pTooltip="days from the date of join" tooltipPosition="top">Confirmation</label>
+                                        <input id="float-input p-fluid" type="text" formControlName="days_of_confirmation" pInputText>
+
                                     </div>
                                     
                                 </div>
@@ -92,23 +91,27 @@
                             <div class="p-fluid p-formgrid grid">
                                 <div class="field col-6 md:col-6">
                                     <div class="field col-12 md:col-12">
-                                        <label for="" class=" d-md-inline-flex" pTooltip="Open" tooltipPosition="top">Year of Experience</label>
-                                        <input id="float-input p-fluid" type="text" formControlName="min_year_of_experience" pInputText>
-                                    </div>
-                                    <div class="field col-12 md:col-12">
                                         <label for="" class=" d-md-inline-flex" pTooltip="Open" tooltipPosition="top">Yearly Increment (%)</label>
                                         <input id="float-input p-fluid" type="text" formControlName="increment_percentage_yearly" pInputText>
                                     </div>
+                                    <div class="field col-12 md:col-12">
+                                        <label for="" class=" d-md-inline-flex" pTooltip="Open" tooltipPosition="top">Year of Experience</label>
+                                        <input id="float-input p-fluid" type="text" formControlName="min_year_of_experience" pInputText>
+                                    </div>
+
                                 </div>
                                 <div class="field col-6 md:col-6">
+                                    <div class="field col-12 md:col-12">
+                                        <p-checkbox binary="true" formControlName="is_gross" label="Is Gross Or" inputId="binary"></p-checkbox>
+                                        <p-dropdown [options]="drpdwnSalaryHeadList" formControlName="salary_head_id" placeholder="--Select--"
+                                                    optionLabel="salary_head_name" optionValue="salary_head_id" [showClear]="true" [filter]="true" filterBy="position_name">
+                                        </p-dropdown>
+                                    </div>
                                     <div class="field col-12 md:col-12">
                                         <label for="" class=" d-md-inline-flex" pTooltip="Open" tooltipPosition="top">To</label>
                                         <input id="float-input p-fluid" type="text" formControlName="max_year_of_experience" pInputText>
                                     </div>
-                                    <div class="field col-12 md:col-12">
-                                        <label for="" class=" d-md-inline-flex" pTooltip="days from the date of join" tooltipPosition="top">Confirmation</label>
-                                        <input id="float-input p-fluid" type="text" formControlName="days_of_confirmation" pInputText>
-                                    </div>
+
                                 </div>
                             </div>
                         </div>
