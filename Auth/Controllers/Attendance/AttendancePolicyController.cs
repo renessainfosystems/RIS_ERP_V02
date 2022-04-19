@@ -127,5 +127,12 @@ namespace Auth.Controllers.Attendance
 
             return await _attendancePolicyRepository.GetAllAttendancePolicy();
         }
+
+        [HttpGet]
+        public async Task<dynamic> GetAllActiveAttendancePolicy()
+        {
+
+            return await _attendancePolicyRepository.GetAllActiveAttendancePolicy();
+        }
     }
 }

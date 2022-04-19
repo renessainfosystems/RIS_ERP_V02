@@ -26,6 +26,10 @@ namespace Auth.Repository.Attendance
         {
             return await _attendancePolicyDataAccess.GetAllAttendancePolicy();
         }
+        public async Task<dynamic> GetAllActiveAttendancePolicy()
+        {
+            return await _attendancePolicyDataAccess.GetAllActiveAttendancePolicy();
+        }
 
         public async Task<dynamic> IUD_AttendancePolicyDayoff(AttendancePolicyDayoff attendancePolicyDayoff, int dbOperation)
         {
