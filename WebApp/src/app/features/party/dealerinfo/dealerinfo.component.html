@@ -1065,9 +1065,10 @@
                             <td>{{dealerinfo.DealerInfoName}}</td>
                             <td>{{dealerinfo.Mobile}}</td>
                             <td>{{dealerinfo.Email}}</td>
-                            <td>{{dealerinfo.AddressNote}}</td>
-                            <td *ngIf="dealerinfo.IsActive===true">{{"Active"}}</td>
-                            <td *ngIf="dealerinfo.IsActive===false">{{"In Active"}}</td>
+                            <td>{{dealerinfo.AddressNote}}</td>                            
+                            <td class="text-blue-400" *ngIf="dealerinfo.IsVerified">{{"Ongoing Verified"}}</td>
+                            <td class="text-orange-400" *ngIf="!dealerinfo.IsVerified">{{"Pending Verified"}}</td>
+                            <!--<td class="text-orange-400" *ngIf="dealerinfo.IsApproved">{{"Approved"}}</td>-->
                         </tr>
                     </ng-template>
 
