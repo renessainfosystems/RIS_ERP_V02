@@ -25,12 +25,14 @@ namespace Auth.Controllers.Party
 
         [HttpPost]
        
-        public async Task<dynamic> Create([FromForm] DealerVerification dealerVerification)
+        public async Task<dynamic> Create([FromBody] DealerVerification dealerVerification)
         {           
             
             return await _dealerVerificationRepository.IUD_DealerVerification(dealerVerification, (int)GlobalEnumList.DBOperation.Create);
-        }     
+        }
 
+
+ 
         [HttpPost]
         public async Task<dynamic> Update([FromForm] DealerVerification dealerVerification)
         {
@@ -42,7 +44,7 @@ namespace Auth.Controllers.Party
         public async Task<dynamic> Delete(int dealer_verification_id)
         {
             DealerVerification oDealerVerification = new DealerVerification();
-            oDealerVerification.dealer_verification_id = dealer_verification_id;            
+            //oDealerVerification.dealer_verification_id = dealer_verification_id;            
             return await _dealerVerificationRepository.IUD_DealerVerification(oDealerVerification, (int)GlobalEnumList.DBOperation.Delete);
         }
 
