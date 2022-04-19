@@ -41,15 +41,6 @@ namespace Auth.DataAccess.Party
             if (operationType == (int)GlobalEnumList.DBOperation.Create || operationType == (int)GlobalEnumList.DBOperation.Update)
             {
                 parameters.Add("@param_dealer_verification_id", dealerVerification.dealer_verification_id, DbType.Int32);
-                parameters.Add("@param_dealer_info_id", dealerVerification.dealer_info_id, DbType.Int32);
-                parameters.Add("@param_department_id", dealerVerification.department_id, DbType.Int32);
-                parameters.Add("@param_employee_id", dealerVerification.employee_id, DbType.Int32);
-                parameters.Add("@param_remarks", dealerVerification.remarks, DbType.String);
-                parameters.Add("@param_is_verified", false, DbType.Boolean);
-                parameters.Add("@param_verified_date", dealerVerification.verified_date, DbType.DateTime);
-                parameters.Add("@param_verified_user_id", dealerVerification.verified_user_id, DbType.Int64);
-                parameters.Add("@param_created_datetime", DateTime.Now, DbType.DateTime);
-                parameters.Add("@param_created_user_info_id", currentUserInfoId ?? 0, DbType.Int64);
                 parameters.Add("@param_DBOperation", operationType == (int)GlobalEnumList.DBOperation.Create ? GlobalEnumList.DBOperation.Create : GlobalEnumList.DBOperation.Update);
             }
             else if (operationType == (int)GlobalEnumList.DBOperation.Delete)
@@ -66,50 +57,69 @@ namespace Auth.DataAccess.Party
             return parameters;
         }
 
+        public DynamicParameters DealerAssignSessionParameterBinding(DealerAssignSession dealerAssignSession, int operationType)
+        {
+            var currentUserInfoId = _httpContextAccessor.HttpContext.Items["User_Info_Id"];
+            DynamicParameters parameters = new DynamicParameters();
+
+            if (operationType == (int)GlobalEnumList.DBOperation.Create || operationType == (int)GlobalEnumList.DBOperation.Update)
+            {
+                parameters.Add("@param_dealer_info_id", dealerAssignSession.dealer_info_id, DbType.Int32);
+                parameters.Add("@param_department_id", dealerAssignSession.department_id, DbType.Int32);
+                parameters.Add("@param_employee_id", dealerAssignSession.employee_id, DbType.Int32);
+                parameters.Add("@param_remarks", dealerAssignSession.remarks, DbType.String);
+                parameters.Add("@param_is_verified", false, DbType.Boolean);
+                parameters.Add("@param_verified_date", dealerAssignSession.verified_date, DbType.DateTime);
+                parameters.Add("@param_verified_user_id", dealerAssignSession.verified_user_id, DbType.Int64);
+                parameters.Add("@param_created_datetime", DateTime.Now, DbType.DateTime);
+                parameters.Add("@param_created_user_info_id", currentUserInfoId ?? 0, DbType.Int64);
+                parameters.Add("@param_DBOperation", operationType == (int)GlobalEnumList.DBOperation.Create ? GlobalEnumList.DBOperation.Create : GlobalEnumList.DBOperation.Update);
+            }
+            else if (operationType == (int)GlobalEnumList.DBOperation.Delete)
+            {
+                parameters.Add("@param_DBOperation", GlobalEnumList.DBOperation.Delete);
+            }
+            else if (operationType == (int)GlobalEnumList.DBOperation.Approve)
+            {
+                parameters.Add("@param_created_user_info_id", currentUserInfoId ?? 0, DbType.Int32);
+                parameters.Add("@param_DBOperation", GlobalEnumList.DBOperation.Approve);
+            }
+
+            return parameters;
+        }
+
         public async Task<dynamic> IUD_DealerVerification(DealerVerification dealerVerification, int dbOperation)
         {
             var message = new CommonMessage();
-            var result = (dynamic)null;
+            var data = (dynamic)null;
             var parameters = DealerVerificationParameterBinding(dealerVerification, dbOperation);
 
             if (_dbConnection.State == ConnectionState.Closed)
                 _dbConnection.Open();
-           
+
+            using (var tran = _dbConnection.BeginTransaction())
+            {
+
                 try
-                {                    
-                    dynamic data = await _dbConnection.QueryFirstOrDefaultAsync("[Party].[SP_Dealer_Verification_IUD]", parameters, commandType: CommandType.StoredProcedure);
-
-                    if (dbOperation == (int)GlobalEnumList.DBOperation.Create)
+                {
+                    if (dealerVerification.DealerAssignSession.Count > 0)
                     {
-                        result = DealerVerificationViewModel.ConvertToModel(data);
-                        return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage, result);
-                    }
-                    if (dbOperation == (int)GlobalEnumList.DBOperation.Update)
-                    {
-                        result = DealerVerificationViewModel.ConvertToModel(data);
-                        return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonUpdateMessage, result);
-                    }
-
-                    if (dbOperation == (int)GlobalEnumList.DBOperation.Approve)
-                    {
-                        result = DealerVerificationViewModel.ConvertToModel(data);
-                        return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonApproveMessage, result);
-                    }
-
-                    if (dbOperation == (int)GlobalEnumList.DBOperation.Delete)
-                    {
-                        return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonDeleteMessage);
+                        foreach (DealerAssignSession itemsecurityDeposit in dealerVerification.DealerAssignSession)
+                        {
+                            var dealerAssignSessionParameters = DealerAssignSessionParameterBinding(itemsecurityDeposit, dbOperation);
+                            data = await _dbConnection.QueryAsync<dynamic>("[Party].[SP_Dealer_Verification_IUD]", dealerAssignSessionParameters, commandType: CommandType.StoredProcedure, transaction: tran);
+                        }
                     }
 
                     if (data.Count > 0)
                     {
-                        result = DealerVerificationViewModel.ConvertToModel(data);
-                        message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage, result);
+                        message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage);
                     }
                     else
                     {
                         message = CommonMessage.SetErrorMessage(CommonMessage.CommonErrorMessage);
                     }
+                    tran.Commit();
                 }
                 catch (Exception ex)
                 {
@@ -120,7 +130,7 @@ namespace Auth.DataAccess.Party
                     //DB connection dispose with db connection close
                     _dbConnection.Dispose();
                 }
-            
+            }
             return (message);
         }
 
