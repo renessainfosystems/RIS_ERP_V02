@@ -291,8 +291,8 @@
                                         <input type="text" formControlName="maximum_credit" placeholder="" pInputText />
                                     </div>
                                     <div class="field col-12 md:col-6">
-                                        <label pTooltip="Allowable Credit" tooltipPosition="top">Allowable Credit</label>
-                                        <input type="text" formControlName="allowable_credit" placeholder="" pInputText />
+                                        <label pTooltip="Allowable Credit amount update from Credit info" tooltipPosition="top">Allowable Credit</label>
+                                        <input type="text" formControlName="allowable_credit" placeholder="" pInputText readonly />
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label pTooltip="Credit Days" tooltipPosition="top">Credit Days </label>
@@ -1066,8 +1066,8 @@
                             <td>{{dealerinfo.Mobile}}</td>
                             <td>{{dealerinfo.Email}}</td>
                             <td>{{dealerinfo.AddressNote}}</td>                            
-                            <td class="text-blue-400" *ngIf="dealerinfo.IsVerified">{{"Ongoing Verified"}}</td>
-                            <td class="text-orange-400" *ngIf="!dealerinfo.IsVerified">{{"Pending Verified"}}</td>
+                            <td class="text-blue-400" *ngIf="dealerinfo.IsVerified">{{"Ongoing Verify"}}</td>
+                            <td class="text-orange-400" *ngIf="!dealerinfo.IsVerified">{{"Pending Verify"}}</td>
                             <!--<td class="text-orange-400" *ngIf="dealerinfo.IsApproved">{{"Approved"}}</td>-->
                         </tr>
                     </ng-template>

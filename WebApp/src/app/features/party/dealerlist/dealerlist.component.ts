@@ -92,7 +92,7 @@ export class DealerlistComponent implements OnInit {
 
     }
 
-    SaveDealerVerification() {
+    saveDealerVerification() {
         debugger
         const dealerassignData = this.dealerassignForm.value;
 
@@ -109,15 +109,14 @@ export class DealerlistComponent implements OnInit {
             this.dealerlistService.updateDealerVerification(dealerassignData).subscribe(result => {
 
                 this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
-                this.loadAllDealerInfos();
+                this.ngOnInit();
             });
         }
         else {
             this.dealerlistService.createDealerVerification(dealerassignData).subscribe(result => {
 
                 this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
-                this.loadAllDealerInfos();
-                
+                this.ngOnInit();
             });
         }
 

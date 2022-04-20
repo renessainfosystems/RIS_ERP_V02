@@ -49,8 +49,7 @@
                             <td>{{dealerinfo.Mobile}}</td>
                             <td>{{dealerinfo.Email}}</td>
                             <td>{{dealerinfo.AddressNote}}</td>
-                            <td *ngIf="dealerinfo.IsActive===true">{{"Active"}}</td>
-                            <td *ngIf="dealerinfo.IsActive===false">{{"In Active"}}</td>
+                            <td class="text-orange-400" *ngIf="!dealerinfo.IsVerified">{{"Pending Verify"}}</td>
                         </tr>
                     </ng-template>
 
@@ -80,7 +79,7 @@
                             </div>
                         </div>
                         <div class="field md:col-1">
-                            <button pButton pRipple type="button" (click)="SaveDealerVerification()" label="Assign" class="risBtnAssign risAssign mr-2 mb-2" icon="pi pi-plus"></button>
+                            <button pButton pRipple type="button" (click)="saveDealerVerification()" label="Assign" class="risBtnAssign risAssign mr-2 mb-2" icon="pi pi-plus"></button>
                         </div>
                     </div>
                 </div>
