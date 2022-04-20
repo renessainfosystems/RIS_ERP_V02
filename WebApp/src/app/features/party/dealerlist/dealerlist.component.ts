@@ -50,11 +50,11 @@ export class DealerlistComponent implements OnInit {
             department_id: ['', [Validators.required]],
             employee_id: ['', [Validators.required]],
         });
+              
 
         //Load Dropdown
         this.loadAllDepartmentCboList();
         this.loadAllEmployeeCboList();
-
     }
 
     onRowSelect(event) {
@@ -87,52 +87,52 @@ export class DealerlistComponent implements OnInit {
         });
     }
 
+
     get d(): { [key: string]: AbstractControl } {
         return this.dealerassignForm.controls;
 
     }
 
     saveDealerVerification() {
-        debugger
+        this.submitted = true;
         const dealerassignData = this.dealerassignForm.value;
+        if (this.dealerassignForm.invalid) {
+            return;
+        }
 
         for (let i = 0; i < this.selecteddealerinfo.length; i++) {
             let dealerInfoId = this.selecteddealerinfo[i].DealerInfoId;
-            let deptId = this.dealerassignForm.value.department_id;
+            let departmentId = this.dealerassignForm.value.department_id;
             let employeeId = this.dealerassignForm.value.employee_id;
-            const dealerAssignObj = { dealer_info_id: dealerInfoId, department_id: deptId, employee_id: employeeId}
+            const dealerAssignObj = { dealer_info_id: dealerInfoId, department_id: departmentId, employee_id: employeeId }
             this.dealerVerificationList.push(dealerAssignObj);
         }
         dealerassignData.DealerAssignSession = this.dealerVerificationList;
 
         if (this.isDealerVerificationEdit) {
+            let i = 0
             this.dealerlistService.updateDealerVerification(dealerassignData).subscribe(result => {
 
                 this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
+                this.dealerassignForm.reset();
+                this.submitted = false;
                 this.ngOnInit();
             });
         }
         else {
+            let i=0
             this.dealerlistService.createDealerVerification(dealerassignData).subscribe(result => {
 
                 this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
+                this.dealerassignForm.reset();
+                this.selecteddealerinfo = null;
+                this.submitted = false;
+                this.isDealerVerificationEdit = false;
                 this.ngOnInit();
             });
         }
 
-    }
-
-    findIndexById(id: string): number {
-        debugger
-        let index = -1;
-        for (let i = 0; i < this.dealerinfoList.length; i++) {
-            if (this.dealerinfoList[i].DealerInfoId === id) {
-                index = i;
-                break;
-            }
-        }
-        return index;
-    }
+    }    
 }
 
 
