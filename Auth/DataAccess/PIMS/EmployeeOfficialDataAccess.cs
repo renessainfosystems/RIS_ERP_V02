@@ -24,7 +24,7 @@ namespace Auth.DataAccess.PIMS
         }
 
         //Parameter binding
-        public DynamicParameters EmployeeOfficialParameterBinding(EmployeeOfficial oEmployeeOfficial, int nOperationType)
+        public DynamicParameters ParameterBinding(EmployeeOfficial oEmployeeOfficial, int nOperationType)
         {
             var currentUserInfoId = _httpContextAccessor.HttpContext.Items["User_Info_Id"];
             DynamicParameters parameters = new DynamicParameters();
@@ -62,7 +62,7 @@ namespace Auth.DataAccess.PIMS
         public async Task<dynamic> IUD_EmployeeOfficial(EmployeeOfficial oEmployeeOfficial, int nDBOperation)
         {            
             var oMessage = new CommonMessage();
-            var parameters = EmployeeOfficialParameterBinding(oEmployeeOfficial,nDBOperation);
+            var parameters = ParameterBinding(oEmployeeOfficial,nDBOperation);
 
             try
             {
@@ -89,7 +89,7 @@ namespace Auth.DataAccess.PIMS
             try
             {
                 var sql = "SELECT [employee_id],[organogram_detail_id],[company_id],[location_id],[department_id],[position_id],[designation_id],[job_domicile_id]" +
-                            ",[service_type_id],[confirmation_status_id],[working_action_id],[job_location_id],[date_of_join],[date_of_confirmation],[created_user_id]" +
+                            ",[service_type_id],[confirmation_status_id],[working_action_id],[job_location_id],FORMAT([date_of_join],'dd-MMM-yyyy') AS [date_of_join],FORMAT([date_of_confirmation],'dd-MMM-yyyy') AS [date_of_confirmation],[created_user_id]" +
                             " FROM [PIMS].[Employee_Official]" +
                             " WHERE [employee_id] = @param_employee_id";
                 DynamicParameters parameters = new DynamicParameters();

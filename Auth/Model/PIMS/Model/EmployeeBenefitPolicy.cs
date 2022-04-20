@@ -14,15 +14,15 @@ namespace Auth.Model.PIMS.Model
             employee_id = 0;
             abp_id =0;
             is_active = true;
-            start_date = DateTime.Now;
-            end_date = DateTime.Now;
+            start_date = "";
+            end_date = "";
         }
 
         public int? employee_benefit_policy_id { get; set; }
         public long? employee_id { get; set; }
         public int? abp_id { get; set; }
         public bool? is_active { get; set; }
-        public DateTime? start_date { get; set; }
-        public DateTime? end_date { get; set; }
+        public string start_date { get; set; }
+        public string end_date { get; set; }
     }
 }

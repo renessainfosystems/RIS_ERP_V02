@@ -42,7 +42,7 @@ namespace Auth.Model.PIMS.ViewModel
             var model = new EmployeeDayoffViewModel();
             model.EmployeeDayoffId = oEmployeeDayoff.employee_dayoff_id ?? 0;
             model.WeekDay = oEmployeeDayoff.week_day ?? "";
-            model.IsActive = oEmployeeDayoff.is_active ?? "";
+            model.IsActive = oEmployeeDayoff.is_active ?? true;
             model.EmployeeCode = oEmployeeDayoff.employee_code ?? "";
             model.EmployeeName = oEmployeeDayoff.employee_name ?? "";
             model.DayoffTypeName = oEmployeeDayoff.dayoff_type_name ?? "";          
