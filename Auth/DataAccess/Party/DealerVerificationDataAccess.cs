@@ -138,14 +138,23 @@ namespace Auth.DataAccess.Party
         {
             var message = new CommonMessage();
             var result = (dynamic)null;
+            var company_id = _httpContextAccessor.HttpContext.Items["company_id"];
 
             if (_dbConnection.State == ConnectionState.Closed)
                 _dbConnection.Open();
 
             try
             {
-                string sql = @"SELECT * FROM [Party].[Dealer_Verification]";
-                dynamic data = await _dbConnection.QueryAsync<dynamic>(sql);
+                string sql = @"SELECT DI.dealer_info_id,(DI.dealer_info_code+'-'+ DI.dealer_info_name) dealer_name, DI.mobile,
+	                            D.department_name,E.employee_name,DV.is_verified
+	                            FROM Party.Dealer_Info DI
+	                            LEFT JOIN Party.Dealer_Verification DV on DV.dealer_info_id=DI.dealer_info_id
+	                            LEFT JOIN PIMS.Employee E on E.employee_id=DV.employee_id
+	                            LEFT JOIN Administrative.Department D on D.department_id=DV.department_id
+	                            WHERE DV.is_verified=0 and DI.company_id=@company_id";
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@company_id", company_id);
+                dynamic data = await _dbConnection.QueryAsync<dynamic>(sql, parameters);
                 if (data != null)
                 {
                     List<dynamic> dataList = data;
