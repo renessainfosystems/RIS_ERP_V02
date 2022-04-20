@@ -30,31 +30,31 @@ namespace Auth.Model.Administrative.ViewModel
         public int max_year_of_experience { get; set; }
         public int? salary_head_id { get; set; }
 
-        public static OrganogramDetailViewModel ConvertToModel(dynamic user)
+        public static OrganogramDetailViewModel ConvertToModel(dynamic obj)
         {
             var model = new OrganogramDetailViewModel();
-            model.organogram_id = user.organogram_id ?? 0;
-            model.position_id = user.position_id ?? 0;
-            model.organogram_detail_id = user.organogram_detail_id ?? 0;
-            model.salary_head_id = user.salary_head_id ?? 0;
-            model.budget = user.budget ?? "";
-            model.manpower = user.manpower ?? "";
-            model.code = user.code ?? "";
-            model.Experience = user.Experience ?? "";           
-            model.Activity = user.Activity ?? "";           
-            model.Position = user.Position ?? "";           
-            model.Increment = user.Increment ?? "";           
-            model.position_name = user.position_name ?? "";  
-            model.is_open = user.is_open;  
-            model.min_no_of_manpower = user.min_no_of_manpower;  
-            model.max_no_of_manpower = user.max_no_of_manpower;  
-            model.min_budget = user.min_budget;  
-            model.max_budget = user.max_budget;  
-            model.increment_percentage_yearly = user.increment_percentage_yearly;  
-            model.is_active = user.is_active;  
-            model.min_year_of_experience = user.min_year_of_experience;  
-            model.max_year_of_experience = user.max_year_of_experience;  
-            model.is_gross = user.is_gross;  
+            model.organogram_id = obj.organogram_id ?? 0;
+            model.position_id = obj.position_id ?? 0;
+            model.organogram_detail_id = obj.organogram_detail_id ?? 0;
+            model.salary_head_id = obj.salary_head_id ?? 0;
+            model.budget = obj.budget ?? "";
+            model.manpower = obj.manpower ?? "";
+            model.code = obj.code ?? "";
+            model.Experience = obj.Experience ?? "";           
+            model.Activity = obj.Activity ?? "";           
+            model.Position = obj.Position ?? "";           
+            model.Increment = obj.Increment ?? "";           
+            model.position_name = obj.position_name ?? "";  
+            model.is_open = obj.is_open;  
+            model.min_no_of_manpower = obj.min_no_of_manpower;  
+            model.max_no_of_manpower = obj.max_no_of_manpower;  
+            model.min_budget = obj.min_budget;  
+            model.max_budget = obj.max_budget;  
+            model.increment_percentage_yearly = obj.increment_percentage_yearly;  
+            model.is_active = obj.is_active;  
+            model.min_year_of_experience = obj.min_year_of_experience;  
+            model.max_year_of_experience = obj.max_year_of_experience;  
+            model.is_gross = obj.is_gross;  
             return model;
         }
     }
