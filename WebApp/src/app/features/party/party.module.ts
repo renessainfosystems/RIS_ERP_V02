@@ -7,6 +7,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { RetailerinfoComponent } from './retailerinfo/retailerinfo.component';
 import { PrimeNGModule } from '../../root/primengreference.module';
 import { DealerlistComponent } from './dealerlist/dealerlist.component';
+import { DealerAssessmentComponent } from './dealer-assessment/dealer-assessment.component';
 
 
 
@@ -15,7 +16,8 @@ import { DealerlistComponent } from './dealerlist/dealerlist.component';
   declarations: [
     DealerinfoComponent,
     RetailerinfoComponent,
-    DealerlistComponent
+    DealerlistComponent,
+    DealerAssessmentComponent
   ],
   imports: [
     CommonModule,
