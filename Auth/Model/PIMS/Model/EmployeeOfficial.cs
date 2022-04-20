@@ -28,7 +28,7 @@ namespace Auth.Model.PIMS.Model
 
         }
 
-        public int? employee_id { get; set; }
+        public long? employee_id { get; set; }
         public int? organogram_detail_id { get; set; }
         public int? company_id { get; set; }
         public int? location_id { get; set; }

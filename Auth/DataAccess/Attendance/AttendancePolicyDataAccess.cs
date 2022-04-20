@@ -495,6 +495,39 @@ namespace Auth.DataAccess.Attendance
             return (result);
         }
 
+        public async Task<dynamic> GetAllActiveAttendancePolicy()
+        {
+            var message = new CommonMessage();
+            var company_group_id = _httpContextAccessor.HttpContext.Items["company_group_id"];
+            var company_id = _httpContextAccessor.HttpContext.Items["company_id"];
+            var result = (dynamic)null;
+
+            if (_dbConnection.State == ConnectionState.Closed)
+                _dbConnection.Open();
+
+            try
+            {
+                var sql = " SELECT * FROM [Attendance].[View_AttendancePolicies] s " +
+                "WHERE S.is_active=1 AND S.company_group_id = CASE WHEN(isShared = 1) THEN @param_company_group_id ELSE S.company_group_id END AND S.company_id = CASE WHEN(isShared = 0) THEN @param_company_id ELSE S.company_id END ORDER BY S.attendance_policy_id DESC";
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@param_company_group_id", company_group_id);
+                parameters.Add("@param_company_id", company_id);
+                result = await _dbConnection.QueryAsync<dynamic>(sql, parameters);
+
+            }
+            catch (Exception ex)
+            {
+                throw ex.InnerException;
+            }
+            finally
+            {
+
+                _dbConnection.Close();
+            }
+
+            return (result);
+        }
+
 
         public async Task<dynamic> GetAttendancePolicyById(int attendance_policy_id)
         {

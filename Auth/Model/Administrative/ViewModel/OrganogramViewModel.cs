@@ -18,20 +18,20 @@ namespace Auth.Model.Administrative.ViewModel
         public int organogram_id { get; set; }
         public Boolean IsActive { get; set; }
         public int SortingPriority { get; set; }
-        public static OrganogramViewModel ConvertToModel(dynamic user)
+        public static OrganogramViewModel ConvertToModel(dynamic obj)
         {
             var model = new OrganogramViewModel();
-            model.organogram_id = user.organogram_id ?? 0;           
-            model.company_name = user.company_name ?? "";
-            model.location_code = user.location_code ?? "";
-            model.organogram_code = user.organogram_code ?? "";
-            model.location_name = user.location_name ?? "";
-            model.department = user.department ?? "";
-            model.department_id = user.department_id ?? 0;
-            model.location_id = user.location_id ?? 0;
-            model.company_id = user.company_id ?? 0;
-            model.IsActive = user.is_active ?? 0;
-            model.SortingPriority = user.sorting_priority ?? 0;
+            model.organogram_id = obj.organogram_id ?? 0;           
+            model.company_name = obj.company_name ?? "";
+            model.location_code = obj.location_code ?? "";
+            model.organogram_code = obj.organogram_code ?? "";
+            model.location_name = obj.location_name ?? "";
+            model.department = obj.department ?? "";
+            model.department_id = obj.department_id ?? 0;
+            model.location_id = obj.location_id ?? 0;
+            model.company_id = obj.company_id ?? 0;
+            model.IsActive = obj.is_active ?? 0;
+            model.SortingPriority = obj.sorting_priority ?? 0;
             return model;
         }
     }
