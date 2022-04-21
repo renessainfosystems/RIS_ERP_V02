@@ -110,4 +110,8 @@ export class EmployeeService {
     getJobLocation(): Observable<any[]> {
         return this.http.get<any[]>(this.ipconfig.base_IP + 'PIMSDBEnum/GetEnumJobLocation', httpOptions);
     }
+    getJobDomicile(): Observable<any[]> {
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'PIMSDBEnum/GetEnumJobDomicile', httpOptions);
+    }
+    
 }
