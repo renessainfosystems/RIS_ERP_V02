@@ -17,17 +17,17 @@ namespace Auth.Model.PIMS.ViewModel
         public int? LeavePolicyId { get; set; }
         public int? AcsId { get; set; }
         public int? LeaveHeadId { get; set; }
-        public double? TotalLeaveDays { get; set; }
+        public decimal? TotalLeaveDays { get; set; }
         public int? TotalLeaveMin { get; set; }
-        public double? AppliedDays { get; set; }
+        public decimal? AppliedDays { get; set; }
         public int? AppliedMin { get; set; }
-        public double? CancelDays { get; set; }
+        public decimal? CancelDays { get; set; }
         public int? CancelMin { get; set; }
-        public double? EnjoyDays { get; set; }
+        public decimal? EnjoyDays { get; set; }
         public int? EnjoyMin { get; set; }
-        public double? LeaveBalanceDays { get; set; }
+        public decimal? LeaveBalanceDays { get; set; }
         public int? LeaveBalanceMin { get; set; }
-        public double? EligibleLeaveDays { get; set; }
+        public decimal? EligibleLeaveDays { get; set; }
         public int? EligibleLeaveMin { get; set; }
         public int? NoOfCarryYear { get; set; }
         public bool IsActive { get; set; }

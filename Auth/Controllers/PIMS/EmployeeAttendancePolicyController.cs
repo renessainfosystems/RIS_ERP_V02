@@ -15,29 +15,23 @@ namespace Auth.Controllers.PIMS
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class EmployeeOfficialController : ControllerBase
+    public class EmployeeAttendancePolicyController : ControllerBase
     {
         //Intialize
         #region Constructor
-        private IEmployeeOfficialRepository _repository;
+        private IEmployeeAttendancePolicyRepository _repository;
 
-        public EmployeeOfficialController(IEmployeeOfficialRepository employeeOfficialRepository)
+        public EmployeeAttendancePolicyController(IEmployeeAttendancePolicyRepository employeeAttendancePolicyRepository)
         {
-            _repository = employeeOfficialRepository;
+            _repository = employeeAttendancePolicyRepository;
         }
 
         #endregion
 
         [HttpPost]
-        public async Task<dynamic> Create([FromForm] EmployeeOfficial oEmployeeOfficial)
+        public async Task<dynamic> CreateUpdate([FromForm] EmployeeAttendancePolicy oEmployeeAttendancePolicy)
         {
-            return await _repository.IUD(oEmployeeOfficial, (int)GlobalEnumList.DBOperation.Create);
-        }
-
-        [HttpPost]
-        public async Task<dynamic> Update([FromForm] EmployeeOfficial oEmployeeOfficial)
-        {
-            return await _repository.IUD(oEmployeeOfficial, (int)GlobalEnumList.DBOperation.Update);
+            return await _repository.IUD(oEmployeeAttendancePolicy);
         }
 
         [HttpGet]

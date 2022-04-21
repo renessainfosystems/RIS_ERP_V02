@@ -12,7 +12,7 @@ namespace Auth.Model.PIMS.ViewModel
         {
             //Constractor
         }
-        public int? EmployeeBenefitPolicy_id { get; set; }
+        public int? EmployeeBenefitPolicyId { get; set; }
         public long? EmployeeId { get; set; }
         public int? AbpId { get; set; }
         public bool  IsActive { get; set; }
@@ -54,7 +54,7 @@ namespace Auth.Model.PIMS.ViewModel
         public static EmployeeBenefitPolicyViewModel ConvertToModel(dynamic oEmployeeBenefitPolicy)
         {
             var oModel = new EmployeeBenefitPolicyViewModel();
-            oModel.EmployeeBenefitPolicy_id = oEmployeeBenefitPolicy.employee_benefit_policy_id ?? 0;
+            oModel.EmployeeBenefitPolicyId = oEmployeeBenefitPolicy.employee_benefit_policy_id ?? 0;
             oModel.EmployeeId = oEmployeeBenefitPolicy.employee_id ?? 0;
             oModel.AbpId = oEmployeeBenefitPolicy.abp_id ?? 0;
             oModel.IsActive = oEmployeeBenefitPolicy.is_active ?? true;

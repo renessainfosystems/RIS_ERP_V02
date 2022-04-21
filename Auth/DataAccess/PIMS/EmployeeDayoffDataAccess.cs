@@ -43,7 +43,7 @@ namespace Auth.DataAccess.PIMS
             }
             else if (nOperationType == (int)GlobalEnumList.DBOperation.Delete)
             {
-                parameters.Add("@param_employee_id", oEmployeeDayoff.employee_id ?? 0, DbType.Int64);
+                parameters.Add("@param_employee_dayoff_id", oEmployeeDayoff.employee_dayoff_id ?? 0, DbType.Int32);
                 parameters.Add("@param_DBOperation", GlobalEnumList.DBOperation.Delete);
             }
 

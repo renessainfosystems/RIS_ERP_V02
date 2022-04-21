@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Auth.Repository.PIMS
 {
-    public interface IEmployeeOfficialRepository
+    public interface IEmployeeLeaveLedgerRepository
     {
-        Task<dynamic> IUD(EmployeeOfficial oEmployeeOfficial, int dbOperation);
-        Task<dynamic> Get(long Employee_id);
+        Task<dynamic> Gets(long nEmployee_id);
     }
 }

@@ -2,6 +2,8 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Collections.Generic;
+using Auth.Model.PIMS.ViewModel;
 
 
 namespace Auth.Model.PIMS.Model
@@ -43,5 +45,7 @@ namespace Auth.Model.PIMS.Model
         public string date_of_join { get; set; }
         public string date_of_confirmation { get; set; }
         public int? created_user_id { get; set; }
+        public EmployeeAttendancePolicyViewModel EmployeeAttendancePolicyView { get;set;}
+
     }
 }
