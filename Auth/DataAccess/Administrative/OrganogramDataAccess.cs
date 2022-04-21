@@ -21,12 +21,12 @@ namespace Auth.DataAccess.Administrative
 
         IHttpContextAccessor _httpContextAccessor = new HttpContextAccessor();
         private IOrganogramDetailRepository _organogramDetailRepository;
-        protected readonly ApplicationDBContext _context;
+        //protected readonly ApplicationDBContext _context;
 
-        public OrganogramDataAccess(ApplicationDBContext context, IDbConnection dbConnection, IOrganogramDetailRepository organogramDetailRepository)
+        public OrganogramDataAccess(IDbConnection dbConnection, IOrganogramDetailRepository organogramDetailRepository)
         {
             _dbConnection = dbConnection;
-            _context = context;
+           // _context = context;
             _organogramDetailRepository = organogramDetailRepository;
         }
          

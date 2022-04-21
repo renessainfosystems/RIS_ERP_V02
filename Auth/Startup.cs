@@ -274,6 +274,10 @@ namespace Auth
             services.AddScoped<IEmployeeCategoryTypeRepository, EmployeeCategoryTypeRepository>();
             services.AddScoped<IPIMSDBEnumRepository, PIMSDBEnumRepository>();
             services.AddScoped<PIMSDBEnumDataAcess, PIMSDBEnumDataAcess>();
+            services.AddScoped<IEmployeeDayoffRepository, EmployeeDayoffRepository>();
+            services.AddScoped<EmployeeDayoffDataAccess, EmployeeDayoffDataAccess>();
+            services.AddScoped<IEmployeeBenefitPolicyRepository, EmployeeBenefitPolicyRepository>();
+            services.AddScoped<EmployeeBenefitPolicyDataAccess, EmployeeBenefitPolicyDataAccess>();
             #endregion
 
             #region Party

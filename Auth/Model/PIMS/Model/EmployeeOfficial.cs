@@ -22,13 +22,13 @@ namespace Auth.Model.PIMS.Model
             confirmation_status_id = 0;
             working_action_id = 0;
             job_location_id = 0;
-            date_of_join = DateTime.Now;
-            date_of_confirmation = DateTime.Now;
+            date_of_join = "";
+            date_of_confirmation = "";
             created_user_id = 0;
 
         }
 
-        public int? employee_id { get; set; }
+        public long? employee_id { get; set; }
         public int? organogram_detail_id { get; set; }
         public int? company_id { get; set; }
         public int? location_id { get; set; }
@@ -40,8 +40,8 @@ namespace Auth.Model.PIMS.Model
         public int? confirmation_status_id { get; set; }
         public int? working_action_id { get; set; }
         public int? job_location_id { get; set; }
-        public DateTime? date_of_join { get; set; }
-        public DateTime? date_of_confirmation { get; set; }
+        public string date_of_join { get; set; }
+        public string date_of_confirmation { get; set; }
         public int? created_user_id { get; set; }
     }
 }

@@ -10,6 +10,7 @@ namespace Auth.Repository.Attendance
     {
 
         Task<dynamic> GetAllAttendancePolicy();
+        Task<dynamic> GetAllActiveAttendancePolicy();
         Task<dynamic> GetAttendancePolicyById(int attendance_policy_id);
         Task<dynamic> IUD_AttendancePolicyDayoff(AttendancePolicyDayoff attendancePolicyDayoff, int dbOperation);
         Task<dynamic> IUD_AttendancePolicyLeave(AttendancePolicyLeave attendancePolicyLeave, int dbOperation);
