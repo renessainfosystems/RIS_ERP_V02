@@ -17,7 +17,7 @@ export class EmployeebasicinfoComponent implements OnInit {
 
     //companyForm: FormGroup;
     submitted = false;
-
+    
     //start grid and form show hide ********************
     gridDisplay = false;
     formDisplay = true;
@@ -44,14 +44,22 @@ export class EmployeebasicinfoComponent implements OnInit {
     @ViewChild('employeeNationalId', {
         static: true
     }) employeeNationalId;
-    employeeForm: any;//FormName
-    employeeOfficialForm: any;
+    employeeForm: FormGroup;//FormName
+    employeeOfficialForm: FormGroup;
     employeeList: any[];//List Employee
     employeedataSource: any[];//single employee
     selectedemployee: any;// Selected Employee
+     //Employee Official
     locationList: any[];
     departmentList: any[];
     positionList: any[];
+    designationList: any[];
+    jobdomicileList: any[];
+    serviceTypeList: any[];
+    confirmationSatusList: any[];
+    workActionList: any[];
+    jobLocationList: any[];
+
     isEmployeeEdit: boolean = false;
     nodeSelected: boolean = false;
     //declare dropdown List Property
@@ -119,17 +127,35 @@ export class EmployeebasicinfoComponent implements OnInit {
     openPrev() {
         this.index = (this.index === 0) ? 3 : this.index - 1;
     }
+    get form(): { [key: string]: AbstractControl } {
+        return this.employeeOfficialForm.controls;
+    }
     get f(): { [key: string]: AbstractControl } {
         return this.employeeForm.controls;
     }
+   
     onGeneral(): void {
+
         this.submitted = true;
-        if (this.employeeForm.invalid) {
+        if (this.employeeForm.invalid ) {
             return;
         }
         const data = this.employeeForm.value;
+        if (this.isEmployeeEdit == true) {
+            this.openNext();
+        } else {
 
+            this.onFormSubmit();
+            this.openNext();
+        }
 
+        // }
+        //if (this.employeeForm.invalid) {
+        //    return;
+        //}
+    }
+    onNext(): void {
+      
         if (this.isEmployeeEdit == true) {
             this.openNext();
         } else {
@@ -303,6 +329,7 @@ export class EmployeebasicinfoComponent implements OnInit {
             employee_id: [null, [Validators.required]],
             location_id: [null, [Validators.required]],
             company_group_id: [0],
+            designation_id: [null, [Validators.required]],
             company_id: [null, [Validators.required]],
             department_id: [null, [Validators.required]],
             position_id: [null, [Validators.required]],
@@ -330,6 +357,14 @@ export class EmployeebasicinfoComponent implements OnInit {
         this.loadPresentCountrydrpdwn();
         this.loadPermanentCountrydrpdwn();
         this.loadLocation();
+
+        //Employee Official
+        this.loadJobDomicile();
+        this.loadDesignation();
+        this.loadServiceType();
+        this.loadWorkAction();
+        this.loadJobLocation();
+        this.loadConfirmationStatus();
     }
     onRowSelect(event) {
         debugger;
@@ -349,8 +384,6 @@ export class EmployeebasicinfoComponent implements OnInit {
         if (event.checked) {
             //return this.notifyService.ShowNotification(2, 'Checked true');
             const data = this.employeeForm.value;
-            debugger;
-
             this.employeeForm.controls['permanent_country_id'].setValue(data.present_country_id);
             this.onSelectByPermanentCountryId(data.present_country_id);
             this.employeeForm.controls['permanent_ps_area'].setValue(data.present_ps_area);
@@ -488,7 +521,7 @@ export class EmployeebasicinfoComponent implements OnInit {
     }
 
     onFormSubmit() {
-        debugger
+      
         //for Image Upload
 
         const data = this.employeeForm.value;
@@ -554,7 +587,7 @@ export class EmployeebasicinfoComponent implements OnInit {
 
     loadAllEmployees() {
         this.employeeService.getAllEmployee().subscribe(data => {
-            console.log(data)
+            
             this.employeeList = data;
         });
     }
@@ -772,5 +805,44 @@ export class EmployeebasicinfoComponent implements OnInit {
         }
         else
             this.positionList = null;
+    }
+
+    loadDesignation() {
+        this.employeeService.getAllDesignation().subscribe(data => {
+            this.designationList = data;
+        });
+
+    }
+
+    loadJobDomicile() {
+        this.employeeService.getJobDomicile().subscribe(data => {
+            this.jobdomicileList = data;
+        });
+
+    }
+    loadJobLocation() {
+        this.employeeService.getJobLocation().subscribe(data => {
+            this.jobLocationList = data;
+        });
+
+    }
+    loadServiceType() {
+        this.employeeService.getServiceType().subscribe(data => {
+            this.serviceTypeList = data;
+        });
+
+    }
+    loadWorkAction() {
+        this.employeeService.getWorkAction().subscribe(data => {
+            this.workActionList = data;
+        });
+
+    }
+
+    loadConfirmationStatus() {
+        this.employeeService.getConfirmationStatus().subscribe(data => {
+            this.confirmationSatusList = data;
+        });
+
     }
 }
