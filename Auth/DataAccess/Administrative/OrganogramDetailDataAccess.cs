@@ -18,13 +18,9 @@ namespace Auth.DataAccess.Administrative
         private readonly IDbConnection _dbConnection;
 
         IHttpContextAccessor _httpContextAccessor = new HttpContextAccessor();
-
-        protected readonly ApplicationDBContext _context;
-
-        public OrganogramDetailDataAccess(ApplicationDBContext context, IDbConnection dbConnection)
+        public OrganogramDetailDataAccess(IDbConnection dbConnection)
         {
-            _dbConnection = dbConnection;
-            _context = context;
+            _dbConnection = dbConnection;            
         }
          
         //Parameter Binding

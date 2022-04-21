@@ -1797,7 +1797,7 @@ export class DealerinfoComponent implements OnInit {
         }
 
         if (this.rowDataCredit.IsApproved == true) {
-            return this.notifyService.ShowNotification(3, "Already approved! You can't update.");
+            return this.notifyService.ShowNotification(3, "Already approved! You can't edit.");
         }
 
         let dealerCreditinfoId = this.rowDataCredit.DealerCreditInfoId;
@@ -1889,7 +1889,8 @@ export class DealerinfoComponent implements OnInit {
             return this.notifyService.ShowNotification(3, "This creidt info already approved!");
         }
         let dealerCreditinfoId = this.rowDataCredit.DealerCreditInfoId;
-        this.dealerinfoService.approve(dealerCreditinfoId).subscribe(result => {            
+        let dealerInfoId = this.rowDataCredit.DealerInfoId;
+        this.dealerinfoService.approve(dealerCreditinfoId, dealerInfoId).subscribe(result => {
             this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
             if (result.MessageType == 1) {
                 this.dealercreditinfoList.splice(this.dealercreditinfoList.findIndex(item => item.DealerCreditInfoId === dealerCreditinfoId), 1);

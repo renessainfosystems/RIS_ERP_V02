@@ -21,12 +21,12 @@ namespace Auth.DataAccess.Administrative
 
         IHttpContextAccessor _httpContextAccessor = new HttpContextAccessor();
         private IOrganogramDetailRepository _organogramDetailRepository;
-        protected readonly ApplicationDBContext _context;
+        //protected readonly ApplicationDBContext _context;
 
-        public OrganogramDataAccess(ApplicationDBContext context, IDbConnection dbConnection, IOrganogramDetailRepository organogramDetailRepository)
+        public OrganogramDataAccess(IDbConnection dbConnection, IOrganogramDetailRepository organogramDetailRepository)
         {
             _dbConnection = dbConnection;
-            _context = context;
+           // _context = context;
             _organogramDetailRepository = organogramDetailRepository;
         }
          
@@ -444,6 +444,124 @@ left join Administrative.Organogram og on l.location_id=og.location_id where l.c
             return (result);
         }
 
-        
+        public async Task<dynamic> GetCompanyByOrganogram(OrganogramFilter organogramFilter)
+        {
+            var result = (dynamic)null;
+            if (_dbConnection.State == ConnectionState.Closed)
+                _dbConnection.Open();
+
+            try
+            {
+                var sql = @"SELECT company_id,company_name FROm Administrative.Company C WHERE C.company_id IN (
+                            SELECT O.location_id FROM Administrative.Organogram O WHERE O.company_group_id = @company_group_id)";
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@company_group_id", organogramFilter.company_group_id);
+
+                result = await _dbConnection.QueryAsync<dynamic>(sql, parameters);
+
+            }
+            catch (Exception ex)
+            {
+                throw ex.InnerException;
+            }
+            finally
+            {
+                _dbConnection.Close();
+            }
+
+            return result;
+        }
+        public async Task<dynamic> GetLocationByOrganogram(OrganogramFilter organogramFilter)
+        {
+            var result = (dynamic)null;
+            if (_dbConnection.State == ConnectionState.Closed)
+                _dbConnection.Open();
+
+            try
+            {
+                var sql = @"SELECT location_id,location_name FROM 
+                            Administrative.Location L WHERE L.location_id 
+                            IN (SELECT O.location_id FROM Administrative.Organogram O 
+                            WHERE O.company_id = @company_id AND O.company_group_id = @company_group_id)";
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@company_group_id", organogramFilter.company_group_id);
+                parameters.Add("@company_id", organogramFilter.company_id);
+
+                result = await _dbConnection.QueryAsync<dynamic>(sql, parameters);
+
+            }
+            catch (Exception ex)
+            {
+                throw ex.InnerException;
+            }
+            finally
+            {
+                _dbConnection.Close();
+            }
+
+            return result;
+        }
+        public async Task<dynamic> GetDepartmentByOrganogram(OrganogramFilter organogramFilter)
+        {
+            var result = (dynamic)null;
+            if (_dbConnection.State == ConnectionState.Closed)
+                _dbConnection.Open();
+
+            try
+            {
+                var sql = @"SELECT d.department_id,department_name FROM Administrative.Department D 
+                            WHERE D.department_id IN(SELECT O.department_id
+                            FROM Administrative.Organogram O
+                            WHERE O.location_id= @location_id AND O.company_id= @company_id AND O.company_group_id= @company_group_id)";
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@company_group_id", organogramFilter.company_group_id);
+                parameters.Add("@company_id", organogramFilter.company_id);
+                parameters.Add("@location_id", organogramFilter.location_id);
+                result = await _dbConnection.QueryAsync<dynamic>(sql, parameters);
+
+            }
+            catch (Exception ex)
+            {
+                throw ex.InnerException;
+            }
+            finally
+            {
+                _dbConnection.Close();
+            }
+
+            return result;
+        }
+        public async Task<dynamic> GetPositionByOrganogram(OrganogramFilter organogramFilter)
+        {
+            var result = (dynamic)null;
+            if (_dbConnection.State == ConnectionState.Closed)
+                _dbConnection.Open();
+
+            try
+            {
+                var sql = @"SELECT OD.organogram_detail_id,OD.organogram_id,P.position_name,O.company_group_id,O.company_id,O.location_id,O.department_id,p.position_id 
+                            FROM Administrative.Organogram_Detail OD
+                            INNER JOIN Administrative.Organogram O ON OD.organogram_id = O.organogram_id
+                            INNER JOIN Administrative.Position P ON OD.position_id = P.position_id
+                            WHERE O.company_group_id = @company_group_id AND O.company_id = @company_id AND O.location_id = @location_id AND O.department_id = @department_id";
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@company_group_id", organogramFilter.company_group_id);
+                parameters.Add("@company_id", organogramFilter.company_id);
+                parameters.Add("@location_id", organogramFilter.location_id);
+                parameters.Add("@department_id", organogramFilter.department_id);
+                result = await _dbConnection.QueryAsync<dynamic>(sql, parameters);
+
+            }
+            catch (Exception ex)
+            {
+                throw ex.InnerException;
+            }
+            finally
+            {
+                _dbConnection.Close();
+            }
+
+            return result;
+        }
     }
 }

@@ -118,5 +118,24 @@ namespace Auth.Utility.PIMS.Enum
         }
         #endregion
 
+        #region ENUM: EnumBenefitTypeOnWork
+        public enum EnumBenefitTypeOnWork
+        {
+            [Display(Name = "Time Slot")]
+            TimeSlot = 1,
+            [Display(Name = "Shift")]
+            Shift = 2,
+            [Display(Name = "Day Off")]
+            DayOff = 3,
+            [Display(Name = "Holiday")]
+            Holiday = 4,
+
+        }
+        public class BenefitTypeOnWork
+        {
+            public int benefit_work_on_id_enum { get; set; }
+            public string benefit_work_on_name_enum { get; set; }
+        }
+        #endregion
     }
 }

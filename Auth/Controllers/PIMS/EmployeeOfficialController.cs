@@ -19,11 +19,11 @@ namespace Auth.Controllers.PIMS
     {
         //Intialize
         #region Constructor
-        private IEmployeeOfficialRepository _EmployeeOfficialRepository;
+        private IEmployeeOfficialRepository _repository;
 
-        public EmployeeOfficialController(IEmployeeOfficialRepository EmployeeOfficialRepository)
+        public EmployeeOfficialController(IEmployeeOfficialRepository employeeOfficialRepository)
         {
-            _EmployeeOfficialRepository = EmployeeOfficialRepository;
+            _repository = employeeOfficialRepository;
         }
 
         #endregion
@@ -31,19 +31,19 @@ namespace Auth.Controllers.PIMS
         [HttpPost]
         public async Task<dynamic> Create([FromForm] EmployeeOfficial oEmployeeOfficial)
         {
-            return await _EmployeeOfficialRepository.IUD_EmployeeOfficial(oEmployeeOfficial, (int)GlobalEnumList.DBOperation.Create);
+            return await _repository.IUD(oEmployeeOfficial, (int)GlobalEnumList.DBOperation.Create);
         }
 
         [HttpPost]
         public async Task<dynamic> Update([FromForm] EmployeeOfficial oEmployeeOfficial)
         {
-            return await _EmployeeOfficialRepository.IUD_EmployeeOfficial(oEmployeeOfficial, (int)GlobalEnumList.DBOperation.Update);
+            return await _repository.IUD(oEmployeeOfficial, (int)GlobalEnumList.DBOperation.Update);
         }
 
         [HttpGet]
-        public async Task<dynamic> GetEmployeeOfficialById(int nEmployeeId)
+        public async Task<dynamic> Get(int nEmployeeId)
         {
-            return await _EmployeeOfficialRepository.GetEmployeeOfficialById(nEmployeeId);
+            return await _repository.Get(nEmployeeId);
         }
    
     }

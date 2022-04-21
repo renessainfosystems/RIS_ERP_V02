@@ -80,5 +80,38 @@ export class EmployeeService {
 
   getAllDistrictCboListByDivisionId(division_id): Observable<any[]> {
     return this.http.get<any[]>(this.ipconfig.base_IP + 'District/DistrictCboListByDivisionId?division_id=' + division_id, httpOptions);
-  }
+    }
+    getCompanyByOrganogram(company_group_id: number): Observable<any[]> {
+        return this.http.post<any[]>(this.ipconfig.base_IP + 'Organogram/GetCompanyByOrganogram', { company_group_id }, httpOptions);
+    }
+
+    getLocationByOrganogram(): Observable<any[]> {
+        return this.http.post<any[]>(this.ipconfig.base_IP + 'Organogram/GetLocationByOrganogram', {  }, httpOptions);
+    }
+    getDepartmentByOrganogram( location_id: number): Observable<any[]> {
+        return this.http.post<any[]>(this.ipconfig.base_IP + 'Organogram/GetDepartmentByOrganogram', {  location_id }, httpOptions);
+    }
+    getPositionByOrganogram( location_id: number, department_id: number): Observable<any[]> {
+        return this.http.post<any[]>(this.ipconfig.base_IP + 'Organogram/GetPositionByOrganogram', {  location_id, department_id }, httpOptions);
+    }
+
+    getAllDesignation(): Observable<any[]> {
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'Designation/DesignationCboList', httpOptions);
+    }
+    getServiceType(): Observable<any[]> {
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'PIMSDBEnum/GetEnumServiceType', httpOptions);
+    }
+    getConfirmationStatus(): Observable<any[]> {
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'PIMSDBEnum/GetEnumConfirmationStatus', httpOptions);
+    }
+    getWorkAction(): Observable<any[]> {
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'PIMSDBEnum/GetEnumWorkAction', httpOptions);
+    }
+    getJobLocation(): Observable<any[]> {
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'PIMSDBEnum/GetEnumJobLocation', httpOptions);
+    }
+    getJobDomicile(): Observable<any[]> {
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'PIMSDBEnum/GetEnumJobDomicile', httpOptions);
+    }
+    
 }

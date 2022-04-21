@@ -37,24 +37,6 @@ namespace Auth.Repository.Attendance
             return await _policyAssignmentDataAccess.GetGroupNameById();
         }
 
-        public async Task<dynamic> GetCompanyByOrganogram(OrganogramFilter organogramFilter)
-        {
-            return await _policyAssignmentDataAccess.GetCompanyByOrganogram(organogramFilter);
-        }
-
-        public async Task<dynamic> GetLocationByOrganogram(OrganogramFilter organogramFilter)
-        {
-            return await _policyAssignmentDataAccess.GetLocationByOrganogram(organogramFilter);
-        }
-
-        public async Task<dynamic> GetDepartmentByOrganogram(OrganogramFilter organogramFilter)
-        {
-            return await _policyAssignmentDataAccess.GetDepartmentByOrganogram(organogramFilter);
-        }
-
-        public async Task<dynamic> GetPositionByOrganogram(OrganogramFilter organogramFilter)
-        {
-            return await _policyAssignmentDataAccess.GetPositionByOrganogram(organogramFilter);
-        }
+ 
     }
 }

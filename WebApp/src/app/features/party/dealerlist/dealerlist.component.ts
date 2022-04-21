@@ -10,39 +10,12 @@ import { DealerListService } from './dealerlist.service';
 
 import { ActivatedRoute, Router } from '@angular/router';
 
-
-//import { Component, OnInit, ViewChild } from '@angular/core';
-//import { DomSanitizer } from '@angular/platform-browser';
-//import { FormControl, FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-//import { Observable } from 'rxjs';
-//import { ConfirmationService } from 'primeng/api';
-//import { SelectionModel } from '@angular/cdk/collections';
-//import { ToastrService } from 'ngx-toastr';
-//import SupplierApplication from './supplier-application.model';
-//import { SupplierApplicationService } from './supplier-application.service';
-//import { NotificationService } from '../../../service/CommonMessage/notification.service';
-
-
-//import { ActivatedRoute, Router } from '@angular/router';
-//import { take } from 'rxjs/operators';
-
-
 @Component({
     selector: 'app-dealerlist',
     templateUrl: './dealerlist.component.html',
     styleUrls: ['./dealerlist.component.scss']
 })
 export class DealerlistComponent implements OnInit {
-
-    //productDialog: boolean;
-
-    //products: Product[];
-
-    //product: Product;
-
-    //selectedProducts: Product[];
-
-    //submitted: boolean;
 
     dealerinfoList: any[];
     gridDisplay = false;
@@ -58,7 +31,6 @@ export class DealerlistComponent implements OnInit {
     isDealerVerificationEdit: any;
     dealerVerificationList = [];
 
-
     selectedVerification: any;
     rowDataVerification: any;
     onRowUnselectData: any;
@@ -66,15 +38,9 @@ export class DealerlistComponent implements OnInit {
     rowData: any;
     rowSelected: boolean;
 
-    //constructor(private formbulider: FormBuilder, private confirmationService: ConfirmationService, private notifyService: NotificationService, private dealerlistService: DealerListService) {
-
-    //}
-
-
     constructor(private formbulider: FormBuilder, private confirmationService: ConfirmationService, private router: Router, private dealerlistService: DealerListService, private toastr: ToastrService, private notifyService: NotificationService, private sanitizer: DomSanitizer, private route: ActivatedRoute) {
 
     }
-
 
     ngOnInit(): void {
         this.dealerlistService.getAllDealerInfo().subscribe(data => this.dealerinfoList = data);
@@ -84,11 +50,11 @@ export class DealerlistComponent implements OnInit {
             department_id: ['', [Validators.required]],
             employee_id: ['', [Validators.required]],
         });
+              
 
         //Load Dropdown
         this.loadAllDepartmentCboList();
         this.loadAllEmployeeCboList();
-
     }
 
     onRowSelect(event) {
@@ -99,6 +65,14 @@ export class DealerlistComponent implements OnInit {
     onRowUnselect(event) {
         this.rowSelected = false;
         this.rowData = null;
+    }
+
+    loadAllDealerInfos() {
+        this.dealerlistService.getAllDealerInfo().subscribe(data => {
+            this.dealerinfoList = data;
+
+
+        });
     }
 
     loadAllDepartmentCboList() {
@@ -113,85 +87,52 @@ export class DealerlistComponent implements OnInit {
         });
     }
 
+
     get d(): { [key: string]: AbstractControl } {
         return this.dealerassignForm.controls;
 
     }
 
-    SaveDealerVerification() {
-        debugger
+    saveDealerVerification() {
+        this.submitted = true;
         const dealerassignData = this.dealerassignForm.value;
+        if (this.dealerassignForm.invalid) {
+            return;
+        }
 
         for (let i = 0; i < this.selecteddealerinfo.length; i++) {
             let dealerInfoId = this.selecteddealerinfo[i].DealerInfoId;
-            let deptId = this.dealerassignForm.value.department_id;
+            let departmentId = this.dealerassignForm.value.department_id;
             let employeeId = this.dealerassignForm.value.employee_id;
-            const dealerAssignObj = { dealer_info_id: dealerInfoId, department_id: deptId, employee_id: employeeId}
+            const dealerAssignObj = { dealer_info_id: dealerInfoId, department_id: departmentId, employee_id: employeeId }
             this.dealerVerificationList.push(dealerAssignObj);
         }
         dealerassignData.DealerAssignSession = this.dealerVerificationList;
 
-
-
         if (this.isDealerVerificationEdit) {
-            //data.dealerinfoId = this.rowData.DealerInfoId;
-            //formData.append("dealer_info_id", this.rowData.DealerInfoId);
+            let i = 0
             this.dealerlistService.updateDealerVerification(dealerassignData).subscribe(result => {
 
                 this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
-
-                //if (result.MessageType == 1) {
-                //    this.dealerVerificationList.splice(this.dealerVerificationList.findIndex(item => item.dealerInfoId === dealerassignData.dealerInfoId), 1);
-                //    this.dealerVerificationList.unshift(result.Data);
-                //    this.selectedVerification = result.Data;
-                //    this.rowDataVerification = result.Data;
-                //    this.onRowUnselectData(event);
-                //    this.dealerVerificationIndex();
-                //    this.isDealerVerificationEdit = false;
-                //    this.submitted = false;
-                //    this.dealerassignForm.reset();
-                //    this.ngOnInit();
-                //}
+                this.dealerassignForm.reset();
+                this.submitted = false;
+                this.ngOnInit();
             });
-            //this.gridDisplayCredit = false;
-            //this.formDisplayCredit = true;
         }
         else {
-    /*        formData.append("dealer_info_id", this.rowData.DealerInfoId);*/
+            let i=0
             this.dealerlistService.createDealerVerification(dealerassignData).subscribe(result => {
 
                 this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
-
-                //if (result.MessageType == 1) {
-                //    this.dealerVerificationList.splice(this.dealerVerificationList.findIndex(item => item.dealerInfoId === dealerassignData.dealerInfoId), 1);
-                //    this.dealerVerificationList.unshift(result.Data);
-                //    this.selectedVerification = result.Data;
-                //    this.rowDataVerification = result.Data;
-                //    this.onRowUnselectData(event);
-                //    this.dealerVerificationIndex();
-                //    this.isDealerVerificationEdit = false;
-                //    this.submitted = false;
-                //    this.dealerassignForm.reset();
-                //    this.ngOnInit();
-                //}
+                this.dealerassignForm.reset();
+                this.selecteddealerinfo = null;
+                this.submitted = false;
+                this.isDealerVerificationEdit = false;
+                this.ngOnInit();
             });
-            //this.gridDisplayCredit = false;
-            //this.formDisplayCredit = true;
         }
 
-    }
-
-    findIndexById(id: string): number {
-        debugger
-        let index = -1;
-        for (let i = 0; i < this.dealerinfoList.length; i++) {
-            if (this.dealerinfoList[i].DealerInfoId === id) {
-                index = i;
-                break;
-            }
-        }
-        return index;
-    }
+    }    
 }
 
 

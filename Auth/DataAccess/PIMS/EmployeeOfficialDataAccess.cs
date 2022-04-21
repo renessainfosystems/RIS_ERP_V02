@@ -24,7 +24,7 @@ namespace Auth.DataAccess.PIMS
         }
 
         //Parameter binding
-        public DynamicParameters EmployeeOfficialParameterBinding(EmployeeOfficial oEmployeeOfficial, int nOperationType)
+        public DynamicParameters ParameterBinding(EmployeeOfficial oEmployeeOfficial, int nOperationType)
         {
             var currentUserInfoId = _httpContextAccessor.HttpContext.Items["User_Info_Id"];
             DynamicParameters parameters = new DynamicParameters();
@@ -59,15 +59,39 @@ namespace Auth.DataAccess.PIMS
         }
 
         //Insert, Update and Delete record
-        public async Task<dynamic> IUD_EmployeeOfficial(EmployeeOfficial oEmployeeOfficial, int nDBOperation)
-        {            
+        public async Task<dynamic> IUD(EmployeeOfficial oEmployeeOfficial, int nDBOperation)
+        {
+            //var oResultList = (dynamic)null;
             var oMessage = new CommonMessage();
-            var parameters = EmployeeOfficialParameterBinding(oEmployeeOfficial,nDBOperation);
-
+            var parameters = ParameterBinding(oEmployeeOfficial,nDBOperation);
+            
             try
             {
                 _dbConnection.Open();
-                dynamic data = await _dbConnection.QueryFirstOrDefaultAsync("[PIMS].[SP_Employee_Official_IUD]", parameters, commandType: CommandType.StoredProcedure);
+                dynamic data = await _dbConnection.QueryMultipleAsync("[PIMS].[SP_Employee_Official_IUD]", parameters, commandType: CommandType.StoredProcedure);
+                //dynamic oDataList = await _dbConnection.QueryMultipleAsync("[PIMS].[SP_Employee_Official_IUD]", parameters, commandType: CommandType.StoredProcedure);
+
+                //if (oDataList != null)
+                //{
+                //    oResultList = oDataList.Read<EmployeeOfficial>().Single();
+                //    List<dynamic> dataList = oDataList.Read();
+                //    result = (from dr in dataList select EmployeeDayoffViewModel.ConvertToModel(dr)).ToList();
+                //    List<dynamic> oEmpAttPolicy=
+
+
+                //    var oEmployeeAttendancePolicyView = oDataList.Read<EmployeeAttendancePolicyViewModel>().Single();
+                //    var oEmployeeDayoffViews = oDataList.Read<EmployeeDayoffViewModel>().ToList();
+                //    var oEmployeeBenefitPolicyViews = oDataList.Read<EmployeeBenefitPolicyViewModel>().ToList();
+                //    var oEmployeeLeaveLedgerViews = oDataList.Read<EmployeeLeaveLedgerViewModel>().ToList();
+
+                //    var abc = oEmployeeOfficial.EmployeeAttendancePolicyView
+
+                //    oResultList.EmployeeAttendancePolicyView = oEmployeeAttendancePolicyView;
+                //    oResultList.attendance_Policy_Benefits = benefitPolicy;
+                //    oResultList.attendance_Policy_Leaves = leavePolicy;
+                //    oResultList.attendance_Policy_Dayoffs = dayoffPolicy;
+                //}
+
                 oMessage = CommonMessage.Message(nDBOperation, data);
             }
             catch(Exception ex)
@@ -83,13 +107,13 @@ namespace Auth.DataAccess.PIMS
         }
 
         //Get employee official by employee id
-        public async Task<dynamic> GetEmployeeOfficialById(long nEmployeeId)
+        public async Task<dynamic> Get(long nEmployeeId)
         {
             var result = (dynamic)null;
             try
             {
                 var sql = "SELECT [employee_id],[organogram_detail_id],[company_id],[location_id],[department_id],[position_id],[designation_id],[job_domicile_id]" +
-                            ",[service_type_id],[confirmation_status_id],[working_action_id],[job_location_id],[date_of_join],[date_of_confirmation],[created_user_id]" +
+                            ",[service_type_id],[confirmation_status_id],[working_action_id],[job_location_id],FORMAT([date_of_join],'dd-MMM-yyyy') AS [date_of_join],FORMAT([date_of_confirmation],'dd-MMM-yyyy') AS [date_of_confirmation],[created_user_id]" +
                             " FROM [PIMS].[Employee_Official]" +
                             " WHERE [employee_id] = @param_employee_id";
                 DynamicParameters parameters = new DynamicParameters();

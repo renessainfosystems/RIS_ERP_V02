@@ -18,6 +18,9 @@ namespace Auth.Repository.Administrative
         Task<dynamic> GetOrganogramById(int Organogram_id);
         Task<dynamic> OrganogramActivity(int Organogram_id);
         Task<dynamic> IUD_Organogram(Organogram organogram, int dbOperation);
-
+        Task<dynamic> GetCompanyByOrganogram(OrganogramFilter organogramFilter);
+        Task<dynamic> GetLocationByOrganogram(OrganogramFilter organogramFilter);
+        Task<dynamic> GetDepartmentByOrganogram(OrganogramFilter organogramFilter);
+        Task<dynamic> GetPositionByOrganogram(OrganogramFilter organogramFilter);
     }
 }

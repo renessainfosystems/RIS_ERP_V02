@@ -8,7 +8,7 @@ namespace Auth.Repository.PIMS
 {
     public interface IEmployeeOfficialRepository
     {
-        Task<dynamic> IUD_EmployeeOfficial(EmployeeOfficial oEmployeeOfficial, int dbOperation);
-        Task<dynamic> GetEmployeeOfficialById(long Employee_id);
+        Task<dynamic> IUD(EmployeeOfficial oEmployeeOfficial, int dbOperation);
+        Task<dynamic> Get(long Employee_id);
     }
 }

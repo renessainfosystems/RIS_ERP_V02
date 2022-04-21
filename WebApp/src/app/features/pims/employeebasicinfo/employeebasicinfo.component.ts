@@ -8,16 +8,16 @@ import { EmployeeService } from './employeebasicinfo.service';
 import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'app-employeebasicinfo',
-  templateUrl: './employeebasicinfo.component.html',
-  styleUrls: ['./employeebasicinfo.component.css']
+    selector: 'app-employeebasicinfo',
+    templateUrl: './employeebasicinfo.component.html',
+    styleUrls: ['./employeebasicinfo.component.css']
 })
 export class EmployeebasicinfoComponent implements OnInit {
 
 
     //companyForm: FormGroup;
     submitted = false;
-
+    
     //start grid and form show hide ********************
     gridDisplay = false;
     formDisplay = true;
@@ -35,76 +35,85 @@ export class EmployeebasicinfoComponent implements OnInit {
     }
     //end grid and form show hide ********************
 
-  @ViewChild('employeeImage', {
-    static: true
-  }) employeeImage;
-  @ViewChild('employeeSignature', {
-    static: true
-  }) employeeSignature;
-  @ViewChild('employeeNationalId', {
-    static: true
-  }) employeeNationalId;
-  employeeForm: any;//FormName
-  employeeList: any[];//List Employee
-  employeedataSource: any[];//single employee
-  selectedemployee: any;// Selected Employee  
-  isEmployeeEdit: boolean = false;
-  nodeSelected: boolean = false;
-  //declare dropdown List Property
-  drpdwntitleList: Employee[];//Title Dropdown List
-  selectedTitle: Employee;//Title Selected Row List
-  drpdwngenderList: Employee[];//Gender Dropdown List
-  selectedGender: Employee;//Gender Selected Row List
-  drpdwnreligionList: Employee[];//Religion Dropdown List
-  selectedReligion: Employee;//Gender Selected Row List
-  drpdwnbloodGroupList: Employee[];//BloodGroup Dropdown List
-  selectedBloodGroup: Employee;//BloodGroup Selected Row List
-  drpdwnresidencialStatusList: Employee[];//ResidencialStatus Dropdown List
-  selectedResidencialStatus: Employee;//ResidencialStatus Selected Row List
-  drpdwnmaritalStatusList: Employee[];//Marital Status Dropdown List
-  selectedMaritalStatus: Employee;//Marital Status Selected Row List
+    @ViewChild('employeeImage', {
+        static: true
+    }) employeeImage;
+    @ViewChild('employeeSignature', {
+        static: true
+    }) employeeSignature;
+    @ViewChild('employeeNationalId', {
+        static: true
+    }) employeeNationalId;
+    employeeForm: FormGroup;//FormName
+    employeeOfficialForm: FormGroup;
+    employeeList: any[];//List Employee
+    employeedataSource: any[];//single employee
+    selectedemployee: any;// Selected Employee
+     //Employee Official
+    locationList: any[];
+    departmentList: any[];
+    positionList: any[];
+    designationList: any[];
+    jobdomicileList: any[];
+    serviceTypeList: any[];
+    confirmationSatusList: any[];
+    workActionList: any[];
+    jobLocationList: any[];
 
-  drpdwnNationalityList: Employee[];//Nationality Dropdown List
-  selectedNationality: Employee;//Nationality Selected Row List
-  drpdwnCountryOfBirthList: Employee[];//Country Of Birth Dropdown List
-  selectedCountryOfBirth: Employee;//Country Of Birth Selected Row List
-  drpdwnEthnicityList: Employee[];//Country Of Birth Dropdown List
-  selectedEthnicity: Employee;//Country Of Birth Selected Row List
-  drpdwnPresentCountryList: Employee[];//Present Country Dropdown List
-  selectedPresentCountry: Employee;//Present Country Selected Row List
-  drpdwnPresentDivisionList: Employee[];//Present Division Dropdown List
-  selectedPresentDivision: Employee;//Present Division Selected Row List
-  drpdwnPresentDistrictList: Employee[];//Present District Dropdown List
-  selectedPresentDistrict: Employee;//Present District Selected Row List
-  drpdwnPermanentCountryList: Employee[];//Permanent Country Dropdown List
-  selectedPermanentCountry: Employee;//Permanent Country Selected Row List
-  drpdwnPermanentDivisionList: Employee[];//Present Division Dropdown List
-  selectedPermanentDivision: Employee;//Present Division Selected Row List
-  drpdwnPermanentDistrictList: Employee[];//Present District Dropdown List
-  selectedPermanentDistrict: Employee;//Present District Selected Row List
-  first = 0;
-  rows = 10;
-  index: number = 0;
-  //end dropdown List prperty
-  rowData: any;
-  // for delete data modal
-  display: boolean = false;
-  rowSelected: boolean = false;
-  selected = true;
-  collapsedempInfo = true;
-  collapsedempDetails = false;
-  collapsed = false;
-  checked: boolean = false;
-  showDialog() {
-    if (this.rowData == null) {
-      return this.notifyService.ShowNotification(3, 'Please select row');
+    isEmployeeEdit: boolean = false;
+    nodeSelected: boolean = false;
+    //declare dropdown List Property
+    drpdwntitleList: Employee[];//Title Dropdown List
+    selectedTitle: Employee;//Title Selected Row List
+    drpdwngenderList: Employee[];//Gender Dropdown List
+    selectedGender: Employee;//Gender Selected Row List
+    drpdwnreligionList: Employee[];//Religion Dropdown List
+    selectedReligion: Employee;//Gender Selected Row List
+    drpdwnbloodGroupList: Employee[];//BloodGroup Dropdown List
+    selectedBloodGroup: Employee;//BloodGroup Selected Row List
+    drpdwnresidencialStatusList: Employee[];//ResidencialStatus Dropdown List
+    selectedResidencialStatus: Employee;//ResidencialStatus Selected Row List
+    drpdwnmaritalStatusList: Employee[];//Marital Status Dropdown List
+    selectedMaritalStatus: Employee;//Marital Status Selected Row List
+
+    drpdwnNationalityList: Employee[];//Nationality Dropdown List
+    selectedNationality: Employee;//Nationality Selected Row List
+    drpdwnCountryOfBirthList: Employee[];//Country Of Birth Dropdown List
+    selectedCountryOfBirth: Employee;//Country Of Birth Selected Row List
+    drpdwnEthnicityList: Employee[];//Country Of Birth Dropdown List
+    selectedEthnicity: Employee;//Country Of Birth Selected Row List
+    drpdwnPresentCountryList: Employee[];//Present Country Dropdown List
+    selectedPresentCountry: Employee;//Present Country Selected Row List
+    drpdwnPresentDivisionList: Employee[];//Present Division Dropdown List
+    selectedPresentDivision: Employee;//Present Division Selected Row List
+    drpdwnPresentDistrictList: Employee[];//Present District Dropdown List
+    selectedPresentDistrict: Employee;//Present District Selected Row List
+    drpdwnPermanentCountryList: Employee[];//Permanent Country Dropdown List
+    selectedPermanentCountry: Employee;//Permanent Country Selected Row List
+    drpdwnPermanentDivisionList: Employee[];//Present Division Dropdown List
+    selectedPermanentDivision: Employee;//Present Division Selected Row List
+    drpdwnPermanentDistrictList: Employee[];//Present District Dropdown List
+    selectedPermanentDistrict: Employee;//Present District Selected Row List
+
+    index: number = 0;
+    //end dropdown List prperty
+    rowData: any;
+    // for delete data modal
+    display: boolean = false;
+    rowSelected: boolean = false;
+    selected = true;
+
+    checked: boolean = false;
+    showDialog() {
+        if (this.rowData == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+        //if (this.rowData.ApprovedBy) {
+        //  return this.notifyService.ShowNotification(3, "This policy already approved,you can't edit this policy");
+        //}
+        else
+            this.display = true;
     }
-    //if (this.rowData.ApprovedBy) {
-    //  return this.notifyService.ShowNotification(3, "This policy already approved,you can't edit this policy");
-    //}
-    else
-      this.display = true;
-  }
     generalIndex() {
         this.index = 0;
     }
@@ -118,17 +127,20 @@ export class EmployeebasicinfoComponent implements OnInit {
     openPrev() {
         this.index = (this.index === 0) ? 3 : this.index - 1;
     }
+    get form(): { [key: string]: AbstractControl } {
+        return this.employeeOfficialForm.controls;
+    }
     get f(): { [key: string]: AbstractControl } {
         return this.employeeForm.controls;
     }
+   
     onGeneral(): void {
+
         this.submitted = true;
-        if (this.employeeForm.invalid) {
+        if (this.employeeForm.invalid ) {
             return;
         }
         const data = this.employeeForm.value;
-
-       
         if (this.isEmployeeEdit == true) {
             this.openNext();
         } else {
@@ -136,50 +148,65 @@ export class EmployeebasicinfoComponent implements OnInit {
             this.onFormSubmit();
             this.openNext();
         }
-           
-       // }
+
+        // }
         //if (this.employeeForm.invalid) {
         //    return;
         //}
     }
-  // for photo and signature upload
+    onNext(): void {
+      
+        if (this.isEmployeeEdit == true) {
+            this.openNext();
+        } else {
 
-    photourllink: string = "assets/images/defaultimg.jpeg";  
-  selectFile(event) {
-    if (event.target.files) {
-      var reader = new FileReader()
-      reader.readAsDataURL(event.target.files[0])
-      reader.onload = (event: any) => {
-        this.photourllink = event.target.result
-      }
+            this.onFormSubmit();
+            this.openNext();
+        }
+
+        // }
+        //if (this.employeeForm.invalid) {
+        //    return;
+        //}
     }
-  }
+    // for photo and signature upload
 
-  sigurllink: string = "assets/images/user-signature1.png";
+    photourllink: string = "assets/images/defaultimg.jpeg";
+    selectFile(event) {
+        if (event.target.files) {
+            var reader = new FileReader()
+            reader.readAsDataURL(event.target.files[0])
+            reader.onload = (event: any) => {
+                this.photourllink = event.target.result
+            }
+        }
+    }
+
+    sigurllink: string = "assets/images/user-signature1.png";
     //sigurllink: string = "assets/images/defaultimg.jpeg";
-  selectSig(event) {
-    if (event.target.files) {
-      var reader = new FileReader()
-      reader.readAsDataURL(event.target.files[0])
-      reader.onload = (event: any) => {
-        this.sigurllink = event.target.result
-      }
+    selectSig(event) {
+        if (event.target.files) {
+            var reader = new FileReader()
+            reader.readAsDataURL(event.target.files[0])
+            reader.onload = (event: any) => {
+                this.sigurllink = event.target.result
+            }
+        }
     }
-  }
 
-  filellink: string = "assets/images/FileUpload.png";
-  selectuFile(event) {
-    if (event.target.files) {
-      var reader = new FileReader()
-      reader.readAsDataURL(event.target.files[0])
-      reader.onload = (event: any) => {
-        this.filellink = event.target.result
-      }
+    filellink: string = "assets/images/FileUpload.png";
+    selectuFile(event) {
+        if (event.target.files) {
+            var reader = new FileReader()
+            reader.readAsDataURL(event.target.files[0])
+            reader.onload = (event: any) => {
+                this.filellink = event.target.result
+            }
+        }
     }
-  }
     showBasicDialog() {
-    //this.resetForm();
-    this.toggleGridDisplay();    
+        //this.resetForm();
+        this.toggleGridDisplay();
     }
 
 
@@ -188,511 +215,435 @@ export class EmployeebasicinfoComponent implements OnInit {
     //}
     constructor(private formbulider: FormBuilder, private notifyService: NotificationService, private employeeService: EmployeeService, private toastr: ToastrService) { }
 
-  clear() {
-    this.employeeForm = this.formbulider.group({
-      code: [''],
-      employee_name: [''],
-      first_name: [''],
-      middle_name: [''],
-      sur_name: [''],
-      father_name: [''],
-      mother_name: [''],
-      spouse_name: [''],
-      date_of_marriage: [''],
-      personal_phone: [''],
-      official_phone: [''],
-      personal_email: [''],
-      official_email: [''],
-      date_of_birth: [''],
-      identification_mark: [''],
-      passport_no: [''],
-      birth_id: [''],
-      driving_license_no: [''],
-      //drownlist field
-      title_enum_id: [null],
-      title_enum_name: [''],
-      gender_enum_id: [null],
-      gender_enum_name: [null],
-      religion_enum_id: [null],
-      ReligionName: [''],
-      blood_group_enum_id: [null],
-      BloodGroupName: [''],
-      residentcial_status_enum_id: [null],
-      ResidencialStatusName: [''],
-      marital_status_enum_id: [null],
-      marital_status_enum_name: [''],
-      national_id: [''],
-      employee_old_code: [''],
-      nationality_id: [''],
-      NationalityName: [''],
-      country_of_birth_id: [''],
-      CountryOfBirthName: [''],
-      ethnicity_id: [''],
-      EthnicityName: [''],
-      ImageUpload: new FormControl(''),
-      SignatureUpload: new FormControl('')
-    });
+    clear() {
+        this.employeeForm = this.formbulider.group({
+            code: [''],
+            employee_name: [''],
+            first_name: [''],
+            middle_name: [''],
+            sur_name: [''],
+            father_name: [''],
+            mother_name: [''],
+            spouse_name: [''],
+            date_of_marriage: [''],
+            personal_phone: [''],
+            official_phone: [''],
+            personal_email: [''],
+            official_email: [''],
+            date_of_birth: [''],
+            identification_mark: [''],
+            passport_no: [''],
+            birth_id: [''],
+            driving_license_no: [''],
+            //drownlist field
+            title_enum_id: [null],
+            title_enum_name: [''],
+            gender_enum_id: [null],
+            gender_enum_name: [null],
+            religion_enum_id: [null],
+            ReligionName: [''],
+            blood_group_enum_id: [null],
+            BloodGroupName: [''],
+            residentcial_status_enum_id: [null],
+            ResidencialStatusName: [''],
+            marital_status_enum_id: [null],
+            marital_status_enum_name: [''],
+            national_id: [''],
+            employee_old_code: [''],
+            nationality_id: [''],
+            NationalityName: [''],
+            country_of_birth_id: [''],
+            CountryOfBirthName: [''],
+            ethnicity_id: [''],
+            EthnicityName: [''],
+            ImageUpload: new FormControl(''),
+            SignatureUpload: new FormControl('')
+        });
 
-  }
-  ngOnInit(): void {
-    this.employeeForm = this.formbulider.group({    
-      code: ['', [Validators.required]],
-    first_name: ['', [Validators.required]],
-    middle_name: [''],
-    sur_name: ['', [Validators.required]],
-    father_name: ['', [Validators.required]],
-    mother_name: ['', [Validators.required]],
-    spouse_name: [''],
-    date_of_marriage: [null],
-    personal_phone: ['', [Validators.required]],
-    official_phone: [''],
-    personal_email: ['',[Validators.required,Validators.email, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
-    official_email: [''],
-    date_of_birth: ['', [Validators.required]],
-    identification_mark: [''],
-    passport_no: [''],
-    birth_id: [''],
-    driving_license_no: [''],
-    //drownlist field
-    title_enum_id: ['', [Validators.required]],    
-    gender_enum_id: ['', [Validators.required]],     
-    religion_enum_id: ['', [Validators.required]],
-    ReligionName: [''],
-    blood_group_enum_id: ['', [Validators.required]],      
-    residentcial_status_enum_id: ['', [Validators.required]],     
-    marital_status_enum_id: ['', [Validators.required]],
-    national_id: ['', [Validators.required]],
-    employee_old_code: [''],
-    nationality_id: ['', [Validators.required]],
-    NationalityName: [''],
-    country_of_birth_id: ['', [Validators.required]],
-    CountryOfBirthName: [''],
-    ethnicity_id: ['', [Validators.required]],
-    EthnicityName: [''],
+    }
+    ngOnInit(): void {
+        this.employeeForm = this.formbulider.group({
+            code: ['', [Validators.required]],
+            first_name: ['', [Validators.required]],
+            middle_name: [''],
+            sur_name: ['', [Validators.required]],
+            father_name: ['', [Validators.required]],
+            mother_name: ['', [Validators.required]],
+            spouse_name: [''],
+            date_of_marriage: [null],
+            personal_phone: ['', [Validators.required]],
+            official_phone: [''],
+            personal_email: ['', [Validators.required, Validators.email, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
+            official_email: [''],
+            date_of_birth: ['', [Validators.required]],
+            identification_mark: [''],
+            passport_no: [''],
+            birth_id: [''],
+            driving_license_no: [''],
+            //drownlist field
+            title_enum_id: ['', [Validators.required]],
+            gender_enum_id: ['', [Validators.required]],
+            religion_enum_id: ['', [Validators.required]],
+            ReligionName: [''],
+            blood_group_enum_id: ['', [Validators.required]],
+            residentcial_status_enum_id: ['', [Validators.required]],
+            marital_status_enum_id: ['', [Validators.required]],
+            national_id: ['', [Validators.required]],
+            employee_old_code: [''],
+            nationality_id: ['', [Validators.required]],
+            NationalityName: [''],
+            country_of_birth_id: ['', [Validators.required]],
+            CountryOfBirthName: [''],
+            ethnicity_id: ['', [Validators.required]],
+            EthnicityName: [''],
 
-    present_country_id: [0],
-    present_division_id: [0],
-    present_district_id: [0],
-    present_ps_area: [''],
-    present_city: [''],
-    present_post_code: [''],
-    present_block: [''],
-    present_road_no: [''],
-    present_house_no: [''],
-    present_flat_no: [''],
-    present_address_note: [''],
+            present_country_id: [0],
+            present_division_id: [0],
+            present_district_id: [0],
+            present_ps_area: [''],
+            present_city: [''],
+            present_post_code: [''],
+            present_block: [''],
+            present_road_no: [''],
+            present_house_no: [''],
+            present_flat_no: [''],
+            present_address_note: [''],
 
-    permanent_country_id: [0],
-    permanent_division_id: [0],
-    permanent_district_id: [0],
-    permanent_city: [''],
-    permanent_ps_area: [''],
-    permanent_post_code: [''],
-    permanent_block: [''],
-    permanent_road_no: [''],
-    permanent_house_no: [''],
-    permanent_flat_no: [''],
-    permanent_address_note: [''],
+            permanent_country_id: [0],
+            permanent_division_id: [0],
+            permanent_district_id: [0],
+            permanent_city: [''],
+            permanent_ps_area: [''],
+            permanent_post_code: [''],
+            permanent_block: [''],
+            permanent_road_no: [''],
+            permanent_house_no: [''],
+            permanent_flat_no: [''],
+            permanent_address_note: [''],
 
-    ImageUpload: new FormControl(null),
-    SignatureUpload: new FormControl(null)
-     
-    });
-    //Load Dropdown
-    this.loadEmployeeTittlesdrpdwn();
-    this.loadEmployeeGenderdrpdwn();
-    this.loadEmployeeReligiondrpdwn();
-    this.loadEmployeeBloodGroupdrpdwn();
-    this.loadEmployeeResidencialStatusdrpdwn();
-    this.loadEmployeeNationalitydrpdwn();
-    this.loadCountryOfBirthdrpdwn();
-    this.loadEmployeeMaritalStatusdrpdwn();
-    this.loadEthnicitydrpdwn();
-    this.loadAllEmployees();
-    this.loadPresentCountrydrpdwn();
-    this.loadPermanentCountrydrpdwn();
+            ImageUpload: new FormControl(null),
+            SignatureUpload: new FormControl(null)
+
+        });
+        this.employeeOfficialForm = this.formbulider.group({
+            employee_id: [null, [Validators.required]],
+            location_id: [null, [Validators.required]],
+            company_group_id: [0],
+            designation_id: [null, [Validators.required]],
+            company_id: [null, [Validators.required]],
+            department_id: [null, [Validators.required]],
+            position_id: [null, [Validators.required]],
+            date_of_confirmation: [null, [Validators.required]],
+            organogram_detail_id: 0,
+            job_domicile_id: 0,
+            service_type_id: 0,
+            confirmation_status_id: 0,
+            working_action_id: 0,
+            job_location_id: 0,
+            date_of_join: 0,
+
+        });
+        //Load Dropdown
+        this.loadEmployeeTittlesdrpdwn();
+        this.loadEmployeeGenderdrpdwn();
+        this.loadEmployeeReligiondrpdwn();
+        this.loadEmployeeBloodGroupdrpdwn();
+        this.loadEmployeeResidencialStatusdrpdwn();
+        this.loadEmployeeNationalitydrpdwn();
+        this.loadCountryOfBirthdrpdwn();
+        this.loadEmployeeMaritalStatusdrpdwn();
+        this.loadEthnicitydrpdwn();
+        this.loadAllEmployees();
+        this.loadPresentCountrydrpdwn();
+        this.loadPermanentCountrydrpdwn();
+        this.loadLocation();
+
+        //Employee Official
+        this.loadJobDomicile();
+        this.loadDesignation();
+        this.loadServiceType();
+        this.loadWorkAction();
+        this.loadJobLocation();
+        this.loadConfirmationStatus();
+    }
+    onRowSelect(event) {
+        debugger;
+        // this.toggle();
+        this.nodeSelected = true;
+        this.rowData = event.data;
+
+    }
+    onRowUnselect(event) {
+        // this.toggle();
+        this.nodeSelected = false;
+        this.rowData = null;
+
+    }
   
-  }
-  onRowSelect(event) {
-    debugger;
-   // this.toggle();
-    this.nodeSelected = true;
-    this.rowData = event.data;
+    sameAddress(event) {
+        if (event.checked) {
+            //return this.notifyService.ShowNotification(2, 'Checked true');
+            const data = this.employeeForm.value;
+            this.employeeForm.controls['permanent_country_id'].setValue(data.present_country_id);
+            this.onSelectByPermanentCountryId(data.present_country_id);
+            this.employeeForm.controls['permanent_ps_area'].setValue(data.present_ps_area);
+            this.employeeForm.controls['permanent_block'].setValue(data.present_block);
+            this.employeeForm.controls['permanent_house_no'].setValue(data.present_house_no);
+            this.employeeForm.controls['permanent_division_id'].setValue(data.present_division_id);
+            this.onSelectByPermanentDivisionId(data.present_division_id);
+            this.employeeForm.controls['permanent_city'].setValue(data.present_city);
+            this.employeeForm.controls['permanent_post_code'].setValue(data.present_post_code);
+            this.employeeForm.controls['permanent_road_no'].setValue(data.present_road_no);
+            this.employeeForm.controls['permanent_flat_no'].setValue(data.present_flat_no);
+            this.employeeForm.controls['permanent_address_note'].setValue(data.present_address_note);
+            this.employeeForm.controls['permanent_district_id'].setValue(data.present_district_id);
 
-  }
-  onRowUnselect(event) {
-   // this.toggle();
-    this.nodeSelected = false;
-    this.rowData = null;
-
-  }
-  toggle() {   
-    if (this.collapsedempInfo) {
-      this.collapsedempDetails = true;
-      this.collapsedempInfo = false;
-    }
-    else {
-      this.collapsedempInfo = true;
-      this.collapsedempDetails = false;
-    }
-  }
-  toggleAddress() {
-    if (this.collapsed) {
-      this.collapsed = false;
-    }
-    else {
-      this.collapsed = true;
-    }
-
-  }
-  sameAddress(event) {
-    if (event.checked) {
-      //return this.notifyService.ShowNotification(2, 'Checked true');
-      const data = this.employeeForm.value;
-      debugger;
-     
-      this.employeeForm.controls['permanent_country_id'].setValue(data.present_country_id);
-      this.onSelectByPermanentCountryId(data.present_country_id);
-      this.employeeForm.controls['permanent_ps_area'].setValue(data.present_ps_area);
-      this.employeeForm.controls['permanent_block'].setValue(data.present_block);
-      this.employeeForm.controls['permanent_house_no'].setValue(data.present_house_no);     
-      this.employeeForm.controls['permanent_division_id'].setValue(data.present_division_id);
-      this.onSelectByPermanentDivisionId(data.present_division_id);
-      this.employeeForm.controls['permanent_city'].setValue(data.present_city);
-      this.employeeForm.controls['permanent_post_code'].setValue(data.present_post_code);
-      this.employeeForm.controls['permanent_road_no'].setValue(data.present_road_no);
-      this.employeeForm.controls['permanent_flat_no'].setValue(data.present_flat_no);
-      this.employeeForm.controls['permanent_address_note'].setValue(data.present_address_note);
-      this.employeeForm.controls['permanent_district_id'].setValue(data.present_district_id);
+        }
+        else {
+            this.employeeForm.controls['permanent_country_id'].setValue('');
+            this.employeeForm.controls['permanent_ps_area'].setValue('');
+            this.employeeForm.controls['permanent_block'].setValue('');
+            this.employeeForm.controls['permanent_house_no'].setValue('');
+            this.employeeForm.controls['permanent_division_id'].setValue('');
+            this.employeeForm.controls['permanent_city'].setValue('');
+            this.employeeForm.controls['permanent_post_code'].setValue('');
+            this.employeeForm.controls['permanent_road_no'].setValue('');
+            this.employeeForm.controls['permanent_flat_no'].setValue('');
+            this.employeeForm.controls['permanent_address_note'].setValue('');
+            this.employeeForm.controls['permanent_district_id'].setValue('');
+        }
 
     }
-    else {
-      this.employeeForm.controls['permanent_country_id'].setValue('');
-      this.employeeForm.controls['permanent_ps_area'].setValue('');
-      this.employeeForm.controls['permanent_block'].setValue('');
-      this.employeeForm.controls['permanent_house_no'].setValue('');
-      this.employeeForm.controls['permanent_division_id'].setValue('');
-      this.employeeForm.controls['permanent_city'].setValue('');
-      this.employeeForm.controls['permanent_post_code'].setValue('');
-      this.employeeForm.controls['permanent_road_no'].setValue('');
-      this.employeeForm.controls['permanent_flat_no'].setValue('');
-      this.employeeForm.controls['permanent_address_note'].setValue('');
-      this.employeeForm.controls['permanent_district_id'].setValue('');
-    }
+ 
+    loadEmployeeToEdit() {
 
-  }
-  btnNew() {
-   
-    this.toggle();
-  }
-  loadEmployeeToEdit() {
+        if (this.rowData == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
 
-    debugger;
-    if (this.rowData == null) {
-      return this.notifyService.ShowNotification(3, 'Please select row');
-    }
-    debugger;
-    let employeeId = this.rowData.EmployeeId;
-    this.employeeService.getEmployeeById(employeeId).subscribe(data => {
-      debugger;
-      if (data != null) {
-        this.isEmployeeEdit = true;
-      }
-      //if (data.days_of_month != null) {
+        let employeeId = this.rowData.EmployeeId;
+        this.employeeService.getEmployeeById(employeeId).subscribe(data => {
+            
+            if (data != null) {
+                this.isEmployeeEdit = true;
+            }
+          
+            this.employeeForm.controls['code'].setValue(data.Code);
 
-      //  this.holidayForm.controls['selectedday'].setValue(+data.days_of_month.split('-')[0]);
-      //  this.holidayForm.controls['selectedmonth'].setValue(data.days_of_month.split('-')[1]);
-      //}
-      this.employeeForm.controls['code'].setValue(data.Code);
-       
-      this.employeeForm.controls['first_name'].setValue(data.FirstName);
-      this.employeeForm.controls['middle_name'].setValue(data.MiddleName);
-      this.employeeForm.controls['sur_name'].setValue(data.SurName);
-      this.employeeForm.controls['father_name'].setValue(data.FatherName);
-      this.employeeForm.controls['mother_name'].setValue(data.MotherName);
-      this.employeeForm.controls['spouse_name'].setValue(data.SpouseName);
-      this.employeeForm.controls['date_of_marriage'].setValue(new Date(data.DateOfMarriage));
-     
-      this.employeeForm.controls['personal_phone'].setValue(data.PersonalPhone);
-      this.employeeForm.controls['official_phone'].setValue(data.OfficialPhone);
-      this.employeeForm.controls['personal_email'].setValue(data.PersonalEmail);
-      this.employeeForm.controls['official_email'].setValue(data.OfficialEmail);
-      this.employeeForm.controls['date_of_birth'].setValue(new Date(data.DateOfBirth));
-      this.employeeForm.controls['identification_mark'].setValue(data.IdentificationMark);
-      this.employeeForm.controls['passport_no'].setValue(data.PassportNo);
-      this.employeeForm.controls['birth_id'].setValue(data.BirthId);
-      this.employeeForm.controls['driving_license_no'].setValue(data.DrivingLicenseNo);
-      //#DropDownLoad
-      this.employeeForm.controls['title_enum_id'].setValue(data.Title_Enum_Id);
+            this.employeeForm.controls['first_name'].setValue(data.FirstName);
+            this.employeeForm.controls['middle_name'].setValue(data.MiddleName);
+            this.employeeForm.controls['sur_name'].setValue(data.SurName);
+            this.employeeForm.controls['father_name'].setValue(data.FatherName);
+            this.employeeForm.controls['mother_name'].setValue(data.MotherName);
+            this.employeeForm.controls['spouse_name'].setValue(data.SpouseName);
+            this.employeeForm.controls['date_of_marriage'].setValue(new Date(data.DateOfMarriage));
+
+            this.employeeForm.controls['personal_phone'].setValue(data.PersonalPhone);
+            this.employeeForm.controls['official_phone'].setValue(data.OfficialPhone);
+            this.employeeForm.controls['personal_email'].setValue(data.PersonalEmail);
+            this.employeeForm.controls['official_email'].setValue(data.OfficialEmail);
+            this.employeeForm.controls['date_of_birth'].setValue(new Date(data.DateOfBirth));
+            this.employeeForm.controls['identification_mark'].setValue(data.IdentificationMark);
+            this.employeeForm.controls['passport_no'].setValue(data.PassportNo);
+            this.employeeForm.controls['birth_id'].setValue(data.BirthId);
+            this.employeeForm.controls['driving_license_no'].setValue(data.DrivingLicenseNo);
+            //#DropDownLoad
+            this.employeeForm.controls['title_enum_id'].setValue(data.Title_Enum_Id);
+
+            this.employeeForm.controls['gender_enum_id'].setValue(data.GenderEnumId);
+
+            this.employeeForm.controls['religion_enum_id'].setValue(data.ReligionEnumId);
+
+            this.employeeForm.controls['blood_group_enum_id'].setValue(data.BloodGroupEnumId);
+
+            this.employeeForm.controls['residentcial_status_enum_id'].setValue(data.ResidentcialStatusEnumId);
+
+            this.employeeForm.controls['marital_status_enum_id'].setValue(data.MaritalStatusEnumId);
+
+
+            this.employeeForm.controls['nationality_id'].setValue(data.NationalityId);
+            this.employeeForm.controls['country_of_birth_id'].setValue(data.CountryOfBirthId);
+            this.employeeForm.controls['ethnicity_id'].setValue(data.EthnicityId);
+            //this.employeeForm.controls['MaritalName'].setValue(data.MaritalName);
+            this.employeeForm.controls['national_id'].setValue(data.NationalId);
+            this.employeeForm.controls['employee_old_code'].setValue(data.EmployeeOldCode);
+
+            this.employeeForm.controls['present_country_id'].setValue(data.PresentCountryId);
+            this.onSelectByPresentCountryId(data.PresentCountryId);
+            this.employeeForm.controls['present_district_id'].setValue(data.PresentDistrictId);
+            this.employeeForm.controls['present_ps_area'].setValue(data.PresentPSArea);
+            this.employeeForm.controls['present_house_no'].setValue(data.PresentHouseNo);
+            this.employeeForm.controls['present_division_id'].setValue(data.PresentDivisionId);
+            this.onSelectByPresentDivisionId(data.PresentDivisionId);
+            this.employeeForm.controls['present_city'].setValue(data.PresentCity);
+            this.employeeForm.controls['present_post_code'].setValue(data.PresentPostCode);
+            this.employeeForm.controls['present_road_no'].setValue(data.PresentRoadNo);
+            this.employeeForm.controls['present_flat_no'].setValue(data.PresentFlatNo);
+            this.employeeForm.controls['present_address_note'].setValue(data.PresentAddressNote);
+            this.employeeForm.controls['present_block'].setValue(data.PresentBlock);
+
+
+            this.employeeForm.controls['permanent_country_id'].setValue(data.PermanentCountryId);
+            this.onSelectByPermanentCountryId(data.PermanentCountryId);
+            this.employeeForm.controls['permanent_district_id'].setValue(data.PermanentDistrictId);
+            this.employeeForm.controls['permanent_ps_area'].setValue(data.PermanentPSArea);
+            this.employeeForm.controls['permanent_house_no'].setValue(data.PermanentHouseNo);
+            this.employeeForm.controls['permanent_division_id'].setValue(data.PermanentDivisionId);
+            this.onSelectByPermanentDivisionId(data.PermanentDivisionId);
+            this.employeeForm.controls['permanent_city'].setValue(data.PermanentCity);
+            this.employeeForm.controls['permanent_post_code'].setValue(data.PermanentPostCode);
+            this.employeeForm.controls['permanent_road_no'].setValue(data.PermanentRoadNo);
+            this.employeeForm.controls['permanent_flat_no'].setValue(data.PermanentFlatNo);
+            this.employeeForm.controls['permanent_address_note'].setValue(data.PermanentAddressNote);
+            this.employeeForm.controls['permanent_block'].setValue(data.PermanentBlock);
+            //# end Dropdownload
+            this.photourllink = data.EmployeeImagePath;
+            this.sigurllink = data.SignatureImagePath;
+
+        });
       
-      this.employeeForm.controls['gender_enum_id'].setValue(data.GenderEnumId);
-       
-      this.employeeForm.controls['religion_enum_id'].setValue(data.ReligionEnumId);
-    
-      this.employeeForm.controls['blood_group_enum_id'].setValue(data.BloodGroupEnumId);
-  
-      this.employeeForm.controls['residentcial_status_enum_id'].setValue(data.ResidentcialStatusEnumId);
-     
-      this.employeeForm.controls['marital_status_enum_id'].setValue(data.MaritalStatusEnumId);
-     
-
-      this.employeeForm.controls['nationality_id'].setValue(data.NationalityId);
-      this.employeeForm.controls['country_of_birth_id'].setValue(data.CountryOfBirthId);
-      this.employeeForm.controls['ethnicity_id'].setValue(data.EthnicityId);
-      //this.employeeForm.controls['MaritalName'].setValue(data.MaritalName);
-      this.employeeForm.controls['national_id'].setValue(data.NationalId);
-      this.employeeForm.controls['employee_old_code'].setValue(data.EmployeeOldCode);
-
-      this.employeeForm.controls['present_country_id'].setValue(data.PresentCountryId);
-      this.onSelectByPresentCountryId(data.PresentCountryId);
-      this.employeeForm.controls['present_district_id'].setValue(data.PresentDistrictId);
-      this.employeeForm.controls['present_ps_area'].setValue(data.PresentPSArea);
-      this.employeeForm.controls['present_house_no'].setValue(data.PresentHouseNo);
-      this.employeeForm.controls['present_division_id'].setValue(data.PresentDivisionId);
-      this.onSelectByPresentDivisionId(data.PresentDivisionId);
-      this.employeeForm.controls['present_city'].setValue(data.PresentCity);
-      this.employeeForm.controls['present_post_code'].setValue(data.PresentPostCode);
-      this.employeeForm.controls['present_road_no'].setValue(data.PresentRoadNo);
-      this.employeeForm.controls['present_flat_no'].setValue(data.PresentFlatNo);
-      this.employeeForm.controls['present_address_note'].setValue(data.PresentAddressNote);
-      this.employeeForm.controls['present_block'].setValue(data.PresentBlock);
-
-
-      this.employeeForm.controls['permanent_country_id'].setValue(data.PermanentCountryId);
-      this.onSelectByPermanentCountryId(data.PermanentCountryId);
-      this.employeeForm.controls['permanent_district_id'].setValue(data.PermanentDistrictId);
-      this.employeeForm.controls['permanent_ps_area'].setValue(data.PermanentPSArea);
-      this.employeeForm.controls['permanent_house_no'].setValue(data.PermanentHouseNo);
-      this.employeeForm.controls['permanent_division_id'].setValue(data.PermanentDivisionId);
-      this.onSelectByPermanentDivisionId(data.PermanentDivisionId);
-      this.employeeForm.controls['permanent_city'].setValue(data.PermanentCity);
-      this.employeeForm.controls['permanent_post_code'].setValue(data.PermanentPostCode);
-      this.employeeForm.controls['permanent_road_no'].setValue(data.PermanentRoadNo);
-      this.employeeForm.controls['permanent_flat_no'].setValue(data.PermanentFlatNo);
-      this.employeeForm.controls['permanent_address_note'].setValue(data.PermanentAddressNote);
-      this.employeeForm.controls['permanent_block'].setValue(data.PermanentBlock);
-      //# end Dropdownload
-      this.photourllink = data.EmployeeImagePath;
-      this.sigurllink = data.SignatureImagePath;
-
-    });
-   // this.displayBasic = true;
-     // this.toggle();
-      this.toggleGridDisplay();
-  }
-
-  deleteEmployee() {
-    this.showDialog();
-    if (this.rowData == null) {
-      return this.notifyService.ShowNotification(3, 'Please select row');
+        this.toggleGridDisplay();
     }
 
-    let employeeId = this.rowData.employee_id;
-    this.employeeService.deleteEmployee(employeeId).subscribe(data => {
+    deleteEmployee() {
+        this.showDialog();
+        if (this.rowData == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
 
-      this.loadAllEmployees();
-      this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
-    });
-    this.display = false;
-  }
+        let employeeId = this.rowData.employee_id;
+        this.employeeService.deleteEmployee(employeeId).subscribe(data => {
+
+            this.loadAllEmployees();
+            this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
+        });
+        this.display = false;
+    }
 
     onFormSubmit() {
-    debugger
-    //for Image Upload
-   
-    const data = this.employeeForm.value;
+      
+        //for Image Upload
 
-    //if (!(data.code)) {
-    //  return this.notifyService.ShowNotification(2, "Please enter Code")
-    //}
-    //if (!(data.first_name)) {
-    //  return this.notifyService.ShowNotification(2, "Please enter First Name")
-    //}
-    //if (!(data.sur_name)) {
-    //  return this.notifyService.ShowNotification(2, "Please enter Sure Name")
-    //}
-    //if (!(data.marital_status_enum_id)) {
-    //  return this.notifyService.ShowNotification(2, "Please select Marital Status")
-    //}
+        const data = this.employeeForm.value;
 
-    //if (!(data.personal_phone)) {
-    //  return this.notifyService.ShowNotification(2, "Please enter Personal Phone")
-    //} if (!(data.personal_email)) {
-    //  return this.notifyService.ShowNotification(2, "Please enter Personal Email")
-    //} if (!(data.date_of_birth)) {
-    //  return this.notifyService.ShowNotification(2, "Please enter Date Of Birth")
-    //} if (!(data.national_id)) {
-    //  return this.notifyService.ShowNotification(2, "Please enter National Id")
-    //} if (!(data.nationality_id)) {
-    //  return this.notifyService.ShowNotification(2, "Please select Nationality")
-    //} if (!(data.country_of_birth_id)) {
-    //  return this.notifyService.ShowNotification(2, "Please select Country Of Birth")
-    //}
-    //if (!(data.ethnicity_id)) {
-    //  return this.notifyService.ShowNotification(2, "Please select Ethnicity")
-    //}
-    //if (!(data.gender_enum_id)) {
-    //  return this.notifyService.ShowNotification(2, "Please select Gender")
-    //} if (!(data.mother_name)) {
-    //  return this.notifyService.ShowNotification(2, "Please select Mother Name")
-    //} if (!(data.religion_enum_id)) {
-    //  return this.notifyService.ShowNotification(2, "Please select Religion")
-    //}  if (!(data.residentcial_status_enum_id)) {
-    //  return this.notifyService.ShowNotification(2, "Please select Residentcial Status")
-    //} if (!(data.father_name)) {
-    //  return this.notifyService.ShowNotification(2, "Please intput father name.")
-    //}if (!(data.father_name)) {
-    //  return this.notifyService.ShowNotification(2, "Please intput father name.")
-    //    }
-    if (this.isEmployeeEdit) {
-        if (!(data.present_country_id)) {
-            return this.notifyService.ShowNotification(2, "Please select present country.")
+        if (this.isEmployeeEdit) {
+            if (!(data.present_country_id)) {
+                return this.notifyService.ShowNotification(2, "Please select present country.")
+            }
+            if (!(data.present_division_id)) {
+                return this.notifyService.ShowNotification(2, "Please select present division.")
+            }
+            if (!(data.present_district_id)) {
+                return this.notifyService.ShowNotification(2, "Please select present district.")
+            }
         }
-        if (!(data.present_division_id)) {
-            return this.notifyService.ShowNotification(2, "Please select present division.")
+        let formData = new FormData();
+        for (const key of Object.keys(this.employeeForm.value)) {
+            const value = this.employeeForm.value[key];
+            if (key == "date_of_marriage") {
+                let date = new Date(value).toISOString();
+                formData.append("date_of_marriage", date);
+            }
+            else if (key == "date_of_birth") {
+                let date = new Date(value).toISOString();
+                formData.append("date_of_birth", date);
+            }
+            else {
+
+                formData.append(key, value);
+            }
+           
+
         }
-        if (!(data.present_district_id)) {
-            return this.notifyService.ShowNotification(2, "Please select present district.")
+
+
+        if (this.isEmployeeEdit) {
+
+            data.employeeId = this.rowData.EmployeeId;
+            formData.append("employee_id", this.rowData.EmployeeId);
+
+            this.employeeService.updateEmployee(formData).subscribe(result => {
+
+                this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
+                this.loadAllEmployees();
+                this.isEmployeeEdit = false;
+            });
+            this.ngOnInit();
         }
-    }
-    let formData = new FormData();
-    for (const key of Object.keys(this.employeeForm.value)) {
-      const value = this.employeeForm.value[key];
-      if (key == "date_of_marriage") {
-        let date = new Date(value).toISOString();
-        formData.append("date_of_marriage", date);
-      }
-      else if (key == "date_of_birth") {
-        let date = new Date(value).toISOString();
-        formData.append("date_of_birth", date);
-      }     
-      else {
+        else {
 
-        formData.append(key, value);
-      }
-      //  formData.append(key, value);
-
-    } //formData.append("user_type_enum_id", this.employeeForm.value.user_type_enum);
-    //for Image Upload
-    console.log(formData)
-
-
-    if (this.isEmployeeEdit) {
-
-      data.employeeId = this.rowData.EmployeeId;
-      formData.append("employee_id", this.rowData.EmployeeId);
-     
-      this.employeeService.updateEmployee(formData).subscribe(result => {
-
-        this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
-        this.loadAllEmployees();
-        this.isEmployeeEdit = false;
-      });
-        this.ngOnInit();
-    }
-    else {
-     
-      this.employeeService.createEmployee(formData).subscribe(
-        result => {
-          this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
-          this.loadAllEmployees();
+            this.employeeService.createEmployee(formData).subscribe(
+                result => {
+                    this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
+                    this.loadAllEmployees();
+                }
+            );
+            this.ngOnInit();
         }
-        );
-        this.ngOnInit();
+
+        // this.displayBasic = false;
+
     }
 
-    // this.displayBasic = false;
+    loadAllEmployees() {
+        this.employeeService.getAllEmployee().subscribe(data => {
+            
+            this.employeeList = data;
+        });
+    }
+ 
+    loadEmployeeTittlesdrpdwn() {
+        this.employeeService.getEmployeeTittle().subscribe(data => {
+            this.drpdwntitleList = data;
+        });
+    }
+    loadEmployeeGenderdrpdwn() {
+        this.employeeService.getEmployeeGender().subscribe(data => {
+            this.drpdwngenderList = data;
+        });
+    }
+    loadEmployeeReligiondrpdwn() {
+        this.employeeService.getEmployeeReligion().subscribe(data => {
+            this.drpdwnreligionList = data;
+        });
+    }
+    loadEmployeeBloodGroupdrpdwn() {
+        this.employeeService.getEmployeeBloodGroup().subscribe(data => {
+            this.drpdwnbloodGroupList = data;
+        });
+    }
+    loadEmployeeResidencialStatusdrpdwn() {
+        this.employeeService.getResidencialStatus().subscribe(data => {
+            this.drpdwnresidencialStatusList = data;
+        });
+    }
 
-  }
+    loadEmployeeMaritalStatusdrpdwn() {
+        this.employeeService.getMaritalStatus().subscribe(data => {
+            this.drpdwnmaritalStatusList = data;
+        });
+    }
 
-  loadAllEmployees() {
-    this.employeeService.getAllEmployee().subscribe(data => {
-      console.log(data)
-      this.employeeList = data;
-    });
-  }
-  //exportPdf() {
-  //  import("jspdf").then(jsPDF => {
-  //    import("jspdf-autotable").then(x => {
-  //      const doc = new jsPDF.default(0, 0);
-  //      doc.autoTable(this.exportColumns, this.employeeList);
-  //      doc.save('products.pdf');
-  //    })
-  //  })
-  //}
-  //  exportColumns(exportColumns: any, employeeList: any[]) {
-  //      throw new Error('Method not implemented.');
-  //  }
-
-  //exportExcel() {
-  //  import("xlsx").then(xlsx => {
-  //    const worksheet = xlsx.utils.json_to_sheet(this.employeeList);
-  //    const workbook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
-  //    const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
-  //    this.saveAsExcelFile(excelBuffer, "products");
-  //  });
-  //}
-  //saveAsExcelFile(buffer: any, fileName: string): void {
-  //  let EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
-  //  let EXCEL_EXTENSION = '.xlsx';
-  //  const data: Blob = new Blob([buffer], {
-  //    type: EXCEL_TYPE
-  //  });
-  //  FileSaver.saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
-  //}
-  //
-  loadEmployeeTittlesdrpdwn() {
-    this.employeeService.getEmployeeTittle().subscribe(data => {
-      this.drpdwntitleList = data;
-    });
-  }
-  loadEmployeeGenderdrpdwn() {
-    this.employeeService.getEmployeeGender().subscribe(data => {
-      this.drpdwngenderList = data;
-    });
-  }
-  loadEmployeeReligiondrpdwn() {
-    this.employeeService.getEmployeeReligion().subscribe(data => {
-      this.drpdwnreligionList = data;
-    });
-  }
-  loadEmployeeBloodGroupdrpdwn() {
-    this.employeeService.getEmployeeBloodGroup().subscribe(data => {
-      this.drpdwnbloodGroupList = data;
-    });
-  }
-  loadEmployeeResidencialStatusdrpdwn() {
-    this.employeeService.getResidencialStatus().subscribe(data => {
-      this.drpdwnresidencialStatusList = data;
-    });
-  }
-
-  loadEmployeeMaritalStatusdrpdwn() {
-    this.employeeService.getMaritalStatus().subscribe(data => {
-      this.drpdwnmaritalStatusList = data;
-    });
-  }
-
-  loadEmployeeNationalitydrpdwn() {
-    this.employeeService.getAllCountry().subscribe(data => {
-      this.drpdwnNationalityList = data;
-    });
-  }
-  loadCountryOfBirthdrpdwn() {
-    this.employeeService.getAllCountry().subscribe(data => {
-      this.drpdwnCountryOfBirthList = data;
-    });
-  }
-  loadEthnicitydrpdwn() {
-    this.employeeService.getAllCountry().subscribe(data => {
-      this.drpdwnEthnicityList = data;
-    });
-  }
-  //Address
-  loadPresentCountrydrpdwn() {
-    this.employeeService.getAllCountry().subscribe(data => {
-      this.drpdwnPresentCountryList = data;
-    });
+    loadEmployeeNationalitydrpdwn() {
+        this.employeeService.getAllCountry().subscribe(data => {
+            this.drpdwnNationalityList = data;
+        });
+    }
+    loadCountryOfBirthdrpdwn() {
+        this.employeeService.getAllCountry().subscribe(data => {
+            this.drpdwnCountryOfBirthList = data;
+        });
+    }
+    loadEthnicitydrpdwn() {
+        this.employeeService.getAllCountry().subscribe(data => {
+            this.drpdwnEthnicityList = data;
+        });
+    }
+    //Address
+    loadPresentCountrydrpdwn() {
+        this.employeeService.getAllCountry().subscribe(data => {
+            this.drpdwnPresentCountryList = data;
+        });
     }
     resetForm() {
         //this.employeeForm.reset();
@@ -700,152 +651,198 @@ export class EmployeebasicinfoComponent implements OnInit {
         this.loadAllEmployees();
         this.employeedataSource = [];
     }
-  //loadPresentDivisiondrpdwn() {
-  //  this.employeeService.getAllDivision().subscribe(data => {
-  //    this.drpdwnPresentDivisionList = data;
-  //  });
-  //}
-  //loadPresentDistrictrpdwn() {
-  //  this.employeeService.getAllDistrict().subscribe(data => {
-  //    this.drpdwnPresentDistrictList = data;
-  //  });
-  //}
-  loadPermanentCountrydrpdwn() {
-    this.employeeService.getAllCountry().subscribe(data => {
-      this.drpdwnPermanentCountryList = data;
-    });
-  }
 
-  //loadPermanentDivisiondrpdwn() {
-  //  this.employeeService.getAllDivision().subscribe(data => {
-  //    this.drpdwnPermanentDivisionList = data;
-  //  });
-  //}
-
-  //loadPermanentDistrictrpdwn() {
-  //  this.employeeService.getAllDistrict().subscribe(data => {
-  //    this.drpdwnPermanentDistrictList = data;
-  //  });
-  //}
-  onSelectByPresentCountryId(countryId: Number) {
-    if (countryId != null) {
-      this.employeeService.getAllDivisionCboListByCountryId(countryId).subscribe(data => {
-        this.drpdwnPresentDivisionList = data;
-      });
+    loadPermanentCountrydrpdwn() {
+        this.employeeService.getAllCountry().subscribe(data => {
+            this.drpdwnPermanentCountryList = data;
+        });
     }
-    else
-      this.drpdwnPresentDivisionList = null;
-  }
 
-  onSelectByPresentDivisionId(divisionId: Number) {
-    if (divisionId != null) {
-      this.employeeService.getAllDistrictCboListByDivisionId(divisionId).subscribe(data => {
-        this.drpdwnPresentDistrictList = data;
-      });
+    onSelectByPresentCountryId(countryId: Number) {
+        if (countryId != null) {
+            this.employeeService.getAllDivisionCboListByCountryId(countryId).subscribe(data => {
+                this.drpdwnPresentDivisionList = data;
+            });
+        }
+        else
+            this.drpdwnPresentDivisionList = null;
     }
-    else
-      this.drpdwnPresentDistrictList = null;
 
-  }
-  onSelectByPermanentCountryId(countryId: Number) {
-    if (countryId != null) {
-      this.employeeService.getAllDivisionCboListByCountryId(countryId).subscribe(data => {
-        this.drpdwnPermanentDivisionList = data;
-      });
+    onSelectByPresentDivisionId(divisionId: Number) {
+        if (divisionId != null) {
+            this.employeeService.getAllDistrictCboListByDivisionId(divisionId).subscribe(data => {
+                this.drpdwnPresentDistrictList = data;
+            });
+        }
+        else
+            this.drpdwnPresentDistrictList = null;
+
     }
-    else
-      this.drpdwnPermanentDivisionList = null;
-  }
-
-  onSelectByPermanentDivisionId(divisionId: Number) {
-    if (divisionId != null) {
-      this.employeeService.getAllDistrictCboListByDivisionId(divisionId).subscribe(data => {
-        this.drpdwnPermanentDistrictList = data;
-      });
+    onSelectByPermanentCountryId(countryId: Number) {
+        if (countryId != null) {
+            this.employeeService.getAllDivisionCboListByCountryId(countryId).subscribe(data => {
+                this.drpdwnPermanentDivisionList = data;
+            });
+        }
+        else
+            this.drpdwnPermanentDivisionList = null;
     }
-    else
-      this.drpdwnPermanentDistrictList = null;
 
-  }
-  //#end Address
+    onSelectByPermanentDivisionId(divisionId: Number) {
+        if (divisionId != null) {
+            this.employeeService.getAllDistrictCboListByDivisionId(divisionId).subscribe(data => {
+                this.drpdwnPermanentDistrictList = data;
+            });
+        }
+        else
+            this.drpdwnPermanentDistrictList = null;
 
-  employeeActiveInactive() {
-    if (this.rowData == null) {
-      return this.notifyService.ShowNotification(3, 'Please select row');
     }
-    //if (this.rowData.IsActive) {
-    //  return this.notifyService.ShowNotification(3, "This policy already approved,you can't edit this policy");
+    //#end Address
+
+    employeeActiveInactive() {
+        if (this.rowData == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+       
+        let employeeId = this.rowData.EmployeeId;
+        this.employeeService.employeeActivity(employeeId).subscribe(
+            result => {
+                this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
+                this.loadAllEmployees();
+            }
+        );
+
+    }
+    //resetForm() {
+    //  this.employeeForm.reset();
+    //  this.isEmployeeEdit = false;
+    //  this.loadAllEmployees();
+    //  this.employeedataSource = [];
     //}
-    let employeeId = this.rowData.EmployeeId;
-    this.employeeService.employeeActivity(employeeId).subscribe(
-      result => {
-        this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
-        this.loadAllEmployees();
-      }
-    );
 
-  }
-  //resetForm() {
-  //  this.employeeForm.reset();
-  //  this.isEmployeeEdit = false;
-  //  this.loadAllEmployees();
-  //  this.employeedataSource = [];
-  //}
+    onSelectImage(event) {
 
-  onSelectImage(event) {
+        if (event.target.files) {
+            var reader = new FileReader()
+            reader.readAsDataURL(event.target.files[0])
+            reader.onload = (event: any) => {
+                this.photourllink = event.target.result
 
-    if (event.target.files) {
-      var reader = new FileReader()
-      reader.readAsDataURL(event.target.files[0])
-      reader.onload = (event: any) => {
-        this.photourllink = event.target.result
+            }
+            alert(this.photourllink)
+            if (event.target.files.length > 0) {
+                const file = event.target.files[0];
+                this.employeeImage.nativeElement.innerText = file.name;
+                this.employeeForm.patchValue({
+                    ImageUpload: file,
+                });
+            }
 
-      }
-      alert(this.photourllink)
-      if (event.target.files.length > 0) {
-        const file = event.target.files[0];
-        this.employeeImage.nativeElement.innerText = file.name;
-        this.employeeForm.patchValue({
-          ImageUpload: file,
-        });
-      }
+        }
+
+    }
+    onSelectSignature(event) {
+        if (event.target.files) {
+            var reader = new FileReader()
+            reader.readAsDataURL(event.target.files[0])
+            reader.onload = (event: any) => {
+                this.sigurllink = event.target.result
+            }
+            if (event.target.files.length > 0) {
+                const file = event.target.files[0];
+                this.employeeSignature.nativeElement.innerText = file.name;
+                this.employeeForm.patchValue({
+                    SignatureUpload: file,
+                });
+            }
+        }
 
     }
 
-  }
-  onSelectSignature(event) {
-    if (event.target.files) {
-      var reader = new FileReader()
-      reader.readAsDataURL(event.target.files[0])
-      reader.onload = (event: any) => {
-        this.sigurllink = event.target.result
-      }
-      if (event.target.files.length > 0) {
-        const file = event.target.files[0];
-        this.employeeSignature.nativeElement.innerText = file.name;
-        this.employeeForm.patchValue({
-          SignatureUpload: file,
+    onSelectFile(event) {
+        if (event.target.files) {
+            var reader = new FileReader()
+            reader.readAsDataURL(event.target.files[0])
+            reader.onload = (event: any) => {
+                this.filellink = event.target.result
+            }
+            if (event.target.files.length > 0) {
+                const file = event.target.files[0];
+                // this.employeeNationalId.nativeElement.innerText = file.name;
+                this.employeeForm.patchValue({
+                    NationalIdUpload: file,
+                });
+            }
+        }
+    }
+    loadLocation() {
+
+        this.employeeService.getLocationByOrganogram().subscribe(data => {
+            this.locationList = data;
         });
-      }
+    }
+    onSelectLocation(location_id: number) {
+
+        if (location_id != null) {
+
+            this.employeeService.getDepartmentByOrganogram(location_id).subscribe(data => {
+                this.departmentList = data;
+            });
+        }
+        else
+            this.departmentList = null;
+    }
+    onSelectDepartment(department_id: number) {
+
+        let location_id = this.employeeOfficialForm.get('location_id')?.value;
+
+        if (department_id != null) {
+
+            this.employeeService.getPositionByOrganogram(location_id, department_id).subscribe(data => {
+                this.positionList = data;
+            });
+        }
+        else
+            this.positionList = null;
     }
 
-  }
-
-  onSelectFile(event) {
-    if (event.target.files) {
-      var reader = new FileReader()
-      reader.readAsDataURL(event.target.files[0])
-      reader.onload = (event: any) => {
-        this.filellink = event.target.result
-      }
-      if (event.target.files.length > 0) {
-        const file = event.target.files[0];
-       // this.employeeNationalId.nativeElement.innerText = file.name;
-        this.employeeForm.patchValue({
-          NationalIdUpload: file,
+    loadDesignation() {
+        this.employeeService.getAllDesignation().subscribe(data => {
+            this.designationList = data;
         });
-      }
-    }
-  }
 
+    }
+
+    loadJobDomicile() {
+        this.employeeService.getJobDomicile().subscribe(data => {
+            this.jobdomicileList = data;
+        });
+
+    }
+    loadJobLocation() {
+        this.employeeService.getJobLocation().subscribe(data => {
+            this.jobLocationList = data;
+        });
+
+    }
+    loadServiceType() {
+        this.employeeService.getServiceType().subscribe(data => {
+            this.serviceTypeList = data;
+        });
+
+    }
+    loadWorkAction() {
+        this.employeeService.getWorkAction().subscribe(data => {
+            this.workActionList = data;
+        });
+
+    }
+
+    loadConfirmationStatus() {
+        this.employeeService.getConfirmationStatus().subscribe(data => {
+            this.confirmationSatusList = data;
+        });
+
+    }
 }
