@@ -5,6 +5,7 @@ using Auth.DataAccess.EntityDataAccess;
 using Auth.DataAccess.Party;
 using Auth.DataAccess.Payroll;
 using Auth.DataAccess.PIMS;
+using Auth.DataAccess.Procurement;
 using Auth.Middleware;
 using Auth.Repository.Administrative;
 using Auth.Repository.Attendance;
@@ -14,11 +15,11 @@ using Auth.Repository.Menu;
 using Auth.Repository.Party;
 using Auth.Repository.Payroll;
 using Auth.Repository.PIMS;
+using Auth.Repository.Procurement;
 using Auth.Repository.UserMenuPermisssion;
 using Auth.Service;
 using Auth.DataAccess.Administrative;
 using DataAccess;
-using DataAccess.Procurement;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -216,9 +217,6 @@ namespace Auth
             services.AddScoped<BankBranchDataAccess, BankBranchDataAccess>();
             services.AddScoped<IBankBranchRepository, BankBranchRepository>();
 
-            services.AddScoped<SupplierApplicationDataAccess, SupplierApplicationDataAccess>();
-            services.AddScoped<ISupplierApplicationRepository, SupplierApplicationRepository>();
-
             services.AddScoped<OrganogramDataAccess, OrganogramDataAccess>();
             services.AddScoped<IOrganogramRepository, OrganogramRepository>();
             
@@ -300,6 +298,15 @@ namespace Auth
             services.AddScoped<IRetailerLocationInfoRepository, RetailerLocationInfoRepository>();
             services.AddScoped<RetailerLocationInfoDataAccess, RetailerLocationInfoDataAccess>();
             #endregion
+            #endregion
+
+            #region Supplier
+
+            services.AddScoped<SupplierApplicationDataAccess, SupplierApplicationDataAccess>();
+            services.AddScoped<ISupplierApplicationRepository, SupplierApplicationRepository>();
+
+            services.AddScoped<SupplierAssessmentDataAccess, SupplierAssessmentDataAccess>();
+            services.AddScoped<ISupplierAssessmentRepository, SupplierAssessmentRepository>();
             #endregion
 
         }

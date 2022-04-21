@@ -712,16 +712,15 @@
                         </div>
                     </p-tabPanel>
                     <p-tabPanel header="Assessment">
-                        <!--<form action="">-->
+                        <!--<form action="" [formGroup]="assessmentScoreForm">-->
                         <div class="col-12">
                             <div class="p-fluid p-formgrid grid">
                                 <div class="p-fluid grid col-12 flex justify-content-start flex-wrap card-container">
-                                    <p-table [value]="criterias" dataKey="supplier_master_information_id" editMode="row">
+                                    <p-table [value]="criterias" dataKey="assessment_criteria_id" editMode="row">
                                         <ng-template pTemplate="header">
                                             <tr>
                                                 <th>SL.</th>
                                                 <th>Consideration of Criteria</th>
-                                                <!--<th>Automatic Weight</th>-->
                                                 <th>Manual  Weight</th>
                                                 <th>Actual Score</th>
                                                 <th>Comments</th>
@@ -730,30 +729,12 @@
                                         </ng-template>
                                         <ng-template pTemplate="body" let-criteria let-editing="editing" let-ri="rowIndex">
                                             <tr [pEditableRow]="criteria">
+                                                <td>{{criteria.assessment_criteria_id}}</td>
+                                                <td>{{criteria.assessment_criteria_name}}</td>
                                                 <td pEditableColumn>
                                                     <p-cellEditor>
                                                         <ng-template pTemplate="input">
-                                                            <input pInputText [(ngModel)]="criteria.assessment_criteria_id">
-                                                        </ng-template>
-                                                        <ng-template pTemplate="output">
-                                                            {{criteria.assessment_criteria_id}}
-                                                        </ng-template>
-                                                    </p-cellEditor>
-                                                </td>
-                                                <td pEditableColumn>
-                                                    <p-cellEditor>
-                                                        <ng-template pTemplate="input">
-                                                            <input pInputText type="text" [(ngModel)]="criteria.assessment_criteria_name" required>
-                                                        </ng-template>
-                                                        <ng-template pTemplate="output">
-                                                            {{criteria.assessment_criteria_name}}
-                                                        </ng-template>
-                                                    </p-cellEditor>
-                                                </td>
-                                                <td pEditableColumn>
-                                                    <p-cellEditor>
-                                                        <ng-template pTemplate="input">
-                                                            <input pInputText type="text" [(ngModel)]="criteria.manual_weight" required>
+                                                            <input pInputText type="number" [(ngModel)]="criteria.manual_weight" required>
                                                         </ng-template>
                                                         <ng-template pTemplate="output">
                                                             {{criteria.manual_weight}}
@@ -763,7 +744,7 @@
                                                 <td pEditableColumn>
                                                     <p-cellEditor>
                                                         <ng-template pTemplate="input">
-                                                            <input pInputText type="text" [(ngModel)]="criteria.actual_weight" required>
+                                                            <input pInputText type="number" [(ngModel)]="criteria.actual_weight" required>
                                                         </ng-template>
                                                         <ng-template pTemplate="output">
                                                             {{criteria.actual_weight}}
@@ -779,6 +760,7 @@
                                                             {{criteria.comments}}
                                                         </ng-template>
                                                     </p-cellEditor>
+
                                                 </td>
                                                 <td style="text-align:center">
                                                     <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" (click)="onRowEditInit(criteria)" class="p-button-rounded p-button-text"></button>
@@ -789,7 +771,7 @@
                                         </ng-template>
                                     </p-table>
                                 </div>
-                                <div class="p-fluid grid col-6 flex justify-content-end flex-wrap card-container">
+                                <!--<div class="p-fluid grid col-6 flex justify-content-end flex-wrap card-container">
                                     <div class="col-4 mt-2 text-right">
                                         <label for="" class=" d-md-inline-flex">Comment</label>
                                     </div>
@@ -820,7 +802,7 @@
                                     <div class="col-8 p-fluid text-right">
                                         <button type="submit" class="pi pi-save risBtn risAdd mr-2" (click)="onFormApprove()"> Approve</button>
                                     </div>
-                                </div>
+                                </div>-->
 
 
                             </div>

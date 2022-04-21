@@ -21,6 +21,31 @@ export class SupplierAssessmentService {
 
     constructor(private http: HttpClient, private ipconfig: IPConfiguration) { }
 
+    createSupplierAssessment(supplierAssessment: any): Observable<any> {
+        return this.http.post<any>(this.ipconfig.base_IP + 'SupplierAssessment/Create', supplierAssessment, httpOptions);
+    }
+
+    updateSupplierAssessment(supplierAssessment: any): Observable<any> {
+        return this.http.post<any>(this.ipconfig.base_IP + 'SupplierAssessment/Update', supplierAssessment, httpOptions);
+    }
+
+
+    getAllSupplierMasterAssessmentCriteria(supplier_id: Number): Observable<any> {
+        return this.http.get<any>(this.ipconfig.base_IP + 'SupplierApplication/getAllSupplierMasterAssessmentCriteria?supplier_id=' + supplier_id, httpOptions);
+    }
+
+
+    approveSupplier(approveFeedbackData: any): Observable<any> {
+        return this.http.post<any>(this.ipconfig.base_IP + 'SupplierApplication/ApproveSupplier', approveFeedbackData, httpOptions);
+    }
+
+    rejectSupplier(rejectFeedbackData: any): Observable<any> {
+        return this.http.post<any>(this.ipconfig.base_IP + 'SupplierApplication/RejectSupplier', rejectFeedbackData, httpOptions);
+    }
+
+    getAllConfirmSupplierInfo(): Observable<any[]> {
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'SupplierApplication/GetAllConfirmSupplierInfo', httpOptions);
+    }
 
     getSupplierId(): Observable<any> {
         return this.http.get(this.ipconfig.base_IP + 'SupplierApplication/GetSupplierId', httpOptions);
@@ -30,8 +55,8 @@ export class SupplierAssessmentService {
         return this.http.get(this.ipconfig.base_IP + 'SupplierApplication/GetSupplierBasicInfoBySupplierId?supplier_id=' + supplier_id, httpOptions);
     }
 
-    getAllConfirmSupplierInfo(): Observable<any[]> {
-        return this.http.get<any[]>(this.ipconfig.base_IP + 'SupplierApplication/GetAllConfirmSupplierInfo', httpOptions);
+    getAllSupplierInfo(): Observable<any[]> {
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'SupplierApplication/GetAllSupplierInfo', httpOptions);
     }
 
     createSupplierApplication(supplierApplication: FormData): Observable<any> {
@@ -40,14 +65,17 @@ export class SupplierAssessmentService {
 
 
     updateSupplierApplication(supplierApplication: FormData): Observable<any> {
-
         return this.http.post<any>(this.ipconfig.base_IP + 'SupplierApplication/Update', supplierApplication, httpOptionsForFileUpload);
-
     }
 
-    DeleteSupplierApplication(supplier_id: Number): Observable<any> {
+    DeleteSupplierApplication(supplier_id: any): Observable<any> {
+        console.log(supplier_id)
+        return this.http.post(this.ipconfig.base_IP + 'SupplierApplication/Delete', { supplier_id }, httpOptions);
+    }
 
-        return this.http.post(this.ipconfig.base_IP + 'SupplierApplication/Delete?supplier_id=' + supplier_id, httpOptions);
+    SubmitSupplierInfoData(supplier_id: any): Observable<any> {
+        console.log(supplier_id)
+        return this.http.post(this.ipconfig.base_IP + 'SupplierApplication/Submit', { supplier_id }, httpOptions);
     }
 
     getAllDomicileEnum(): Observable<any[]> {
@@ -77,6 +105,15 @@ export class SupplierAssessmentService {
     getAllDistrictCboListByDivisionId(division_id): Observable<any[]> {
         return this.http.get<any[]>(this.ipconfig.base_IP + 'District/DistrictCboListByDivisionId?division_id=' + division_id, httpOptions);
     }
+
+    getAllThanaCboListByDistrictId(district_id): Observable<any[]> {
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'Thana/ThanaCboListByDistrictId?district_id=' + district_id, httpOptions);
+    }
+
+    getAllZone(): Observable<any[]> {
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'Zone/ZoneCboList');
+    }
+
 
     //Business
 
@@ -145,6 +182,11 @@ export class SupplierAssessmentService {
         return this.http.get<any>(this.ipconfig.base_IP + 'SupplierApplication/GetAssociationBySupplierId?supplier_id=' + supplier_id, httpOptions);
     }
 
+    deleteAssociationInfo(supplier_association_id: any): Observable<any> {
+        return this.http.post<any>(this.ipconfig.base_IP + 'SupplierApplication/DeleteAssociationBySupplierAssociationId', { supplier_association_id }, httpOptions);
+    }
+
+
     //Legal Document
     getAllDocumentCboList(): Observable<any[]> {
         return this.http.get<any[]>(this.ipconfig.base_IP + 'DocumentType/DocumentTypeCboList', httpOptions);
@@ -163,6 +205,7 @@ export class SupplierAssessmentService {
     }
 
     //Location
+
     getAllLocationTypeCboList(): Observable<any[]> {
         return this.http.get<any[]>(this.ipconfig.base_IP + 'LocationType/LocationTypeCboList', httpOptions);
     }
@@ -170,6 +213,14 @@ export class SupplierAssessmentService {
     updateLocationData(supplierLocation: any): Observable<any> {
         return this.http.post<any>(this.ipconfig.base_IP + 'SupplierApplication/UpdateLocationData', supplierLocation, httpOptions);
     }
+
+    deleteLocationInfo(supplier_location_id: any): Observable<any> {
+        debugger
+        console.log(supplier_location_id)
+        return this.http.post<any>(this.ipconfig.base_IP + 'SupplierApplication/DeleteLocationBySupplierLocationId', { supplier_location_id }, httpOptions);
+    }
+
+
 
     getAllSupplierLocation(supplier_id): Observable<any> {
         return this.http.get<any>(this.ipconfig.base_IP + 'SupplierApplication/GetLocationBySupplierId?supplier_id=' + supplier_id, httpOptions);
@@ -179,6 +230,10 @@ export class SupplierAssessmentService {
 
     updateWarehouseData(supplierWarehouse: any): Observable<any> {
         return this.http.post<any>(this.ipconfig.base_IP + 'SupplierApplication/UpdateWarehouseData', supplierWarehouse, httpOptions);
+    }
+
+    deleteWarehouseInfo(supplier_warehouse_id: any): Observable<any> {
+        return this.http.post<any>(this.ipconfig.base_IP + 'SupplierApplication/DeleteWarehouseBySupplierWarehouseId', { supplier_warehouse_id }, httpOptions);
     }
 
     getAllSupplierWarehouse(supplier_id): Observable<any> {
@@ -227,8 +282,17 @@ export class SupplierAssessmentService {
         return this.http.get<any>(this.ipconfig.base_IP + 'SupplierApplication/GetLocationWiseContactBySupplierId?supplier_id=' + supplier_id, httpOptions);
     }
 
+
     updateContactLocationData(supplierContactLocation: any): Observable<any> {
         return this.http.post<any>(this.ipconfig.base_IP + 'SupplierApplication/UpdateContactLocationData', supplierContactLocation, httpOptions);
+    }
+
+    deleteContactInfo(supplier_contact_id: any): Observable<any> {
+        return this.http.post<any>(this.ipconfig.base_IP + 'SupplierApplication/DeleteContactInfoBySupplierContactId', { supplier_contact_id }, httpOptions);
+    }
+
+    deleteLocationWiseContactInfo(supplier_contact_location_id: any): Observable<any> {
+        return this.http.post<any>(this.ipconfig.base_IP + 'SupplierApplication/DeleteLocationWiseContactBySupplierContactLocationId', { supplier_contact_location_id }, httpOptions);
     }
 
 
@@ -246,6 +310,7 @@ export class SupplierAssessmentService {
         return this.http.get<any[]>(this.ipconfig.base_IP + 'AdministrativeDBEnum/PaymentFrequencyCboList', httpOptions);
     }
 
+
     getAllMfsCboList(): Observable<any[]> {
         return this.http.get<any[]>(this.ipconfig.base_IP + 'Mfs/MfsCboList', httpOptions);
     }
@@ -258,9 +323,6 @@ export class SupplierAssessmentService {
         return this.http.get<any[]>(this.ipconfig.base_IP + 'AdministrativeDBEnum/BankTypeCboList', httpOptions);
     }
 
-    //getAllBankCboList(): Observable<any[]> {
-    //  return this.http.get<any[]>(this.ipconfig.base_IP + 'Bank/BankCboList', httpOptions);
-    //}
 
     getAllBankCboListByBankTypeId(bank_type_id): Observable<any[]> {
         return this.http.get<any[]>(this.ipconfig.base_IP + 'SupplierApplication/getAllBankCboListByBankTypeId?bank_type_id=' + bank_type_id, httpOptions);
@@ -270,9 +332,6 @@ export class SupplierAssessmentService {
         return this.http.get<any[]>(this.ipconfig.base_IP + 'BankBranch/GetAllBankBranchByBankId?bank_id=' + bank_id, httpOptions);
     }
 
-    //GetBankById(bank_id): Observable<any[]> {
-    //  return this.http.get<any[]>(this.ipconfig.base_IP + 'Bank/GetBankById?bank_id=' + bank_id, httpOptions);
-    //}
 
     GetBankById(bank_id: Number): Observable<any> {
         return this.http.get<any>(this.ipconfig.base_IP + 'Bank/GetBankById?bank_id=' + bank_id, httpOptions);
@@ -293,8 +352,16 @@ export class SupplierAssessmentService {
         return this.http.post<any>(this.ipconfig.base_IP + 'SupplierApplication/UpdateMobileBankingData', supplierMobileBanking, httpOptions);
     }
 
+    deleteMFSAccount(supplier_mobile_bank_id: any): Observable<any> {
+        return this.http.post<any>(this.ipconfig.base_IP + 'SupplierApplication/DeleteMFSAccountBySupplierMFSAccountId', { supplier_mobile_bank_id }, httpOptions);
+    }
+
     UpdateBankAccountData(supplierBanking: any): Observable<any> {
         return this.http.post<any>(this.ipconfig.base_IP + 'SupplierApplication/UpdateBankAccountData', supplierBanking, httpOptions);
+    }
+
+    deleteBankAccount(supplier_bank_account_id: any): Observable<any> {
+        return this.http.post<any>(this.ipconfig.base_IP + 'SupplierApplication/DeleteBankAccountBySupplierBankAccountId', { supplier_bank_account_id }, httpOptions);
     }
 
     getAllSupplierMFS(supplier_id): Observable<any> {
@@ -312,20 +379,5 @@ export class SupplierAssessmentService {
     getAllSupplierCreditHistory(supplier_id: Number): Observable<any> {
         return this.http.get<any>(this.ipconfig.base_IP + 'SupplierApplication/getAllSupplierCreditHistory?supplier_id=' + supplier_id, httpOptions);
     }
-
-    getAllSupplierMasterAssessmentCriteria(supplier_id: Number): Observable<any> {
-        return this.http.get<any>(this.ipconfig.base_IP + 'SupplierApplication/getAllSupplierMasterAssessmentCriteria?supplier_id=' + supplier_id, httpOptions);
-    }
-
-    approveSupplier(approveFeedbackData: any): Observable<any> {
-        return this.http.post<any>(this.ipconfig.base_IP + 'SupplierApplication/ApproveSupplier', approveFeedbackData, httpOptions);
-    }
-
-    rejectSupplier(rejectFeedbackData: any): Observable<any> {
-        return this.http.post<any>(this.ipconfig.base_IP + 'SupplierApplication/RejectSupplier', rejectFeedbackData, httpOptions);
-    }
-
-
-
 
 }

@@ -1,8 +1,8 @@
 ﻿using Auth.Model.Procurement.Model;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 
-namespace Auth.Service
+
+namespace Auth.Repository.Procurement
 {
     public interface ISupplierApplicationRepository
     {
