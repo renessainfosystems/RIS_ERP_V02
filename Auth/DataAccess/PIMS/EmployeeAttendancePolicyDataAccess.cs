@@ -45,14 +45,54 @@ namespace Auth.DataAccess.PIMS
         public async Task<dynamic> IUD(EmployeeAttendancePolicy oEmployeeAttendancePolicy)
         {
             var oMessage = new CommonMessage();
+            var oResult = (dynamic)null;
             var parameters = ParameterBinding(oEmployeeAttendancePolicy);
 
             try
             {
                 _dbConnection.Open();
-                dynamic data = await _dbConnection.QueryFirstOrDefaultAsync("[PIMS].[SP_Employee_Attendance_Policy_IUD]", parameters, commandType: CommandType.StoredProcedure);                
-                oMessage = CommonMessage.Message(data);
+                var oDataList = await _dbConnection.QueryMultipleAsync("[PIMS].[SP_Employee_Attendance_Policy_IUD]", parameters, commandType: CommandType.StoredProcedure);
+                {
+                    List<dynamic> oAttPolicys = oDataList.Read().ToList();
+                    List<dynamic> oDayoffs = oDataList.Read().ToList();
+                    List<dynamic> oBenefitPolicys = oDataList.Read().ToList();
+                    List<dynamic> oLeaveLedgers = oDataList.Read().ToList();
 
+                    if (oAttPolicys.Count > 0)
+                    {
+                        oResult = (from oObj in oAttPolicys select EmployeeAttendancePolicyViewModel.ConvertToModel(oObj)).Single();
+
+                        List<EmployeeDayoffViewModel> oEmpDayoffs = new List<EmployeeDayoffViewModel>();
+                        List<EmployeeBenefitPolicyViewModel> oEmpBenefitPolicys = new List<EmployeeBenefitPolicyViewModel>();
+                        List<EmployeeLeaveLedgerViewModel> oEmpLeaveLedgers = new List<EmployeeLeaveLedgerViewModel>();
+
+                        if (oDayoffs.Count > 0)
+                        {
+                            foreach (EmployeeDayoffViewModel oItem in (from oObj in oDayoffs select EmployeeDayoffViewModel.ConvertToModel(oObj)))
+                            {
+                                oEmpDayoffs.Add(oItem);
+                            }
+                            oResult.EmployeeDayoffViews = oEmpDayoffs;
+                        }
+                        if (oBenefitPolicys.Count > 0)
+                        {
+                            foreach (EmployeeBenefitPolicyViewModel oItem in (from oObj in oBenefitPolicys select EmployeeBenefitPolicyViewModel.ConvertToModel(oObj)))
+                            {
+                                oEmpBenefitPolicys.Add(oItem);
+                            }
+                            oResult.EmployeeBenefitPolicyViews = oEmpBenefitPolicys;
+                        }
+                        if (oLeaveLedgers.Count > 0)
+                        {
+                            foreach (EmployeeLeaveLedgerViewModel oItem in (from oObj in oLeaveLedgers select EmployeeLeaveLedgerViewModel.ConvertToModel(oObj)))
+                            {
+                                oEmpLeaveLedgers.Add(oItem);
+                            }
+                            oResult.EmployeeLeaveLedgerViews = oEmpLeaveLedgers;
+                        }
+                    }
+                }
+                oMessage = CommonMessage.Message(oDataList);
             }
             catch (Exception ex)
             {
@@ -69,19 +109,58 @@ namespace Auth.DataAccess.PIMS
         //Get employee day off by employee id
         public async Task<dynamic> Get(long nEmployeeId)
         {
-            var result = (dynamic)null;
+            var oResult = (dynamic)null;
             try
             {
-                var sql = "SELECT * FROM PIMS.View_Employee_Attendance_Policy WHERE employee_id= @param_employee_id";
+                var sql = "SELECT * FROM PIMS.View_Employee_Attendance_Policy WHERE employee_id= @param_employee_id" +// Single Employee Attendance Policy 
+                " SELECT * FROM PIMS.View_Employee_Dayoff WHERE employee_id=@param_employee_id;" +// Multiple Employee Day offs
+                " SELECT * FROM PIMS.View_Employee_Benefit_Policy WHERE employee_id=@param_employee_id;" + // Multiple Employee benefits
+                " SELECT * FROM PIMS.View_Employee_Leave_Ledger WHERE employee_id=@param_employee_id;"; //Multipla Employee Leave ledger
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@param_employee_id", nEmployeeId);
 
                 _dbConnection.Open();
-                dynamic data = await _dbConnection.QueryAsync<dynamic>(sql, parameters);
-                if (data != null)
+                var oDataList = await _dbConnection.QueryMultipleAsync(sql, parameters);
+                if (oDataList != null)
                 {
-                    List<dynamic> dataList = data;
-                    result = (from dr in dataList select EmployeeAttendancePolicyViewModel.ConvertToModel(dr)).ToList();
+                    List<dynamic> oAttPolicys = oDataList.Read().ToList();
+                    List<dynamic> oDayoffs = oDataList.Read().ToList();
+                    List<dynamic> oBenefitPolicys = oDataList.Read().ToList();
+                    List<dynamic> oLeaveLedgers = oDataList.Read().ToList();
+
+                    if (oAttPolicys.Count > 0)
+                    {
+                        oResult = (from oObj in oAttPolicys select EmployeeAttendancePolicyViewModel.ConvertToModel(oObj)).Single();
+
+                        List<EmployeeDayoffViewModel> oEmpDayoffs = new List<EmployeeDayoffViewModel>();
+                        List<EmployeeBenefitPolicyViewModel> oEmpBenefitPolicys = new List<EmployeeBenefitPolicyViewModel>();
+                        List<EmployeeLeaveLedgerViewModel> oEmpLeaveLedgers = new List<EmployeeLeaveLedgerViewModel>();
+
+                        if (oDayoffs.Count > 0)
+                        {
+                            foreach (EmployeeDayoffViewModel oItem in (from oObj in oDayoffs select EmployeeDayoffViewModel.ConvertToModel(oObj)))
+                            {
+                                oEmpDayoffs.Add(oItem);
+                            }
+                            oResult.EmployeeDayoffViews = oEmpDayoffs;
+                        }
+                        if (oBenefitPolicys.Count > 0)
+                        {
+                            foreach (EmployeeBenefitPolicyViewModel oItem in (from oObj in oBenefitPolicys select EmployeeBenefitPolicyViewModel.ConvertToModel(oObj)))
+                            {
+                                oEmpBenefitPolicys.Add(oItem);
+                            }
+                            oResult.EmployeeBenefitPolicyViews = oEmpBenefitPolicys;
+                        }
+                        if (oLeaveLedgers.Count > 0)
+                        {
+                            foreach (EmployeeLeaveLedgerViewModel oItem in (from oObj in oLeaveLedgers select EmployeeLeaveLedgerViewModel.ConvertToModel(oObj)))
+                            {
+                                oEmpLeaveLedgers.Add(oItem);
+                            }
+                            oResult.EmployeeLeaveLedgerViews = oEmpLeaveLedgers;
+                        }
+                    }
                 }
             }
             catch (Exception ex)
@@ -93,7 +172,7 @@ namespace Auth.DataAccess.PIMS
             {
                 _dbConnection.Dispose();
             }
-            return result;
+            return oResult;
         }
     }
 }

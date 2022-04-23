@@ -398,6 +398,34 @@ namespace Auth.DataAccess.Attendance
 
             return (result);
         }
+        public async Task<dynamic> GetShiftForDP(int nAttendancePolicyId)
+        {   
+            var oResult = (dynamic)null;  
+
+            try
+            {
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@param_attendance_policy_id", nAttendancePolicyId);               
+                
+                var sql = "SELECT SI.shift_id,SI.shift_name+'('+Convert(varchar(5),SI.[shift_start]) +'-'+ Convert(varchar(5),SI.[shift_end])+')' shift_name FROM Attendance.Shift_Info SI" +
+                            " WHERE SI.shift_id IN(SELECT APS.shift_id FROM Attendance.Attendance_Policy_Shift APS WHERE APS.attendance_policy_id= @param_attendance_policy_id)" +
+                            "AND SI.is_active = 1";
+                _dbConnection.Open();
+                oResult = await _dbConnection.QueryAsync<dynamic>(sql, parameters);
+
+            }
+            catch (Exception ex)
+            {
+                _dbConnection.Dispose();
+                throw ex.InnerException;
+            }
+            finally
+            {
+
+                _dbConnection.Dispose();
+            }
+            return (oResult);
+        }
         public async Task<dynamic> GetAllShiftByFiltering(ShiftFiltering shiftFiltering)
         {
             var message = new CommonMessage();
