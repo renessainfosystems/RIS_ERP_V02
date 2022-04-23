@@ -6,3 +6,4 @@ obj
 /WebApp/.angular/cache/angular-webpack
 
 
+/WebApp/node_modules/.staging
