@@ -1,14 +1,12 @@
-﻿using Auth.Model.Procurement.Model;
-using DataAccess.Procurement;
+﻿using Auth.DataAccess.Procurement;
+using Auth.Model.Procurement.Model;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Linq;
 
 
 
 
 
-namespace Auth.Service
+namespace Auth.Repository.Procurement
 {
     public class SupplierApplicationRepository : ISupplierApplicationRepository
     {

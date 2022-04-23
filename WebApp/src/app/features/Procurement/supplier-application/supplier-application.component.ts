@@ -1318,7 +1318,6 @@ export class SupplierApplicationComponent implements OnInit {
             if (this.dataSubSectorExist(industrySubSectorId)) {
                 return this.notifyService.ShowNotification(2, "Selected Sub Sector already added")
             }
-
             else {
                 if (this.subSectorDataSources.includes(this.businessApplicationForm.get('industry_sub_sector_id')?.value)) {
                     return this.toastr.warning("Please select Sub Sector")

@@ -59,15 +59,39 @@ namespace Auth.DataAccess.PIMS
         }
 
         //Insert, Update and Delete record
-        public async Task<dynamic> IUD_EmployeeOfficial(EmployeeOfficial oEmployeeOfficial, int nDBOperation)
-        {            
+        public async Task<dynamic> IUD(EmployeeOfficial oEmployeeOfficial, int nDBOperation)
+        {
+            //var oResultList = (dynamic)null;
             var oMessage = new CommonMessage();
             var parameters = ParameterBinding(oEmployeeOfficial,nDBOperation);
-
+            
             try
             {
                 _dbConnection.Open();
-                dynamic data = await _dbConnection.QueryFirstOrDefaultAsync("[PIMS].[SP_Employee_Official_IUD]", parameters, commandType: CommandType.StoredProcedure);
+                dynamic data = await _dbConnection.QueryMultipleAsync("[PIMS].[SP_Employee_Official_IUD]", parameters, commandType: CommandType.StoredProcedure);
+                //dynamic oDataList = await _dbConnection.QueryMultipleAsync("[PIMS].[SP_Employee_Official_IUD]", parameters, commandType: CommandType.StoredProcedure);
+
+                //if (oDataList != null)
+                //{
+                //    oResultList = oDataList.Read<EmployeeOfficial>().Single();
+                //    List<dynamic> dataList = oDataList.Read();
+                //    result = (from dr in dataList select EmployeeDayoffViewModel.ConvertToModel(dr)).ToList();
+                //    List<dynamic> oEmpAttPolicy=
+
+
+                //    var oEmployeeAttendancePolicyView = oDataList.Read<EmployeeAttendancePolicyViewModel>().Single();
+                //    var oEmployeeDayoffViews = oDataList.Read<EmployeeDayoffViewModel>().ToList();
+                //    var oEmployeeBenefitPolicyViews = oDataList.Read<EmployeeBenefitPolicyViewModel>().ToList();
+                //    var oEmployeeLeaveLedgerViews = oDataList.Read<EmployeeLeaveLedgerViewModel>().ToList();
+
+                //    var abc = oEmployeeOfficial.EmployeeAttendancePolicyView
+
+                //    oResultList.EmployeeAttendancePolicyView = oEmployeeAttendancePolicyView;
+                //    oResultList.attendance_Policy_Benefits = benefitPolicy;
+                //    oResultList.attendance_Policy_Leaves = leavePolicy;
+                //    oResultList.attendance_Policy_Dayoffs = dayoffPolicy;
+                //}
+
                 oMessage = CommonMessage.Message(nDBOperation, data);
             }
             catch(Exception ex)
@@ -83,7 +107,7 @@ namespace Auth.DataAccess.PIMS
         }
 
         //Get employee official by employee id
-        public async Task<dynamic> GetEmployeeOfficialById(long nEmployeeId)
+        public async Task<dynamic> Get(long nEmployeeId)
         {
             var result = (dynamic)null;
             try

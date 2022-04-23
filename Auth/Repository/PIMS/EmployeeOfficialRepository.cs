@@ -14,13 +14,13 @@ namespace Auth.Repository.PIMS
             _DataAccess = oEmployeeOfficialDataAccess;
         }
 
-        public async Task<dynamic> IUD_EmployeeOfficial(EmployeeOfficial oEmployeeOfficial, int dbOperation)
+        public async Task<dynamic> IUD(EmployeeOfficial oEmployeeOfficial, int dbOperation)
         {
-            return await _DataAccess.IUD_EmployeeOfficial(oEmployeeOfficial, dbOperation);
+            return await _DataAccess.IUD(oEmployeeOfficial, dbOperation);
         }
-        public async Task<dynamic> GetEmployeeOfficialById(long Employee_id)
+        public async Task<dynamic> Get(long Employee_id)
         {
-            return await _DataAccess.GetEmployeeOfficialById(Employee_id);
+            return await _DataAccess.Get(Employee_id);
         }
     }
 }

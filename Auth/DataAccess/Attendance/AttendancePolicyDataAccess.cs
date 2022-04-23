@@ -508,7 +508,7 @@ namespace Auth.DataAccess.Attendance
             try
             {
                 var sql = " SELECT * FROM [Attendance].[View_AttendancePolicies] s " +
-                "WHERE S.is_active=1 AND S.company_group_id = CASE WHEN(isShared = 1) THEN @param_company_group_id ELSE S.company_group_id END AND S.company_id = CASE WHEN(isShared = 0) THEN @param_company_id ELSE S.company_id END ORDER BY S.attendance_policy_id DESC";
+                "WHERE S.is_active=1 AND ISNULL(approve_user_id,0)>0 AND S.company_group_id = CASE WHEN(isShared = 1) THEN @param_company_group_id ELSE S.company_group_id END AND S.company_id = CASE WHEN(isShared = 0) THEN @param_company_id ELSE S.company_id END ORDER BY S.attendance_policy_id DESC";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@param_company_group_id", company_group_id);
                 parameters.Add("@param_company_id", company_id);

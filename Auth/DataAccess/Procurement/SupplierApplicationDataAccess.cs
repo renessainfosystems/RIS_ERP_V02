@@ -1,17 +1,4 @@
-﻿//using Auth.Model.Procurement.Model;
-//using Auth.Model.Procurement.ViewModel;
-//using Auth.Utility.Procurement;
-//using Auth.Utility.Procurement.Enum;
-//using Dapper;
-//using Microsoft.AspNetCore.Http;
-//using Microsoft.Extensions.Configuration;
-//using System;
-//using System.Collections.Generic;
-//using System.Data;
-//using System.Linq;
-//using System.Threading.Tasks;
-
-using Auth.Model.Procurement.Model;
+﻿using Auth.Model.Procurement.Model;
 using Auth.Model.Procurement.ViewModel;
 using Auth.Utility;
 using Dapper;
@@ -27,7 +14,7 @@ using static Auth.Utility.CommonMessage;
 
 
 
-namespace DataAccess.Procurement
+namespace Auth.DataAccess.Procurement
 {
     public class SupplierApplicationDataAccess
     {

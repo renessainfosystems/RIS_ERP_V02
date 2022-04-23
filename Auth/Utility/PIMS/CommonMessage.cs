@@ -33,7 +33,7 @@ namespace Auth.Utility.PIMS
         public static string CommonUpdateMessage = "Data has been updated successfully";
         public static string CommonMailMessage = "Email Sent successfully";
         public static string CommonApproveMessage = "Approved successfully";
-        public static string CommonCopyMessage = "Copied successfully";
+        public static string CommonCopyMessage = "Copied successfully";        
 
         public static CommonMessage Message(int nDBOperation, dynamic data = null)
         {
@@ -53,6 +53,20 @@ namespace Auth.Utility.PIMS
                     sMsg.MessageType = MessageTypes.Error;
                     sMsg.CurrentMessage = CommonErrorMessage;
                 }
+            }
+            return sMsg;
+        }
+
+        public static CommonMessage Message(dynamic data = null)
+        {
+            var sMsg = new CommonMessage();
+            sMsg.MessageType = MessageTypes.Success;
+            sMsg.CurrentMessage = CommonSaveMessage;
+            if (data != null) sMsg.Data = data;
+            else
+            {                
+                sMsg.MessageType = MessageTypes.Error;
+                sMsg.CurrentMessage = CommonErrorMessage;
             }
             return sMsg;
         }

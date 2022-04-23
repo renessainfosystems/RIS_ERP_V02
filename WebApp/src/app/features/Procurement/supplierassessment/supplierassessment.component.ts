@@ -39,6 +39,7 @@ export class SupplierAssessmentComponent implements OnInit {
     mobileBankingApplicationForm: FormGroup;
     bankingApplicationForm: FormGroup;
     AssesmentApplicationForm: FormGroup;
+    assessmentScoreForm: FormGroup;
 
 
 
@@ -202,7 +203,7 @@ export class SupplierAssessmentComponent implements OnInit {
 
     /*  products2: Product[];*/
     selectedItemsList = [];
-    checkedIDs = [];
+    assessmentScore = [];
 
 
     //Association Info
@@ -594,15 +595,26 @@ export class SupplierAssessmentComponent implements OnInit {
         this.bankingApplicationForm.controls['bank_branch_routing'].disable();
         this.bankingApplicationForm.controls['bank_swift_code'].disable();
 
-        this.AssesmentApplicationForm = this.formbulider.group({
-            comment: ['', [Validators.required]],
-            suggestion: ['', [Validators.required]],
-            category_id: [''],
-            category_name: [''],
-        });
-        this.LoadAllBankTypeCboList();
-        this.AssesmentApplicationForm.controls['comment'].disable();
-        this.AssesmentApplicationForm.controls['suggestion'].disable();
+        //this.AssesmentApplicationForm = this.formbulider.group({
+        //    comment: ['', [Validators.required]],
+        //    suggestion: ['', [Validators.required]],
+        //    category_id: [''],
+        //    category_name: [''],
+        //});
+        //this.LoadAllBankTypeCboList();
+        //this.AssesmentApplicationForm.controls['comment'].disable();
+        //this.AssesmentApplicationForm.controls['suggestion'].disable();
+
+        //this.assessmentScoreForm = this.formbulider.group({
+
+        //    assessment_criteria_id: ['', [Validators.required]],
+        //    assessment_criteria_name: ['', [Validators.required]],
+        //    manual_weight: ['', [Validators.required]],
+        //    actual_weight: ['', [Validators.required]],
+        //    comments: ['', [Validators.required]],
+        //});
+
+
 
 
     }
@@ -789,6 +801,9 @@ export class SupplierAssessmentComponent implements OnInit {
         this.SupplierAssessmentService.getAllSupplierMasterAssessmentCriteria(supplierId).subscribe(data => {
             debugger
             this.criterias = data;
+
+            /*this.clonedProducts[criteria.assessment_criteria_id] = { ...criteria };*/
+            /*      this.onRowEditInit(criterias);*/
         });
 
         //this.AssesmentApplicationForm.controls['comment'].enable();
@@ -802,6 +817,8 @@ export class SupplierAssessmentComponent implements OnInit {
             this.supplierinfoList = data;
         });
     }
+
+
 
 
     loadAllDomicileEnum() {
@@ -1425,12 +1442,48 @@ export class SupplierAssessmentComponent implements OnInit {
     }
 
     onRowEditInit(criteria: Criteria) {
-        debugger
         this.clonedProducts[criteria.assessment_criteria_id] = { ...criteria };
     }
 
+
     onRowEditSave(criteria: Criteria) {
+        debugger
+
         if (criteria.assessment_criteria_id > 0) {
+
+            //if (this.rowData == null) {
+            //    return this.notifyService.ShowNotification(3, 'Please select supplier first');
+            //}
+
+            ////for validation message -----------
+            //this.submittedAssociation = true;
+            //const associationData = this.associationsApplicationForm.value;
+            //if (this.associationsApplicationForm.invalid) {
+            //    return;
+            //}
+            ////end validation messate -----------
+
+            //this.dataSaved = false;
+       /*     let supplierId = this.rowData.SupplierId;*/
+            let assessment_criteria_id = criteria.assessment_criteria_id;
+            let criteria_type = 1;
+            let manual_weight = criteria.manual_weight;
+            let actual_weight = criteria.actual_weight;
+            let comments = criteria.comments;
+            let supplierId = this.supplierApplicationForm.get('supplier_code')?.value;
+
+            //let association_id = this.associationsApplicationForm.get('association_id')?.value.association_id;
+
+            const scoreobj = { supplier_id: supplierId, assessment_criteria_id: assessment_criteria_id, criteria_type: criteria_type, manual_weight: manual_weight, actual_weight: actual_weight, comments: comments }
+       /*     this.assessmentScore.push(scoreobj);*/
+
+            this.SupplierAssessmentService.createSupplierAssessment(scoreobj).subscribe(data => {
+                this.dataSaved = true;
+               // this.loadAllSupplierAssociation();
+
+                this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage);
+            });
+
             delete this.clonedProducts[criteria.assessment_criteria_id];
             this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Product is updated' });
         }
@@ -1443,7 +1496,6 @@ export class SupplierAssessmentComponent implements OnInit {
         this.criterias[index] = this.clonedProducts[criteria.assessment_criteria_id];
         delete this.clonedProducts[criteria.assessment_criteria_id];
     }
-
 
 }
 
