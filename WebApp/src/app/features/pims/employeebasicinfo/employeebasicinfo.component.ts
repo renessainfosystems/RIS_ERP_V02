@@ -598,6 +598,9 @@ export class EmployeebasicinfoComponent implements OnInit {
             this.employeeService.createEmployee(formData).subscribe(
                 result => {
                     this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
+                    this.isEmployeeEdit = true;
+                    // //result.Data[0].organogram_id
+                    formData.append("employee_id", result.Data[0].employee_id);
                     this.loadAllEmployees();
                 }
             );
