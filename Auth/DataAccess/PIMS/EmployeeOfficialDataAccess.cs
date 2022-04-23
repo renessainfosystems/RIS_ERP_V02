@@ -45,8 +45,8 @@ namespace Auth.DataAccess.PIMS
                 parameters.Add("@param_job_location_id", oEmployeeOfficial.job_location_id ?? 0, DbType.Int32);
                 parameters.Add("@param_date_of_join", oEmployeeOfficial.date_of_join, DbType.DateTime);
                 parameters.Add("@param_date_of_confirmation", oEmployeeOfficial.date_of_confirmation, DbType.DateTime);
-                parameters.Add("@param_created_user_id", currentUserInfoId ?? 0, DbType.Int32);
-                //parameters.Add("@param_created_user_id", oEmployeeOfficial.created_user_id ?? 0, DbType.Int32);
+                //parameters.Add("@param_created_user_id", currentUserInfoId ?? 0, DbType.Int32);
+                parameters.Add("@param_created_user_id", oEmployeeOfficial.created_user_id ?? 0, DbType.Int32);
                 parameters.Add("@param_DBOperation", nOperationType == (int)GlobalEnumList.DBOperation.Create ? GlobalEnumList.DBOperation.Create : GlobalEnumList.DBOperation.Update);
             }
             else if (nOperationType == (int)GlobalEnumList.DBOperation.Delete)
@@ -61,38 +61,55 @@ namespace Auth.DataAccess.PIMS
         //Insert, Update and Delete record
         public async Task<dynamic> IUD(EmployeeOfficial oEmployeeOfficial, int nDBOperation)
         {
-            //var oResultList = (dynamic)null;
+            var oResult = (dynamic)null;
             var oMessage = new CommonMessage();
             var parameters = ParameterBinding(oEmployeeOfficial,nDBOperation);
             
             try
             {
                 _dbConnection.Open();
-                dynamic data = await _dbConnection.QueryMultipleAsync("[PIMS].[SP_Employee_Official_IUD]", parameters, commandType: CommandType.StoredProcedure);
-                //dynamic oDataList = await _dbConnection.QueryMultipleAsync("[PIMS].[SP_Employee_Official_IUD]", parameters, commandType: CommandType.StoredProcedure);
+                var oDataList = await _dbConnection.QueryMultipleAsync("[PIMS].[SP_Employee_Official_IUD]", parameters, commandType: CommandType.StoredProcedure);
+                if (oDataList != null)
+                {
+                    oResult = oDataList.Read<EmployeeOfficial>().Single();
+                    List<dynamic> oAttPolicys = oDataList.Read().ToList();
+                    List<dynamic> oDayoffs = oDataList.Read().ToList();
+                    List<dynamic> oBenefitPolicys = oDataList.Read().ToList();
+                    List<dynamic> oLeaveLedgers = oDataList.Read().ToList();
 
-                //if (oDataList != null)
-                //{
-                //    oResultList = oDataList.Read<EmployeeOfficial>().Single();
-                //    List<dynamic> dataList = oDataList.Read();
-                //    result = (from dr in dataList select EmployeeDayoffViewModel.ConvertToModel(dr)).ToList();
-                //    List<dynamic> oEmpAttPolicy=
+                    oResult.EmployeeAttendancePolicyView = (from oObj in oAttPolicys select EmployeeAttendancePolicyViewModel.ConvertToModel(oObj)).Single();
 
+                    List<EmployeeDayoffViewModel> oEmpDayoffs = new List<EmployeeDayoffViewModel>();
+                    List<EmployeeBenefitPolicyViewModel> oEmpBenefitPolicys = new List<EmployeeBenefitPolicyViewModel>();
+                    List<EmployeeLeaveLedgerViewModel> oEmpLeaveLedgers = new List<EmployeeLeaveLedgerViewModel>();
 
-                //    var oEmployeeAttendancePolicyView = oDataList.Read<EmployeeAttendancePolicyViewModel>().Single();
-                //    var oEmployeeDayoffViews = oDataList.Read<EmployeeDayoffViewModel>().ToList();
-                //    var oEmployeeBenefitPolicyViews = oDataList.Read<EmployeeBenefitPolicyViewModel>().ToList();
-                //    var oEmployeeLeaveLedgerViews = oDataList.Read<EmployeeLeaveLedgerViewModel>().ToList();
+                    if (oDayoffs != null)
+                    {
+                        foreach (EmployeeDayoffViewModel oItem in (from oObj in oDayoffs select EmployeeDayoffViewModel.ConvertToModel(oObj)))
+                        {
+                            oEmpDayoffs.Add(oItem);
+                        }
+                        oResult.EmployeeAttendancePolicyView.EmployeeDayoffViews = oEmpDayoffs;
+                    }
+                    if (oBenefitPolicys != null)
+                    {
+                        foreach (EmployeeBenefitPolicyViewModel oItem in (from oObj in oBenefitPolicys select EmployeeBenefitPolicyViewModel.ConvertToModel(oObj)))
+                        {
+                            oEmpBenefitPolicys.Add(oItem);
+                        }
+                        oResult.EmployeeAttendancePolicyView.EmployeeBenefitPolicyViews = oEmpBenefitPolicys;
+                    }
+                    if (oLeaveLedgers != null)
+                    {
+                        foreach (EmployeeLeaveLedgerViewModel oItem in (from oObj in oLeaveLedgers select EmployeeLeaveLedgerViewModel.ConvertToModel(oObj)))
+                        {
+                            oEmpLeaveLedgers.Add(oItem);
+                        }
+                        oResult.EmployeeAttendancePolicyView.EmployeeLeaveLedgerViews = oEmpLeaveLedgers;
+                    }
+                }
 
-                //    var abc = oEmployeeOfficial.EmployeeAttendancePolicyView
-
-                //    oResultList.EmployeeAttendancePolicyView = oEmployeeAttendancePolicyView;
-                //    oResultList.attendance_Policy_Benefits = benefitPolicy;
-                //    oResultList.attendance_Policy_Leaves = leavePolicy;
-                //    oResultList.attendance_Policy_Dayoffs = dayoffPolicy;
-                //}
-
-                oMessage = CommonMessage.Message(nDBOperation, data);
+                oMessage = CommonMessage.Message(nDBOperation, oResult);
             }
             catch(Exception ex)
             {
@@ -109,29 +126,79 @@ namespace Auth.DataAccess.PIMS
         //Get employee official by employee id
         public async Task<dynamic> Get(long nEmployeeId)
         {
-            var result = (dynamic)null;
+            var oResult = (dynamic)null;
             try
             {
                 var sql = "SELECT [employee_id],[organogram_detail_id],[company_id],[location_id],[department_id],[position_id],[designation_id],[job_domicile_id]" +
                             ",[service_type_id],[confirmation_status_id],[working_action_id],[job_location_id],FORMAT([date_of_join],'dd-MMM-yyyy') AS [date_of_join],FORMAT([date_of_confirmation],'dd-MMM-yyyy') AS [date_of_confirmation],[created_user_id]" +
                             " FROM [PIMS].[Employee_Official]" +
-                            " WHERE [employee_id] = @param_employee_id";
+                            " WHERE [employee_id] = @param_employee_id;" +
+
+                            " SELECT * FROM PIMS.View_Employee_Attendance_Policy WHERE employee_id=@param_employee_id;"+
+                            
+                            " SELECT * FROM PIMS.View_Employee_Dayoff WHERE employee_id=@param_employee_id;" +
+
+                            " SELECT * FROM PIMS.View_Employee_Benefit_Policy WHERE employee_id=@param_employee_id;" +
+
+                            " SELECT * FROM PIMS.View_Employee_Leave_Ledger WHERE employee_id=@param_employee_id;";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@param_employee_id", nEmployeeId);
 
                 _dbConnection.Open();
-                result = await _dbConnection.QueryFirstOrDefaultAsync<dynamic>(sql, parameters);
+                var oDataList = await _dbConnection.QueryMultipleAsync(sql, parameters);
+                if (oDataList != null)
+                {
+                    oResult = oDataList.Read<EmployeeOfficial>().Single();
+                    List<dynamic> oAttPolicys = oDataList.Read().ToList();
+                    List<dynamic> oDayoffs = oDataList.Read().ToList();
+                    List<dynamic> oBenefitPolicys = oDataList.Read().ToList();
+                    List<dynamic> oLeaveLedgers = oDataList.Read().ToList();
+
+                    if (oAttPolicys.Count > 0)
+                    {
+                        oResult.EmployeeAttendancePolicyView = (from oObj in oAttPolicys select EmployeeAttendancePolicyViewModel.ConvertToModel(oObj)).Single();
+
+                        List<EmployeeDayoffViewModel> oEmpDayoffs = new List<EmployeeDayoffViewModel>();
+                        List<EmployeeBenefitPolicyViewModel> oEmpBenefitPolicys = new List<EmployeeBenefitPolicyViewModel>();
+                        List<EmployeeLeaveLedgerViewModel> oEmpLeaveLedgers = new List<EmployeeLeaveLedgerViewModel>();
+
+                        if (oDayoffs.Count > 0)
+                        {
+                            foreach (EmployeeDayoffViewModel oItem in (from oObj in oDayoffs select EmployeeDayoffViewModel.ConvertToModel(oObj)))
+                            {
+                                oEmpDayoffs.Add(oItem);
+                            }
+                            oResult.EmployeeAttendancePolicyView.EmployeeDayoffViews = oEmpDayoffs;
+                        }
+                        if (oBenefitPolicys.Count > 0)
+                        {
+                            foreach (EmployeeBenefitPolicyViewModel oItem in (from oObj in oBenefitPolicys select EmployeeBenefitPolicyViewModel.ConvertToModel(oObj)))
+                            {
+                                oEmpBenefitPolicys.Add(oItem);
+                            }
+                            oResult.EmployeeAttendancePolicyView.EmployeeBenefitPolicyViews = oEmpBenefitPolicys;
+                        }
+                        if (oLeaveLedgers.Count > 0)
+                        {
+                            foreach (EmployeeLeaveLedgerViewModel oItem in (from oObj in oLeaveLedgers select EmployeeLeaveLedgerViewModel.ConvertToModel(oObj)))
+                            {
+                                oEmpLeaveLedgers.Add(oItem);
+                            }
+                            oResult.EmployeeAttendancePolicyView.EmployeeLeaveLedgerViews = oEmpLeaveLedgers;
+                        }
+                    }
+                }
             }
             catch (Exception ex)
             {
                 _dbConnection.Dispose();
-                throw ex.InnerException;                
+                throw ex.InnerException;
             }
             finally
             {
                 _dbConnection.Dispose();
             }
-            return result;
+            return oResult;
         }
     }
 }

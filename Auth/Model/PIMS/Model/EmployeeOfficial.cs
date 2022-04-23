@@ -46,6 +46,7 @@ namespace Auth.Model.PIMS.Model
         public string date_of_confirmation { get; set; }
         public int? created_user_id { get; set; }
         public EmployeeAttendancePolicyViewModel EmployeeAttendancePolicyView { get;set;}
+        public List<EmployeeDayoffViewModel> EmployeeDayoffViews { get; set; }
 
     }
 }

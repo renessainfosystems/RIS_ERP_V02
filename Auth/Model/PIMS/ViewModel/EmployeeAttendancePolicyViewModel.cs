@@ -13,7 +13,7 @@ namespace Auth.Model.PIMS.ViewModel
         {
             //Constractor            
         }
-        public int? EmployeeId { get; set; }
+        public long? EmployeeId { get; set; }
         public int? AttendancePolicyId { get; set; }
         public int? AttendanceCalendarId { get; set; }
         public int? LateEarlyPolicyId { get; set; }
