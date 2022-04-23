@@ -18,8 +18,7 @@ namespace Auth.Model.PIMS.Model
             roster_policy_id = 0;
             shift_id = 0;
             is_random_dayoff = false;
-            no_of_random_dayoff = 0;
-            is_allow_benefit_policy = false;
+            no_of_random_dayoff = 0;            
         }
 
         public long? employee_id { get; set; }
@@ -31,6 +30,6 @@ namespace Auth.Model.PIMS.Model
         public int? shift_id { get; set; }
         public bool? is_random_dayoff { get; set; }
         public int? no_of_random_dayoff { get; set; }
-        public bool? is_allow_benefit_policy { get; set; }
+        
     }
 }

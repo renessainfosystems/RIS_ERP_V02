@@ -31,7 +31,7 @@ namespace Auth.DataAccess.PIMS
 
             if (nOperationType == (int)GlobalEnumList.DBOperation.Create || nOperationType == (int)GlobalEnumList.DBOperation.Update)
             {
-                parameters.Add("@param_employee_leave_ledger_id", oEmployeeLeaveLedger.employee_leave_ledger_id ?? 0, DbType.Int32);
+                parameters.Add("@param_employee_leave_ledger_id", oEmployeeLeaveLedger.employee_leave_ledger_id ?? 0, DbType.Int64);
                 parameters.Add("@param_employee_id", oEmployeeLeaveLedger.employee_id ?? 0, DbType.Int64);
                 parameters.Add("@param_leave_policy_id", oEmployeeLeaveLedger.leave_policy_id ?? 0, DbType.Int32);
                 parameters.Add("@param_acs_id", oEmployeeLeaveLedger.acs_id ?? 0, DbType.Int32);

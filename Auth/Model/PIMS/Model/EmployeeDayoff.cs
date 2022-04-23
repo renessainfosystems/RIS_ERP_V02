@@ -18,7 +18,7 @@ namespace Auth.Model.PIMS.Model
             is_active = true;
         }
 
-        public int? employee_dayoff_id { get; set; }
+        public long? employee_dayoff_id { get; set; }
         public long? employee_id { get; set; }
         public string week_day { get; set; }
         public int? dayoff_type_id { get; set; }

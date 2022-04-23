@@ -31,7 +31,7 @@ namespace Auth.DataAccess.PIMS
 
             if (nOperationType == (int)GlobalEnumList.DBOperation.Create || nOperationType == (int)GlobalEnumList.DBOperation.Update)
             {
-                parameters.Add("@param_employee_dayoff_id", oEmployeeDayoff.employee_dayoff_id ?? 0, DbType.Int32);
+                parameters.Add("@param_employee_dayoff_id", oEmployeeDayoff.employee_dayoff_id ?? 0, DbType.Int64);
                 parameters.Add("@param_employee_id", oEmployeeDayoff.employee_id ?? 0, DbType.Int64);
                 parameters.Add("@param_week_day", oEmployeeDayoff.week_day, DbType.String);
                 parameters.Add("@param_dayoff_type_id", oEmployeeDayoff.dayoff_type_id ?? 0, DbType.Int32);

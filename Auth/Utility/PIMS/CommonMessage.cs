@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Auth.Utility.PIMS.Enum;
 
 namespace Auth.Utility.PIMS
 {
@@ -39,16 +40,16 @@ namespace Auth.Utility.PIMS
         {
             var sMsg = new CommonMessage();
             sMsg.MessageType = MessageTypes.Success;
-            if (nDBOperation == 1/*Insert*/) sMsg.CurrentMessage = CommonSaveMessage;
-            else if (nDBOperation == 2/*Update*/) sMsg.CurrentMessage = CommonUpdateMessage;
-            else if (nDBOperation == 3/*Delete*/) sMsg.CurrentMessage = CommonDeleteMessage;
-            else if (nDBOperation == 4/*Approve*/) sMsg.CurrentMessage = CommonApproveMessage;
+            if (nDBOperation == (int)GlobalEnumList.DBOperation.Create) sMsg.CurrentMessage = CommonSaveMessage;
+            else if (nDBOperation == (int)GlobalEnumList.DBOperation.Update) sMsg.CurrentMessage = CommonUpdateMessage;
+            else if (nDBOperation == (int)GlobalEnumList.DBOperation.Delete) sMsg.CurrentMessage = CommonDeleteMessage;
+            else if (nDBOperation == (int)GlobalEnumList.DBOperation.Approve) sMsg.CurrentMessage = CommonApproveMessage;
             else sMsg.CurrentMessage = CommonCopyMessage;/*DBOperation=5; Copy*/
 
             if (data != null) sMsg.Data = data;
             else
             {
-                if (nDBOperation != 3/*Delete*/)
+                if (nDBOperation != (int)GlobalEnumList.DBOperation.Delete)
                 {
                     sMsg.MessageType = MessageTypes.Error;
                     sMsg.CurrentMessage = CommonErrorMessage;

@@ -18,7 +18,7 @@ namespace Auth.Model.PIMS.Model
             end_date = "";
         }
 
-        public int? employee_benefit_policy_id { get; set; }
+        public long? employee_benefit_policy_id { get; set; }
         public long? employee_id { get; set; }
         public int? abp_id { get; set; }
         public bool? is_active { get; set; }

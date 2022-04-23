@@ -12,7 +12,7 @@ namespace Auth.Model.PIMS.ViewModel
         {
             //Constractor
         }
-        public int? EmployeeDayoffId { get; set;}
+        public long? EmployeeDayoffId { get; set;}
         public string WeekDay { get; set; }
         public bool IsActive { get; set; }
         public string EmployeeCode { get; set; }

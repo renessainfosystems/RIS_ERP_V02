@@ -18,7 +18,7 @@ namespace Auth.Model.PIMS.Model
 
         public int? employee_authentication_id { get; set; }
         public long? employee_id { get; set; }
-        public string? card_no { get; set; }
-        public bool? is_active { get; set; }
+        public string card_no { get; set; }
+        public bool is_active { get; set; }
     }
 }
