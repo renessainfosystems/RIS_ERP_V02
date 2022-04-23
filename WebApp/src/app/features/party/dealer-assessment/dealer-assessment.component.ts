@@ -369,7 +369,6 @@ export class DealerAssessmentComponent  implements OnInit {
     }
 
     ngOnInit(): void {
-        //this.dealerAssessmentService.getAllDealerInfo().subscribe(data => this.dealerinfoList = data);
         this.dealerAssessmentService.getAllDealerVerification().subscribe(data => this.dealerAssessmentList = data);
         this.dealerinfoForm = this.formbulider.group({
             dealer_info_code: [''],
@@ -522,6 +521,8 @@ export class DealerAssessmentComponent  implements OnInit {
         this.loadAllBloodGroupEnum();
         this.loadAllDocumentCboList();
         this.LoadAllSecurityTypeCboList();
+
+       
     }
 
     onRowSelect(event) {
@@ -614,14 +615,8 @@ export class DealerAssessmentComponent  implements OnInit {
         this.toggle();
     }
 
-    loadDealerinfoToEdit() {
-
-        debugger;
-        if (this.rowData == null) {
-            return this.notifyService.ShowNotification(3, 'Please select row');
-        }
-
-        let dealerinfoId = this.rowData.DealerInfoId;
+    viewDealerinfo(a, row) {
+        let dealerinfoId = row.DealerInfoId;
         this.dealerAssessmentService.getDealerInfoById(dealerinfoId).subscribe(data => {
             if (data != null) {
                 this.isDealerinfoEdit = true;
@@ -674,6 +669,10 @@ export class DealerAssessmentComponent  implements OnInit {
             this.dealerinfoForm.controls['logo_path'].setValue(data.LogoPath);
             this.photourllink = data.LogoPath;
 
+            this.loadAllDealerContactinfos();
+            this.loadAllDealerLocationinfos();
+            this.loadAllDealerDocumentinfos();
+            this.loadAllDealerCreditinfos();
         });
         this.toggleGridDisplay();
     }

@@ -672,6 +672,11 @@ export class DealerinfoComponent implements OnInit {
             this.dealerinfoForm.controls['logo_path'].setValue(data.LogoPath);
             this.photourllink = data.LogoPath;            
 
+            this.loadAllDealerContactinfos();
+            this.loadAllDealerLocationinfos();
+            this.loadAllDealerDocumentinfos();
+            this.loadAllDealerCreditinfos();
+
         });
         this.toggleGridDisplay();
     }
