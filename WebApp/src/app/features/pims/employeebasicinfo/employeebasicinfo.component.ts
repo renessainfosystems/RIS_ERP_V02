@@ -136,7 +136,7 @@ export class EmployeebasicinfoComponent implements OnInit {
     }
    
     onGeneral(): void {
-
+      
         this.submitted = true;
         if (this.employeeForm.invalid ) {
             return;
@@ -530,6 +530,8 @@ export class EmployeebasicinfoComponent implements OnInit {
 
             return;
         }
+        data.date_of_join = new Date((data.date_of_join)).toLocaleString();
+        data.date_of_confirmation = new Date((data.date_of_confirmation)).toLocaleString();
         this.employeeService.createEmployeeOfficial(data).subscribe(
             result => {
                 if (result.MessageType == 1) {
