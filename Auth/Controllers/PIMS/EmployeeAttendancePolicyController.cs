@@ -29,7 +29,7 @@ namespace Auth.Controllers.PIMS
         #endregion
 
         [HttpPost]
-        public async Task<dynamic> CreateUpdate([FromForm] EmployeeAttendancePolicy oEmployeeAttendancePolicy)
+        public async Task<dynamic> CreateUpdate(EmployeeAttendancePolicy oEmployeeAttendancePolicy)
         {
             return await _repository.IUD(oEmployeeAttendancePolicy);
         }

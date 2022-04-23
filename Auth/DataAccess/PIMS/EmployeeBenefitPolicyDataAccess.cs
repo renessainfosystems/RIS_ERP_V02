@@ -31,7 +31,7 @@ namespace Auth.DataAccess.PIMS
 
             if (nOperationType == (int)GlobalEnumList.DBOperation.Create || nOperationType == (int)GlobalEnumList.DBOperation.Update)
             {
-                parameters.Add("@param_employee_benefit_policy_id", oEmployeeBenefitPolicy.employee_benefit_policy_id ?? 0, DbType.Int32);
+                parameters.Add("@param_employee_benefit_policy_id", oEmployeeBenefitPolicy.employee_benefit_policy_id ?? 0, DbType.Int64);
                 parameters.Add("@param_employee_id", oEmployeeBenefitPolicy.employee_id ?? 0, DbType.Int64);
                 parameters.Add("@param_abp_id", oEmployeeBenefitPolicy.abp_id ?? 0, DbType.Int32);
                 parameters.Add("@param_is_active", oEmployeeBenefitPolicy.is_active, DbType.Boolean);

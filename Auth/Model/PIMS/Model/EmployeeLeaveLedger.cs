@@ -31,7 +31,7 @@ namespace Auth.Model.PIMS.Model
             is_active = true;
         }
 
-        public int? employee_leave_ledger_id { get; set; }
+        public long? employee_leave_ledger_id { get; set; }
         public long? employee_id { get; set; }
         public int? leave_policy_id { get; set; }
         public int? acs_id { get; set; }

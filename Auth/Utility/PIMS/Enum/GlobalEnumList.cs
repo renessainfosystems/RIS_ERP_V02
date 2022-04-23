@@ -13,7 +13,8 @@ namespace Auth.Utility.PIMS.Enum
             Create = 1,
             Update = 2,
             Delete = 3,
-            Approve = 4
+            Approve = 4,
+            Copy=5
         }
         #endregion
         #region Employee PIMS
