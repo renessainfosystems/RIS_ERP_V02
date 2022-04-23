@@ -277,8 +277,10 @@
                                         <label for="" class=" d-md-inline-flex" pTooltip="Residential Status" tooltipPosition="top">Residential Status: </label>
 
                                         <p-dropdown [options]="drpdwnresidencialStatusList" formControlName="residentcial_status_enum_id" placeholder="Select Residencial Status"
-                                                    optionLabel="residentcial_status_enum_name" optionValue="residentcial_status_enum_id" [showClear]="true"></p-dropdown>
-
+                                                    optionLabel="residentcial_status_enum_name" optionValue="residentcial_status_enum_id" [showClear]="true" [ngClass]="{ 'is-invalid': submitted && f.residentcial_status_enum_id.errors }"></p-dropdown>
+                                        <div *ngIf="submitted && f.residentcial_status_enum_id.errors" class="invalid-feedback">
+                                            <small *ngIf="f.residentcial_status_enum_id.errors.required" class="p-error">Resedential status is required</small>
+                                        </div>
                                     </div>
 
                                 </div>
@@ -310,9 +312,7 @@
 
                                         <p-dropdown [options]="drpdwnPresentCountryList" formControlName="present_country_id" [ngClass]="{ 'is-invalid': submitted && f.present_country_id.errors }" placeholder="---Select---"
                                                     optionLabel="country_name" optionValue="country_id" (onChange)="onSelectByPresentCountryId($event.value)" [showClear]="true" [filter]="true" filterBy="country_name"></p-dropdown>
-                                        <!--<div *ngIf="submitted && f.present_country_id.errors" class="invalid-feedback">
-                    <small *ngIf="f.present_country_id.errors.required" class="p-error">Country is required</small>
-                </div>-->
+                                  
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label for="" class=" d-md-inline-flex" pTooltip="State/Division" tooltipPosition="top">State/Division<span class="req">*:</span> </label>
@@ -320,9 +320,7 @@
                                         <p-dropdown [options]="drpdwnPresentDivisionList" formControlName="present_division_id" [ngClass]="{ 'is-invalid': submitted && f.present_division_id.errors }" placeholder="---Select---"
                                                     optionLabel="division_name" optionValue="division_id" (onChange)="onSelectByPresentDivisionId($event.value)" [showClear]="true"></p-dropdown>
 
-                                        <!--<div *ngIf="submitted && f.present_division_id.errors" class="invalid-feedback">
-                    <small *ngIf="f.present_division_id.errors.required" class="p-error">State Or Division is required</small>
-                </div>-->
+                                       
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label for="" class=" d-md-inline-flex" pTooltip="District" tooltipPosition="top">District<span class="req">*:</span> </label>
@@ -446,7 +444,7 @@
                             <div class="flex justify-content-end pr-2">
                                 <button pButton pRipple type="button" (click)="openPrev()" label="Previous" class="risBtn mr-2 mb-2" icon="pi pi-step-backward"></button>
                                 <button pButton pRipple type="button" (click)="onFormSubmit()" label="Save" class="risBtn risSave mr-2 mb-2" icon="pi pi-check"></button>
-                                <button pButton pRipple type="button" (click)="onGeneral()" label="Next" class="risBtn  mr-2 mb-2" icon="pi pi-step-forward"></button>
+                                <button pButton pRipple type="button" (click)="openNext()" label="Next" class="risBtn  mr-2 mb-2" icon="pi pi-step-forward"></button>
                                 <button pButton pRipple type="button" (click)="toggleFormClose()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
                             </div>
                      
