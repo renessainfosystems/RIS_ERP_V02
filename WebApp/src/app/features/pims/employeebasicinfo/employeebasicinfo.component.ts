@@ -17,7 +17,8 @@ export class EmployeebasicinfoComponent implements OnInit {
 
     //companyForm: FormGroup;
     submitted = false;
-    
+
+    officialFormSubmitted = false;
     //start grid and form show hide ********************
     gridDisplay = false;
     formDisplay = true;
@@ -326,21 +327,21 @@ export class EmployeebasicinfoComponent implements OnInit {
 
         });
         this.employeeOfficialForm = this.formbulider.group({
-            employee_id: [null, [Validators.required]],
+            employee_id: [0],
             location_id: [null, [Validators.required]],
             company_group_id: [0],
             designation_id: [null, [Validators.required]],
-            company_id: [null, [Validators.required]],
+            company_id: [0],
             department_id: [null, [Validators.required]],
             position_id: [null, [Validators.required]],
             date_of_confirmation: [null, [Validators.required]],
             organogram_detail_id: 0,
-            job_domicile_id: 0,
-            service_type_id: 0,
-            confirmation_status_id: 0,
-            working_action_id: 0,
-            job_location_id: 0,
-            date_of_join: 0,
+            job_domicile_id: [null, [Validators.required]],
+            service_type_id: [null, [Validators.required]],
+            confirmation_status_id: [null, [Validators.required]],
+            working_action_id: [null, [Validators.required]],
+            job_location_id: [null, [Validators.required]],
+            date_of_join: [null, [Validators.required]],
 
         });
         //Load Dropdown
@@ -518,6 +519,26 @@ export class EmployeebasicinfoComponent implements OnInit {
             this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
         });
         this.display = false;
+    }
+    onOfficialFormSubmit() {
+        
+        const data = this.employeeOfficialForm.value;
+        console.log(data)
+        this.officialFormSubmitted = true;
+
+        if (this.employeeOfficialForm.invalid) {
+
+            return;
+        }
+        this.employeeService.createEmployeeOfficial(data).subscribe(
+            result => {
+                if (result.MessageType == 1) {
+                    this.resetForm();
+                   
+                }
+                this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
+
+            });
     }
 
     onFormSubmit() {

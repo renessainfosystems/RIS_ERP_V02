@@ -113,5 +113,9 @@ export class EmployeeService {
     getJobDomicile(): Observable<any[]> {
         return this.http.get<any[]>(this.ipconfig.base_IP + 'PIMSDBEnum/GetEnumJobDomicile', httpOptions);
     }
+    createEmployeeOfficial(oEmployeeOfficial: any): Observable<any> {
+         return this.http.post<any>(this.ipconfig.base_IP + 'EmployeeOfficial/Create', oEmployeeOfficial, httpOptions);
+    }
+    
     
 }
