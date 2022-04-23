@@ -29,13 +29,13 @@ namespace Auth.Controllers.PIMS
         #endregion
 
         [HttpPost]
-        public async Task<dynamic> Create([FromForm] EmployeeOfficial oEmployeeOfficial)
+        public async Task<dynamic> Create(EmployeeOfficial oEmployeeOfficial)
         {
             return await _repository.IUD(oEmployeeOfficial, (int)GlobalEnumList.DBOperation.Create);
         }
 
         [HttpPost]
-        public async Task<dynamic> Update([FromForm] EmployeeOfficial oEmployeeOfficial)
+        public async Task<dynamic> Update(EmployeeOfficial oEmployeeOfficial)
         {
             return await _repository.IUD(oEmployeeOfficial, (int)GlobalEnumList.DBOperation.Update);
         }
