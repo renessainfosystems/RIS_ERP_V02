@@ -464,7 +464,7 @@
                                         <label pTooltip="Location" tooltipPosition="top">Location/Branch<span class="req"></span></label>
                                         <p-dropdown [options]="locationList" formControlName="location_id" (onChange)="onSelectLocation($event.value)" [ngClass]="{ 'is-invalid': submitted && form.location_id.errors }" placeholder="Select Location"
                                                     optionLabel="location_name" optionValue="location_id" [showClear]="true"></p-dropdown>
-                                        <div *ngIf="submitted && form.location_id.errors" class="invalid-feedback">
+                                        <div *ngIf="officialFormSubmitted && form.location_id.errors" class="invalid-feedback">
                                             <small *ngIf="form.location_id.errors.required" class="p-error">Location is required</small>
                                         </div>
 
@@ -472,73 +472,73 @@
                                     <div class="field col-12 md:col-6 ">
 
                                         <label pTooltip="Department" tooltipPosition="top">Department<span class="req"></span></label>
-                                        <p-dropdown [options]="departmentList" formControlName="department_id" (onChange)="onSelectDepartment($event.value)" [ngClass]="{ 'is-invalid': submitted && form.department_id.errors }" placeholder="Select Department"
+                                        <p-dropdown [options]="departmentList" formControlName="department_id" (onChange)="onSelectDepartment($event.value)" [ngClass]="{ 'is-invalid': officialFormSubmitted && form.department_id.errors }" placeholder="Select Department"
                                                     optionLabel="department_name" optionValue="department_id" [showClear]="true"></p-dropdown>
-                                        <div *ngIf="submitted && form.department_id.errors" class="invalid-feedback">
+                                        <div *ngIf="officialFormSubmitted && form.department_id.errors" class="invalid-feedback">
                                             <small *ngIf="form.department_id.errors.required" class="p-error">Department is required</small>
                                         </div>
 
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label pTooltip="Position" tooltipPosition="top">Position<span class="req"></span></label>
-                                        <p-dropdown [options]="positionList" formControlName="position_id" [ngClass]="{ 'is-invalid': submitted && form.position_id.errors }" placeholder="Select Position"
+                                        <p-dropdown [options]="positionList" formControlName="position_id" [ngClass]="{ 'is-invalid': officialFormSubmitted && form.position_id.errors }" placeholder="Select Position"
                                                     optionLabel="position_name" optionValue="position_id" [showClear]="true"></p-dropdown>
 
-                                        <div *ngIf="submitted && form.position_id.errors" class="invalid-feedback">
+                                        <div *ngIf="officialFormSubmitted && form.position_id.errors" class="invalid-feedback">
                                             <small *ngIf="form.position_id.errors.required" class="p-error">Position is required</small>
                                         </div>
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label for="" class=" d-md-inline-flex" pTooltip="Designation" tooltipPosition="top">Designation<span class="req">*</span> </label>
-                                        <p-dropdown [options]="designationList" formControlName="designation_id" [ngClass]="{ 'is-invalid': submitted && form.designation_id.errors }" placeholder="---Select---"
+                                        <p-dropdown [options]="designationList" formControlName="designation_id" [ngClass]="{ 'is-invalid': officialFormSubmitted && form.designation_id.errors }" placeholder="---Select---"
                                                     optionLabel="designation_name" optionValue="designation_id" [showClear]="true">
                                         </p-dropdown>
-                                        <div *ngIf="submitted && form.designation_id.errors" class="invalid-feedback">
+                                        <div *ngIf="officialFormSubmitted && form.designation_id.errors" class="invalid-feedback">
                                             <small *ngIf="form.designation_id.errors.required" class="p-error">Designation is required</small>
                                         </div>
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label for="" class=" d-md-inline-flex" pTooltip="Job Domicile" tooltipPosition="top">Job Domicile<span class="req">*</span> </label>
-                                        <p-dropdown [options]="jobdomicileList" formControlName="job_domicile_id" [ngClass]="{ 'is-invalid': submitted && form.job_domicile_id.errors }" placeholder="---Select---"
+                                        <p-dropdown [options]="jobdomicileList" formControlName="job_domicile_id" [ngClass]="{ 'is-invalid': officialFormSubmitted && form.job_domicile_id.errors }" placeholder="---Select---"
                                                     optionLabel="job_domicile_name" optionValue="job_domicile_id" [showClear]="true">
                                         </p-dropdown>
-                                        <div *ngIf="submitted && form.job_domicile_id.errors" class="invalid-feedback">
+                                        <div *ngIf="officialFormSubmitted && form.job_domicile_id.errors" class="invalid-feedback">
                                             <small *ngIf="form.job_domicile_id.errors.required" class="p-error">Job Domicile is required</small>
                                         </div>
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label for="" class=" d-md-inline-flex" pTooltip="Service Type" tooltipPosition="top">Service Type<span class="req">*</span> </label>
-                                        <p-dropdown [options]="serviceTypeList" formControlName="service_type_id" [ngClass]="{ 'is-invalid': submitted && form.service_type_id.errors }" placeholder="---Select---"
+                                        <p-dropdown [options]="serviceTypeList" formControlName="service_type_id" [ngClass]="{ 'is-invalid': officialFormSubmitted && form.service_type_id.errors }" placeholder="---Select---"
                                                     optionLabel="service_type_name" optionValue="service_type_id" [showClear]="true">
                                         </p-dropdown>
-                                        <div *ngIf="submitted && form.service_type_id.errors" class="invalid-feedback">
+                                        <div *ngIf="officialFormSubmitted && form.service_type_id.errors" class="invalid-feedback">
                                             <small *ngIf="form.service_type_id.errors.required" class="p-error">Service Type is required</small>
                                         </div>
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label for="" class=" d-md-inline-flex" pTooltip="Confirmation Status" tooltipPosition="top">Confirmation Status<span class="req">*</span> </label>
-                                        <p-dropdown [options]="confirmationSatusList" formControlName="confirmation_status_id" [ngClass]="{ 'is-invalid': submitted && form.confirmation_status_id.errors }" placeholder="---Select---"
+                                        <p-dropdown [options]="confirmationSatusList" formControlName="confirmation_status_id" [ngClass]="{ 'is-invalid': officialFormSubmitted && form.confirmation_status_id.errors }" placeholder="---Select---"
                                                     optionLabel="confirmation_status_name" optionValue="confirmation_status_id" [showClear]="true">
                                         </p-dropdown>
-                                        <div *ngIf="submitted && form.confirmation_status_id.errors" class="invalid-feedback">
+                                        <div *ngIf="officialFormSubmitted && form.confirmation_status_id.errors" class="invalid-feedback">
                                             <small *ngIf="form.confirmation_status_id.errors.required" class="p-error">Confirmation Status is required</small>
                                         </div>
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label for="" class=" d-md-inline-flex" pTooltip="Working Action" tooltipPosition="top">Working Action<span class="req">*</span> </label>
-                                        <p-dropdown [options]="workActionList" formControlName="working_action_id" [ngClass]="{ 'is-invalid': submitted && form.working_action_id.errors }" placeholder="---Select---"
+                                        <p-dropdown [options]="workActionList" formControlName="working_action_id" [ngClass]="{ 'is-invalid': officialFormSubmitted && form.working_action_id.errors }" placeholder="---Select---"
                                                     optionLabel="working_action_name" optionValue="working_action_id" [showClear]="true">
                                         </p-dropdown>
-                                        <div *ngIf="submitted && form.working_action_id.errors" class="invalid-feedback">
+                                        <div *ngIf="officialFormSubmitted && form.working_action_id.errors" class="invalid-feedback">
                                             <small *ngIf="form.working_action_id.errors.required" class="p-error">Working Action is required</small>
                                         </div>
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label for="" class=" d-md-inline-flex" pTooltip="Job Location" tooltipPosition="top">Job Location<span class="req">*</span> </label>
-                                        <p-dropdown [options]="jobLocationList" formControlName="job_location_id" [ngClass]="{ 'is-invalid': submitted && form.job_location_id.errors }" placeholder="---Select---"
+                                        <p-dropdown [options]="jobLocationList" formControlName="job_location_id" [ngClass]="{ 'is-invalid': officialFormSubmitted && form.job_location_id.errors }" placeholder="---Select---"
                                                     optionLabel="job_location_name" optionValue="job_location_id" [showClear]="true">
                                         </p-dropdown>
-                                        <div *ngIf="submitted && form.job_location_id.errors" class="invalid-feedback">
+                                        <div *ngIf="officialFormSubmitted && form.job_location_id.errors" class="invalid-feedback">
                                             <small *ngIf="form.job_location_id.errors.required" class="p-error">Job Location is required</small>
                                         </div>
                                     </div>
@@ -562,7 +562,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div *ngIf="submitted && form.date_of_confirmation.errors" class="invalid-feedback">
+                                        <div *ngIf="officialFormSubmitted && form.date_of_confirmation.errors" class="invalid-feedback">
                                             <small *ngIf="form.date_of_confirmation.errors.required" class="p-error">Date Of Confirmation is required</small>
                                         </div>
                                     </div>
@@ -573,7 +573,7 @@
 
                             <div class="flex justify-content-end pr-2">
                                 <button pButton pRipple type="button" (click)="openPrev()" label="Previous" class="risBtn mr-2 mb-2" icon="pi pi-step-backward"></button>
-                                <button pButton pRipple type="button" (click)="onFormSubmit()" label="Save" class="risBtn risSave mr-2 mb-2" icon="pi pi-check"></button>
+                                <button pButton pRipple type="button" (click)="onOfficialFormSubmit()" label="Save" class="risBtn risSave mr-2 mb-2" icon="pi pi-check"></button>
                                 <button pButton pRipple type="button" (click)="toggleFormClose()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
                             </div>
                        
