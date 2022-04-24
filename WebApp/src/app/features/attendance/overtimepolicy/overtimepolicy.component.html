@@ -1,270 +1,475 @@
-<div class="p-card">
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <h4>OT Policy Information</h4>
+            <div [hidden]="formDisplay">
+                <form action="" [formGroup]="overTimePolicyForm">
+                    <div class="col-12">
+                        <div class="p-fluid p-formgrid grid">
+                            <div class="field form-group col-12 md:col-6">
+                                <label pTooltip="OT Policy Name" tooltipPosition="top">Policy Name<span class="req">*</span> </label>
+                                <input id="lastname2" type="text" class="from-control" formControlName="policy_name"
+                                       [ngClass]="{ 'is-invalid': submitted && f.policy_name.errors }"
+                                       placeholder="" pInputText required />
 
-  <div class="me-auto">
-    <div class="p-card-title ">
-      <span class="pi pi-OT Policy"> </span>OT Policy Information
-    </div>
-    <div class="p-card-body">
-      <!--********** start card body ********************-->
+                                <div *ngIf="submitted && f.policy_name.errors" class="invalid-feedback">
+                                    <small *ngIf="f.policy_name.errors.required" class="p-error">OT Policy Name is required</small>
 
-      <div class="card">
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-6 float-right">
+                                <label pTooltip="Leave Policy Code" tooltipPosition="top">Code<span class="req">*</span></label>
+                                <input pInputText id="firstname2" type="text" formControlName="code" pInputText disabled />
+                            </div>
 
+                            <div class="field col-12 md:col-6 float-right">
+                                <label pTooltip="Minimum OT" tooltipPosition="top"> Minimum OT<span class="req">*</span> </label>
 
+                                <div class="grid">
+                                    <div class=" col-12 md:col-12">
+                                        <div class="field-checkbox mb-0">
+                                            <input id="float-input p-fluid" type="number" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" formControlName="minimum_OT_min"
+                                                   placeholder="" pInputText required>
+                                            <label for="ch">(Minutes)</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-        <div class="card-body">
+                            <div class="field col-12 md:col-6 float-right">
+                                <label pTooltip="Maximum OT" tooltipPosition="top">Maximum OT<span class="req">*</span> </label>
 
-          <p-fieldset legend="Add-Edit Overtime" [collapsed]="collapsed" (onBeforeToggle)="toggle()" [toggleable]="true">
-            <p-dialog header="Delete Record" [(visible)]="display" [style]="{width: '35vw'}">
-              <p>Do you want to delete this record?</p>
-              <ng-template pTemplate="footer">
-                <button class="pi pi-times risBtn risClose" (click)="display=false"> No</button>
-                <button class="pi pi-check risBtn risSave" (click)="deleteOTPolicy()"> Yes</button>
-              </ng-template>
-            </p-dialog>
-            <form action="" [formGroup]="overTimePolicyForm">
-              <div class="p-fluid grid col-12 flex flex-wrap card-container">
-                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
-                  <div class="col-4 mt-2 text-right">
-                    <label for="" class=" d-md-inline-flex" pTooltip="Policy Name" tooltipPosition="top">OT Policy Name<span class="req">*:</span> </label>
-                  </div>
-                  <div class="col-8 p-fluid">
-                    <span class="p-float-label">
-                      <input id="float-input p-fluid" type="text" formControlName="policy_name" placeholder="OT Policy Name" pInputText required>
-                    </span>
-                  </div>
-                </div>
-                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
-                  <div class="col-3 mt-2 text-right">
-                    <label for="" class=" d-md-inline-flex">Code:</label>
-                  </div>
-                  <div class="col-8 p-fluid">
-                    <span class="p-float-label">
-                      <input id="float-input p-fluid" type="text" disabled="disabled" formControlName="code" placeholder="Code" pInputText>
-                    </span>
-                  </div>
+                                <div class="grid">
+                                    <div class=" col-12 md:col-12">
+                                        <div class="field-checkbox mb-0">
+                                            <input id="float-input p-fluid" type="number" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" formControlName="maximum_OT_min"
+                                                   placeholder="" pInputText required>
+                                            <label for="ch">(Minutes)</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-                </div>
+                            <div class="field col-12 md:col-6 float-right">
+                                <label pTooltip="OT Reduce Time" tooltipPosition="top">OT Reduce Time<span class="req">*</span> </label>
 
-                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
-                  <div class="col-4 mt-2 text-right">
-                    <label for="" class=" d-md-inline-flex">Minimum OT:</label>
-                  </div>
-                  <div class="col-6 p-fluid">
-                    <span class="p-float-label">
-                      <input id="float-input p-fluid" type="number" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" formControlName="minimum_OT_min" placeholder="Minimum OT" pInputText>
-                    </span>
-                  </div>
-                  <div class="col-1 mt-1 text-right">
-                    <label for="" class=" d-md-inline-flex">(Minutes)</label>
-                  </div>
-                </div>
-                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
-                  <div class="col-3 mt-2 text-right">
-                    <label for="" class=" d-md-inline-flex">Maximum OT:</label>
-                  </div>
-                  <div class="col-6 p-fluid">
-                    <span class="p-float-label">
-                      <input id="float-input p-fluid" type="number" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" formControlName="maximum_OT_min" placeholder="Maximum OT" pInputText>
-                    </span>
-                  </div>
-                  <div class="col-1 mt-1 text-right">
-                    <label for="" class=" d-md-inline-flex">(Minutes)</label>
-                  </div>
-                </div>
-                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
-                  <div class="col-4 mt-2 text-right">
-                    <label for="" class=" d-md-inline-flex">OT Reduce Time:</label>
-                  </div>
-                  <div class="col-6 p-fluid">
-                    <span class="p-float-label">
-                      <input id="float-input p-fluid" type="number" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" formControlName="OT_reduce_time_min" placeholder="OT Reduce Time" pInputText>
-                    </span>
+                                <div class="grid">
+                                    <div class=" col-12 md:col-12">
+                                        <div class="field-checkbox mb-0">
+                                            <input id="float-input p-fluid" type="number" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" formControlName="OT_reduce_time_min"
+                                                   placeholder="" pInputText required>
+                                            <label for="ch">(Minutes)</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-                  </div>
-                  <div class="col-1 mt-1 text-right">
-                    <label for="" class=" d-md-inline-flex">(Minutes)</label>
-                  </div>
-                </div>
+                            <div class="field col-12 md:col-6">
+                                <label pTooltip="Remarks" tooltipPosition="top">Remarks </label>
+                                <input id="lastname2" type="text" formControlName="remarks" placeholder="" pInputText />
+                            </div>
+
+                            <div class="field col-12 md:col-12">
+                                <label for="" style="font-weight: bold; padding-top:3px; padding-left: 1px;">OT Slab (In Minutes) (Optional)</label>
+                            </div>
 
 
-                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
-                  <div class="col-3 mt-2 text-right">
-                    <label for="" class=" d-md-inline-flex">Remarks:</label>
-                  </div>
-                  <div class="col-8 p-fluid">
-                    <span class="p-float-label">
+                            <div class="field col-12 md:col-4 float-right">
+                                <label pTooltip="Min OT" tooltipPosition="top">Min OT<span class="req"></span></label>
+                                <div class="grid">
+                                    <div class=" col-12 md:col-12">
+                                        <div class="field-checkbox mb-0">
+                                            <input id="float-input p-fluid" type="number"
+                                                   oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" formControlName="min_ot_slab"
+                                                   pInputText>
+                                            <label for="ch">(Minutes)</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-                      <textarea rows="1" id="float-input p-fluid" formControlName="remarks" class="inputfield w-full" cols="50" pInputTextarea></textarea>
-                    </span>
-                  </div>
-                </div>
+                            <div class="field col-12 md:col-3 float-right">
+                                <label pTooltip="Max OT" tooltipPosition="top">Max OT<span class="req"></span></label>
+
+                                <div class="grid">
+                                    <div class=" col-12 md:col-12">
+                                        <div class="field-checkbox mb-0">
+                                            <input id="float-input p-fluid" type="number"
+                                                   oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" formControlName="max_ot_slab"
+                                                   pInputText>
+                                            <label for="ch">(Minutes)</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="field col-12 md:col-4 float-right">
+                                <label pTooltip="Leave Policy" tooltipPosition="top">Achieve OT<span class="req"></span></label>
+
+                                <div class="grid">
+                                    <div class=" col-12 md:col-10">
+                                        <div class="field-checkbox mb-0">
+                                            <input id="float-input p-fluid" type="number"
+                                                   oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')"
+                                                   formControlName="acheive_ot_slab" pInputText>
+                                            <label for="ch">(Minutes)</label>
+                                        </div>
+                                    </div>
+                                    <div class=" col-12 md:col-2 md:ml-0">
+
+                                        <button class=" pi pi-plus risBtn risAdd mr-2" (click)="addOTSlabInfo()" label="Add">Add</button>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="field col-12 md:col-12 pl-0 pr-3">
+                                <p-table [value]="otslabDataSources" styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm" responsiveLayout="scroll">
+
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th>#SL</th>
+
+                                            <th>Min OT(Minutes)</th>
+                                            <th>Max OT(Minutes)</th>
+                                            <th>Achieve OT(Minutes)</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-rowIndex="rowIndex" let-slab>
+
+                                        <tr>
+                                            <td>{{rowIndex+1}}</td>
+
+                                            <td>{{slab.minimum_OT_min}}</td>
+                                            <td>{{slab.maximum_OT_min}}</td>
+                                            <td>{{slab.acheive_OT_min}}</td>
+                                            <td> <button class="pi pi-times-circle risBtn risDelete" (click)="removeEvent(rowIndex,slab)"> </button></td>
+
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="flex justify-content-end pr-2 pt-2">
+                        <button pButton pRipple type="button" label="Save" (click)="SaveOTPolicy()" class="risBtn risSave mr-2 mb-2" icon="pi pi-check"></button>
+                        <button pButton pRipple type="button" (click)="toggleFormClose()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
+                    </div>
+                </form>
+            </div>
+
+            <div [hidden]="gridDisplay">
 
 
-                <div class="p-fluid grid col-11 flex justify-content-start flex-wrap card-container">
-                  <div class="col-1 p-fluid ">
+                <button pButton pRipple type="button" label="New" (click)="showBasicDialog()" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
+                <button pButton pRipple type="button" label="Edit" (click)="loadOTPolicyToEdit()" icon="pi pi-pencil" class="risBtn risEdit mr-2 mb-2"></button>
+                <button pButton pRipple type="button" label="Delete" icon="pi pi-trash" class="risBtn risDelete mr-2 mb-2" (click)="deleteModal($event)"> </button>
+                <button pButton pRipple type="button" label="Activity" icon="pi pi-box" (click)="policyActiveInactive()" class="risBtn risAll mr-2 mb-2"> </button>
+                <button pButton pRipple type="button" label="Approve" icon="pi pi-box" class="risBtn risAll mr-2 mb-2" (click)="approveModal($event)"> </button>
 
-                  </div>
-                  <label for="" style="font-weight: bold; padding-left: 25px;" class=" d-md-inline-flex">OT Slab (In Minutes) (Optional)</label>
-                </div>
+                <p-confirmPopup key="approve"></p-confirmPopup>
+                <p-confirmPopup key="delete"></p-confirmPopup>
+                <p-table [value]="otPolicies" [paginator]="true" [rows]="10" selectionMode="single" [(selection)]="selectedotPolicie" dataKey="OTPolicyId" [showCurrentPageReport]="true" responsiveLayout="scroll" styleClass="p-datatable-striped p-datatable-sm"
+                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
 
-                <!-- start ot stab __________// -->
-
-                <div class="p-fluid grid col-4 flex justify-content-start flex-wrap card-container">
-                  <div class="col mt-2 text-right">
-                    <label for="" class="d-md-inline-flex">Min OT:</label>
-                  </div>
-                  <div class="col-6 p-fluid">
-                    <span class="p-float-label">
-                      <input id="float-input p-fluid" type="number"
-                             oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" formControlName="min_ot_slab"
-                             placeholder="Min OT" pInputText>
-                    </span>
-                  </div>
-
-                </div>
-
-
-                <div class="p-fluid grid col-3 flex justify-content-center text-center flex-wrap card-container">
-                  <div class="col mt-2 text-right">
-                    <label for="" class="  d-md-inline-flex">Max OT:</label>
-                  </div>
-                  <div class="col-6 p-fluid text-left">
-                    <span class="p-float-label">
-                      <input id="float-input p-fluid" type="number"
-                             oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" formControlName="max_ot_slab"
-                             placeholder="Max OT" pInputText>
-                    </span>
-                  </div>
-
-                </div>
-
-                <div class="p-fluid grid col-5 flex justify-content-end flex-wrap card-container">
-                  <div class="col mt-2 text-right">
-                    <label for="" class=" d-md-inline-flex">AchieveOT:</label>
-                  </div>
-                  <div class="col-4 p-fluid">
-                    <span class="p-float-label">
-                      <input id="float-input p-fluid" type="number"
-                             oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')"
-                             formControlName="acheive_ot_slab" placeholder="Achieve OT" pInputText>
-                    </span>
-
-
-                  </div>
-                  <div class="col-3">
-                    <button class=" pi pi-plus risBtn risAdd " label="Add" (click)="addOTSlabInfo()">Add</button>
-                  </div>
-
-                </div>
-                <!-- end ot stab __________// -->
-
-                <div class="col-2 pr-3 text-right">
-                  OT Slab List: <span class="req"></span>
-                </div>
-                <div class=" col-9 p-0 ">
-                  <p-table [value]="otslabDataSources" styleClass="p-datatable-sm" class="p-0" responsiveLayout="scroll">
-                    <!-- <ng-template pTemplate="caption">
-    OT Slab List<span class="req"></span>
-  </ng-template> -->
                     <ng-template pTemplate="header">
-                      <tr>
-                        <th>#SL</th>
-
-                        <th>Min OT(Minutes)</th>
-                        <th>Max OT(Minutes)</th>
-                        <th>Achieve OT(Minutes)</th>
-                        <th>Action</th>
-                      </tr>
-                    </ng-template>
-                    <ng-template pTemplate="body" let-rowIndex="rowIndex" let-slab>
-                   
                         <tr>
-                          <td>{{rowIndex+1}}</td>
+                            <th>OT Policy</th>
+                            <th>Remarks</th>
+                            <th>Approve By</th>
+                            <th>Activity</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-otpolicy>
+                        <tr [pSelectableRow]="otpolicy">
+                            <td>{{otpolicy.PolicyName}}</td>
+                            <td>{{otpolicy.Remarks}}</td>
+                            <td>{{otpolicy.ApprovedBy}}</td>
+                            <td *ngIf="otpolicy.IsActive===true">{{"Active"}}</td>
+                            <td *ngIf="otpolicy.IsActive===false">{{"InActive"}}</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+    </div>
+</div>
 
-                          <td>{{slab.minimum_OT_min}}</td>
-                          <td>{{slab.maximum_OT_min}}</td>
-                          <td>{{slab.acheive_OT_min}}</td>
-                          <td> <button class="pi pi-times-circle risBtn risDelete" (click)="removeEvent(rowIndex,slab)"> </button></td>
+
+
+
+<!--<div class="p-card">
+
+    <div class="me-auto">
+        <div class="p-card-title ">
+            <span class="pi pi-OT Policy"> </span>OT Policy Information
+        </div>
+        <div class="p-card-body">-->
+            <!--********** start card body ********************-->
+
+            <!--<div class="card">
+
+
+
+                <div class="card-body">
+
+                    <p-fieldset legend="Add-Edit Overtime" [collapsed]="collapsed" (onBeforeToggle)="toggle()" [toggleable]="true">
+                        <p-dialog header="Delete Record" [(visible)]="display" [style]="{width: '35vw'}">
+                            <p>Do you want to delete this record?</p>
+                            <ng-template pTemplate="footer">
+                                <button class="pi pi-times risBtn risClose" (click)="display=false"> No</button>
+                                <button class="pi pi-check risBtn risSave" (click)="deleteOTPolicy()"> Yes</button>
+                            </ng-template>
+                        </p-dialog>
+                        <form action="" [formGroup]="overTimePolicyForm">
+                            <div class="p-fluid grid col-12 flex flex-wrap card-container">
+                                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                                    <div class="col-4 mt-2 text-right">
+                                        <label for="" class=" d-md-inline-flex" pTooltip="Policy Name" tooltipPosition="top">OT Policy Name<span class="req">*:</span> </label>
+                                    </div>
+                                    <div class="col-8 p-fluid">
+                                        <span class="p-float-label">
+                                            <input id="float-input p-fluid" type="text" formControlName="policy_name" placeholder="OT Policy Name" pInputText required>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                                    <div class="col-3 mt-2 text-right">
+                                        <label for="" class=" d-md-inline-flex">Code:</label>
+                                    </div>
+                                    <div class="col-8 p-fluid">
+                                        <span class="p-float-label">
+                                            <input id="float-input p-fluid" type="text" disabled="disabled" formControlName="code" placeholder="Code" pInputText>
+                                        </span>
+                                    </div>
+
+                                </div>
+
+                                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                                    <div class="col-4 mt-2 text-right">
+                                        <label for="" class=" d-md-inline-flex">Minimum OT:</label>
+                                    </div>
+                                    <div class="col-6 p-fluid">
+                                        <span class="p-float-label">
+                                            <input id="float-input p-fluid" type="number" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" formControlName="minimum_OT_min" placeholder="Minimum OT" pInputText>
+                                        </span>
+                                    </div>
+                                    <div class="col-1 mt-1 text-right">
+                                        <label for="" class=" d-md-inline-flex">(Minutes)</label>
+                                    </div>
+                                </div>
+                                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                                    <div class="col-3 mt-2 text-right">
+                                        <label for="" class=" d-md-inline-flex">Maximum OT:</label>
+                                    </div>
+                                    <div class="col-6 p-fluid">
+                                        <span class="p-float-label">
+                                            <input id="float-input p-fluid" type="number" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" formControlName="maximum_OT_min" placeholder="Maximum OT" pInputText>
+                                        </span>
+                                    </div>
+                                    <div class="col-1 mt-1 text-right">
+                                        <label for="" class=" d-md-inline-flex">(Minutes)</label>
+                                    </div>
+                                </div>
+                                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                                    <div class="col-4 mt-2 text-right">
+                                        <label for="" class=" d-md-inline-flex">OT Reduce Time:</label>
+                                    </div>
+                                    <div class="col-6 p-fluid">
+                                        <span class="p-float-label">
+                                            <input id="float-input p-fluid" type="number" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" formControlName="OT_reduce_time_min" placeholder="OT Reduce Time" pInputText>
+                                        </span>
+
+                                    </div>
+                                    <div class="col-1 mt-1 text-right">
+                                        <label for="" class=" d-md-inline-flex">(Minutes)</label>
+                                    </div>
+                                </div>
+
+
+                                <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                                    <div class="col-3 mt-2 text-right">
+                                        <label for="" class=" d-md-inline-flex">Remarks:</label>
+                                    </div>
+                                    <div class="col-8 p-fluid">
+                                        <span class="p-float-label">
+
+                                            <textarea rows="1" id="float-input p-fluid" formControlName="remarks" class="inputfield w-full" cols="50" pInputTextarea></textarea>
+                                        </span>
+                                    </div>
+                                </div>
+
+                               
+
+                                <div class="p-fluid grid col-11 flex justify-content-start flex-wrap card-container">
+                                    <div class="col-1 p-fluid ">
+
+                                    </div>
+                                    <label for="" style="font-weight: bold; padding-left: 25px;" class=" d-md-inline-flex">OT Slab (In Minutes) (Optional)</label>
+                                </div>-->
+
+                                <!-- start ot stab __________// -->
+
+                                <!--<div class="p-fluid grid col-4 flex justify-content-start flex-wrap card-container">
+                                    <div class="col mt-2 text-right">
+                                        <label for="" class="d-md-inline-flex">Min OT:</label>
+                                    </div>
+                                    <div class="col-6 p-fluid">
+                                        <span class="p-float-label">
+                                            <input id="float-input p-fluid" type="number"
+                                                   oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" formControlName="min_ot_slab"
+                                                   placeholder="Min OT" pInputText>
+                                        </span>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="p-fluid grid col-3 flex justify-content-center text-center flex-wrap card-container">
+                                    <div class="col mt-2 text-right">
+                                        <label for="" class="  d-md-inline-flex">Max OT:</label>
+                                    </div>
+                                    <div class="col-6 p-fluid text-left">
+                                        <span class="p-float-label">
+                                            <input id="float-input p-fluid" type="number"
+                                                   oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" formControlName="max_ot_slab"
+                                                   placeholder="Max OT" pInputText>
+                                        </span>
+                                    </div>
+
+                                </div>
+
+                                <div class="p-fluid grid col-5 flex justify-content-end flex-wrap card-container">
+                                    <div class="col mt-2 text-right">
+                                        <label for="" class=" d-md-inline-flex">AchieveOT:</label>
+                                    </div>
+                                    <div class="col-4 p-fluid">
+                                        <span class="p-float-label">
+                                            <input id="float-input p-fluid" type="number"
+                                                   oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')"
+                                                   formControlName="acheive_ot_slab" placeholder="Achieve OT" pInputText>
+                                        </span>
+
+
+                                    </div>
+                                    <div class="col-3">
+                                        <button class=" pi pi-plus risBtn risAdd " label="Add" (click)="addOTSlabInfo()">Add</button>
+                                    </div>
+
+                                </div>-->
+                                <!-- end ot stab __________// -->
+
+
+
+                                <!--<div class="col-2 pr-3 text-right">
+                                    OT Slab List: <span class="req"></span>
+                                </div>
+                                <div class=" col-9 p-0 ">
+                                    <p-table [value]="otslabDataSources" styleClass="p-datatable-sm" class="p-0" responsiveLayout="scroll">-->
+                                        <!-- <ng-template pTemplate="caption">
+              OT Slab List<span class="req"></span>
+            </ng-template> -->
+                                        <!--<ng-template pTemplate="header">
+                                            <tr>
+                                                <th>#SL</th>
+
+                                                <th>Min OT(Minutes)</th>
+                                                <th>Max OT(Minutes)</th>
+                                                <th>Achieve OT(Minutes)</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="body" let-rowIndex="rowIndex" let-slab>
+
+                                            <tr>
+                                                <td>{{rowIndex+1}}</td>
+
+                                                <td>{{slab.minimum_OT_min}}</td>
+                                                <td>{{slab.maximum_OT_min}}</td>
+                                                <td>{{slab.acheive_OT_min}}</td>
+                                                <td> <button class="pi pi-times-circle risBtn risDelete" (click)="removeEvent(rowIndex,slab)"> </button></td>
+
+                                            </tr>
+                                        </ng-template>
+                                    </p-table>
+                                </div>
+
+
+
+
+                                <div class="p-fluid grid col-11 mt-2 ml-4 flex justify-content-end flex-wrap card-container">
+
+
+                                    <button type="submit" class="pi pi-save risBtn risSave mr-2" (click)="SaveOTPolicy()"> Save</button>
+                                    <button class="pi pi-times risBtn risClose mr-2" (click)="resetForm()"> Close</button>
+
+
+                                </div>
+
+                            </div>
+                        </form>
+
+                    </p-fieldset>
+
+                    <p-fieldset legend="Overtime List" collapsed="true" [toggleable]="true">
+                        <div class="grid mb-2">
+
+                            <button class="pi pi-pencil risBtn risEdit mr-2 " (click)="loadOTPolicyToEdit()"> Edit</button>
+                            <button class="pi pi-trash risBtn risDelete mr-2" (click)="showDialog()"> Delete</button>
+                            <button class="pi pi-pi-cog risBtn risAll  mr-2" (click)="policyActiveInactive()">Activity</button>
+                            <button class="pi pi-pi-cog risBtn risAll  mr-2" (click)="policyApprove()">Approve</button>
+                        </div>
+                        <p-table [value]="otPolicies" [paginator]="true" [rows]="10" selectionMode="single" [(selection)]="selectedotPolicie" dataKey="OTPolicyId" [showCurrentPageReport]="true" responsiveLayout="scroll" styleClass="p-datatable-striped p-datatable-sm"
+                                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
+
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>OT Policy</th>
+                                    <th>Remarks</th>
+                                    <th>Approve By</th>
+                                    <th>Activity</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-otpolicy>
+                                <tr [pSelectableRow]="otpolicy">
+                                    <td>{{otpolicy.PolicyName}}</td>
+                                    <td>{{otpolicy.Remarks}}</td>
+                                    <td>{{otpolicy.ApprovedBy}}</td>
+                                    <td *ngIf="otpolicy.IsActive===true">{{"Active"}}</td>
+                                    <td *ngIf="otpolicy.IsActive===false">{{"InActive"}}</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </p-fieldset>-->
+                    <!--************************start grid ************************-->
+                    <!--<p-table [value]="Holidays" [paginator]="true" [rows]="10" selectionMode="single" [(selection)]="selectedHolidays" dataKey="holiday_id" [showCurrentPageReport]="true" responsiveLayout="scroll" styleClass="p-datatable-striped p-datatable-sm"
+                             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
+
+                      <ng-template pTemplate="header">
+                        <tr>
+                          <th>Holiday</th>
+                          <th>Type Of Holiday</th>
+                          <th>Days Of Month</th>
 
                         </tr>
                       </ng-template>
-                  </p-table>
-                </div>
+                      <ng-template pTemplate="body" let-holiday>
+                        <tr [pSelectableRow]="holiday">
+                          <td>{{holiday.holiday_name}}</td>
+                          <td>{{holiday.holidayTypeName}}</td>
+                          <td>{{holiday.days_of_month}}</td>
+                        </tr>
+                      </ng-template>
+                    </p-table>-->
 
 
+                <!--</div>-->
 
+                <!--********** end card body ********************-->
 
-                <div class="p-fluid grid col-11 mt-2 ml-4 flex justify-content-end flex-wrap card-container">
-
-
-                  <button type="submit" class="pi pi-save risBtn risSave mr-2" (click)="SaveOTPolicy()"> Save</button>
-                  <button class="pi pi-times risBtn risClose mr-2" (click)="resetForm()"> Close</button>
-
-
-                </div>
-
-              </div>
-            </form>
-
-          </p-fieldset>
-
-          <p-fieldset legend="Overtime List" collapsed="true" [toggleable]="true">
-            <div class="grid mb-2">
-
-              <button class="pi pi-pencil risBtn risEdit mr-2 " (click)="loadOTPolicyToEdit()"> Edit</button>
-              <button class="pi pi-trash risBtn risDelete mr-2" (click)="showDialog()"> Delete</button>
-              <button class="pi pi-pi-cog risBtn risAll  mr-2" (click)="policyActiveInactive()">Activity</button>
-              <button class="pi pi-pi-cog risBtn risAll  mr-2" (click)="policyApprove()">Approve</button>
-            </div>
-            <p-table [value]="otPolicies" [paginator]="true" [rows]="10" selectionMode="single" [(selection)]="selectedotPolicie" dataKey="OTPolicyId" [showCurrentPageReport]="true" responsiveLayout="scroll" styleClass="p-datatable-striped p-datatable-sm"
-                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
-
-              <ng-template pTemplate="header">
-                <tr>
-                  <th>OT Policy</th>
-                  <th>Remarks</th>
-                  <th>Approve By</th>
-                  <th>Activity</th>
-                </tr>
-              </ng-template>
-              <ng-template pTemplate="body" let-otpolicy>
-                <tr [pSelectableRow]="otpolicy">
-                  <td>{{otpolicy.PolicyName}}</td>
-                  <td>{{otpolicy.Remarks}}</td>
-                  <td>{{otpolicy.ApprovedBy}}</td>
-                  <td *ngIf="otpolicy.IsActive===true">{{"Active"}}</td>
-                  <td *ngIf="otpolicy.IsActive===false">{{"InActive"}}</td>
-                </tr>
-              </ng-template>
-            </p-table>
-          </p-fieldset>
-          <!--************************start grid ************************-->
-          <!--<p-table [value]="Holidays" [paginator]="true" [rows]="10" selectionMode="single" [(selection)]="selectedHolidays" dataKey="holiday_id" [showCurrentPageReport]="true" responsiveLayout="scroll" styleClass="p-datatable-striped p-datatable-sm"
-                   currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
-
-            <ng-template pTemplate="header">
-              <tr>
-                <th>Holiday</th>
-                <th>Type Of Holiday</th>
-                <th>Days Of Month</th>
-
-              </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-holiday>
-              <tr [pSelectableRow]="holiday">
-                <td>{{holiday.holiday_name}}</td>
-                <td>{{holiday.holidayTypeName}}</td>
-                <td>{{holiday.days_of_month}}</td>
-              </tr>
-            </ng-template>
-          </p-table>-->
-
-
+            <!--</div>
         </div>
-
-        <!--********** end card body ********************-->
-
-      </div>
     </div>
-  </div>
-</div>
+</div>-->
