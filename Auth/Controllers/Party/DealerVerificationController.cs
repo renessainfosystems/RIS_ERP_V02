@@ -44,7 +44,6 @@ namespace Auth.Controllers.Party
         public async Task<dynamic> Delete(int dealer_verification_id)
         {
             DealerVerification oDealerVerification = new DealerVerification();
-            //oDealerVerification.dealer_verification_id = dealer_verification_id;            
             return await _dealerVerificationRepository.IUD_DealerVerification(oDealerVerification, (int)GlobalEnumList.DBOperation.Delete);
         }
 

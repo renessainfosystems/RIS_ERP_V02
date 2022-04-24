@@ -41,9 +41,9 @@
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label pTooltip="Trade License" tooltipPosition="top">Trade License<span class="req">*</span> </label>
-                                        <input pInputText type="text" formControlName="trade_license"  disabled />
+                                        <input pInputText type="text" formControlName="trade_license" disabled />
 
-                                        
+
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label pTooltip="Year Established" tooltipPosition="top">Year Established </label>
@@ -59,15 +59,15 @@
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label pTooltip="Mobile" tooltipPosition="top">Mobile <span class="req">*</span> </label>
-                                        <input type="text" formControlName="mobile" disabled pInputText />                                        
+                                        <input type="text" formControlName="mobile" disabled pInputText />
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label pTooltip="Phone" tooltipPosition="top">Phone </label>
-                                        <input type="text" formControlName="phone"  disabled pInputText />
+                                        <input type="text" formControlName="phone" disabled pInputText />
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label pTooltip="Email" tooltipPosition="top">Email </label>
-                                        <input type="email" formControlName="email"  disabled pInputText />                                        
+                                        <input type="email" formControlName="email" disabled pInputText />
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label pTooltip="Web" tooltipPosition="top">Web </label>
@@ -89,8 +89,8 @@
                                 <div class="p-fluid p-formgrid grid">
                                     <div class="field col-12 md:col-6">
                                         <label pTooltip="Ownership Type" tooltipPosition="top">Ownership Type<span class="req">*</span> </label>
-                                        <p-dropdown [options]="allOwnershipType" formControlName="ownership_type_id"  placeholder="---Select---"
-                                                    optionLabel="ownership_type_name" optionValue="ownership_type_id" [showClear]="true" [filter]="true" filterBy="ownership_type_name"></p-dropdown>                                        
+                                        <p-dropdown [options]="allOwnershipType" formControlName="ownership_type_id" placeholder="---Select---"
+                                                    optionLabel="ownership_type_name" optionValue="ownership_type_id" [showClear]="true" [filter]="true" filterBy="ownership_type_name"></p-dropdown>
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label pTooltip="Business Type" tooltipPosition="top">Business Type </label>
@@ -100,9 +100,9 @@
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label pTooltip="Indusrty Sector" tooltipPosition="top">Indusrty Sector<span class="req">*</span> </label>
-                                        <p-dropdown [options]="allIndustrySector" formControlName="industry_sector_id"  placeholder="---Select---"
+                                        <p-dropdown [options]="allIndustrySector" formControlName="industry_sector_id" placeholder="---Select---"
                                                     optionLabel="industry_sector_name" optionValue="industry_sector_id" (onChange)="onSelectBySectorId($event.value)" [showClear]="true" [filter]="true" filterBy="industry_sector_name"></p-dropdown>
-                                        
+
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label pTooltip="Indusrty Sector" tooltipPosition="top">Indusrty SubSector </label>
@@ -133,7 +133,7 @@
                                         <label pTooltip="Currency" tooltipPosition="top">Currency<span class="req">*</span> </label>
                                         <p-dropdown [options]="allCurrency" formControlName="currency_id" placeholder="---Select---"
                                                     optionLabel="currency_name" optionValue="currency_id" [showClear]="true" [filter]="true" filterBy="currency_name"></p-dropdown>
-                                        
+
                                     </div>
                                 </div>
                             </div>
@@ -151,7 +151,7 @@
                                 <div class="p-fluid p-formgrid grid">
                                     <div class="field col-12 md:col-6">
                                         <label pTooltip="Continent" tooltipPosition="top">Continent<span class="req">*</span></label>
-                                        <p-dropdown [options]="allContinent" formControlName="continent_enum_id"  placeholder="---Select---"
+                                        <p-dropdown [options]="allContinent" formControlName="continent_enum_id" placeholder="---Select---"
                                                     optionLabel="continent_enum_name" optionValue="continent_enum_id" (onChange)="onSelectByCountryId($event.value)" [showClear]="true" [filter]="true" filterBy="continent_enum_name"></p-dropdown>
 
                                     </div>
@@ -159,7 +159,7 @@
                                         <label pTooltip="Country" tooltipPosition="top">Country<span class="req">*</span></label>
                                         <p-dropdown [options]="allCountry" formControlName="country_id" placeholder="---Select---"
                                                     optionLabel="country_name" optionValue="country_id" (onChange)="onSelectByCountryId($event.value)" [showClear]="true" [filter]="true" filterBy="country_name"></p-dropdown>
-                                                                                
+
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label pTooltip="Division" tooltipPosition="top">Division<span class="req">*</span></label>
@@ -175,9 +175,9 @@
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label pTooltip="Thana" tooltipPosition="top">Thana<span class="req">*</span></label>
-                                        <p-dropdown [options]="allThana" formControlName="thana_id"placeholder="---Select---"
+                                        <p-dropdown [options]="allThana" formControlName="thana_id" placeholder="---Select---"
                                                     optionLabel="thana_name" optionValue="thana_id" [showClear]="true" [filter]="true" filterBy="thana_name"></p-dropdown>
-                                        
+
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label pTooltip="Zone" tooltipPosition="top">Zone</label>
@@ -252,9 +252,9 @@
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label pTooltip="Security Requirment" tooltipPosition="top">Security Requirment</label>
-                                        <p-dropdown [options]="allSecurityType" formControlName="security_type_enum_id"  placeholder="---Select---"
+                                        <p-dropdown [options]="allSecurityType" formControlName="security_type_enum_id" placeholder="---Select---"
                                                     optionLabel="security_type_enum_name" optionValue="security_type_enum_id" [showClear]="true" [filter]="true" filterBy="security_type_enum_name"></p-dropdown>
-                                        
+
                                     </div>
                                 </div>
                             </div>
@@ -390,7 +390,6 @@
                         </div>
                     </p-tabPanel>
                     <p-tabPanel header="Credit Info">
-
                         <div [hidden]="gridDisplayCredit">
                             <p-table [value]="dealercreditinfoList" styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm" selectionMode="single"
                                      [(selection)]="selecteddealercreditinfo" dataKey="DealerCreditInfoId" (onRowSelect)="onRowSelectCredit($event)" (onRowUnselect)="onRowUnselectCredit($event)">
@@ -423,14 +422,79 @@
 
                                 </ng-template>
 
-                            </p-table>                            
+                            </p-table>
                             <!--end grid display -------------->
                         </div>
                         <div class="flex next-previous">
                             <button pButton pRipple type="button" (click)="openPrev()" label="Previous" class="risBtn  mr-2 mb-2" icon="pi pi-step-backward"></button>
+                            <button pButton pRipple type="button" (click)="openNext()" label="Next" class="risBtn  mr-2 mb-2" icon="pi pi-step-forward"></button>
                             <button pButton pRipple type="button" (click)="toggleFormClose()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
                         </div>
                     </p-tabPanel>
+                        <p-tabPanel header="Assessment">
+                            <form action="" [formGroup]="dealerinfoForm">
+                                <div class="col-12">
+                                    <div class="p-fluid p-formgrid grid">
+                                        <div class="field form-group col-12 md:col-6">
+                                            <label>Dealer Name:</label>
+                                            <input pInputText type="text" class="from-control" formControlName="dealer_info_name" disabled />
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label>Dealer Short Name</label>
+                                            <input pInputText type="text" formControlName="dealer_info_short_name" disabled />
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label> Dealer Display Name </label>
+                                            <input type="text" formControlName="dealer_info_display_name" pInputText disabled />
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label>Domicile<span class="req">*</span></label>
+                                            <p-dropdown [options]="allDomicile" formControlName="domicile_enum_id" optionLabel="domicile_enum_name" optionValue="domicile_enum_id" readonly></p-dropdown>
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label pTooltip="Trade License" tooltipPosition="top">Trade License<span class="req">*</span> </label>
+                                            <input pInputText type="text" formControlName="trade_license" disabled />
+
+
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label pTooltip="Year Established" tooltipPosition="top">Year Established </label>
+                                            <p-calendar formControlName="year_established" disabled [showIcon]="true" [showButtonBar]="true"></p-calendar>
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label pTooltip=" TIN No" tooltipPosition="top">TIN No </label>
+                                            <input type="text" formControlName="TIN" disabled pInputText />
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label pTooltip="BIN No" tooltipPosition="top">BIN No </label>
+                                            <input type="text" formControlName="BIN" disabled pInputText />
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label pTooltip="Mobile" tooltipPosition="top">Mobile <span class="req">*</span> </label>
+                                            <input type="text" formControlName="mobile" disabled pInputText />
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label pTooltip="Phone" tooltipPosition="top">Phone </label>
+                                            <input type="text" formControlName="phone" disabled pInputText />
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label pTooltip="Email" tooltipPosition="top">Email </label>
+                                            <input type="email" formControlName="email" disabled pInputText />
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label pTooltip="Web" tooltipPosition="top">Web </label>
+                                            <input type="text" formControlName="web_url" disabled pInputText />
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="flex next-previous">
+                                <button pButton pRipple type="button" (click)="openPrev()" label="Previous" class="risBtn  mr-2 mb-2" icon="pi pi-step-backward"></button>
+                                <button pButton pRipple type="button" (click)="toggleFormClose()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
+                            </div>
+                        </p-tabPanel>
                 </p-tabView>
             </div>
             <div [hidden]="gridDisplay">
@@ -470,7 +534,10 @@
                             <td>{{dealerAssessment.DepartmentName}}</td>
                             <td>{{dealerAssessment.EmployeeName}}</td>
                             <td class="text-orange-400" *ngIf="!dealerAssessment.is_verified">{{"Pending Assessment"}}</td>
-                            <td> <button class="pi pi-pencil risBtn risView mr-2" (click)="viewDealerinfo(rowIndex,dealerAssessment)"> View </button></td>
+                            <td>
+                            <button class="pi pi-pencil risBtn risView mr-2" (click)="viewDealerinfo(rowIndex,dealerAssessment)"> View </button>
+                            <button class="pi pi-plus risBtn risAdd mr-2" (click)="showBasicDialog()"> Assessment </button>
+                            </td>
                         </tr>
                     </ng-template>
                 </p-table>
