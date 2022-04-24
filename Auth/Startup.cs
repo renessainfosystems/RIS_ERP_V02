@@ -297,6 +297,8 @@ namespace Auth
             services.AddScoped<DealerCreditInfoDataAccess, DealerCreditInfoDataAccess>();
             services.AddScoped<IDealerVerificationRepository, DealerVerificationRepository>();
             services.AddScoped<DealerVerificationDataAccess, DealerVerificationDataAccess>();
+            services.AddScoped<IDealerAssessmentRepository, DealerAssessmentRepository>();
+            services.AddScoped<DealerAssessmentDataAccess, DealerAssessmentDataAccess>();
             #endregion
             #region Retailer Part
             services.AddScoped<IRetailerInfoRepository, RetailerInfoRepository>();
