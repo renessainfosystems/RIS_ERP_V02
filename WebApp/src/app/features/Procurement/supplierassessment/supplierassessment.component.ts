@@ -348,6 +348,7 @@ export class SupplierAssessmentComponent implements OnInit {
             this.showBasicEdit = true;
         }
     }
+
     onRowUnselect(event) {
         this.nodeSelected = false;
         this.rowData = null;
@@ -801,13 +802,12 @@ export class SupplierAssessmentComponent implements OnInit {
         this.SupplierAssessmentService.getAllSupplierMasterAssessmentCriteria(supplierId).subscribe(data => {
             debugger
             this.criterias = data;
+      /*      this.cri*/
 
-            /*this.clonedProducts[criteria.assessment_criteria_id] = { ...criteria };*/
-            /*      this.onRowEditInit(criterias);*/
+
+            this.clonedProducts[data.assessment_criteria_id] = { ...data };
+
         });
-
-        //this.AssesmentApplicationForm.controls['comment'].enable();
-        //this.AssesmentApplicationForm.controls['suggestion'].enable();
         this.toggleGridDisplay();
     }
 

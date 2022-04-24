@@ -743,6 +743,7 @@
                                 <th pSortableColumn="MobileNo">Short Name</th>
                                 <th pSortableColumn="MobileNo">Mobile No</th>
                                 <th pSortableColumn="Email">Email</th>
+                                <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </ng-template>
@@ -757,6 +758,7 @@
                                 <td>{{supplierinfo.ShortName}}</td>
                                 <td>{{supplierinfo.MobileNo}}</td>
                                 <td>{{supplierinfo.Email}}</td>
+                                <td class="text-orange-400" *ngIf="!supplierinfo.IsVerified">{{"Pending Verify"}}</td>
                                 <td> <button class="pi pi-pencil risBtn risView mr-2" (click)="viewDocumentinfo(rowIndex,supplierinfo)"> View </button></td>
                             </tr>
                         </ng-template>
@@ -787,13 +789,11 @@
                             </div>
                         </div>
                         <div class="field md:col-1">
-                            <button pButton pRipple type="button" label="Assign" class="risBtnAssign risAssign mr-2 mb-2" icon="pi pi-plus"></button>
+                            <button pButton pRipple type="button" (click)="saveSupplierVerification()" label="Assign" class="risBtnAssign risAssign mr-2 mb-2" icon="pi pi-plus"></button>
                         </div>
                     </div>
                 </div>
             </form>
-
-
         </div>
     </div>
 </div>

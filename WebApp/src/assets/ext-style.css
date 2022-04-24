@@ -256,3 +256,8 @@
     border-color: #198754;
     box-shadow: 0.7px 0.7px 5px #888888;
 }
+
+.next-previous{
+    justify-content: flex-end !important;
+    margin-top: 0.5em;
+}

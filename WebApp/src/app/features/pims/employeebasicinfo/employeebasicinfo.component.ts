@@ -156,19 +156,34 @@ export class EmployeebasicinfoComponent implements OnInit {
         //}
     }
     onNext(): void {
-      
-        if (this.isEmployeeEdit == true) {
-            this.openNext();
-        } else {
 
-            this.onFormSubmit();
-            this.openNext();
+        const data = this.employeeForm.value;
+
+        if (this.isEmployeeEdit) {
+            if (!(data.present_country_id)) {
+                return this.notifyService.ShowNotification(2, "Please select present country.")
+            }
+            if (!(data.present_division_id)) {
+                return this.notifyService.ShowNotification(2, "Please select present division.")
+            }
+            if (!(data.present_district_id)) {
+                return this.notifyService.ShowNotification(2, "Please select present district.")
+            }
+            if (!(data.present_district_id)) {
+                return this.notifyService.ShowNotification(2, "Please select present district.")
+            }
+            if (data.present_city=="") {
+                return this.notifyService.ShowNotification(2, "Please input present city.")
+            } if (data.present_ps_area=="") {
+                return this.notifyService.ShowNotification(2, "Please input ps area.")
+            }
+            //if (this.isEmployeeEdit == true) {
+                this.onFormSubmit();
+                this.openNext();
+            //}
         }
 
-        // }
-        //if (this.employeeForm.invalid) {
-        //    return;
-        //}
+       
     }
     // for photo and signature upload
 
@@ -299,6 +314,7 @@ export class EmployeebasicinfoComponent implements OnInit {
             EthnicityName: [''],
 
             present_country_id: [0],
+            employee_id: [0],
             present_division_id: [0],
             present_district_id: [0],
             present_ps_area: [''],
@@ -372,7 +388,6 @@ export class EmployeebasicinfoComponent implements OnInit {
         // this.toggle();
         this.nodeSelected = true;
         this.rowData = event.data;
-
     }
     onRowUnselect(event) {
         // this.toggle();
@@ -581,9 +596,12 @@ export class EmployeebasicinfoComponent implements OnInit {
 
 
         if (this.isEmployeeEdit) {
-
-            data.employeeId = this.rowData.EmployeeId;
-            formData.append("employee_id", this.rowData.EmployeeId);
+            debugger
+            if (this.rowData != undefined) {
+                data.employeeId = this.rowData.EmployeeId;
+                formData.append("employee_id", this.rowData.EmployeeId);
+            }
+           
 
             this.employeeService.updateEmployee(formData).subscribe(result => {
 
@@ -591,21 +609,26 @@ export class EmployeebasicinfoComponent implements OnInit {
                 this.loadAllEmployees();
                 this.isEmployeeEdit = false;
             });
-            this.ngOnInit();
+          
         }
         else {
 
             this.employeeService.createEmployee(formData).subscribe(
                 result => {
                     this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
-                    this.loadAllEmployees();
+                    this.isEmployeeEdit = true;
+                    // //result.Data[0].organogram_id
+                    debugger
+                    if (this.rowData != undefined) {
+                        this.rowData.EmployeeId = result.Data[0].employee_id;
+                    }                   
+                    this.employeeList = result.Data[0];                    
+                    this.employeeForm.controls['employee_id'].setValue(result.Data[0].employee_id);
+                   // this.loadAllEmployees();
                 }
             );
-            this.ngOnInit();
+           
         }
-
-        // this.displayBasic = false;
-
     }
 
     loadAllEmployees() {
