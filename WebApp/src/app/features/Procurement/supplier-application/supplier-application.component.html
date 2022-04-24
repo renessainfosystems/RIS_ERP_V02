@@ -1537,7 +1537,8 @@
                             <th pSortableColumn="MobileNo">Mobile No</th>
                             <th pSortableColumn="Email">Email</th>
                             <th>Application Status</th>
-                            <th>Approval Status</th>
+                            <th>Status</th>
+                            <!--<th>Approval Status</th>-->
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-supplierinfo let-rowData let-columns="columns">
@@ -1547,12 +1548,14 @@
                             <td>{{supplierinfo.ShortName}}</td>
                             <td>{{supplierinfo.MobileNo}}</td>
                             <td>{{supplierinfo.Email}}</td>
-                            <td *ngIf="supplierinfo.IsConfirm===true">{{"Submitted"}}</td>
-                            <td *ngIf="supplierinfo.IsConfirm===false">{{"On Draft"}}</td>
-                            <td *ngIf="supplierinfo.FeedbackStatus===0">{{""}}</td>
-                            <td *ngIf="supplierinfo.FeedbackStatus===1">{{"Pending"}}</td>
-                            <td *ngIf="supplierinfo.FeedbackStatus===2">{{"Approve"}}</td>
-                            <td *ngIf="supplierinfo.FeedbackStatus===99">{{"Reject"}}</td>
+                            <td class="text-green-400" *ngIf="supplierinfo.IsConfirm===true">{{"Submitted"}}</td>
+                            <td class="text-red-400" *ngIf="supplierinfo.IsConfirm===false">{{"On Draft"}}</td>
+                            <td class="text-blue-400" *ngIf="supplierinfo.IsVerified">{{"Ongoing Verify"}}</td>
+                            <td class="text-orange-400" *ngIf="!supplierinfo.IsVerified">{{"Pending Verify"}}</td>
+                            <!--<td *ngIf="supplierinfo.FeedbackStatus===0">{{""}}</td>
+    <td *ngIf="supplierinfo.FeedbackStatus===1">{{"Pending"}}</td>
+    <td *ngIf="supplierinfo.FeedbackStatus===2">{{"Approve"}}</td>
+    <td *ngIf="supplierinfo.FeedbackStatus===99">{{"Reject"}}</td>-->
                         </tr>
                     </ng-template>
                 </p-table>

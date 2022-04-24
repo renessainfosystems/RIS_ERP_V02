@@ -315,6 +315,10 @@ namespace Auth
 
             services.AddScoped<SupplierAssessmentDataAccess, SupplierAssessmentDataAccess>();
             services.AddScoped<ISupplierAssessmentRepository, SupplierAssessmentRepository>();
+
+
+            services.AddScoped<SupplierVerificationDataAccess, SupplierVerificationDataAccess>();
+            services.AddScoped<ISupplierVerificationRepository, SupplierVerificationRepository>();
             #endregion
 
         }
