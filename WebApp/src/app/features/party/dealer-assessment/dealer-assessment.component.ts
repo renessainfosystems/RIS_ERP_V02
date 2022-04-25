@@ -3,6 +3,7 @@ import { AbstractControl, FormBuilder, FormControl, Validators } from '@angular/
 import { NavigationEnd } from '@angular/router';
 import { ConfirmationService } from 'primeng/api';
 import { NotificationService } from '../../../service/CommonMessage/notification.service';
+import { Criteria } from './criteria';
 import { DealerAssessmentService } from './dealer-assessment.service';
 
 @Component({
@@ -60,6 +61,9 @@ export class DealerAssessmentComponent  implements OnInit {
 
     dealerAssessmentList: any[];
     selecteddealerAssessment: any;
+
+    assessmentCriteriaList: any[];
+    selectedAssessmentCriteria: any;
 
     //declare dropdown List Property
     selectedDomicile: any;
@@ -347,6 +351,10 @@ export class DealerAssessmentComponent  implements OnInit {
         this.toggleFormDisplayDocument();
         this.dealerDocumentIndex();
     }
+
+    criterias: Criteria[];
+
+    clonedProducts: { [s: string]: Criteria; } = {};
         
     // for photo and signature upload
 
@@ -363,6 +371,9 @@ export class DealerAssessmentComponent  implements OnInit {
             }
         }
     }
+
+    // Assessment start
+
 
     constructor(private formbulider: FormBuilder, private confirmationService: ConfirmationService, private notifyService: NotificationService, private dealerAssessmentService: DealerAssessmentService) {
 
@@ -673,6 +684,7 @@ export class DealerAssessmentComponent  implements OnInit {
             this.loadAllDealerLocationinfos(row);
             this.loadAllDealerDocumentinfos(row);
             this.loadAllDealerCreditinfos(row);
+            this.loadAllAssessmentCriteria();
         });
         this.toggleGridDisplay();
     }
@@ -865,6 +877,13 @@ export class DealerAssessmentComponent  implements OnInit {
             this.dealercreditinfoList = data;
         });
     }
+
+    loadAllAssessmentCriteria() {
+        //let dealerinfoId = row.DealerInfoId;
+        this.dealerAssessmentService.getAllAssessmentCriteria().subscribe(data => {
+            this.criterias = data;
+        });
+    }
         
     onSelectImage(event) {
         if (event.target.files) {
@@ -973,5 +992,49 @@ export class DealerAssessmentComponent  implements OnInit {
     openPrevCredit() {
         this.indexCredit = (this.indexCredit === 0) ? 1 : this.indexCredit - 1;
     }
+
+
+    onRowEditInit(criteria: Criteria) {
+        this.clonedProducts[criteria.assessment_criteria_id] = { ...criteria };
+    }
+
+    //onRowEditSave(criteria: Criteria) {
+    //    debugger
+
+    //    if (criteria.assessment_criteria_id > 0) {
+
+           
+    //        let assessment_criteria_id = criteria.assessment_criteria_id;
+    //        let criteria_type = 1;
+    //        let manual_weight = criteria.manual_score;
+    //        let actual_weight = criteria.actual_score;
+    //        let comments = criteria.comment;
+    //        let supplierId = this.supplierApplicationForm.get('supplier_code')?.value;
+
+    //        //let association_id = this.associationsApplicationForm.get('association_id')?.value.association_id;
+
+    //        const scoreobj = { supplier_id: supplierId, assessment_criteria_id: assessment_criteria_id, criteria_type: criteria_type, manual_weight: manual_weight, actual_weight: actual_weight, comments: comments }
+    //        /*     this.assessmentScore.push(scoreobj);*/
+
+    //        this.SupplierAssessmentService.createSupplierAssessment(scoreobj).subscribe(data => {
+    //            this.dataSaved = true;
+    //            // this.loadAllSupplierAssociation();
+
+    //            this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage);
+    //        });
+
+    //        delete this.clonedProducts[criteria.assessment_criteria_id];
+    //        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Product is updated' });
+    //    }
+    //    else {
+    //        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Invalid Price' });
+    //    }
+    //}
+
+    onRowEditCancel(criteria: Criteria, index: number) {
+        this.criterias[index] = this.clonedProducts[criteria.assessment_criteria_id];
+        delete this.clonedProducts[criteria.assessment_criteria_id];
+    }
+
 
 }

@@ -184,5 +184,31 @@ namespace Auth.DataAccess.Party
             }
             return result;
         }
+
+        public async Task<dynamic> GetAllAssessmentCriteria()
+        {
+            var result = (dynamic)null;
+            if (_dbConnection.State == ConnectionState.Closed)
+                _dbConnection.Open();
+            try
+            {
+                var sql = @"SELECT * FROM Administrative.Assessment_Criteria WHERE criteria_type_id=1 and party_type_id=2";
+                dynamic data = await _dbConnection.QueryAsync<dynamic>(sql);
+                if (data != null)
+                {
+                    List<dynamic> dataList = data;
+                    result = (from dr in dataList select DealerAssessmentViewModel.ConvertToModel(dr)).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex.InnerException;
+            }
+            finally
+            {
+                _dbConnection.Close();
+            }
+            return result;
+        }
     }
 }

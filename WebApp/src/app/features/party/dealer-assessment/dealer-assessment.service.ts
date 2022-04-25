@@ -275,4 +275,9 @@ export class DealerAssessmentService {
 
         return this.http.get<any[]>(this.ipconfig.base_IP + 'DealerVerification/GetAllDealerVerification', httpOptions);
     }
+
+    getAllAssessmentCriteria(): Observable<any[]> {
+
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'DealerAssessment/GetAllAssessmentCriteria', httpOptions);
+    }
 }
