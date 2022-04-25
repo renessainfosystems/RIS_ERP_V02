@@ -56,9 +56,9 @@ namespace Auth.Controllers.Party
         }
 
         [HttpGet]
-        public async Task<dynamic> GetAllAssessmentCriteria()
+        public async Task<dynamic> GetAllAssessmentCriteria(int dealer_info_id)
         {
-            return await _dealerAssessmentRepository.GetAllAssessmentCriteria();
+            return await _dealerAssessmentRepository.GetAllAssessmentCriteria(dealer_info_id);
         }
     }
 }

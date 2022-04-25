@@ -37,9 +37,6 @@ namespace Auth.DataAccess.Party
         public DynamicParameters DealerAssessmentarameterBinding(DealerAssessment dealerAssessment, int operationType)
         {
             var user_info_id = _httpContextAccessor.HttpContext.Items["User_Info_Id"];
-            var company_corporate_id = _httpContextAccessor.HttpContext.Items["company_corporate_id"];
-            var company_group_id = _httpContextAccessor.HttpContext.Items["company_group_id"];
-            var company_id = _httpContextAccessor.HttpContext.Items["company_id"];
             DynamicParameters parameters = new DynamicParameters();
 
             if (operationType == (int)GlobalEnumList.DBOperation.Create || operationType == (int)GlobalEnumList.DBOperation.Update)
@@ -180,15 +177,22 @@ namespace Auth.DataAccess.Party
             return result;
         }
 
-        public async Task<dynamic> GetAllAssessmentCriteria()
+        public async Task<dynamic> GetAllAssessmentCriteria(int dealer_info_id)
         {
             var result = (dynamic)null;
             if (_dbConnection.State == ConnectionState.Closed)
                 _dbConnection.Open();
             try
             {
-                var sql = @"SELECT * FROM Administrative.Assessment_Criteria WHERE criteria_type_id=1 and party_type_id=2";
-                result = await _dbConnection.QueryAsync<dynamic>(sql);
+                var sql = @"SELECT AC.*,
+                            ISNULL(DA.manual_score,0)manual_score,ISNULL(DA.actual_score,0)actual_score ,DA.comment
+                            FROM Administrative.Assessment_Criteria AC
+                            LEFT JOIN (SELECT *FROM Party.Dealer_Assessment WHERE dealer_info_id=@dealer_info_id) DA 
+                            ON DA.assessment_criteria_id=AC.assessment_criteria_id
+                            WHERE AC.criteria_type_id=1 and AC.party_type_id=2";
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@dealer_info_id", dealer_info_id);
+                result = await _dbConnection.QueryAsync<dynamic>(sql, parameters);
 
             }
             catch (Exception ex)

@@ -277,9 +277,15 @@ export class DealerAssessmentService {
         return this.http.get<any[]>(this.ipconfig.base_IP + 'DealerVerification/GetAllDealerVerification', httpOptions);
     }
 
-    getAllAssessmentCriteria(): Observable<any[]> {
+    //getAllAssessmentCriteria(): Observable<any[]> {
 
-        return this.http.get<any[]>(this.ipconfig.base_IP + 'DealerAssessment/GetAllAssessmentCriteria', httpOptions);
+    //    return this.http.get<any[]>(this.ipconfig.base_IP + 'DealerAssessment/GetAllAssessmentCriteria', httpOptions);
+    //}
+
+    getAllAssessmentCriteria(dealer_info_id: Number): Observable<any[]> {
+
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'DealerAssessment/GetAllAssessmentCriteria?dealer_info_id=' + dealer_info_id, httpOptions);
+
     }
 
     createDealerAssessment(dealerAssessment: any): Observable<any> {

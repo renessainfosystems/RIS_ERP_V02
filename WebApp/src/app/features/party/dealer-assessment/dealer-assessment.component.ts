@@ -686,7 +686,7 @@ export class DealerAssessmentComponent  implements OnInit {
             this.loadAllDealerLocationinfos(row);
             this.loadAllDealerDocumentinfos(row);
             this.loadAllDealerCreditinfos(row);
-            this.loadAllAssessmentCriteria();
+            this.loadAllAssessmentCriteria(row);
         });
         this.toggleGridDisplay();
     }
@@ -880,9 +880,9 @@ export class DealerAssessmentComponent  implements OnInit {
         });
     }
 
-    loadAllAssessmentCriteria() {
-        //let dealerinfoId = row.DealerInfoId;
-        this.dealerAssessmentService.getAllAssessmentCriteria().subscribe(data => {
+    loadAllAssessmentCriteria(row) {
+        let dealerinfoId = row.DealerInfoId;
+        this.dealerAssessmentService.getAllAssessmentCriteria(dealerinfoId).subscribe(data => {
             this.criterias = data;
         });
     }
