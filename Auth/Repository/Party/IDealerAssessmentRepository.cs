@@ -9,6 +9,6 @@ namespace Auth.Repository.Party
         Task<dynamic> GetAllDealerAssessment();
         Task<dynamic> GetAssessmentByDealerId(int dealer_info_id);
         Task<dynamic> IUD_DealerAssessment(DealerAssessment dealerAssessment, int dbOperation);
-
+        Task<dynamic> GetAllAssessmentCriteria(int dealer_info_id);
     }
 }

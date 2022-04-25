@@ -37,9 +37,6 @@ namespace Auth.DataAccess.Party
         public DynamicParameters DealerAssessmentarameterBinding(DealerAssessment dealerAssessment, int operationType)
         {
             var user_info_id = _httpContextAccessor.HttpContext.Items["User_Info_Id"];
-            var company_corporate_id = _httpContextAccessor.HttpContext.Items["company_corporate_id"];
-            var company_group_id = _httpContextAccessor.HttpContext.Items["company_group_id"];
-            var company_id = _httpContextAccessor.HttpContext.Items["company_id"];
             DynamicParameters parameters = new DynamicParameters();
 
             if (operationType == (int)GlobalEnumList.DBOperation.Create || operationType == (int)GlobalEnumList.DBOperation.Update)
@@ -58,7 +55,7 @@ namespace Auth.DataAccess.Party
 
                 parameters.Add("@param_DBOperation", operationType == (int)GlobalEnumList.DBOperation.Create ? GlobalEnumList.DBOperation.Create : GlobalEnumList.DBOperation.Update);
             }
-            
+
             return parameters;
         }
 
@@ -73,56 +70,51 @@ namespace Auth.DataAccess.Party
             if (_dbConnection.State == ConnectionState.Closed)
                 _dbConnection.Open();
 
-            using (var tran = _dbConnection.BeginTransaction())
+
+            try
             {
-                try
-                {
-                    dynamic data = await _dbConnection.QueryAsync<dynamic>("[Party].[SP_DealerAssessment_IUD]", parameters, commandType: CommandType.StoredProcedure, transaction: tran);
+                dynamic data = await _dbConnection.QueryAsync<dynamic>("[Party].[SP_DealerAssessment_IUD]", parameters, commandType: CommandType.StoredProcedure);
 
-                    if (data != null)
+                if (data != null)
+                {
+                    List<dynamic> dataList = data;
+
+                    result = (from dr in dataList select DealerAssessmentViewModel.ConvertToModel(dr)).ToList();
+
+
+
+                    if (result != null && dbOperation == (int)GlobalEnumList.DBOperation.Create)
                     {
-                        List<dynamic> dataList = data;
-
-                        result = (from dr in dataList select DealerAssessmentViewModel.ConvertToModel(dr)).ToList();
-
-
-                        if (result != null && dbOperation == (int)GlobalEnumList.DBOperation.Approve)
-                        {
-                            return message = CommonMessage.SetSuccessMessage("Approved", result);
-                        }
-
-                        if (result != null && dbOperation == (int)GlobalEnumList.DBOperation.Create)
-                        {
-                            message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage, result);
-                        }
-                        else if (result != null && dbOperation == (int)GlobalEnumList.DBOperation.Update)
-                        {
-                            message = CommonMessage.SetSuccessMessage(CommonMessage.CommonUpdateMessage, result);
-                        }
-                        if (dbOperation == (int)GlobalEnumList.DBOperation.Delete)
-                        {
-                            return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonDeleteMessage);
-                        }
-                        else
-                        {
-                            message = CommonMessage.SetErrorMessage(CommonMessage.CommonErrorMessage);
-                        }
+                        message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage, result);
                     }
-                    tran.Commit();
-                }
-                catch (Exception ex)
-                {
-                    tran.Rollback();
-                    throw ex.InnerException;
-                }
-                finally
-                {
-                    //DB connection dispose with db connection close
-                    tran.Dispose();
-
+                    else if (result != null && dbOperation == (int)GlobalEnumList.DBOperation.Update)
+                    {
+                        message = CommonMessage.SetSuccessMessage(CommonMessage.CommonUpdateMessage, result);
+                    }
+                    else if (dbOperation == (int)GlobalEnumList.DBOperation.Delete)
+                    {
+                        return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonDeleteMessage);
+                    }
+                    else
+                    {
+                        message = CommonMessage.SetErrorMessage(CommonMessage.CommonErrorMessage);
+                    }
                 }
 
             }
+            catch (Exception ex)
+            {
+                message = CommonMessage.SetErrorMessage(ex.Message);
+
+            }
+            finally
+            {
+                //DB connection dispose with db connection close
+                _dbConnection.Dispose();
+
+            }
+
+
 
             return (message);
         }
@@ -173,6 +165,35 @@ namespace Auth.DataAccess.Party
                     List<dynamic> dataList = data;
                     result = (from dr in dataList select DealerAssessmentViewModel.ConvertToModel(dr)).ToList();
                 }
+            }
+            catch (Exception ex)
+            {
+                throw ex.InnerException;
+            }
+            finally
+            {
+                _dbConnection.Close();
+            }
+            return result;
+        }
+
+        public async Task<dynamic> GetAllAssessmentCriteria(int dealer_info_id)
+        {
+            var result = (dynamic)null;
+            if (_dbConnection.State == ConnectionState.Closed)
+                _dbConnection.Open();
+            try
+            {
+                var sql = @"SELECT AC.*,
+                            ISNULL(DA.manual_score,0)manual_score,ISNULL(DA.actual_score,0)actual_score ,DA.comment
+                            FROM Administrative.Assessment_Criteria AC
+                            LEFT JOIN (SELECT *FROM Party.Dealer_Assessment WHERE dealer_info_id=@dealer_info_id) DA 
+                            ON DA.assessment_criteria_id=AC.assessment_criteria_id
+                            WHERE AC.criteria_type_id=1 and AC.party_type_id=2";
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@dealer_info_id", dealer_info_id);
+                result = await _dbConnection.QueryAsync<dynamic>(sql, parameters);
+
             }
             catch (Exception ex)
             {
