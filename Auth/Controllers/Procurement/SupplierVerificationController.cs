@@ -31,46 +31,44 @@ namespace Auth.Controllers.Procurement
             return await _supplierVerificationRepository.IUD_SupplierVerification(supplierVerification, (int)GlobalEnumList.DBOperation.Create);
         }
 
+        [HttpPost]
+        public async Task<dynamic> Update([FromForm] SupplierVerification supplierVerification)
+        {
 
- 
-        //[HttpPost]
-        //public async Task<dynamic> Update([FromForm] DealerVerification dealerVerification)
-        //{
-            
-        //   return await _dealerVerificationRepository.IUD_DealerVerification(dealerVerification, (int)GlobalEnumList.DBOperation.Update);
-        //}
-   
-        //[HttpPost]
-        //public async Task<dynamic> Delete(int dealer_verification_id)
-        //{
-        //    DealerVerification oDealerVerification = new DealerVerification();
-        //    //oDealerVerification.dealer_verification_id = dealer_verification_id;            
-        //    return await _dealerVerificationRepository.IUD_DealerVerification(oDealerVerification, (int)GlobalEnumList.DBOperation.Delete);
-        //}
+            return await _supplierVerificationRepository.IUD_SupplierVerification(supplierVerification, (int)GlobalEnumList.DBOperation.Update);
+        }
 
-        //[HttpPost]
-        //public async Task<dynamic> Approve(DealerVerification dealerVerification)
-        //{
+        [HttpPost]
+        public async Task<dynamic> Delete(int supplier_verification_id)
+        {
+            SupplierVerification oSupplierVerification = new SupplierVerification();        
+            return await _supplierVerificationRepository.IUD_SupplierVerification(oSupplierVerification, (int)GlobalEnumList.DBOperation.Delete);
+        }
 
-        //    return await _dealerVerificationRepository.IUD_DealerVerification(dealerVerification, (int)GlobalEnumList.DBOperation.Approve);
-        //}
 
-        //[HttpGet]
-        //public async Task<dynamic> GetAllDealerVerification()
-        //{
-        //    return await _dealerVerificationRepository.GetAllDealerVerification();
-        //}
+        [HttpPost]
+        public async Task<dynamic> Approve(SupplierVerification supplierVerification)
+        {
 
-        //[HttpGet]
-        //public async Task<dynamic> GetDealerVerificationById(int dealer_verification_id)
-        //{
-        //    return await _dealerVerificationRepository.GetDealerVerificationById(dealer_verification_id);
-        //}
+            return await _supplierVerificationRepository.IUD_SupplierVerification(supplierVerification, (int)GlobalEnumList.DBOperation.Approve);
+        }
 
-        //[HttpGet]
-        //public async Task<dynamic> GetDealerVerificationByDealerId(int dealer_info_id)
-        //{
-        //    return await _dealerVerificationRepository.GetDealerVerificationByDealerId(dealer_info_id);
-        //}        
+        [HttpGet]
+        public async Task<dynamic> GetAllSupplierVerification()
+        {
+            return await _supplierVerificationRepository.GetAllSupplierVerification();
+        }
+
+        [HttpGet]
+        public async Task<dynamic> GetSupplierVerificationById(int supplier_verification_id)
+        {
+            return await _supplierVerificationRepository.GetSupplierVerificationById(supplier_verification_id);
+        }
+
+        [HttpGet]
+        public async Task<dynamic> GetSupplierVerificationBySupplierId(int supplier_id)
+        {
+            return await _supplierVerificationRepository.GetSupplierVerificationBySupplierId(supplier_id);
+        }
     }
 }
