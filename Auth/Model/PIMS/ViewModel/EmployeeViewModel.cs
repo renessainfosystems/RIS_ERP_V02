@@ -74,10 +74,10 @@ namespace Auth.Model.PIMS.ViewModel
         public string PermanentAddressNote { get; set; }
         public long EmployeeOldId { get; set; }
         public string EmployeeOldCode { get; set; }        //            //
-        public Boolean IsActive { get; set; }
+        public bool IsActive { get; set; }
         public string TitleName { get; set; }
         public string GenderName { get; set; }
-        public string ReligionName { get; set; }
+        public string ReligionName { get; set; }        
         public string BloodGroupName { get; set; }
         public string ResidencialStatusName { get; set; }
         public string MaritalName { get; set; }
@@ -85,13 +85,35 @@ namespace Auth.Model.PIMS.ViewModel
         public string CountryOfBirthName { get; set; }
         public string EmployeeImagePath { get; set; }
         public string SignatureImagePath { get; set; }
+        public string EmployeeNameCode { get { return "[" + this.Code + "] " + this.EmployeeName; } }
+        public string EmployeeOfficial { get { return this.position_name + ", " + this.department_name + ", " + this.location_name; } }
+
+        public string position_name { get; set; }
+        public string department_name { get; set; }
+        public string location_name { get; set; }
+        public string designation_name { get; set; }
+        public string confirmation_status_name { get; set; }
+        public string company_name { get; set; }
+        public string job_domicile_name { get; set; }
+        public string service_type_name { get; set; }
+        public string working_action_name { get; set; }
+        public string job_location_name { get; set; }
 
         public static EmployeeViewModel ConvertToModel(dynamic user)
         {
          
             var model = new EmployeeViewModel();
-          //  model.UserInfoId = user.user_info_id;
-            //model.Code = user.code ??"";          
+            model.position_name = user.position_name ?? "";
+            model.department_name = user.department_name ?? "";
+            model.location_name = user.location_name ?? "";
+            model.designation_name = user.designation_name ?? "";
+            model.confirmation_status_name = user.confirmation_status_name ?? "";
+            model.company_name = user.company_name ?? "";
+            model.job_domicile_name = user.job_domicile_name ?? "";
+            model.service_type_name = user.service_type_name ?? "";
+            model.working_action_name = user.working_action_name ?? "";
+            model.job_location_name = user.job_location_name ?? "";
+
             model.EmployeeId = user.employee_id ??0;
             model.Code = user.code ?? "";
             model.EmployeeName = user.employee_name ?? "";
@@ -152,6 +174,7 @@ namespace Auth.Model.PIMS.ViewModel
             model.CompanyId = user.company_id ?? "";
             model.EmployeeOldId = user.employee_old_id ?? "";
             model.EmployeeOldCode = user.employee_old_code ?? "";
+           
 
             model.TitleName = EnumDisplay.GetDisplayName((EnumEmployeeTittle)user.title_enum_id);
             model.GenderName = EnumDisplay.GetDisplayName((EnumEmployeeGender)user.gender_enum_id);

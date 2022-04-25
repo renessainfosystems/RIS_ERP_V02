@@ -272,6 +272,14 @@
                         <form action="" [formGroup]="employeeForm">
                             <div class="col-12">
                                 <div class="p-fluid p-formgrid grid">
+                                    <div class="field col-12 md:col-6">
+                                        <label pTooltip="Country" tooltipPosition="top">Business Unit</label>
+                                        <input id="float-input p-fluid" disabled type="text" formControlName="adrs_Business_Unit" pInputText>
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label pTooltip="Country" tooltipPosition="top">Employee</label>
+                                        <input id="float-input p-fluid" disabled type="text" formControlName="EmployeeNameCode" pInputText>
+                                    </div>
                                     <div class="field col-12 md:col-12">
                                         <h4>Present Address</h4>
                                     </div>
@@ -279,7 +287,7 @@
                                         <label pTooltip="Country" tooltipPosition="top">Country<span class="req">*</span></label>
                                         <p-dropdown [options]="drpdwnPresentCountryList" formControlName="present_country_id" [ngClass]="{ 'is-invalid': submitted && f.present_country_id.errors }" placeholder="---Select---"
                                                     optionLabel="country_name" optionValue="country_id" (onChange)="onSelectByPresentCountryId($event.value)" [showClear]="true" [filter]="true" filterBy="country_name"></p-dropdown>
-                                  
+
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label for="" class=" d-md-inline-flex" pTooltip="State/Division" tooltipPosition="top">State/Division<span class="req">*:</span> </label>
@@ -287,7 +295,7 @@
                                         <p-dropdown [options]="drpdwnPresentDivisionList" formControlName="present_division_id" [ngClass]="{ 'is-invalid': submitted && f.present_division_id.errors }" placeholder="---Select---"
                                                     optionLabel="division_name" optionValue="division_id" (onChange)="onSelectByPresentDivisionId($event.value)" [showClear]="true"></p-dropdown>
 
-                                       
+
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label for="" class=" d-md-inline-flex" pTooltip="District" tooltipPosition="top">District<span class="req">*:</span> </label>
@@ -296,7 +304,7 @@
                                         <p-dropdown [options]="drpdwnPresentDistrictList" formControlName="present_district_id" [ngClass]="{ 'is-invalid': submitted && f.present_district_id.errors }" placeholder="---Select---"
                                                     optionLabel="district_name" optionValue="district_id" [showClear]="true">
                                         </p-dropdown>
-                                     
+
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label for="" class=" d-md-inline-flex" pTooltip="City/Town" tooltipPosition="top">City/Town<span class="req">*:</span> </label>
@@ -339,17 +347,17 @@
                                     </div>
 
                                     <hr />
-                                    <h4>Permanent Address</h4> 
+                                    <h4>Permanent Address</h4>
                                     <div class="field col-12 md:col-12">
                                         <!--<p-checkbox [(ngModel)]="checked" binary="true" label="Same As Present Address" (onChange)="sameAddress($event)" inputId="binary"></p-checkbox>-->
                                         <p-checkbox binary="true" label="Same As Present Address" (onChange)="sameAddress($event)" inputId="binary"></p-checkbox>
 
-                                    </div> 
+                                    </div>
                                     <div class="field col-12 md:col-6">
                                         <label for="" class=" d-md-inline-flex" pTooltip="Country" tooltipPosition="top">Country :</label>
                                         <p-dropdown [options]="drpdwnPermanentCountryList" formControlName="permanent_country_id" placeholder="---Select---"
                                                     optionLabel="country_name" optionValue="country_id" (onChange)="onSelectByPermanentCountryId($event.value)" [showClear]="true" [filter]="true" filterBy="country_name">
-                                        </p-dropdown> 
+                                        </p-dropdown>
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label for="" class=" d-md-inline-flex" pTooltip="State/Division" tooltipPosition="top">State/Division :</label>

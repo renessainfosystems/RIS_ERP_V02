@@ -153,7 +153,13 @@ namespace Auth.DataAccess.PIMS
 
                 if (data.Count > 0)
                 {
-                    message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage, data);
+                    //Return View Model 
+                    List<dynamic> dataList = data;
+                    var result = (dynamic)null;
+                    result = (from dr in dataList select EmployeeViewModel.ConvertToModel(dr)).ToList();
+                   // message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage, data);
+                    message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage, result);
+                    //end Return View Model
                 }
                 else
                 {
