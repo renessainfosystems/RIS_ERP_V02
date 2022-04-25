@@ -14,8 +14,6 @@ import { Observable } from 'rxjs';
 })
 export class EmployeebasicinfoComponent implements OnInit {
 
-
-    //companyForm: FormGroup;
     submitted = false;
 
     officialFormSubmitted = false;
@@ -64,37 +62,22 @@ export class EmployeebasicinfoComponent implements OnInit {
     isEmployeeEdit: boolean = false;
     nodeSelected: boolean = false;
     //declare dropdown List Property
-    drpdwntitleList: Employee[];//Title Dropdown List
-    selectedTitle: Employee;//Title Selected Row List
-    drpdwngenderList: Employee[];//Gender Dropdown List
-    selectedGender: Employee;//Gender Selected Row List
-    drpdwnreligionList: Employee[];//Religion Dropdown List
-    selectedReligion: Employee;//Gender Selected Row List
-    drpdwnbloodGroupList: Employee[];//BloodGroup Dropdown List
-    selectedBloodGroup: Employee;//BloodGroup Selected Row List
-    drpdwnresidencialStatusList: Employee[];//ResidencialStatus Dropdown List
-    selectedResidencialStatus: Employee;//ResidencialStatus Selected Row List
+    drpdwntitleList: Employee[];//Title Dropdown List    
+    drpdwngenderList: Employee[];//Gender Dropdown List    
+    drpdwnreligionList: Employee[];//Religion Dropdown List    
+    drpdwnbloodGroupList: Employee[];//BloodGroup Dropdown List   
+    drpdwnresidencialStatusList: Employee[];//ResidencialStatus Dropdown List    
     drpdwnmaritalStatusList: Employee[];//Marital Status Dropdown List
-    selectedMaritalStatus: Employee;//Marital Status Selected Row List
-
-    drpdwnNationalityList: Employee[];//Nationality Dropdown List
-    selectedNationality: Employee;//Nationality Selected Row List
-    drpdwnCountryOfBirthList: Employee[];//Country Of Birth Dropdown List
-    selectedCountryOfBirth: Employee;//Country Of Birth Selected Row List
-    drpdwnEthnicityList: Employee[];//Country Of Birth Dropdown List
-    selectedEthnicity: Employee;//Country Of Birth Selected Row List
-    drpdwnPresentCountryList: Employee[];//Present Country Dropdown List
-    selectedPresentCountry: Employee;//Present Country Selected Row List
-    drpdwnPresentDivisionList: Employee[];//Present Division Dropdown List
-    selectedPresentDivision: Employee;//Present Division Selected Row List
-    drpdwnPresentDistrictList: Employee[];//Present District Dropdown List
-    selectedPresentDistrict: Employee;//Present District Selected Row List
-    drpdwnPermanentCountryList: Employee[];//Permanent Country Dropdown List
-    selectedPermanentCountry: Employee;//Permanent Country Selected Row List
-    drpdwnPermanentDivisionList: Employee[];//Present Division Dropdown List
-    selectedPermanentDivision: Employee;//Present Division Selected Row List
+    drpdwnNationalityList: Employee[];//Nationality Dropdown List     
+    drpdwnCountryOfBirthList: Employee[];//Country Of Birth Dropdown List    
+    drpdwnEthnicityList: Employee[];//Country Of Birth Dropdown List     
+    drpdwnPresentCountryList: Employee[];//Present Country Dropdown List    
+    drpdwnPresentDivisionList: Employee[];//Present Division Dropdown List    
+    drpdwnPresentDistrictList: Employee[];//Present District Dropdown List     
+    drpdwnPermanentCountryList: Employee[];//Permanent Country Dropdown List    
+    drpdwnPermanentDivisionList: Employee[];//Present Division Dropdown List   
     drpdwnPermanentDistrictList: Employee[];//Present District Dropdown List
-    selectedPermanentDistrict: Employee;//Present District Selected Row List
+   
 
     index: number = 0;
     //end dropdown List prperty
@@ -220,64 +203,14 @@ export class EmployeebasicinfoComponent implements OnInit {
             }
         }
     }
-    showBasicDialog() {
-        //this.resetForm();
+    showBasicDialog() {       
         this.toggleGridDisplay();
     }
 
 
-    //resetForm() {
-    //    this.employeeForm.reset();
-    //}
     constructor(private formbulider: FormBuilder, private notifyService: NotificationService, private employeeService: EmployeeService, private toastr: ToastrService) { }
 
     clear() {
-        this.employeeForm = this.formbulider.group({
-            code: [''],
-            employee_name: [''],
-            first_name: [''],
-            middle_name: [''],
-            sur_name: [''],
-            father_name: [''],
-            mother_name: [''],
-            spouse_name: [''],
-            date_of_marriage: [''],
-            personal_phone: [''],
-            official_phone: [''],
-            personal_email: [''],
-            official_email: [''],
-            date_of_birth: [''],
-            identification_mark: [''],
-            passport_no: [''],
-            birth_id: [''],
-            driving_license_no: [''],
-            //drownlist field
-            title_enum_id: [null],
-            title_enum_name: [''],
-            gender_enum_id: [null],
-            gender_enum_name: [null],
-            religion_enum_id: [null],
-            ReligionName: [''],
-            blood_group_enum_id: [null],
-            BloodGroupName: [''],
-            residentcial_status_enum_id: [null],
-            ResidencialStatusName: [''],
-            marital_status_enum_id: [null],
-            marital_status_enum_name: [''],
-            national_id: [''],
-            employee_old_code: [''],
-            nationality_id: [''],
-            NationalityName: [''],
-            country_of_birth_id: [''],
-            CountryOfBirthName: [''],
-            ethnicity_id: [''],
-            EthnicityName: [''],
-            ImageUpload: new FormControl(''),
-            SignatureUpload: new FormControl('')
-        });
-
-    }
-    ngOnInit(): void {
         this.employeeForm = this.formbulider.group({
             code: ['', [Validators.required]],
             first_name: ['', [Validators.required]],
@@ -342,6 +275,10 @@ export class EmployeebasicinfoComponent implements OnInit {
             SignatureUpload: new FormControl(null)
 
         });
+       
+    }
+    ngOnInit(): void {
+        this.clear();
         this.employeeOfficialForm = this.formbulider.group({
             employee_id: [0],
             location_id: [null, [Validators.required]],
@@ -398,7 +335,7 @@ export class EmployeebasicinfoComponent implements OnInit {
   
     sameAddress(event) {
         if (event.checked) {
-            //return this.notifyService.ShowNotification(2, 'Checked true');
+          
             const data = this.employeeForm.value;
             this.employeeForm.controls['permanent_country_id'].setValue(data.present_country_id);
             this.onSelectByPermanentCountryId(data.present_country_id);
@@ -561,7 +498,6 @@ export class EmployeebasicinfoComponent implements OnInit {
     onFormSubmit() {
       
         //for Image Upload
-
         const data = this.employeeForm.value;
 
         if (this.isEmployeeEdit) {
@@ -593,8 +529,6 @@ export class EmployeebasicinfoComponent implements OnInit {
            
 
         }
-
-
         if (this.isEmployeeEdit) {
             debugger
             if (this.rowData != undefined) {
@@ -760,12 +694,7 @@ export class EmployeebasicinfoComponent implements OnInit {
         );
 
     }
-    //resetForm() {
-    //  this.employeeForm.reset();
-    //  this.isEmployeeEdit = false;
-    //  this.loadAllEmployees();
-    //  this.employeedataSource = [];
-    //}
+    
 
     onSelectImage(event) {
 
