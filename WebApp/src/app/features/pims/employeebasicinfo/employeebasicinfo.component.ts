@@ -203,7 +203,8 @@ export class EmployeebasicinfoComponent implements OnInit {
             }
         }
     }
-    showBasicDialog() {       
+    showBasicDialog() {
+        this.clear();
         this.toggleGridDisplay();
     }
 
@@ -270,6 +271,8 @@ export class EmployeebasicinfoComponent implements OnInit {
             permanent_house_no: [''],
             permanent_flat_no: [''],
             permanent_address_note: [''],
+            adrs_Business_Unit: [''],
+            EmployeeNameCode: [''],
 
             ImageUpload: new FormControl(null),
             SignatureUpload: new FormControl(null)
@@ -369,7 +372,7 @@ export class EmployeebasicinfoComponent implements OnInit {
     }
  
     loadEmployeeToEdit() {
-
+        this.clear();
         if (this.rowData == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
         }
@@ -449,6 +452,7 @@ export class EmployeebasicinfoComponent implements OnInit {
             this.employeeForm.controls['permanent_flat_no'].setValue(data.PermanentFlatNo);
             this.employeeForm.controls['permanent_address_note'].setValue(data.PermanentAddressNote);
             this.employeeForm.controls['permanent_block'].setValue(data.PermanentBlock);
+            this.employeeForm.controls['EmployeeNameCode'].setValue(data.EmployeeNameCode);
             //# end Dropdownload
             this.photourllink = data.EmployeeImagePath;
             this.sigurllink = data.SignatureImagePath;
@@ -554,10 +558,11 @@ export class EmployeebasicinfoComponent implements OnInit {
                     // //result.Data[0].organogram_id
                     debugger
                     if (this.rowData != undefined) {
-                        this.rowData.EmployeeId = result.Data[0].employee_id;
+                        this.rowData.EmployeeId = result.Data[0].EmployeeId;
                     }                   
                     this.employeeList = result.Data[0];                    
-                    this.employeeForm.controls['employee_id'].setValue(result.Data[0].employee_id);
+                    this.employeeForm.controls['employee_id'].setValue(result.Data[0].EmployeeId);
+                    this.employeeForm.controls['EmployeeNameCode'].setValue(result.Data[0].EmployeeNameCode);
                    // this.loadAllEmployees();
                 }
             );
@@ -646,7 +651,7 @@ export class EmployeebasicinfoComponent implements OnInit {
         }
         else
             this.drpdwnPresentDivisionList = null;
-    }
+    }    
 
     onSelectByPresentDivisionId(divisionId: Number) {
         if (divisionId != null) {

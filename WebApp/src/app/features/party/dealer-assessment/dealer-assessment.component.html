@@ -9,8 +9,8 @@
                             <div class="col-12">
                                 <div class="p-fluid p-formgrid grid">
                                     <div class="field col-12 md:col-6">
-                                        <label>Dealer Code</label>
-                                        <input pInputText type="text" formControlName="dealer_info_code" placeholder="<<Auto Generate>>" disabled />
+                                        <label>Dealer Code</label>                                        
+                                        <input pInputText type="text" formControlName="dealer_info_id" placeholder="<<Auto Generate>>" disabled />
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label pTooltip="Image" tooltipPosition="top">Image </label>
@@ -47,7 +47,7 @@
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label>Year Established </label>
-                                        <p-calendar formControlName="year_established"  [disabled]="true"></p-calendar>
+                                        <p-calendar formControlName="year_established" [disabled]="true"></p-calendar>
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label>TIN No </label>
@@ -156,7 +156,7 @@
 
                                     </div>
                                     <div class="field col-12 md:col-6">
-                                        <label >Country</label>
+                                        <label>Country</label>
                                         <p-dropdown [options]="allCountry" formControlName="country_id" [disabled]="true"
                                                     optionLabel="country_name" optionValue="country_id" (onChange)="onSelectByCountryId($event.value)" [showClear]="true" [filter]="true" filterBy="country_name"></p-dropdown>
 
@@ -186,7 +186,7 @@
 
                                     </div>
                                     <div class="field col-12 md:col-6">
-                                        <label >City/Town </label>
+                                        <label>City/Town </label>
                                         <input type="text" formControlName="city" disabled pInputText />
                                     </div>
 
@@ -251,7 +251,7 @@
                                         <input type="text" formControlName="credit_days" disabled pInputText />
                                     </div>
                                     <div class="field col-12 md:col-6">
-                                        <label >Security Requirment</label>
+                                        <label>Security Requirment</label>
                                         <p-dropdown [options]="allSecurityType" formControlName="security_type_enum_id" [disabled]="true"
                                                     optionLabel="security_type_enum_name" optionValue="security_type_enum_id" [showClear]="true" [filter]="true" filterBy="security_type_enum_name"></p-dropdown>
 
@@ -432,64 +432,68 @@
                         </div>
                     </p-tabPanel>
                     <p-tabPanel header="Assessment">
-                        <!--<form action="" [formGroup]="dealerinfoForm">
-                            <div class="col-12">
-                                <div class="p-fluid p-formgrid grid">
-                                    <div class="field form-group col-12 md:col-6">
-                                        <label>Dealer Name:</label>
-                                        <input pInputText type="text" class="from-control" formControlName="dealer_info_name" disabled />
-                                    </div>
-                                    <div class="field col-12 md:col-6">
-                                        <label>Dealer Short Name</label>
-                                        <input pInputText type="text" formControlName="dealer_info_short_name" disabled />
-                                    </div>
-                                    <div class="field col-12 md:col-6">
-                                        <label> Dealer Display Name </label>
-                                        <input type="text" formControlName="dealer_info_display_name" pInputText disabled />
-                                    </div>
-                                    <div class="field col-12 md:col-6">
-                                        <label>Domicile</label>
-                                        <p-dropdown [options]="allDomicile" formControlName="domicile_enum_id" optionLabel="domicile_enum_name" optionValue="domicile_enum_id" readonly></p-dropdown>
-                                    </div>
-                                    <div class="field col-12 md:col-6">
-                                        <label pTooltip="Trade License" tooltipPosition="top">Trade License </label>
-                                        <input pInputText type="text" formControlName="trade_license" disabled />
+                        <div class="col-12">
+                            <div class="p-fluid p-formgrid grid">
+                                <div class="p-fluid grid col-12 flex justify-content-start flex-wrap card-container">
+                                    <p-table [value]="criterias" dataKey="assessment_criteria_id" editMode="row">
+                                        <ng-template pTemplate="header">
+                                            <tr>
+                                                <th>Criteria Name</th>
+                                                <th>Autometic Score</th>
+                                                <th>Manual Score</th>
+                                                <th>Actual Score</th>
+                                                <th>Comments</th>
+                                                <th style="width:8rem"></th>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="body" let-criteria let-editing="editing" let-ri="rowIndex">
+                                            <tr [pEditableRow]="criteria">
+                                                <td>{{criteria.assessment_criteria_name}}</td>
+                                                <td>{{criteria.automatic_score}}</td>
+                                                <td pEditableColumn>
+                                                    <p-cellEditor>
+                                                        <ng-template pTemplate="input">
+                                                            <input pInputText type="number" [(ngModel)]="criteria.manual_score" required>
+                                                        </ng-template>
+                                                        <ng-template pTemplate="output">
+                                                            {{criteria.manual_score}}
+                                                        </ng-template>
+                                                    </p-cellEditor>
+                                                </td>
+                                                <td pEditableColumn>
+                                                    <p-cellEditor>
+                                                        <ng-template pTemplate="input">
+                                                            <input pInputText type="number" [(ngModel)]="criteria.actual_score" required>
+                                                        </ng-template>
+                                                        <ng-template pTemplate="output">
+                                                            {{criteria.actual_score}}
+                                                        </ng-template>
+                                                        el
+                                                    </p-cellEditor>
+                                                </td>
+                                                <td pEditableColumn>
+                                                    <p-cellEditor>
+                                                        <ng-template pTemplate="input">
+                                                            <input pInputText type="text" [(ngModel)]="criteria.comment" required>
+                                                        </ng-template>
+                                                        <ng-template pTemplate="output">
+                                                            {{criteria.comment}}
+                                                        </ng-template>
+                                                    </p-cellEditor>
 
-
-                                    </div>
-                                    <div class="field col-12 md:col-6">
-                                        <label pTooltip="Year Established" tooltipPosition="top">Year Established </label>
-                                        <p-calendar formControlName="year_established" disabled [showIcon]="true" [showButtonBar]="true"></p-calendar>
-                                    </div>
-                                    <div class="field col-12 md:col-6">
-                                        <label pTooltip=" TIN No" tooltipPosition="top">TIN No </label>
-                                        <input type="text" formControlName="TIN" disabled pInputText />
-                                    </div>
-                                    <div class="field col-12 md:col-6">
-                                        <label pTooltip="BIN No" tooltipPosition="top">BIN No </label>
-                                        <input type="text" formControlName="BIN" disabled pInputText />
-                                    </div>
-                                    <div class="field col-12 md:col-6">
-                                        <label pTooltip="Mobile" tooltipPosition="top">Mobile  </label>
-                                        <input type="text" formControlName="mobile" disabled pInputText />
-                                    </div>
-                                    <div class="field col-12 md:col-6">
-                                        <label pTooltip="Phone" tooltipPosition="top">Phone </label>
-                                        <input type="text" formControlName="phone" disabled pInputText />
-                                    </div>
-                                    <div class="field col-12 md:col-6">
-                                        <label pTooltip="Email" tooltipPosition="top">Email </label>
-                                        <input type="email" formControlName="email" disabled pInputText />
-                                    </div>
-                                    <div class="field col-12 md:col-6">
-                                        <label pTooltip="Web" tooltipPosition="top">Web </label>
-                                        <input type="text" formControlName="web_url" disabled pInputText />
-                                    </div>
-
-
+                                                </td>
+                                                <td style="text-align:center">
+                                                    <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" (click)="onRowEditInit(criteria)" class="p-button-rounded p-button-text"></button>
+                                                    <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(criteria)" class="p-button-rounded p-button-text p-button-success p-mr-2"></button>
+                                                    <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" (click)="onRowEditCancel(criteria, ri)" class="p-button-rounded p-button-text p-button-danger"></button>
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                                    </p-table>
                                 </div>
+
                             </div>
-                        </form>-->
+                        </div>
                         <div class="flex next-previous">
                             <button pButton pRipple type="button" (click)="openPrev()" label="Previous" class="risBtn  mr-2 mb-2" icon="pi pi-step-backward"></button>
                             <button pButton pRipple type="button" (click)="toggleFormClose()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>

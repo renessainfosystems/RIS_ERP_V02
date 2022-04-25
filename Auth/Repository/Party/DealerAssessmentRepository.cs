@@ -25,7 +25,11 @@ namespace Auth.Repository.Party
         public async Task<dynamic> IUD_DealerAssessment(DealerAssessment dealerAssessment,int dbOperation)
         {
             return await _dealerAssessmentDataAccess.IUDDealerAssessment(dealerAssessment, dbOperation);
-        }        
-        
+        }
+
+        public async Task<dynamic> GetAllAssessmentCriteria(int dealer_info_id)
+        {
+            return await _dealerAssessmentDataAccess.GetAllAssessmentCriteria(dealer_info_id);
+        }
     }
 }
