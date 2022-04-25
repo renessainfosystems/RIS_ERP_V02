@@ -1293,6 +1293,8 @@ export class SupplierApplicationComponent implements OnInit {
     //Business Submit
     addSubSectorToTable(a) {
 
+        debugger
+
         if (this.rowData == null) {
             return this.notifyService.ShowNotification(3, 'Please save Basic Info first');
         }
