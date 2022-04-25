@@ -1,6 +1,7 @@
 import { Time } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
+import { ConfirmationService } from 'primeng/api';
 import { NotificationService } from '../../../service/CommonMessage/notification.service';
 import { LeaveheadService } from '../leavehead/leavehead.service';
 import { ShiftbreakService } from '../shiftbreak/shiftbreak.service';
@@ -48,7 +49,39 @@ export class ShiftinformationComponent implements OnInit {
   isHalfEndEnabled = false;
   isWorkingHourEnabled ;
   isHalfWorkingHourEnabled = true;
-   
+  submitted = false;
+    //start grid and form show hide ********************
+    gridDisplay = false;
+    formDisplay = true;
+
+    toggleFormDisplay() {
+        this.gridDisplay = false;
+        this.formDisplay = true;
+    }
+    toggleGridDisplay() {
+        this.gridDisplay = true;
+        this.formDisplay = false;
+    }
+    toggleFormClose() {
+        this.toggleFormDisplay();
+        this.resetForm();
+    }
+    showBasicDialog() {
+        // this.displayBasic = true;
+        this.toggleGridDisplay();
+        // this.AttendancePolicyForm.reset();
+        this.shiftForm.valid;
+    }
+    showAdvanceSearch() {
+        this.displayBasic = true;
+     
+    }
+    //for validation messate -----------
+
+    get f(): { [key: string]: AbstractControl } {
+        return this.shiftForm.controls;
+    }
+
   showDialog() {
     if (this.rowData == null) {
       return this.notifyService.ShowNotification(3, 'Please select row');
@@ -59,7 +92,7 @@ export class ShiftinformationComponent implements OnInit {
     else
       this.display = true;
   }
-  constructor(private formbulider: FormBuilder, private notifyService: NotificationService, private ShiftinformationService: ShiftinformationService) { }
+    constructor(private formbulider: FormBuilder, private notifyService: NotificationService, private ShiftinformationService: ShiftinformationService, private confirmationService: ConfirmationService) { }
 
   ngOnInit() {
     this.isWorkingHourEnabled = true;
@@ -79,7 +112,7 @@ export class ShiftinformationComponent implements OnInit {
 
     this.shiftForm = this.formbulider.group({
       shift_name: [null, [Validators.required]],
-      code: [null, [Validators.required]],
+      code: [null],
       shift_type_id_enum: ['', [Validators.required]],
       remark: ['', [Validators.required]],
       time_zone_id: ['', [Validators.required]],
@@ -155,9 +188,7 @@ export class ShiftinformationComponent implements OnInit {
 
 
   }
-  showBasicDialog() {
-    this.displayBasic = true;
-  }
+
   onHalfShiftEndChange() {
   
   
@@ -358,8 +389,9 @@ export class ShiftinformationComponent implements OnInit {
 
     let shift_id = this.rowData.ShiftId;
     this.ShiftinformationService.delete(shift_id).subscribe(data => {
-
-      this.loadAllshift();
+        if (data.MessageType == 1) {
+            this.otPolicies.splice(this.otPolicies.findIndex(item => item.ShiftId === this.rowData.ShiftId), 1);
+        }
       this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage)
     });
     this.display = false;
@@ -503,7 +535,7 @@ export class ShiftinformationComponent implements OnInit {
 
       this.isShiftEdit = true;
     });
-
+      this.toggleGridDisplay();
     //this.displayBasic = true;
   }
 
@@ -516,9 +548,14 @@ export class ShiftinformationComponent implements OnInit {
     }
     let shift_id = this.rowData.ShiftId;
     this.ShiftinformationService.approve(shift_id).subscribe(
-      result => {
+        result => {
+            this.shifts.splice(this.shifts.findIndex(item => item.ShiftId === this.rowData.ShiftId), 1);
+            this.shifts.unshift(result.Data[0]);
+            this.selectedShift = result.Data[0];
+            this.rowSelected = true;
+            this.rowData = result.Data[0];
         this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
-        this.loadAllshift();
+    
       }
     );
   }
@@ -535,7 +572,12 @@ let time2Date = new Date("01/01/2000 " + time2);
 }}
   saveShift() {
     const data = this.shiftForm.value;
+      this.submitted = true;
+      debugger;
+      if (this.shiftForm.invalid) {
 
+          return;
+      }
     data.shiftBreakDurations = this.breakDataSources;
     if (!(data.shift_name)) {
       return this.notifyService.ShowNotification(2, "Please enter shift name")
@@ -579,7 +621,14 @@ let time2Date = new Date("01/01/2000 " + time2);
         this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
  
         if (result.MessageType == 1) {
-          this.resetForm();
+            this.resetForm();
+
+            this.shifts.splice(this.shifts.findIndex(item => item.ShiftId === this.rowData.ShiftId), 1);
+            this.shifts.unshift(result.Data[0]);
+            this.selectedShift = result.Data[0];
+            this.rowSelected = true;
+            this.rowData = result.Data[0];
+            this.toggleGridDisplay();
         }
         
       });
@@ -589,8 +638,16 @@ let time2Date = new Date("01/01/2000 " + time2);
       
       this.ShiftinformationService.create(JSON.stringify(data) ).subscribe(
         result => {
-          this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
-          this.loadAllshift();
+         
+              if (result.MessageType == 1) {
+                  this.resetForm();
+                  this.shifts.unshift(result.Data[0]);
+                  this.selectedShift = result.Data[0];
+                  this.rowSelected = true;
+                  this.rowData = result.Data[0];
+                  this.toggleGridDisplay();
+              }
+              this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
         }
       );
     }
@@ -598,7 +655,46 @@ let time2Date = new Date("01/01/2000 " + time2);
    
 
   }
+    approveModal(event: Event) {
+        if (this.rowData == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+        if (this.rowData.approvedBy) {
+            return this.notifyService.ShowNotification(3, "This policy already approved");
+        }
+        this.confirmationService.confirm({
+            key: 'approve',
+            target: event.target,
+            message: 'Are you sure that you want to approve?',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                this.policyApprove();
+            },
+            reject: () => {
 
+            }
+        });
+    }
+    deleteModal(event: Event) {
+        if (this.rowData == null) {
+            return this.notifyService.ShowNotification(3, 'Please select row');
+        }
+        if (this.rowData.approvedBy) {
+            return this.notifyService.ShowNotification(3, "This policy already approved");
+        }
+        this.confirmationService.confirm({
+            key: 'delete',
+            target: event.target,
+            message: 'Are you sure that you want to delete?',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                this.deleteShift();
+            },
+            reject: () => {
+
+            }
+        });
+    }
   //shiftDataValidate() {
   //  const data = this.shiftForm.value;
 
@@ -638,11 +734,11 @@ let time2Date = new Date("01/01/2000 " + time2);
   //  }
   //}
   resetForm() {
-    this.shiftForm.reset();
+    this.formInit();
     this.isShiftEdit = false;
     this.loadAllshift();
-    this.collapsed = true;
-    this.ngOnInit();
+    this.submitted = false;
+  
   }
 
 }

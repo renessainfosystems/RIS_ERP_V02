@@ -1,19 +1,17 @@
-<!--<div class="grid">
+<div class="grid">
     <div class="col-12">
         <div class="card">
 
-            <h4>Attendance Policy Assignment for Organogram</h4>
+            <h4>Shift Information</h4>
             <div [hidden]="formDisplay">
 
-                <form action="" [formGroup]="AttPolicyAssignmentForm">
+                <form action="" [formGroup]="shiftForm">
 
                     <div class="col-12">
                         <div class="p-fluid p-formgrid grid md:pl-5 md:pr-5">
                             <div class="field form-group col-12 md:col-6">
                                 <label pTooltip="Shift Name" tooltipPosition="top">Shift Name<span class="req"></span> </label>
-                                <input type="text" class="from-control" formControlName="shift_name"
-                                       [ngClass]="{ 'is-invalid': submitted && f.shift_name.errors }"
-                                       pInputText required />
+                                <input type="text" class="from-control" formControlName="shift_name"[ngClass]="{ 'is-invalid': submitted && f.shift_name.errors }"   pInputText required />
 
                                 <div *ngIf="submitted && f.shift_name.errors" class="invalid-feedback">
                                     <small *ngIf="f.shift_name.errors.required" class="p-error">Shift name is required</small>
@@ -23,22 +21,15 @@
                             <div class="field col-12 md:col-6">
                                 <label pTooltip="Shift Type" tooltipPosition="top">Shift Type<span class="req"></span></label>
                                 <p-dropdown [options]="shiftTypes" formControlName="shift_type_id_enum"
-                                            optionLabel="shift_type_enum_name" optionValue="shift_type_id_enum" (onChange)="onShiftChange($event)" [ngClass]="{ 'is-invalid': submitted && f.shift_type_id_enum.errors }" [showClear]="true"></p-dropdown>
+                                            optionLabel="shift_type_enum_name" optionValue="shift_type_id_enum" (onChange)="onShiftChange($event)"  [showClear]="true"></p-dropdown>
 
-                                <div *ngIf="submitted && f.shift_type_id_enum.errors" class="invalid-feedback">
-                                    <small *ngIf="f.shift_type_id_enum.errors.required" class="p-error">Shift type is required</small>
-                                </div>
                             </div>
 
                             <div class="field col-12 md:col-6">
 
                                 <label pTooltip="Time Zone" tooltipPosition="top">Time Zone<span class="req"></span></label>
                                 <p-dropdown [options]="timeZones" formControlName="time_zone_id"
-                                            optionLabel="time_Zone_name" optionValue="time_zone_id" [showClear]="true" [ngClass]="{ 'is-invalid': submitted && f.time_zone_id.errors }"></p-dropdown>
-
-                                <div *ngIf="submitted && f.time_zone_id.errors" class="invalid-feedback">
-                                    <small *ngIf="f.time_zone_id.errors.required" class="p-error">Time Zone is required</small>
-                                </div>
+                                            optionLabel="time_Zone_name" optionValue="time_zone_id" [showClear]="true" ></p-dropdown>
 
                             </div>
                             <div class="field col-12 md:col-6 ">
@@ -50,17 +41,14 @@
 
                                 <label pTooltip="Department" tooltipPosition="top">Attendance Count<span class="req"></span></label>
                                 <p-dropdown [options]="attendanceCounts" formControlName="attendance_count"
-                                            optionLabel="attendance_countname" optionValue="attendance_count" [showClear]="true" [ngClass]="{ 'is-invalid': submitted && f.attendance_count.errors }"></p-dropdown>
+                                            optionLabel="attendance_countname" optionValue="attendance_count" [showClear]="true" ></p-dropdown>
 
-                                <div *ngIf="submitted && f.attendance_count.errors" class="invalid-feedback">
-                                    <small *ngIf="f.attendance_count.errors.required" class="p-error">Attendance Count is required</small>
-                                </div>
 
                             </div>
                             <div class="field col-12 md:col-6 ">
                                 <div class="grid ">
 
-                                    <div class="field-checkbox mb-0">
+                                    <div class="field-checkbox mb-0 md:pl-2">
                                         <p-checkbox name="group" binary="true" formControlName="is_day_crossing" id="ch"></p-checkbox>
                                         <label for="ch">Night Shift(Day Overlap)</label>
                                     </div>
@@ -117,9 +105,9 @@
 
                             </div>
 
-                            <div class="field col-12 md:col-12">
+                            <div class="field col-12 md:col-12 ">
                                 <div class="grid ">
-                                    <div class="field-checkbox mb-0">
+                                    <div class="field-checkbox mb-0 md:pt-2">
                                         <p-checkbox name="group" formControlName="is_allow_half_day" (onChange)="halfWorkingStartEnd()" binary="true"></p-checkbox>
                                         <label [for]="">Half Working Day</label>
                                     </div>
@@ -147,159 +135,390 @@
 
 
                             <div class="field col-12 md:col-6 float-right">
-                                <label pTooltip="Benefit Policy" tooltipPosition="top">Benefit Policy <span class="req"></span></label>
+                                <label pTooltip="Overtime Policy" tooltipPosition="top">Overtime Policy <span class="req"></span></label>
                                 <div class="grid">
-                                    <div class=" col-12 md:col-10">
-
-                                        <p-dropdown [options]="benefitPolicyDP" formControlName="abp_id" [ngClass]="{ 'is-invalid': submitted && f.abp_id.errors }" placeholder="Select Benefit Policy"
-                                                    optionLabel="abp_name" [showClear]="true"></p-dropdown>
-
+                                    <div class=" col-12 md:col-9">
+                                        <p-dropdown [options]="otPolicies" [(ngModel)]="selectedOTPolicy" placeholder="Select OT Policy" formControlName="OT_policy_id"
+                                                    optionLabel="policy_name" optionValue="OT_policy_id" [showClear]="true"></p-dropdown>
                                     </div>
-                                    <div class=" col-12 md:col-1">
-
-                                        <button class=" pi pi-plus risBtn risAdd mr-2" (click)="addAttendanceBenefit()" label="Add">Add</button>
-
+                                    <div class=" col-12 md:col-3">
+                                        <button class=" pi pi-search risBtn risAdd ml-0" label="Add" (click)="getOTDetails()">Details</button>
                                     </div>
                                 </div>
 
                             </div>
 
                             <div class="field col-12 md:col-6">
-                                <label pTooltip="Position" tooltipPosition="top">Position<span class="req"></span></label>
-                                <p-dropdown [options]="positionList" formControlName="position_id" [ngClass]="{ 'is-invalid': submitted && f.position_id.errors }" placeholder="Select Position"
-                                            optionLabel="position_name" optionValue="position_id" [showClear]="true"></p-dropdown>
+                                <label pTooltip="Benefit Policy" tooltipPosition="top">Benefit Policy<span class="req"></span></label>
+                                <p-dropdown [options]="benifitPolicies" [(ngModel)]="selectedBenifitPolicy" placeholder="Select Benefit Policy" formControlName="attendance_benefit_policy_id"
+                                            optionLabel="leave_type_enum_name" optionValue="leave_type_id_enum" [showClear]="true"></p-dropdown>
 
-                                <div *ngIf="submitted && f.position_id.errors" class="invalid-feedback">
-                                    <small *ngIf="f.position_id.errors.required" class="p-error">Position is required</small>
+                            </div>
+
+
+                            <div class="field col-12 md:col-6">
+                                <div class="grid ">
+                                    <div class="field-checkbox mb-0 md:pl-2">
+                                        <p-checkbox name="group" formControlName="is_OT_before_shift" binary="true"></p-checkbox>
+                                        <label [for]="">OT Start before starting shift</label>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <div class="grid ">
+                                    <div class="field-checkbox mb-0 md:pl-2">
+                                        <p-checkbox name="group" formControlName="is_OT_after_shift" binary="true"></p-checkbox>
+                                        <label [for]="">OT Start after ending shift</label>
+
+                                    </div>
+
                                 </div>
                             </div>
 
 
-                            <div class="field col-12 md:col-6 ">
+                            <div class="field col-12 md:col-6">
+                                <label pTooltip="Break" tooltipPosition="top">Break<span class="req"></span></label>
+                                <p-dropdown [options]="breakList" [(ngModel)]="selectedBreak" formControlName="shift_break_head_id" placeholder="Select Break"
+                                            optionLabel="head_name" [showClear]="true"></p-dropdown>
 
-                                <label pTooltip="Attendance policy" tooltipPosition="top">Attendance policy<span class="req"></span></label>
 
+                            </div>
+                            <div class="field col-12 md:col-6 float-right">
+                                <label pTooltip="Break Duration" tooltipPosition="top">Break Duration <span class="req"></span></label>
                                 <div class="grid">
                                     <div class=" col-12 md:col-10">
-                                        <p-dropdown [options]="attendancePolicyList" formControlName="attendance_policy_id" [ngClass]="{ 'is-invalid': submitted && f.attendance_policy_id.errors }" placeholder="Select Attendance Policy" optionLabel="policy_name" optionValue="attendance_policy_id" [showClear]="true"></p-dropdown>
-                                        <div *ngIf="submitted && f.attendance_policy_id.errors" class="invalid-feedback">
-                                            <small *ngIf="f.attendance_policy_id.errors.required" class="p-error">Attendance Policy is required</small>
-                                        </div>
-                                    </div>
-                                    <div class=" col-12 md:col-1  md:pl-0">
+                                        <input id="float-input p-fluid" type="number" formControlName="break_duration_min" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" placeholder="Duration" pInputText>
 
-                                        <button class=" pi pi-eye risBtn risAll " label="Add" (click)="viewAttendancePolicy()">View</button>
+                                    </div>
+                                    <div class=" col-12 md:col-1">
+                                        <button class=" pi pi-plus risBtn risAdd mr-2" label="Add" (click)="addOTSlabInfo()">Add</button>
 
                                     </div>
                                 </div>
+
                             </div>
 
+                            <div  class="field col-12 md:col-12 pl-0 pr-3">
+                                <p-table [value]="breakDataSources" styleClass="p-datatable-sm" class="p-0" responsiveLayout="scroll">
 
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th>#SL</th>
 
-                        </div>
-                            <div class="flex justify-content-end md:pl-5 md:pr-5 md:pt-4">
-                                <button pButton pRipple type="button" label="Save" (click)="saveAttendancePolicyAssignment()" class="risBtn risSave mr-2 mb-2" icon="pi pi-check"></button>
-                                <button pButton pRipple type="button" (click)="toggleFormClose()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
+                                            <th>Break Name</th>
+                                            <th>Duration(Minutes)</th>
+                                            <th>Activity</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-rowIndex="rowIndex" let-slab>
+
+                                        <tr>
+                                            <td>{{rowIndex+1}}</td>
+
+                                            <td>{{slab.break_name}}</td>
+                                            <td>{{slab.break_duration_min}}</td>
+                                            <td *ngIf="slab.is_active===true">{{"Active"}}</td>
+                                            <td *ngIf="slab.is_active===false">{{"InActive"}}</td>
+                                            <td> <button class="pi pi-times-circle risBtn risDelete" (click)="removeEvent(rowIndex,slab)"> </button></td>
+
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+
                             </div>
+
                         </div>
+                        <div class="flex justify-content-end md:pl-5 md:pr-5 md:pt-4">
+                            <button pButton pRipple type="button" label="Save" (click)="saveShift()" class="risBtn risSave mr-2 mb-2" icon="pi pi-check"></button>
+                            <button pButton pRipple type="button" (click)="toggleFormClose()" label="Close" class="risBtn risClose mr-2 mb-2" icon="pi pi-times"></button>
+                        </div>
+                    </div>
 
 
                 </form>
 
-            </div>-->
+            </div>
 
             <!--end form display------------->
 
-            <!--<div [hidden]="gridDisplay">
-                <button pButton pRipple type="button" label="New" (click)="showBasicDialog()" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
-                <button pButton pRipple type="button" label="Edit" (click)="loadPolicyAssignmentToEdit()" icon="pi pi-pencil" class="risBtn risEdit mr-2 mb-2"></button>
-                <button pButton pRipple type="button" label="Delete" icon="pi pi-trash" class="risBtn risDelete mr-2 mb-2" (click)="deleteModal($event)"> </button>
-                <button pButton pRipple type="button" label="Activity" icon="pi pi-box" class="risBtn risAll mr-2 mb-2"> </button>
-                <button pButton pRipple type="button" label="Approve" icon="pi pi-box" class="risBtn risAll mr-2 mb-2" (click)="approveModal($event)"> </button>
+            <div [hidden]="gridDisplay">
+
+
+                <div class="grid mb-4">
+                    <form [formGroup]="shiftSearchForm">
+                        <span class="p-input-icon-right mr-2">
+                            <i class="pi pi-search cursor-pointer" (click)="shiftSearch()"></i>
+                            <input type="text" id="user_info_search" formControlName="shift_name" (keyup.enter)="shiftSearch()" style="width:350px" pInputText placeholder="Search By- Any">
+                        </span>
+
+                        <span class="p-input-icon-right mr-2">
+                            <p-checkbox name="group" formControlName="is_night_shift" (onChange)="shiftSearch()" binary="true"></p-checkbox>
+                            <label class="p-input-right ml-2" [for]="">Night Shift(Day Overlap)</label>
+                        </span>
+
+                    </form>
+
+                    <span class="p-input-right mr-2">
+
+                        <button class="pi pi-search risBtn risAll ml-1 mr-2" (click)="showAdvanceSearch()"> Adv Search</button>
+
+                    </span>
+                </div>
+
+                <div class="grid mb-2">
+
+                    <button pButton pRipple type="button" label="New" (click)="showBasicDialog()" icon="pi pi-plus" class="risBtn risAdd mr-2 mb-2"></button>
+                    <button pButton pRipple type="button" label="Edit" (click)="loadShiftToEdit()" icon="pi pi-pencil" class="risBtn risEdit mr-2 mb-2"></button>
+                    <button pButton pRipple type="button" label="Delete" icon="pi pi-trash" class="risBtn risDelete mr-2 mb-2" (click)="deleteModal($event)"> </button>
+                    <button pButton pRipple type="button" label="Activity" icon="pi pi-box" class="risBtn risAll mr-2 mb-2"> </button>
+                    <button pButton pRipple type="button" label="Approve" icon="pi pi-box" class="risBtn risAll mr-2 mb-2" (click)="approveModal($event)"> </button>
+
+                </div>
                 <p-confirmPopup key="approve"></p-confirmPopup>
                 <p-confirmPopup key="delete"></p-confirmPopup>
 
-                <p-table [value]="policyAssigmentList" styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm" [paginator]="true" [rows]="10" selectionMode="single" [showCurrentPageReport]="true" responsiveLayout="scroll"
-                         [(selection)]="selectedPolicy" dataKey="attendance_policy_organogram_id" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
+                <p-table [value]="shifts" dataKey="ShiftId" [paginator]="true" [rows]="10" selectionMode="single" [(selection)]="selectedShift" [showCurrentPageReport]="true" responsiveLayout="scroll" styleClass="p-datatable-striped p-datatable-sm"
+                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
+
                     <ng-template pTemplate="header">
                         <tr>
-                            <th>Position</th>
-                            <th>Policy</th>
-                            <th>Approve By</th>
+                            <th>Shift</th>
+                            <th>Shift Type</th>
+                            <th>Day Time</th>
+                            <th>Shift Time</th>
+                            <th>Tolerence(min)</th>
+                            <th>Other Info</th>
+                            <th>Approved By</th>
                             <th>Activity</th>
                         </tr>
                     </ng-template>
-                    <ng-template pTemplate="body" let-policy>
-                        <tr [pSelectableRow]="policy">
-
-                            <td>{{policy.position_name}}</td>
-                            <td>{{policy.attendance_policy_name}}</td>
-                            <td>{{policy.approvedBy}}</td>
-                            <td *ngIf="policy.is_active===true">{{"Active"}}</td>
-                            <td *ngIf="policy.is_active===false">{{"InActive"}}</td>
-
+                    <ng-template pTemplate="body" let-shift>
+                        <tr [pSelectableRow]="shift">
+                            <td>{{shift.ShiftName}}</td>
+                            <td>{{shift.ShiftTypeName}}</td>
+                            <td>{{shift.DayTime}}</td>
+                            <td>{{shift.ShiftTime}}</td>
+                            <td>{{shift.Tollerence}}</td>
+                            <td>{{shift.OtherInfo}}</td>
+                            <td>{{shift.ApprovedBy}}</td>
+                            <td *ngIf="shift.IsActive===true">{{"Active"}}</td>
+                            <td *ngIf="shift.IsActive===false">{{"InActive"}}</td>
                         </tr>
                     </ng-template>
-
-                </p-table>-->
+                </p-table>
                 <!--end grid display -------------->
-            <!--</div>
+            </div>
 
-            <p-dialog header="Attendance Policy" [(visible)]="attendancePolicyDisplay" modal="modal" showEffect="fade" [style]="{width: '50vw'}" [breakpoints]="{'960px': '75vw'}">
-                <div class="col-12 ">
-                    <p-table [value]="AttendancePolicies" styleClass="p-datatable-sm" class="p-0" responsiveLayout="scroll">
+            <p-dialog header="Advance Search" maskStyleClass="xl-dialog" [(visible)]="displayBasic" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [style]="{width: '50vw',height:'27vw'}" [baseZIndex]="10000">
+                <form action="" [formGroup]="advSearchForm">
 
-                        <ng-template pTemplate="header">
-                            <tr>
-                                <th>Policy Name</th>
-                                <th>Calendar</th>
-                                <th>Late Early Policy</th>
-                                <th>Absenteeism Policy</th>
-                                <th>Roster Policy</th>
-                                <th>Approve</th>
-                                <th>Activity</th>
-                            </tr>
-                        </ng-template>
-                        <ng-template pTemplate="body" let-attPolicy>
-                            <tr [pSelectableRow]="attPolicy">
 
-                                <td>{{attPolicy.policy_name}}</td>
-                                <td>{{attPolicy.attendance_calendar_name}}</td>
-                                <td>{{attPolicy.late_early_policy_name}}</td>
-                                <td>{{attPolicy.absenteeism_policy_name}}</td>
-                                <td>{{attPolicy.roster_policy_name}}</td>
-                                <td>{{attPolicy.approvedBy}}</td>
-                                <td *ngIf="attPolicy.is_active===true">{{"Active"}}</td>
-                                <td *ngIf="attPolicy.is_active===false">{{"InActive"}}</td>
 
-                            </tr>
-                        </ng-template>
-                    </p-table>
-                </div>
+                    <div class="p-fluid grid col-12 flex justify-content-end flex-wrap card-container">
+
+                        <div class="field col-12 md:col-6">
+                            <label pTooltip="Shift Type" tooltipPosition="top">Shift Type<span class="req"></span></label>
+                            <p-dropdown [options]="shiftTypes" formControlName="shift_type_id_enum"
+                                        optionLabel="shift_type_enum_name" optionValue="shift_type_id_enum" [showClear]="true"></p-dropdown>
+
+                        </div>
+                        <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                            <div class="col-1 mt-2 text-right">
+
+                            </div>
+                            <div class="col-5 p-fluid">
+
+                                <div class="field-checkbox">
+                                    <p-checkbox name="group" formControlName="is_inactive" binary="true"></p-checkbox>
+                                    <label [for]="">InActive</label>
+                                </div>
+                            </div>
+                            <div class="col-6 p-fluid">
+
+                                <div class="field-checkbox">
+                                    <p-checkbox name="group" formControlName="is_allow_half_day" binary="true"></p-checkbox>
+                                    <label [for]="">Allow Half Day</label>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+
+
+                        <div class="field col-12 md:col-6">
+                            <label for="" class=" d-md-inline-flex">Time Zone:</label>
+                            <p-dropdown [options]="timeZones" formControlName="time_zone_id"
+                                        optionLabel="time_Zone_name" optionValue="time_zone_id" [showClear]="true"></p-dropdown>
+
+                        </div>
+                        <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+                            <div class="col-1 mt-2 text-right">
+
+                            </div>
+
+                            <div class="col-5 p-fluid">
+
+                                <div class="field-checkbox">
+                                    <p-checkbox name="group" formControlName="is_allow_OT" binary="true"></p-checkbox>
+                                    <label [for]="">Allow OT</label>
+                                </div>
+                            </div>
+                            <div class="col-6 p-fluid">
+
+                                <div class="field-checkbox">
+                                    <p-checkbox name="group" formControlName="is_allow_benifit" binary="true"></p-checkbox>
+                                    <label [for]="">Allow Benefit</label>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+
+                        <div class="field col-12 md:col-6 ">
+                            <label pTooltip="Shift Start" tooltipPosition="top">Shift Start<span class="req"></span></label>
+                            <p-calendar [timeOnly]="true" [disabled]="isShiftStartEnabled" formControlName="shift_start" dataType="string" [hourFormat]="24" inputId="timeonly"></p-calendar>
+
+                        </div>
+                        <div class="field col-12 md:col-6 ">
+                            <label pTooltip="Shift End" tooltipPosition="top">Shift End<span class="req"></span></label>
+                            <p-calendar [timeOnly]="true" [disabled]="isShiftEndEnabled" (input)="onShiftEndChange()" (onSelect)="onShiftEndChange()" formControlName="shift_end" dataType="string" [hourFormat]="24" inputId="timeonly"></p-calendar>
+
+                        </div>
+
+                        <div class="field col-12 md:col-6 ">
+
+                            <label pTooltip="Department" tooltipPosition="top">Attendance Count<span class="req"></span></label>
+                            <p-dropdown [options]="attendanceCounts" formControlName="attendance_count"
+                                        optionLabel="attendance_countname" optionValue="attendance_count" [showClear]="true" [ngClass]="{ 'is-invalid': submitted && f.attendance_count.errors }"></p-dropdown>
+
+                        </div>
+
+                        <div class="p-fluid grid col-6 flex justify-content-start flex-wrap card-container">
+
+
+                        </div>
+
+
+                    </div>
+
+                </form>
                 <ng-template pTemplate="footer">
-                    <button pButton icon="pi pi-check" (click)="attendancePolicyDisplay=false" label="Ok" class="p-button-outlined"></button>
+                    <button type="submit" class="pi pi-save risBtn risSave" (click)="shiftAdvanceSearch()"> Search</button>
+                    <button class="pi pi-times risBtn risClose" (click)="displayBasic=false"> Close</button>
+                </ng-template>
+            </p-dialog>
+
+            <p-dialog header="OT Details" [(visible)]="OTDetailsModal" [draggable]="true" [resizable]="false" [style]="{width: '40vw'}">
+                <form action="" [formGroup]="OTDetailsForm">
+
+
+                    <div class="p-fluid grid col-12">
+                        <div class="p-fluid grid col-4 flex justify-content-start flex-wrap card-container">
+                            <div class="col-6 mt-2 text-right">
+                                <label for="" class=" d-md-inline-flex">Min OT:</label>
+                            </div>
+                            <div class="col-6 p-fluid">
+                                <span class="p-float-label">
+                                    <input id="float-input p-fluid" type="text" disabled="disabled" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" formControlName="minimum_OT_min" placeholder="Minimum OT" pInputText>
+                                </span>
+                            </div>
+
+                        </div>
+                        <div class="p-fluid grid col-4 flex justify-content-start flex-wrap card-container">
+                            <div class="col-6 mt-2 text-right">
+                                <label for="" class=" d-md-inline-flex">Max OT</label>
+                            </div>
+                            <div class="col-6 p-fluid">
+                                <span class="p-float-label">
+                                    <input id="float-input p-fluid" type="text" disabled="disabled" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" formControlName="maximum_OT_min" placeholder="Maximum OT" pInputText>
+                                </span>
+                            </div>
+
+                        </div>
+                        <div class="p-fluid grid col-4 flex justify-content-start flex-wrap card-container">
+                            <div class="col-6 mt-2 text-right">
+                                <label for="" class=" d-md-inline-flex">Reduce Time:</label>
+                            </div>
+                            <div class="col-6 p-fluid">
+                                <span class="p-float-label">
+                                    <input id="float-input p-fluid" type="text" disabled="disabled" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" formControlName="OT_reduce_time_min" placeholder="OT Reduce Time" pInputText>
+                                </span>
+
+                            </div>
+
+                        </div>
+                        <div class="col-1 mt-1 text-right">
+                            <label for="" class=" d-md-inline-flex">(Minutes)</label>
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="p-fluid grid col-12">
+                        <div class="col-5 mt-2">
+                            <label for="" class=" d-none d-md-inline-flex">OT Slab(Minute)<span class="req"></span>:</label>
+                        </div>
+                        <div class="col-7 p-fluid">
+                            <p-table [value]="otslabDataSources" styleClass="p-datatable-sm" class="p-0" responsiveLayout="scroll">
+                                <!-- <ng-template pTemplate="caption">
+                          OT Slab List<span class="req"></span>
+                        </ng-template> -->
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th>#SL</th>
+
+                                        <th>Min OT</th>
+                                        <th>Max OT</th>
+                                        <th>Achieve OT</th>
+
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-rowIndex="rowIndex" let-slab>
+
+                                    <tr>
+                                        <td>{{rowIndex+1}}</td>
+
+                                        <td>{{slab.minimum_OT_min}}</td>
+                                        <td>{{slab.maximum_OT_min}}</td>
+                                        <td>{{slab.acheive_OT_min}}</td>
+
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </div>
+                </form>
+                <ng-template pTemplate="footer">
+                    <button type="submit" class="pi pi-save risBtn risSave" (click)="OTDetailsModal=false"> Ok</button>
+                    <button class="pi pi-times risBtn risClose" (click)="OTDetailsModal=false"> Close</button>
                 </ng-template>
             </p-dialog>
 
         </div>
     </div>
-</div>-->
+</div>
 
 
 
 
 
 
-<div class="p-card">
+<!--<div class="p-card">
 
     <div class="me-auto">
         <div class="p-card-title ">
             <span class="pi pi-OT Policy"> </span>Shift Information
         </div>
-        <div class="p-card-body">
+        <div class="p-card-body">-->
             <!--********** start card body ********************-->
 
-            <div class="card">
+            <!--<div class="card">
 
 
 
@@ -374,12 +593,12 @@
                                     <div class="col-4 mt-2 text-right">
 
                                     </div>
-                                    <div class="col-8 p-fluid">
+                                    <div class="col-8 p-fluid">-->
                                         <!--<div class="field-checkbox">
                                           <p-checkbox name="group[i]" value="event" binary="true" [value]="event" (onChange)="onCheckboxChange($event,event.MenuId,event.AuthorizationRoleMenuEventsId,event.AuthorizationRoleId,event.MenuEventId)" [(ngModel)]="event.IsPermissionExist" [inputId]="event.EventEnumId"></p-checkbox>
                                           <label [for]="event.EventEnumId">{{event.EventEnumName}}</label>
                                         </div>-->
-                                        <div class="field-checkbox">
+                                        <!--<div class="field-checkbox">
                                             <p-checkbox name="group" formControlName="is_day_crossing" binary="true"></p-checkbox>
                                             <label [for]="">Night Shift(Day Overlap)</label>
                                         </div>
@@ -473,12 +692,12 @@
                                     <div class="col-2 mt-2 text-right">
 
                                     </div>
-                                    <div class="col-3 p-fluid">
+                                    <div class="col-3 p-fluid">-->
                                         <!--<div class="field-checkbox">
                                           <p-checkbox name="group[i]" value="event" binary="true" [value]="event" (onChange)="onCheckboxChange($event,event.MenuId,event.AuthorizationRoleMenuEventsId,event.AuthorizationRoleId,event.MenuEventId)" [(ngModel)]="event.IsPermissionExist" [inputId]="event.EventEnumId"></p-checkbox>
                                           <label [for]="event.EventEnumId">{{event.EventEnumName}}</label>
                                         </div>-->
-                                        <div class="field-checkbox">
+                                        <!--<div class="field-checkbox">
                                             <p-checkbox name="group" formControlName="is_allow_half_day" (onChange)="halfWorkingStartEnd()" binary="true"></p-checkbox>
                                             <label [for]="">Half Working Day</label>
 
@@ -555,13 +774,13 @@
                                     <div class="col-4 mt-2 text-right">
 
                                     </div>
-                                    <div class="col-8 p-fluid">
+                                    <div class="col-8 p-fluid">-->
                                         <!--<div class="field-checkbox">
                                           <p-checkbox name="group[i]" value="event" binary="true" [value]="event" (onChange)="onCheckboxChange($event,event.MenuId,event.AuthorizationRoleMenuEventsId,event.AuthorizationRoleId,event.MenuEventId)" [(ngModel)]="event.IsPermissionExist" [inputId]="event.EventEnumId"></p-checkbox>
                                           <label [for]="event.EventEnumId">{{event.EventEnumName}}</label>
                                         </div>-->
 
-                                        <div class="field-checkbox">
+                                        <!--<div class="field-checkbox">
                                             <p-checkbox name="group" formControlName="is_OT_before_shift" binary="true"></p-checkbox>
                                             <label [for]="">OT Start before starting shift</label>
                                         </div>
@@ -572,13 +791,13 @@
                                     <div class="col-4 mt-2 text-right">
 
                                     </div>
-                                    <div class="col-8 p-fluid">
+                                    <div class="col-8 p-fluid">-->
                                         <!--<div class="field-checkbox">
                                           <p-checkbox name="group[i]" value="event" binary="true" [value]="event" (onChange)="onCheckboxChange($event,event.MenuId,event.AuthorizationRoleMenuEventsId,event.AuthorizationRoleId,event.MenuEventId)" [(ngModel)]="event.IsPermissionExist" [inputId]="event.EventEnumId"></p-checkbox>
                                           <label [for]="event.EventEnumId">{{event.EventEnumName}}</label>
                                         </div>-->
 
-                                        <div class="field-checkbox">
+                                        <!--<div class="field-checkbox">
                                             <p-checkbox name="group" formControlName="is_OT_after_shift" binary="true"></p-checkbox>
                                             <label [for]="">OT Start after ending shift</label>
                                         </div>
@@ -670,7 +889,7 @@
 
                             <span class="p-input-right mr-2">
 
-                                <button class="pi pi-search risBtn risAll ml-1 mr-2" (click)="showBasicDialog()"> Adv Search</button>
+                                <button class="pi pi-search risBtn risAll ml-1 mr-2" (click)="showBasic()"> Adv Search</button>
 
                             </span>
                         </div>
@@ -887,11 +1106,11 @@
                                     <label for="" class=" d-none d-md-inline-flex">OT Slab(Minute)<span class="req"></span>:</label>
                                 </div>
                                 <div class="col-9 p-fluid">
-                                    <p-table [value]="otslabDataSources" styleClass="p-datatable-sm" class="p-0" responsiveLayout="scroll">
+                                    <p-table [value]="otslabDataSources" styleClass="p-datatable-sm" class="p-0" responsiveLayout="scroll">-->
                                         <!-- <ng-template pTemplate="caption">
                                           OT Slab List<span class="req"></span>
                                         </ng-template> -->
-                                        <ng-template pTemplate="header">
+                                        <!--<ng-template pTemplate="header">
                                             <tr>
                                                 <th>#SL</th>
 
@@ -921,11 +1140,11 @@
                             <button class="pi pi-times risBtn risClose" (click)="OTDetailsModal=false"> Close</button>
                         </ng-template>
                     </p-dialog>
-                </div>
+                </div>-->
 
                 <!--********** end card body ********************-->
 
-            </div>
+            <!--</div>
         </div>
     </div>
-</div>
+</div>-->
