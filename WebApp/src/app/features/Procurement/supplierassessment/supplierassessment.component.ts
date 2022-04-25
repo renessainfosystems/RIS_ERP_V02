@@ -393,8 +393,7 @@ export class SupplierAssessmentComponent implements OnInit {
             pabx: [''],
 
         });
-
-        this.loadAllConfirmSupplierinfos();
+        this.loadAllSupplierVerification();
         this.supplierApplicationForm.controls['supplier_code'].disable();
         this.supplierApplicationForm.controls['legal_name'].disable();
         this.supplierApplicationForm.controls['short_name'].disable();
@@ -664,7 +663,7 @@ export class SupplierAssessmentComponent implements OnInit {
         }
     }
 
-    viewDocumentinfo(a, row) {
+    viewSupplierinfo(a, row) {
         let supplierId = row.SupplierId;
         /*     this.supplierId = row.SupplierId;*/
         this.SupplierAssessmentService.getSupplierBasicInfo(supplierId).subscribe(data => {
@@ -811,8 +810,9 @@ export class SupplierAssessmentComponent implements OnInit {
         this.toggleGridDisplay();
     }
 
-    loadAllConfirmSupplierinfos() {
-        this.SupplierAssessmentService.getAllConfirmSupplierInfo().subscribe(data => {
+    loadAllSupplierVerification() {
+        debugger
+        this.SupplierAssessmentService.getAllSupplierVerification().subscribe(data => {
             debugger
             this.supplierinfoList = data;
         });
@@ -1424,7 +1424,7 @@ export class SupplierAssessmentComponent implements OnInit {
         approveFeedbackData.supplier_id = supplierId;
         this.SupplierAssessmentService.approveSupplier(approveFeedbackData).subscribe(data => {
             this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage);
-            this.loadAllConfirmSupplierinfos();
+            this.loadAllSupplierVerification();
         });
     }
 
@@ -1437,7 +1437,7 @@ export class SupplierAssessmentComponent implements OnInit {
         rejectFeedbackData.supplier_id = supplierId;
         this.SupplierAssessmentService.rejectSupplier(rejectFeedbackData).subscribe(data => {
             this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage);
-            this.loadAllConfirmSupplierinfos();
+            this.loadAllSupplierVerification();
         });
     }
 

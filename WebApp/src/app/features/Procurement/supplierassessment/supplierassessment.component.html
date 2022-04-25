@@ -848,22 +848,33 @@
                                 Supplier Name
                                 <p-columnFilter type="text" field="LegalName" display="menu"></p-columnFilter>
                             </th>
-                            <th pSortableColumn="MobileNo">Short Name</th>
-                            <th pSortableColumn="MobileNo">Mobile No</th>
-                            <th pSortableColumn="Email">Email</th>
+                            <th pSortableColumn="DealerinfoName">
+                                Mobile
+                                <p-columnFilter type="text" field="DealerinfoName" display="menu"></p-columnFilter>
+                            </th>
+                            <th pSortableColumn="PersonalPhone">Department</th>
+                            <th pSortableColumn="PersonalPhone">Assign Person</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-supplierinfo let-rowData let-columns="columns">
                         <tr [pSelectableRow]="supplierinfo">
-                            <td>{{supplierinfo.SupplierCode}}</td>
-                            <td>{{supplierinfo.LegalName}}</td>
-                            <td>{{supplierinfo.ShortName}}</td>
-                            <td>{{supplierinfo.MobileNo}}</td>
-                            <td>{{supplierinfo.Email}}</td>
+                            <td>{{supplierinfo.SupplierId}}</td>
+                            <td>{{supplierinfo.SupplierName}}</td>
+                            <td>{{supplierinfo.Mobile}}</td>
+                            <td>{{supplierinfo.DepartmentName}}</td>
+                            <td>{{supplierinfo.EmployeeName}}</td>
                             <td class="text-orange-400" *ngIf="!supplierinfo.is_verified">{{"Pending Assessment"}}</td>
-                            <td> <button class="pi pi-pencil risBtn risView mr-2" (click)="viewDealerinfo(rowIndex,supplierinfo)"> View </button></td>
+                            <td>
+                                <button class="pi pi-pencil risBtn risView mr-2" (click)="viewSupplierinfo(rowIndex,supplierinfo)"> View </button>
+                                <button class="pi pi-plus risBtn risAdd mr-2" (click)="showBasicDialog()"> Assessment </button>
+                            </td>
+
+
+
+                            <!--<td class="text-orange-400" *ngIf="!supplierinfo.is_verified">{{"Pending Assessment"}}</td>
+                            <td> <button class="pi pi-pencil risBtn risView mr-2" (click)="viewDealerinfo(rowIndex,supplierinfo)"> View </button></td>-->
 
                             <!--<td> <button class="pi pi-pencil risBtn risView mr-2" (click)="viewDocumentinfo(rowIndex,supplierinfo)"> View </button></td>-->
                         </tr>

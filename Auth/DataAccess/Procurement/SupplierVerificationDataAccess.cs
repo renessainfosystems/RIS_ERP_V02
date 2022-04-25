@@ -143,13 +143,13 @@ namespace Auth.DataAccess.Procurement
 
             try
             {
-                string sql = @"SELECT DI.dealer_info_id,(DI.dealer_info_code+'-'+ DI.dealer_info_name) dealer_name, DI.mobile,
-	                            D.department_name,E.employee_name,DV.is_verified
-	                            FROM Party.Dealer_Info DI
-	                            LEFT JOIN Party.Dealer_Verification DV on DV.dealer_info_id=DI.dealer_info_id
-	                            LEFT JOIN PIMS.Employee E on E.employee_id=DV.employee_id
-	                            LEFT JOIN Administrative.Department D on D.department_id=DV.department_id
-	                            WHERE DV.is_verified=0 and DI.company_id=@company_id";
+                string sql = @"SELECT SI.supplier_id ,(SI.supplier_code+'-'+ SI.legal_name) supplier_name, SI.mobile_no,
+	                            D.department_name,E.employee_name,SV.is_verified
+	                            FROM Procurement.Supplier_Application SI
+	                            LEFT JOIN Procurement.Supplier_Verification SV on SV.supplier_id=SI.Supplier_id
+	                            LEFT JOIN PIMS.Employee E on E.employee_id=SV.employee_id
+	                            LEFT JOIN Administrative.Department D on D.department_id=SV.department_id
+	                            WHERE SV.is_verified=0 and SI.company_id=@company_id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@company_id", company_id);
                 dynamic data = await _dbConnection.QueryAsync<dynamic>(sql, parameters);
@@ -158,7 +158,6 @@ namespace Auth.DataAccess.Procurement
                     List<dynamic> dataList = data;
                     result = (from dr in dataList select SupplierVerificationViewModel.ConvertToModel(dr)).ToList();
                 }
-
             }
             catch (Exception ex)
             {
