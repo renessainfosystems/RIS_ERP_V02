@@ -1,8 +1,8 @@
 export interface Criteria {
     assessment_criteria_id?: number;
-/*    code?: number;*/
+    dealer_info_id?: number;
     assessment_criteria_name?: string;
-    autometic_score?: number;
+    automatic_score?: number;
     manual_score?: number;
     actual_score?: number;
     comment?: string;

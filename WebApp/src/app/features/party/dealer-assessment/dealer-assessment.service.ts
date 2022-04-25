@@ -271,6 +271,7 @@ export class DealerAssessmentService {
 
     // End Dealer Document Info ------***------
 
+    // Start Dealer Assessment and Evaluation
     getAllDealerVerification(): Observable<any[]> {
 
         return this.http.get<any[]>(this.ipconfig.base_IP + 'DealerVerification/GetAllDealerVerification', httpOptions);
@@ -279,5 +280,13 @@ export class DealerAssessmentService {
     getAllAssessmentCriteria(): Observable<any[]> {
 
         return this.http.get<any[]>(this.ipconfig.base_IP + 'DealerAssessment/GetAllAssessmentCriteria', httpOptions);
+    }
+
+    createDealerAssessment(dealerAssessment: any): Observable<any> {
+        return this.http.post<any>(this.ipconfig.base_IP + 'DealerAssessment/Create', dealerAssessment, httpOptions);
+    }
+
+    updateDealerAssessment(dealerAssessment: any): Observable<any> {
+        return this.http.post<any>(this.ipconfig.base_IP + 'DealerAssessment/Update', dealerAssessment, httpOptions);
     }
 }

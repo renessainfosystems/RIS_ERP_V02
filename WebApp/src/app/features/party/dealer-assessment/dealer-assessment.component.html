@@ -9,8 +9,8 @@
                             <div class="col-12">
                                 <div class="p-fluid p-formgrid grid">
                                     <div class="field col-12 md:col-6">
-                                        <label>Dealer Code</label>
-                                        <input pInputText type="text" formControlName="dealer_info_code" placeholder="<<Auto Generate>>" disabled />
+                                        <label>Dealer Code</label>                                        
+                                        <input pInputText type="text" formControlName="dealer_info_id" placeholder="<<Auto Generate>>" disabled />
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label pTooltip="Image" tooltipPosition="top">Image </label>
@@ -438,9 +438,9 @@
                                     <p-table [value]="criterias" dataKey="assessment_criteria_id" editMode="row">
                                         <ng-template pTemplate="header">
                                             <tr>
-                                                <th>SL.</th>
-                                                <th>Consideration of Criteria</th>
-                                                <th>Manual  Weight</th>
+                                                <th>Criteria Name</th>
+                                                <th>Autometic Score</th>
+                                                <th>Manual Score</th>
                                                 <th>Actual Score</th>
                                                 <th>Comments</th>
                                                 <th style="width:8rem"></th>
@@ -448,12 +448,12 @@
                                         </ng-template>
                                         <ng-template pTemplate="body" let-criteria let-editing="editing" let-ri="rowIndex">
                                             <tr [pEditableRow]="criteria">
-                                                <td>{{criteria.assessment_criteria_id}}</td>
                                                 <td>{{criteria.assessment_criteria_name}}</td>
+                                                <td>{{criteria.automatic_score}}</td>
                                                 <td pEditableColumn>
                                                     <p-cellEditor>
                                                         <ng-template pTemplate="input">
-                                                            <input pInputText type="number" [(ngModel)]="criteria.manual_weight" required>
+                                                            <input pInputText type="number" [(ngModel)]="criteria.manual_score" required>
                                                         </ng-template>
                                                         <ng-template pTemplate="output">
                                                             {{criteria.manual_score}}
@@ -463,17 +463,18 @@
                                                 <td pEditableColumn>
                                                     <p-cellEditor>
                                                         <ng-template pTemplate="input">
-                                                            <input pInputText type="number" [(ngModel)]="criteria.actual_weight" required>
+                                                            <input pInputText type="number" [(ngModel)]="criteria.actual_score" required>
                                                         </ng-template>
-                                                        <!--<ng-template pTemplate="output">
+                                                        <ng-template pTemplate="output">
                                                             {{criteria.actual_score}}
-                                                        </ng-template>-->
+                                                        </ng-template>
+                                                        el
                                                     </p-cellEditor>
                                                 </td>
                                                 <td pEditableColumn>
                                                     <p-cellEditor>
                                                         <ng-template pTemplate="input">
-                                                            <input pInputText type="text" [(ngModel)]="criteria.comments" required>
+                                                            <input pInputText type="text" [(ngModel)]="criteria.comment" required>
                                                         </ng-template>
                                                         <ng-template pTemplate="output">
                                                             {{criteria.comment}}

@@ -58,7 +58,7 @@ namespace Auth.DataAccess.Party
 
                 parameters.Add("@param_DBOperation", operationType == (int)GlobalEnumList.DBOperation.Create ? GlobalEnumList.DBOperation.Create : GlobalEnumList.DBOperation.Update);
             }
-            
+
             return parameters;
         }
 
@@ -73,56 +73,51 @@ namespace Auth.DataAccess.Party
             if (_dbConnection.State == ConnectionState.Closed)
                 _dbConnection.Open();
 
-            using (var tran = _dbConnection.BeginTransaction())
+
+            try
             {
-                try
-                {
-                    dynamic data = await _dbConnection.QueryAsync<dynamic>("[Party].[SP_DealerAssessment_IUD]", parameters, commandType: CommandType.StoredProcedure, transaction: tran);
+                dynamic data = await _dbConnection.QueryAsync<dynamic>("[Party].[SP_DealerAssessment_IUD]", parameters, commandType: CommandType.StoredProcedure);
 
-                    if (data != null)
+                if (data != null)
+                {
+                    List<dynamic> dataList = data;
+
+                    result = (from dr in dataList select DealerAssessmentViewModel.ConvertToModel(dr)).ToList();
+
+
+
+                    if (result != null && dbOperation == (int)GlobalEnumList.DBOperation.Create)
                     {
-                        List<dynamic> dataList = data;
-
-                        result = (from dr in dataList select DealerAssessmentViewModel.ConvertToModel(dr)).ToList();
-
-
-                        if (result != null && dbOperation == (int)GlobalEnumList.DBOperation.Approve)
-                        {
-                            return message = CommonMessage.SetSuccessMessage("Approved", result);
-                        }
-
-                        if (result != null && dbOperation == (int)GlobalEnumList.DBOperation.Create)
-                        {
-                            message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage, result);
-                        }
-                        else if (result != null && dbOperation == (int)GlobalEnumList.DBOperation.Update)
-                        {
-                            message = CommonMessage.SetSuccessMessage(CommonMessage.CommonUpdateMessage, result);
-                        }
-                        if (dbOperation == (int)GlobalEnumList.DBOperation.Delete)
-                        {
-                            return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonDeleteMessage);
-                        }
-                        else
-                        {
-                            message = CommonMessage.SetErrorMessage(CommonMessage.CommonErrorMessage);
-                        }
+                        message = CommonMessage.SetSuccessMessage(CommonMessage.CommonSaveMessage, result);
                     }
-                    tran.Commit();
-                }
-                catch (Exception ex)
-                {
-                    tran.Rollback();
-                    throw ex.InnerException;
-                }
-                finally
-                {
-                    //DB connection dispose with db connection close
-                    tran.Dispose();
-
+                    else if (result != null && dbOperation == (int)GlobalEnumList.DBOperation.Update)
+                    {
+                        message = CommonMessage.SetSuccessMessage(CommonMessage.CommonUpdateMessage, result);
+                    }
+                    else if (dbOperation == (int)GlobalEnumList.DBOperation.Delete)
+                    {
+                        return message = CommonMessage.SetSuccessMessage(CommonMessage.CommonDeleteMessage);
+                    }
+                    else
+                    {
+                        message = CommonMessage.SetErrorMessage(CommonMessage.CommonErrorMessage);
+                    }
                 }
 
             }
+            catch (Exception ex)
+            {
+                message = CommonMessage.SetErrorMessage(ex.Message);
+
+            }
+            finally
+            {
+                //DB connection dispose with db connection close
+                _dbConnection.Dispose();
+
+            }
+
+
 
             return (message);
         }
@@ -193,12 +188,8 @@ namespace Auth.DataAccess.Party
             try
             {
                 var sql = @"SELECT * FROM Administrative.Assessment_Criteria WHERE criteria_type_id=1 and party_type_id=2";
-                dynamic data = await _dbConnection.QueryAsync<dynamic>(sql);
-                if (data != null)
-                {
-                    List<dynamic> dataList = data;
-                    result = (from dr in dataList select DealerAssessmentViewModel.ConvertToModel(dr)).ToList();
-                }
+                result = await _dbConnection.QueryAsync<dynamic>(sql);
+
             }
             catch (Exception ex)
             {

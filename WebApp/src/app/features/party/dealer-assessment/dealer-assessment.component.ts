@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NavigationEnd } from '@angular/router';
-import { ConfirmationService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { NotificationService } from '../../../service/CommonMessage/notification.service';
 import { Criteria } from './criteria';
 import { DealerAssessmentService } from './dealer-assessment.service';
@@ -28,7 +28,7 @@ export class DealerAssessmentComponent  implements OnInit {
     }) dealerCreditImageFile;
 
     submitted = false;
-    dealerinfoForm: any;//DealerFormName  
+    dealerinfoForm: FormGroup;//DealerFormName
     dealerinfoList: any[];//List Dealerinfo
     dealerinfodataSource: any[];//single dealerinfo
     selecteddealerinfo: any;// Selected Dealerinfo  
@@ -147,6 +147,7 @@ export class DealerAssessmentComponent  implements OnInit {
     indexDocument: number = 0;
     indexCredit: number = 0;
     display: boolean = false;
+    assessmentScoreForm: FormGroup;
     
     showDialog() {
         if (this.rowData == null) {
@@ -375,7 +376,7 @@ export class DealerAssessmentComponent  implements OnInit {
     // Assessment start
 
 
-    constructor(private formbulider: FormBuilder, private confirmationService: ConfirmationService, private notifyService: NotificationService, private dealerAssessmentService: DealerAssessmentService) {
+    constructor(private formbulider: FormBuilder, private confirmationService: ConfirmationService, private notifyService: NotificationService, private messageService: MessageService, private dealerAssessmentService: DealerAssessmentService) {
 
     }
 
@@ -512,6 +513,7 @@ export class DealerAssessmentComponent  implements OnInit {
             FileUpload: new FormControl(''),
         });
 
+       
         //Load Dropdown
         this.loadAllDomicileEnum();
         this.loadAllContinentEnum();
@@ -632,7 +634,7 @@ export class DealerAssessmentComponent  implements OnInit {
             if (data != null) {
                 this.isDealerinfoEdit = true;
             }
-
+            
             this.dealerinfoForm.controls['dealer_info_code'].setValue(data.DealerInfoCode);
             this.dealerinfoForm.controls['dealer_info_short_name'].setValue(data.DealerInfoShortName);
             this.dealerinfoForm.controls['dealer_info_name'].setValue(data.DealerInfoName);
@@ -677,7 +679,7 @@ export class DealerAssessmentComponent  implements OnInit {
             this.dealerinfoForm.controls['house_no'].setValue(data.HouseNo);
             this.dealerinfoForm.controls['flat_no'].setValue(data.FlatNo);
             this.dealerinfoForm.controls['address_note'].setValue(data.AddressNote);
-            this.dealerinfoForm.controls['logo_path'].setValue(data.LogoPath);
+            this.dealerinfoForm.controls['logo_path'].setValue(data.LogoPath);            
             this.photourllink = data.LogoPath;
 
             this.loadAllDealerContactinfos(row);
@@ -998,38 +1000,42 @@ export class DealerAssessmentComponent  implements OnInit {
         this.clonedProducts[criteria.assessment_criteria_id] = { ...criteria };
     }
 
-    //onRowEditSave(criteria: Criteria) {
-    //    debugger
+    onRowEditSave(criteria: Criteria) {
+        debugger
 
-    //    if (criteria.assessment_criteria_id > 0) {
+        if (criteria.assessment_criteria_id > 0) {
 
            
-    //        let assessment_criteria_id = criteria.assessment_criteria_id;
-    //        let criteria_type = 1;
-    //        let manual_weight = criteria.manual_score;
-    //        let actual_weight = criteria.actual_score;
-    //        let comments = criteria.comment;
-    //        let supplierId = this.supplierApplicationForm.get('supplier_code')?.value;
+            let assessment_criteria_id = criteria.assessment_criteria_id;
+            let criteria_type_id = 2;
+            let automatic_score = criteria.automatic_score;
+            let manual_score = criteria.manual_score;
+            let actual_score = criteria.actual_score;
+            let comment = criteria.comment;
+            let dealerinfoId = this.dealerinfoForm.get('dealer_info_code')?.value;
 
-    //        //let association_id = this.associationsApplicationForm.get('association_id')?.value.association_id;
+            const scoreobj = {
+                dealer_info_id: dealerinfoId,
+                assessment_criteria_id: assessment_criteria_id,
+                criteria_type_id: criteria_type_id,
+                automatic_score: automatic_score,
+                manual_score: manual_score,
+                actual_score: actual_score,
+                comment: comment
+            }
 
-    //        const scoreobj = { supplier_id: supplierId, assessment_criteria_id: assessment_criteria_id, criteria_type: criteria_type, manual_weight: manual_weight, actual_weight: actual_weight, comments: comments }
-    //        /*     this.assessmentScore.push(scoreobj);*/
+            this.dealerAssessmentService.createDealerAssessment(scoreobj).subscribe(data => {
+                this.dataSaved = true;
+                this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage);
+            });
 
-    //        this.SupplierAssessmentService.createSupplierAssessment(scoreobj).subscribe(data => {
-    //            this.dataSaved = true;
-    //            // this.loadAllSupplierAssociation();
-
-    //            this.notifyService.ShowNotification(data.MessageType, data.CurrentMessage);
-    //        });
-
-    //        delete this.clonedProducts[criteria.assessment_criteria_id];
-    //        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Product is updated' });
-    //    }
-    //    else {
-    //        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Invalid Price' });
-    //    }
-    //}
+            delete this.clonedProducts[criteria.assessment_criteria_id];
+            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Product is updated' });
+        }
+        else {
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Invalid Price' });
+        }
+    }
 
     onRowEditCancel(criteria: Criteria, index: number) {
         this.criterias[index] = this.clonedProducts[criteria.assessment_criteria_id];
