@@ -44,6 +44,8 @@ namespace Auth.Model.Procurement.ViewModel
         public bool IsActive { get; set; }
 
         public bool IsConfirm { get; set; }
+        public bool IsVerified { get; set; }
+        public bool IsApproved { get; set; }
 
         public int FeedbackStatus { get; set; }
         public int BusinessActivityEnumId { get; set; }
@@ -84,6 +86,11 @@ namespace Auth.Model.Procurement.ViewModel
             model.Pabx = SupplierApplication.pabx ?? "";
             model.IsActive = SupplierApplication.is_active ?? false;
             model.IsConfirm = SupplierApplication.is_confirm ?? false;
+
+
+            model.IsVerified = SupplierApplication.is_verified ?? false;
+            model.IsApproved = SupplierApplication.is_approved ?? false;
+
             //model.IsConfirm = SupplierApplication.is_confirm ?? false;
             model.FeedbackStatus = SupplierApplication.feedback_status ?? 1;
 

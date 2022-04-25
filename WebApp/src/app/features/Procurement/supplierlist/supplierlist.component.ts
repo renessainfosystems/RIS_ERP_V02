@@ -119,7 +119,7 @@ export class SupplierListComponent implements OnInit {
 
     supplierinfoList: any[];//List Supplierinfo
     selectedsupplierinfo: any;// Selected Dealerinfo
-    isSupplierinfoEdit: boolean = false;
+/*    isSupplierinfoEdit: boolean = false;*/
     showBasicEdit = true;
     index: number = 0;
     rowSelected: boolean = false;
@@ -128,6 +128,37 @@ export class SupplierListComponent implements OnInit {
     collapsedempDetails = false;
     collapsed = false;
     checked: boolean = false;
+    supplierVarificationUpdate: any;
+    isSupplierVerificationEdit: any;
+    supplierVerificationList = [];
+
+    selectedVerification: any;
+    rowDataVerification: any;
+    onRowUnselectData: any;
+    supplierVerificationIndex: any;
+
+
+
+    //dealerinfoList: any[];
+    //gridDisplay = false;
+    //selecteddealerinfo: any;
+    //first = 0;
+    //rows = 10;
+    //allDepartment: any[];
+    //allEmployee: any[];
+    //dealerassignForm: FormGroup;
+    //submitted = false;
+    //dataSaved: boolean;
+    //delearVarificationUpdate: any;
+    //isDealerVerificationEdit: any;
+    //dealerVerificationList = [];
+
+    //selectedVerification: any;
+    //rowDataVerification: any;
+    //onRowUnselectData: any;
+    //dealerVerificationIndex: any;
+    //rowData: any;
+    //rowSelected: boolean;
 
 
 
@@ -585,6 +616,13 @@ export class SupplierListComponent implements OnInit {
         this.loadAllDepartmentCboList();
         this.loadAllEmployeeCboList();
 
+        this.supplierassignForm = this.formbulider.group({
+            supplierid: [''],
+            department_id: ['', [Validators.required]],
+            employee_id: ['', [Validators.required]],
+        });
+
+
 
     }
 
@@ -638,9 +676,9 @@ export class SupplierListComponent implements OnInit {
         this.SupplierListService.getSupplierBasicInfo(supplierId).subscribe(data => {
             debugger
             this.supplierApplicationForm.reset();
-            if (data != null) {
-                this.isSupplierinfoEdit = true;
-            }
+            //if (data != null) {
+            //    this.isSupplierVerificationEdit = true;
+            //}
             this.supplierApplicationForm.controls['supplier_code'].setValue(data.SupplierCode);
             this.supplierApplicationForm.controls['legal_name'].setValue(data.LegalName);
             this.supplierApplicationForm.controls['short_name'].setValue(data.ShortName);
@@ -697,24 +735,24 @@ export class SupplierListComponent implements OnInit {
 
         this.SupplierListService.getAllSupplierAssociation(supplierId).subscribe(data => {
             this.associationsApplicationForm.reset();
-            if (data != null) {
-                this.isSupplierinfoEdit = true;
-            }
+            //if (data != null) {
+            //    this.isSupplierVerificationEdit = true;
+            //}
             this.associationDataSources = data;
         });
 
         this.SupplierListService.getAllLegalDocument(supplierId).subscribe(data => {
             this.legalDocumentApplicationForm.reset();
-            if (data != null) {
-                this.isSupplierinfoEdit = true;
-            }
+            //if (data != null) {
+            //    this.isSupplierVerificationEdit = true;
+            //}
             this.documentDataSources = data;
         });
 
         this.SupplierListService.getAllSupplierLocation(supplierId).subscribe(data => {
             this.locationApplicationForm.reset();
             if (data != null) {
-                this.isSupplierinfoEdit = true;
+                this.isSupplierVerificationEdit = true;
             }
             this.locationDataSources = data;
             this.allLocation = data;
@@ -729,7 +767,7 @@ export class SupplierListComponent implements OnInit {
         this.SupplierListService.getAllSupplierContact(supplierId).subscribe(data => {
             this.ContactLocationApplicationForm.reset();
             if (data != null) {
-                this.isSupplierinfoEdit = true;
+                this.isSupplierVerificationEdit = true;
             }
             this.contactDataSources = data;
             this.allContactPerson = data;
@@ -743,7 +781,7 @@ export class SupplierListComponent implements OnInit {
         this.SupplierListService.getAllSupplierMFS(supplierId).subscribe(data => {
             this.financialApplicationForm.reset();
             if (data != null) {
-                this.isSupplierinfoEdit = true;
+                this.isSupplierVerificationEdit = true;
             }
             this.mobileBankingDataSources = data;
         });
@@ -759,7 +797,7 @@ export class SupplierListComponent implements OnInit {
         this.SupplierListService.getAllSupplierCreditHistory(supplierId).subscribe(data => {
             this.financialApplicationForm.reset();
             if (data != null) {
-                this.isSupplierinfoEdit = true;
+                this.isSupplierVerificationEdit = true;
                 this.financialApplicationForm.controls['currency_id'].setValue(data.currency_id);
                 this.financialApplicationForm.controls['credit_days'].setValue(data.credit_days);
                 this.financialApplicationForm.controls['credit_limit'].setValue(data.credit_limit);
@@ -773,7 +811,7 @@ export class SupplierListComponent implements OnInit {
     }
 
     loadAllConfirmSupplierinfos() {
-        this.SupplierListService.getAllConfirmSupplierInfo().subscribe(data => {
+        this.SupplierListService.getAllSupplierInfo().subscribe(data => {
             debugger
             this.supplierinfoList = data;
         });
@@ -1301,10 +1339,10 @@ export class SupplierListComponent implements OnInit {
         return this.bankingApplicationForm.controls;
     }
 
-    //get l(): { [key: string]: AbstractControl } {
-    //    return this.supplierassignForm.controls;
+    get l(): { [key: string]: AbstractControl } {
+        return this.supplierassignForm.controls;
 
-    //}
+    }
 
 
 
@@ -1371,7 +1409,7 @@ export class SupplierListComponent implements OnInit {
 
     resetForm() {
         this.supplierApplicationForm.reset();
-        this.isSupplierinfoEdit = false;
+        this.isSupplierVerificationEdit = false;
         this.supplierinfoList = [];
     }
 
@@ -1391,13 +1429,57 @@ export class SupplierListComponent implements OnInit {
         });
     }
 
-    get l(): { [key: string]: AbstractControl } {
-        return this.supplierassignForm.controls;
 
-    }
 
-    onSaveDealerInfoAssign(): void {
+    //onSaveDealerInfoAssign(): void {
+    //    this.submitted = true;
+    //}
+
+    saveSupplierVerification() {
+        debugger
         this.submitted = true;
+        const supplierassignData = this.supplierassignForm.value;
+        if (this.supplierassignForm.invalid) {
+            return;
+        }
+        //let j = 0;
+        //if (this.selectedsupplierinfo.length > j)
+        //{
+        //    return this.notifyService.ShowNotification(3, 'Please select supplier');
+        //}
+
+
+        for (let i = 0; i < this.selectedsupplierinfo.length; i++) {
+            let supplierInfoId = this.selectedsupplierinfo[i].SupplierId;
+            let departmentId = this.supplierassignForm.value.department_id;
+            let employeeId = this.supplierassignForm.value.employee_id;
+            const supplierAssignObj = { supplier_id: supplierInfoId, department_id: departmentId, employee_id: employeeId }
+            this.supplierVerificationList.push(supplierAssignObj);
+        }
+        supplierassignData.SupplierAssignSession = this.supplierVerificationList;
+
+        if (this.isSupplierVerificationEdit) {
+            let i = 0
+            this.SupplierListService.updateSupplierVerification(supplierassignData).subscribe(result => {
+
+                this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
+                this.supplierassignForm.reset();
+                this.submitted = false;
+                this.ngOnInit();
+            });
+        }
+        else {
+            let i = 0
+            this.SupplierListService.createSupplierVerification(supplierassignData).subscribe(result => {
+
+                this.notifyService.ShowNotification(result.MessageType, result.CurrentMessage);
+                this.supplierassignForm.reset();
+                this.selectedsupplierinfo = null;
+                this.submitted = false;
+                this.isSupplierVerificationEdit = false;
+                this.ngOnInit();
+            });
+        }
     }
 
     //onFormApprove() {

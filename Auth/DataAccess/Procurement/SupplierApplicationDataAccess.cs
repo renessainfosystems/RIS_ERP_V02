@@ -673,7 +673,7 @@ namespace Auth.DataAccess.Procurement
 
             try
             {
-                string sql = @"SELECT * FROM [Procurement].[Supplier_Application] SI WHERE SI.company_id =" + company_id + " and SI.is_confirm='true' and SI.feedback_status='1' ";
+                string sql = @"SELECT * FROM [Procurement].[Supplier_Application] SI WHERE SI.company_id =" + company_id + " and SI.is_confirm='true' and SI.is_verified='0' ";
                 dynamic data = await _dbConnection.QueryAsync<dynamic>(sql);
                 if (data != null)
                 {

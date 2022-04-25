@@ -112,8 +112,8 @@ namespace Auth.DataAccess.Attendance
             {
 
                 dynamic data = await _dbConnection.QueryAsync("[Attendance].[SP_Overtime_Policy_IUD]", parameters, commandType: CommandType.StoredProcedure);
-     
-
+                
+              
                 if (dbOperation == (int)DBOperation.Create && oTPolicy.otPolicySlab!=null)
                 {
                     if (oTPolicy.otPolicySlab.Count > 0 && data[0].OT_policy_id > 0)

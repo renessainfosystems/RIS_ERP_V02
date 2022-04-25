@@ -143,6 +143,7 @@ export class DealerAssessmentComponent  implements OnInit {
     indexDocument: number = 0;
     indexCredit: number = 0;
     display: boolean = false;
+    
     showDialog() {
         if (this.rowData == null) {
             return this.notifyService.ShowNotification(3, 'Please select row');
@@ -346,8 +347,7 @@ export class DealerAssessmentComponent  implements OnInit {
         this.toggleFormDisplayDocument();
         this.dealerDocumentIndex();
     }
-
-
+        
     // for photo and signature upload
 
     fileToUploadDocumentForm: File | null = null;
@@ -894,11 +894,11 @@ export class DealerAssessmentComponent  implements OnInit {
     }
 
     openNext() {
-        this.index = (this.index === 7) ? 0 : this.index + 1;
+        this.index = (this.index === 8) ? 0 : this.index + 1;
     }
 
     openPrev() {
-        this.index = (this.index === 0) ? 7 : this.index - 1;
+        this.index = (this.index === 0) ? 8 : this.index - 1;
     }
 
 

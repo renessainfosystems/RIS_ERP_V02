@@ -43,8 +43,9 @@ export class SupplierAssessmentService {
         return this.http.post<any>(this.ipconfig.base_IP + 'SupplierApplication/RejectSupplier', rejectFeedbackData, httpOptions);
     }
 
-    getAllConfirmSupplierInfo(): Observable<any[]> {
-        return this.http.get<any[]>(this.ipconfig.base_IP + 'SupplierApplication/GetAllConfirmSupplierInfo', httpOptions);
+    getAllSupplierVerification(): Observable<any[]> {
+        debugger
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'SupplierVerification/GetAllSupplierVerification', httpOptions);
     }
 
     getSupplierId(): Observable<any> {

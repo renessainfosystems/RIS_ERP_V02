@@ -31,6 +31,45 @@ export class SupplierListService {
     //}
 
 
+    createSupplierVerification(supplierVerification: any): Observable<any> {
+
+        return this.http.post<any>(this.ipconfig.base_IP + 'SupplierVerification/Create', supplierVerification, httpOptions);
+
+    }
+    updateSupplierVerification(supplierVerification: FormData): Observable<any> {
+
+        return this.http.post<any>(this.ipconfig.base_IP + 'SupplierVerification/Update', supplierVerification, httpOptionsForFileUpload);
+
+    }
+    deleteSupplierVerification(supplier_verification_id: number): Observable<any> {
+
+        return this.http.post(this.ipconfig.base_IP + 'SupplierVerification/Delete?supplier_verification_id=' + supplier_verification_id, httpOptions);
+
+    }
+    getAllSupplierVerification(): Observable<any[]> {
+
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'SupplierVerification/GetAllSupplierVerification', httpOptions);
+
+    }
+    getSupplierVerificationById(dealer_verification_id: number): Observable<any> {
+        return this.http.get(this.ipconfig.base_IP + 'DealerInfo/GetDealerVerificationById?dealer_verification_id=' + dealer_verification_id, httpOptions);
+    }
+
+    getAllSupplierVerificationList(): Observable<any[]> {
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'DealerInfo/GetAllDealerInfo', httpOptions);
+    }
+
+    getSupplierVerificationByDealerId(dealer_info_id: number): Observable<any> {
+        return this.http.get(this.ipconfig.base_IP + 'DealerInfo/GetDealerVerificationByDealerId?dealer_info_id=' + dealer_info_id, httpOptions);
+    }
+
+    getAllSupplierInfo(): Observable<any[]> {
+
+        return this.http.get<any[]>(this.ipconfig.base_IP + 'SupplierApplication/GetAllConfirmSupplierInfo', httpOptions);
+
+    }
+
+
     getSupplierId(): Observable<any> {
         return this.http.get(this.ipconfig.base_IP + 'SupplierApplication/GetSupplierId', httpOptions);
     }
@@ -39,9 +78,9 @@ export class SupplierListService {
         return this.http.get(this.ipconfig.base_IP + 'SupplierApplication/GetSupplierBasicInfoBySupplierId?supplier_id=' + supplier_id, httpOptions);
     }
 
-    getAllConfirmSupplierInfo(): Observable<any[]> {
-        return this.http.get<any[]>(this.ipconfig.base_IP + 'SupplierApplication/GetAllConfirmSupplierInfo', httpOptions);
-    }
+    //getAllConfirmSupplierInfo(): Observable<any[]> {
+    //    return this.http.get<any[]>(this.ipconfig.base_IP + 'SupplierApplication/GetAllConfirmSupplierInfo', httpOptions);
+    //}
 
     createSupplierApplication(supplierApplication: FormData): Observable<any> {
         return this.http.post<any>(this.ipconfig.base_IP + 'SupplierApplication/Create', supplierApplication, httpOptionsForFileUpload);
